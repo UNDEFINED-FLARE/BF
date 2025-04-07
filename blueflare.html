@@ -1,0 +1,1809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link href="test.css" rel="stylesheet">
+<script type='module' href="main.js"></script>
+
+
+  <title>blueflare</title>
+  
+<style>
+    *{                         
+      margin: 0;
+      padding: 0;#1C1C1C;
+      transition: 5s;
+    
+    }
+        body {
+          margin: 0;
+          padding: 0;
+        
+        
+          font-family: Arial, sans-serif;
+          display: flex;
+          flex-direction: column;
+          height: 100vh;
+        }
+    header{
+      
+      width: 100%;
+      
+     
+      
+    }
+    .schoolProfile{
+            margin-top: 5px;
+      margin-left: 2%;
+      width: 55px;
+      height: 55px;
+      border-radius: 0;
+      border: 2px solid #fff;
+      border: none;
+      
+    }
+    
+    .searchDiv{
+     
+     max-height: 50px;
+      width:100%;
+      text-align: center;
+      border: 1px solid #ddd;
+      border-radius: 0;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      background: #fff;
+      
+    }
+    
+    .searchInp
+{    width: 65%;
+
+float:left;
+font-size: 12px;
+text-align: center ;
+    
+      padding: 4px;
+
+      border-radius: 15px;
+      border: none;
+      background: #AEA3A33D;
+    }
+    .searchButton{
+      
+      
+            border-radius:5px 5px 5px 5px;
+    
+  
+              color: #42445A;
+               width:10%;
+         padding: 4%;
+          text-align: center;
+          font-size: 12px;
+          background-color: rgba(255, 255, 255, 0.9);
+          
+        
+          font-weight: 900;
+           box-shadow: 0px 0px 1.6px #B4B4BE;
+          border: 2px solid rgba(255, 255, 255, 0.9);
+          border-left: 2px solid rgba(255, 255, 255, 9);
+          border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+
+    
+      
+    }
+    .searchInpFile{
+      
+      border-radius:15px;
+    
+             float: left;
+               
+              color: #42445A;
+               width:75%;
+               padding-bottom: 10px;
+          text-align: center;
+          font-size: 12px;
+          background-color: rgba(255, 255, 255, 0.9);
+          
+          
+          font-weight: 900;
+           box-shadow: 0px 0px 8px #B4B4BE;
+          border: 2px solid rgba(255, 255, 255, 0.9);
+          border-left: 2px solid rgba(255, 255, 255, 9);
+          border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+
+    
+      
+      
+    }
+    
+    
+    hr{
+      background :#F5EFFF;
+      border: 0.5px solid #E5D9F2;
+      padding-bottom: 3px;
+    }
+    .profileCont{
+                float: left;
+          height:50px ;
+          padding: 4%;
+          width: 90%;
+          
+        
+          
+          text-align: center;
+          font-size: 12px;
+          background-color: rgba(255, 255, 255, 0.9);
+          background: #ECF8F891;
+          border-radius: 12px;
+          font-weight: 900;
+           box-shadow: 0px 0px 8px #B4B4BE;
+          border: 2px solid rgba(255, 255, 255, 0.9);
+          border-left: 2px solid rgba(255, 255, 255, 9);
+          border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+align-content: center ;
+
+    }
+    .profilePicture{
+    
+      float: left;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: 2px solid #fff;
+      box-shadow: 1px 1px 8px #000;
+      
+    }
+    .profileName{
+      
+      
+      color:#2D2F40;
+    }
+    .messNavDiv{
+            display: flex;
+            height: auto;
+            padding: 7px;
+            width: auto;
+            
+           
+          
+      
+    }
+    .messNav{
+      
+           
+           padding:1%;
+           
+          
+         
+           height:30px;
+          width: 16%;
+          
+        margin-left: 5%;
+          text-align: center;
+          font-size: 12px;
+          background :white;
+          
+          border-radius: 12px;
+          font-weight: 900;
+           box-shadow: 0px 0px 2px #B4B4BE;
+          border: 2px solid rgba(255, 255, 255, 0.9);
+          border-left: 2px solid rgba(255, 255, 255, 9);
+          border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+
+    }
+    
+    
+    
+          
+      
+
+        .posts {
+          margin-top:;
+            margin-bottom: 20px;
+        }
+        .post {
+        
+            background-color: #f7f7f7;
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+        .post-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .post-header img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 10px;
+            border: 2px solid #fff;
+      box-shadow: 1px 1px 8px #000;
+        }
+        .post-header h2 {
+            font-size: 15px;
+            margin-top: 0;
+        }
+.timeDiv{
+   border-radius:5px 5px 5px 5px;
+    
+    float:left;
+               max-height: 60px;
+              color: #42445A;
+               width:40%;
+          
+          text-align: center;
+          font-size: 12px;
+          background-color: rgba(255, 255, 255, 0.9);
+          
+          
+          font-weight: 900;
+           box-shadow: 0px 0px 8px #B4B4BE;
+          border: 2px solid rgba(255, 255, 255, 0.9);
+          border-left: 2px solid rgba(255, 255, 255, 9);
+          border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+
+    
+}
+
+        .imgVidDiv {
+          border-radius: 5px 5px 5px 5px;
+
+          background: #DFE1ED;
+          color: #42445A;
+          width: 100%;
+
+          text-align: center;
+          font-size: 12px;
+
+
+
+          font-weight: 900;
+
+        }
+        .post-content {
+          font-size: 14px;
+                        margin-bottom: 10px;
+            margin-top: 5px;
+            background:#E5E5E58A;
+            border-radius:7px;
+            margin-bottom: 20px;
+        }
+        .post-content p {
+            font-size: 15px;
+            font-weight: 300;
+        }
+        .post-actions {
+            display: flex;
+            justify-content: spce-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+  .post-actions button{
+      margin:2% ;
+  }
+        .post-actions button , .icon-crd {
+               border-radius:15px 15px 15px 15px;
+    
+              height:auto;
+              color: #42445A;
+               width:auto;
+               padding: 5px;
+          text-align: center;
+         
+          background-color: rgba(255, 255, 255, 0.9);
+          
+          
+          font-weight: 900;
+           box-shadow: 1px 0.5px 2px #B4B4BE;
+          border: 2px solid rgba(255, 255, 255, 0.9);
+          border-left: 2px solid rgba(255, 255, 255, 9);
+          border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+
+    
+            cursor: pointer;
+        }
+        
+                .ptCMNT {
+               border-radius:15px 15px 15px 15px;
+    
+              height:auto;
+              color: #42445A;
+               width:auto;
+               padding: 7px;
+          text-align: center;
+         
+          background-color: rgba(255, 255, 255, 0.9);
+          
+          
+          font-weight: 900;
+           box-shadow: 1px 0.5px 2px #B4B4BE;
+          border: 2px solid rgba(255, 255, 255, 0.9);
+          border-left: 2px solid rgba(255, 255, 255, 9);
+          border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+
+    
+            cursor: pointer;
+        }
+        .post-actions button:hover {
+            background-color:#D8DAEB;
+        }
+        .post-comments {
+            margin-bottom: 20px;
+            display :none;
+        }
+        .post-comment {
+            background-color: #f7f7f7;
+            padding: 10px;
+            border-bottom: 9px solid #ccc;
+        }
+        .post-comment img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .post-comment p {
+            font-size: 14px;
+            color:grey;
+        }
+        .likes{
+          font-weight: 700;
+          color: #4E5064;
+        }
+        .comments{
+          font-weight: 700;
+          color: #4E5064;
+        }
+                       .videoNote   {
+          
+        
+         : flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        
+          width: 95%;
+          
+          
+          float: left;
+          text-align: center;
+          font-size: 12px;
+          background-color: rgba(255, 255, 255, 0.9);
+         
+          border-radius: 12px;
+          font-weight: 900;
+           box-shadow: 0px 0px 8px #B4B4BE;
+          border: 2px solid rgba(255, 255, 255, 0.9);
+          border-left: 2px solid rgba(255, 255, 255, 9);
+          border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+
+    
+    
+        }
+        .publicPost{
+          transition: 5s;
+        }
+        
+        
+        
+        .schoolNotice{
+          width:0%;
+          z-index: 2;
+          display :none;
+          float:left;
+          padding-bottom: 100%;
+          transition: 5s;
+          box-shadow: 0px 0px 8px #B4B4BE;
+          border: 2px solid rgba(255, 255, 255, 0.9);
+          border-left: 2px solid rgba(255, 255, 255, 9);
+          border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+
+        }
+                 .noticePost{
+             
+            border:1px solid black;
+            display:block;
+           word-wrap:break-word;
+          overflow-wrap:break-word;
+           padding: 9.999px;
+            height:auto;
+            width:90%;
+            margin: 5%;
+            margin-left: 5%;
+            text-align:center;
+            font-weight: 440;
+            font-size:12px;
+            background:#B2967E;
+            
+            box-sizing:border-box;
+            border-radius:12px;
+            
+            box-shadow: 0 2px 8px grey;
+            backdrop-filter: blur(25px);
+            border-radius: 10px;
+            border:none;
+            display: flex;
+            justify-content: center;
+           
+            overflow: hidden;
+          
+    
+           
+         }
+                     .NoticePostContent{
+              font-size:    14px;
+              color: white;
+              font-weight: 900;
+             
+            }
+            .commentBox{
+                margin: 0;
+            padding:0 ;
+    width: auto;
+    border: 1px solid #C6C6C65E;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    background-color: ;
+    
+    
+              
+            }
+            .commentButton{
+              
+              background: #B2967E;
+              z-index:1;
+              font-weight: 900;
+              font-size: 15px;
+              color:white;
+             
+              border-radius: 6px;
+              border: none;
+              
+              width:50%;
+              height: 30px;
+              float: right;
+              margin-right: 2%;
+            }
+                .comment img {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+    }
+    
+              .item{
+          height:50px;
+          width:100%;
+         
+          display:flex;
+          align-items:center;
+          justify-content:center;
+
+          }
+          .icon{
+          
+          
+          width:90%;
+         
+      
+          transition:1s;
+          z-index:1;
+          
+          }
+                    
+            .icon-card i {
+                   font-size: 25px;
+                   color: #282B4B;
+                   margin-bottom: 50%;
+                
+                   background-color: rgba(255, 255, 255, 0.9);
+                   box-shadow: 0 0px 2px #2C2E3E;
+                   border-radius: 30%;
+                   transition: 0.9s;
+                     
+                  
+                    }
+                    .icon-card:hover{
+                       border: 3px solid ;
+                       box-shadow: inset 0px 0px   2px ;
+                       border-radius: 15%;
+                    }
+                    .postCNTNT{
+                      COLOR:GREY;
+                      
+                    }
+                    
+                             .image-container {
+      width: 100%;
+      min-height: 250px;
+      
+      background-size: 100%;
+      background-position: center ;
+      overflow: hidden;
+      color: white;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 1px;
+      font-size: 20px;
+  
+                             }
+                               .suVidDiv{
+       
+      height: auto;
+      
+      width: 100%;
+        box-shadow: 1px 1px 9px white;
+       background:white;
+    }
+     
+     
+         .suVidImg {
+           font-weight:600;   
+           color:#676768 ;
+           height:230px;
+           width:46%;
+         margin-bottom: 5%;
+           background: white;
+           margin:3px ;
+           border-radius: 10px;
+           border: 0.5px solid white;
+           box-shadow: 1px 1px 5px grey;
+         }
+
+  .suDiv{
+       display: flex;
+      height: auto;
+      
+      width: 100%;
+        box-shadow: 1px 1px 9px white;
+       background:white;
+    }
+     
+     
+         .suImg {
+           font-weight:600;   
+           color:#676768 ;
+           height:230px;
+           width:33.33333%;
+           padding-bottom:1%;
+           background: white;
+           margin:2px ;
+           border-radius: 10px;
+           border: 0.5px solid white;
+           box-shadow: 1px 1px 5px grey;
+         }
+         .imgReal{
+             width: 100%;
+             height:100%;
+             border-radius: 10px;
+
+         }
+.avatar {
+      width: 40px;
+      z-index: 2000;
+      height: 40px;
+      background: #F0F0F08A;
+      color: green;
+      font-weight: bold;
+      display: flex;
+      position:absolute;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      font-size: 20px;
+    }
+        .dots {
+      display: flex;
+      justify-content: right;
+      float: right;
+    }
+
+    .dot {
+      width: 9px;
+      height: 9px;
+      margin: 0 2px;
+      background: #bbb;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+main{
+  z-index:3000;
+  position:fixed;
+  height:100%;
+  width:100%;
+  background : white;
+}
+    main {
+      
+    
+      paddng:20px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #333;
+    }
+
+     select,
+    textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    textarea {
+      resize: none;
+    }
+
+    .toggle-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 24px;
+    }
+
+    .toggle-switch input {
+      display: none;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      border-radius: 24px;
+      transition: 0.4s;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 4px;
+      bottom: 3px;
+      background-color: white;
+      border-radius: 50%;
+      transition: 0.4s;
+    }
+
+    input:checked+.slider {
+      background-color: #4A90E2;
+    }
+
+    input:checked+.slider:before {
+      transform: translateX(26px);
+    }
+
+    .post-card {
+      border: 1px solid #ccc;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .submit-button {
+      background-color: #4A90E2;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .submit-button:hover {
+      background-color: #357ABD;
+    }
+    
+    
+    
+    
+        .searchVidDiv{
+     
+     display :flex;
+      width:100%;
+      text-align: center;
+      border: 1px solid #ddd;
+      border-radius: 0;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      background: #fff;
+      
+    }
+    
+    .searchVidInp
+{    width: 65%;
+padding: 3%;
+float:left;
+font-size: 12px;
+text-align: center ;
+    
+
+      border-radius: 15px;
+      border: none;
+      background: #AEA3A33D;
+    }
+        .searchVidBtn{
+      
+     
+width:15%;
+font-weight: bold;
+margin: 0;
+border-radius: 15px 15px 15px 15px;
+
+
+          background-color: #BBBCC8;
+          justify-content: center;
+        text-align: center;
+          font-weight: 900;
+           box-shadow: 0px 0px 1.6px #B4B4BE;
+          border: 2px solid rgba(255, 255, 255, 0.9);
+          border-left: 2px solid rgba(255, 255, 255, 9);
+          border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+
+    
+      
+    }
+    
+#
+ /* Global Styles */
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+transition: 0.3s ease-in-out;
+font-family: "Poppins", sans-serif;
+}
+
+body {
+background: #f9f9f9;
+color: #333;
+}
+
+/* Header */
+header {
+width: 100%;
+background:;
+border: 1px 1px 9px #B1A7A7;
+
+top: 0;
+z-index: 100;
+}
+
+/* Profile Section */
+.schoolProfile {
+margin-left: 7%;
+width: 50px;
+height: 50px;
+
+
+
+}
+
+/* Search Bar */
+.searchDiv {
+display: inline-block;
+height:auto;
+align-items: center;
+width: 100%;
+background: #ffffff;
+
+border-radius: 8px;
+box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
+}
+
+.searchInp {
+flex: 1;
+font-size: 14px;
+padding: px;
+border-radius: 8px;
+border: 1px solid #ddd;
+background: #f4f4f4;
+outline: none;
+}
+
+.searchButton {
+background: #4A90E2;
+color: white;
+padding: 8px 15px;
+border-radius: 8px;
+border: none;
+font-weight: bold;
+cursor: pointer;
+transition: 0.3s;
+}
+
+.searchButton:hover {
+background: #357ABD;
+}
+
+/* Profile Container */
+.profileCont {
+display: flex;
+align-items: center;
+background: white;
+padding: 10px;
+border-radius: 10px;
+box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
+}
+
+.profilePicture {
+width: 50px;
+height: 50px;
+border-radius: 50%;
+object-fit: cover;
+box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
+}
+
+.profileName {
+font-size: 16px;
+font-weight: bold;
+margin-left: 10px;
+}
+
+/* Navigation */
+    .messNavDiv{
+            display: flex;
+            height: auto;
+            padding: 7px;
+            width: auto;
+            border:2px solid #90959D;
+           
+          
+      
+    }
+    .messNav{
+      
+           
+           padding:1%;
+           
+          
+         
+           height:30px;
+          width: 16%;
+          
+        margin-left: 5%;
+          text-align: center;
+          font-size: 12px;
+          background :white;
+          
+          border-radius: 12px;
+          font-weight: 900;
+           box-shadow: 0px 0px 2px #B4B4BE;
+            border:1px solid black;
+
+    }
+    
+                .icon-card i {
+                   font-size: 25px;
+                   color: #545454;
+                   
+                
+                   background-color: rgba(255, 255, 255, 0.9);
+              
+                   border-radius: 12px;
+                   transition: 0.9s;
+                     
+                  
+                    }
+/* Posts */
+.posts {
+margin-top: 5px;
+}
+
+.post {
+background: #fff;
+padding: 15px;
+border-radius: 10px;
+box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
+
+}
+
+.post-header {
+display: flex;
+align-items: center;
+margin-bottom: 10px;
+}
+
+.post-header img {
+width: 50px;
+height: 50px;
+border-radius: 50%;
+object-fit: cover;
+}
+
+.post-header h2 {
+font-size: 16px;
+margin-left: 10px;
+}
+
+/* Post Content */
+.post-content {
+background: #f5f5f5;
+padding: 10px;
+border-radius: 8px;
+}
+
+.post-content p {
+  font-size: 14px; /* Comfortable reading size */
+  line-height: 1.1; /* Improve readability with spacing */
+  color: #0F1014; /* Dark color for text */
+  
+  margin: px 0; /* Add spacing above and below the content */
+  font-family: 'Arial', sans-serif; /* Use a clean, readable font */
+}
+
+/* Post Actions */
+.post-actions {
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 10px 0;
+}
+
+.post-actions button {
+    border-radius: 50px;
+    background: #f5f5f5; /* Facebook's primary blue color */
+    color: #313242;
+    padding: 8px 16px; /* Slightly larger padding for better clickability */
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Space between icon and text */
+    font-size: 14px;
+}
+
+.post-actions button:hover {
+    background: #1659B3; /* Darker blue on hover */
+    transform: scale(1.05); /* Slightly enlarge on hover */
+}
+
+.post-actions button:active {
+    background: #114080; /* Even darker blue on click */
+    transform: scale(0.95); /* Slightly shrink on click */
+}
+
+/* Add a thumbs-up icon using a pseudo-element or an icon library like FontAwesome */
+.post-actions button::before {
+     /* Thumbs-up emoji */
+    font-size: 16px;
+}
+
+/* Alternatively, use FontAwesome for a more polished icon */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
+.post-actions button i {
+    font-size: 16px;
+}
+/* Comments */
+.post-comments {
+display: none;
+}
+
+.post-comment {
+display: flex;
+align-items: center;
+background: #f7f7f7;
+padding: 10px;
+border-radius: 8px;
+margin-top: 10px;
+}
+
+.post-comment img {
+width: 30px;
+height: 30px;
+border-radius: 50%;
+object-fit: cover;
+}
+
+.post-comment p {
+font-size: 14px;
+margin-left: 10px;
+color: grey;
+}
+
+/* Footer */
+
+
+.timestamp {
+  font-size: 12px; /* Smaller font size */
+  color: #888; /* Light gray color for subtlety */
+  font-style: italic; /* Optional: Italicize for a softer look */
+  margin-top: 5px; /* Add some spacing above the timestamp */
+  display: block; /* Ensure it appears on a new line */
+}
+
+.posterName {
+  font-size: 14px; /* Slightly larger than the timestamp */
+  font-weight: bold; /* Make the name stand out */
+  color: #333; /* Dark color for prominence */
+  display: block; /* Ensure it appears on a new line */
+  margin-bottom: 5px; /* Add spacing below the name */
+}
+
+#pstIcon {
+    color: #78787C; /* Gold color */
+    font-size: 20px; /* Icon size */
+    margin: 0 10px; /* Spacing around the icon */
+    transition: color 0.3s ease, transform 0.3s ease; /* Smooth transitions */
+}
+
+.pstIcon:hover {
+    color: #FFA500; /* Orange color on hover */
+    transform: scale(1.2); /* Slightly enlarge on hover */
+}
+
+footer {
+      grid-area: ;
+      text-align: center;
+      height:10%;
+      width:
+      transition: 5s;
+      background: transparent;
+      
+      position:fixed;
+      bottom: 5%;
+      left: 0;
+      right: 0;
+    }
+    
+    
+</style>
+  
+</head>
+  <main  style="display: none;">
+
+
+
+</main>
+<header onclick="document.querySelector('main').style.display='block';">
+  
+  
+  <img src="https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/fire-7318594_640.png?alt=media&token=b59d9b01-a1cd-41fc-ba6c-73ec14a53248" alt="" class="schoolProfile" >
+        <div class="logo-text">BLUE FLARE</div>
+  
+</header>
+
+
+<body >
+  
+ 
+ <div>
+
+    
+    
+    
+    
+      
+    <div class="post-options">
+      
+      <div class="option live">
+        <i class="fas fa-home"></i>
+        <span>Home</span>
+      </div>
+      <div class="option photo">
+        <i class="fas fa-video"></i>
+        <span>Video</span>
+      </div>
+      <div class="option location">
+        <i class="fas fa-map-marker-alt"></i>
+        <span>Group</span>
+      </div>
+    </div>
+    
+    
+    
+  </div>
+  
+  <div class="searchDiv" style="display:none;">
+       <form class="post-frm">
+         <textarea  class="searchInp" onclick="document.querySelector('footer').style.height='30%';" id="searchInp" disabled>
+          
+         </textarea>
+                 <button id="uploadButton" class="icon-crd" style="float:left;">🗂️</button>
+
+
+
+                  <input type="submit" value="Post" class="icon-crd" style="padding:10px; box-shadow:0 0 1px;">
+                
+                  
+
+         <input type="file" accept="image/*,video/*,.pdf,.doc,.docx" class="searchInpFile" style="display: none" id="fileInput"/>
+         
+           <!--    
+              <i class="fas fa-paper-plane" style="font-size: 25px;"></i>
+                  -->
+                   </form> 
+      </div>
+
+  </div>
+  
+
+  
+  <div id="postInpNav">
+    
+    <div class="post-input">
+      <img class="profile-pic" alt="User profile picture" src="https://storage.googleapis.com/a1aa/image/hVZNLKyl3aK_P_hLYIPOWjZ3kTVJPgmC6nL6CFkwkDE.jpg" id="profilePicture"/>
+      <input class="post-input-field" placeholder="What's on your mind?" type="text" />
+    </div>
+
+  </div>
+     <div class="nav">
+      <i class="fas fa-users"style="color:red;"></i>
+      <i class="fas fa-book"></i>
+      <i class="fas fa-hands"></i>
+      <i class="fas fa-chart-line"></i>
+      <i class="fas fa-handshake"></i>
+    </div>
+    
+  <div class="schoolNotice" id="schoolNotice">
+
+
+
+
+  <!-- Video Grid -->
+
+  
+  <!-- Video Grid -->
+  <div class="video-container" id="video-posts" style="display: flex;
+flex-direction: column;
+gap: 16px;"></div>
+
+  
+
+  <!-- Fullscreen Modal -->
+  <div id="fullscreen-modal" class="fullscreen-modal" style="display:none;">
+    <div class="video-player-container">
+      <div class="video-player">
+        <video id="fullscreen-video" controls></video>
+      </div>
+      <div class="video-info-fullscreen">
+        <h3 id="fullscreen-title" class="video-title"></h3>
+        <div class="channel-name" id="fullscreen-channel"></div>
+        <div class="video-stats" id="fullscreen-stats"></div>
+        <div class="video-description" id="fullscreen-description"></div>
+      </div>
+      <div class="comments-section">
+        <h3>Comments</h3>
+        <div id="comments-container"></div>
+      </div>
+    </div>
+    <span class="close-btn" onclick="closeFullscreen()">✖</span>
+  </div>
+
+
+
+
+  <!-- Fullscreen Modal -->
+  <div id="loading-spinner" class="loading-spinner"></div>
+
+
+
+  </div>
+
+
+  <div class="image-container" id="image-container" style="display:none;">
+            <div class="suDiv">
+<button src=""  class="suImg" onclick="document.getElementById('mainSet2').style.display='block';">
+                <div class="avatar">
+                🛒
+          </div>
+        <img src="/storage/emulated/0/Pictures/facebook/1736415214656.jpg" class="imgReal">
+</button>
+<button src="" alt="" class="suImg">
+                <div class="avatar">
+                👔
+          </div>
+        <img src="/storage/emulated/0/Pictures/facebook/1736415186319.jpg" class="imgReal">
+</button>
+<button src="" alt="" class="suImg">
+                <div class="avatar">
+          🏫
+          </div>
+    <img src="/storage/emulated/0/Pictures/facebook/1736415310222.jpg" class="imgReal">
+
+</button>
+  </div>
+  
+  
+  
+      
+  </div>
+  <div class="posts" id="publicPost">
+
+
+
+
+
+            
+        </div>
+    
+    
+    
+    
+    
+    
+    
+    </div>
+ 
+  
+  
+  
+  
+  
+</body>
+<footer  style="bottom: 0;margin:0;" >
+  <div class="circle-container">
+
+    <div class="bottom-nav">
+      <div class="nav-items">
+        <div class="nav-item">
+          <i class="fas fa-home"></i>
+          <span>Home</span>
+        </div>
+        <div class="nav-item">
+          <i class="fas fa-comment"></i>
+          <span>Chat</span>
+        </div>
+        <div class="nav-item">
+        <a href="rare-5f47e(pstPgFirstV,).html">
+          <i class="fas fa-plus-circle"></i>
+          </a>
+        </div>
+        <div class="nav-item" onclick="publicToNotice()">
+          <i class="fas fa-video"></i>
+          <span>Video</span>
+        </div>
+        <div class="nav-item">
+          <div class="profile-pic">
+            <img alt="User profile picture" src="https://storage.googleapis.com/a1aa/image/nRrhjMXvH8J2fKrIw017JgJgpnFNkUDYPETEd5KwZXc.jpg" id="profilePicture"/>
+            <span class="online-status"></span>
+          </div>
+        
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+
+</footer>
+</html>
+
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+    import { getDatabase, ref, push, set, onValue, runTransaction } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-database.js";
+    import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-storage.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBSMvHpZ0_VkqWjJ94UMa6vqEhFiqrsIWM",
+      authDomain: "rare-5f47e.firebaseapp.com",
+      projectId: "rare-5f47e",
+      storageBucket: "rare-5f47e.appspot.com",
+      messagingSenderId: "811727087812",
+      appId: "1:811727087812:web:d362e68abf6c26acf24191",
+      measurementId: "G-DE59771G7Q"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const database = getDatabase(app);
+    const storage = getStorage(app);
+    const postForm = document.querySelector(".post-form");
+    const postsContainer = document.querySelector(".posts");
+
+    onAuthStateChanged(auth, (user) => {
+  if (!user) {
+    alert("You must be signed in to use this platform.");
+    window.location.href = "sign-in.html";
+  } else {
+    fetchPosts();
+    document.getElementById('profilePicture').src = user.photoURL;
+    document.getElementById('user-info').innerText = user.email;
+  }
+});
+    const groupDisplayContainer = document.getElementById("image-container");
+
+  let groups = [];
+  let currentIndex = 0;
+
+  function fetchGroups() {
+    const groupsRef = ref(database, "groups");
+    onValue(groupsRef, (snapshot) => {
+      groups = [];
+      snapshot.forEach((childSnapshot) => {
+        const group = childSnapshot.val();
+        groups.push(group);
+      });
+      displayGroups(); // Start displaying the groups
+    });
+  }
+
+  function displayGroups() {
+    // Clear the container
+    groupDisplayContainer.innerHTML = "";
+
+    // Get the next 3 groups to display
+    const selectedGroups = groups.slice(currentIndex, currentIndex + 3);
+    if (selectedGroups.length < 3) {
+      selectedGroups.push(...groups.slice(0, 3 - selectedGroups.length)); // Wrap around if needed
+    }
+    
+    // Render the groups
+  //  selectedGroups.forEach((group) =>
+    selectedGroups.forEach((group) => {
+const categoryIcons = {
+  Social: "fa-solid fa-users",
+  Academics: "fa-solid fa-book",
+  Marketing: "fa-solid fa-chart-line",
+  Service: "fa-solid fa-handshake",
+  Music: "fa-solid fa-music",
+  Newsletter: "fa-solid fa-envelope-open-text"
+}
+const categoryIcon = categoryIcons[group.category] || "";
+      const groupBlockHTML = `
+        <button class="suImg">
+                        <div class="avatar">
+<i class="${categoryIcon} category-icon"></i>
+          </div>
+          
+          <img src="${group.imageURL}" alt="${group.name}" class="imgReal">
+
+     
+       </button>
+      `;
+      groupDisplayContainer.innerHTML += groupBlockHTML;
+    });
+
+    // Update the currentIndex for the next rotation
+    currentIndex = (currentIndex + 3) % groups.length;
+  }
+
+  // Fetch groups and set up interval for rotation
+  fetchGroups();
+  setInterval(() => {
+    if (groups.length > 0) {
+      displayGroups();
+    }
+  }, 30000); // Switch groups every 5 seconds
+
+    // Post submission
+
+    // Fetch and display posts
+    function fetchPosts() {
+
+      const postsRef = ref(database, "posts");
+      
+      onValue(postsRef, (snapshot) => {
+        postsContainer.innerHTML = "";
+        snapshot.forEach((childSnapshot) => {
+          const post = childSnapshot.val();
+                          const categoryIcons = {
+  Social: "fa-solid fa-users",
+  Academics: "fa-solid fa-book",
+  Marketing: "fa-solid fa-chart-line",
+  Service: "fa-solid fa-handshake",
+  Music: "fa-solid fa-music",
+  Newsletter: "fa-solid fa-envelope-open-text"
+}
+const categoryIcon = categoryIcons[post.category] || "";
+   
+          const postId = childSnapshot.key;
+
+          const postHTML = `
+          <hr style="background: transparent;">
+         
+            <div class="post" data-id="${postId}" >
+                                                                <div class="dots" id="dots">
+                  <div class="dot" ></div>                               <div class="dot" ></div>     
+                                    <div class="dot" ></div>     
+                                    </div>
+              <div class="post-header">
+                <img src="${post.authorPhoto}" alt="Profile Picture" >
+                <div>
+                  <h2 class="postName">${post.author}</h2>
+                  <p class="timestamp">${post.timestamp}</p>
+                </div>
+              </div>
+                          <button class="icon-crd" style="border:none;padding:2px; margin-bottom:3px;">
+
+              <span class="likes" style="font-size:20px;color:green;" class="fa ${categoryIcon}"></span>
+               ${post.category}
+            </button>
+                         <br>
+              <button class="icon-crd" style="border:none;padding:2px;">
+                              <span class="likes" style="font-size:12px;color:green;">
+                       ${postId}    
+                            </span>
+             
+            
+              
+              </button>
+                     <h4 style="text-align:center;font-weight:700;width:auto;" class="icon-crd">
+                ${post.title}
+              </h4>
+              <div class="post-content" style="margin:0;">
+                        <p style="font-weight:400;">${post.content}</p>
+                        ${
+                        post.fileURL
+                        ? post.fileType.startsWith("image/")
+                        ? `<img src="${post.fileURL}" alt="Post Image" class="imgVidDiv"/>` // Display image
+                        : post.fileType.startsWith("video/")
+                        ? `<video controls src="${post.fileURL}" class="imgVidDiv"></video>` // Display video
+                        : post.fileType.startsWith("audio/")
+                        ? `<audio controls src="${post.fileURL}" class="imgVidDiv"></audio>` // Display audio
+                        : `<a href="${post.fileURL}" target="_blank">Download File</a>` // Display download link for other files
+                        : ""
+                        }
+                        </div>
+              <div class="post-actions" style="margin:0;">
+                <button class="like-button" >
+                <i class="far fa-thumbs-up" style="font-size:22px"></i>
+                ${Object.keys(post.likes || {}).length} 
+              <span class="likes" style="font-size:20px;"></span>
+              </button>
+                            <button class="toggle-comments-button" style="margin-right: 0%;padding: ;">
+<i class="far fa-comment" style="font-size:22px"></i>
+                            ${Object.keys(post.comments || {}).length} 
+                            <span class="likes" style="font-size:20px;">
+                          </span>
+                </button>
+               <button>
+
+    <div class="share-icon">
+      <div class="flare-effect"></div>
+      <div class="icon-base">
+        <div class="share-arrow"></div>
+      </div>
+      <div class="flare-particle" style="animation-delay: 0.5s; left: 15px; top: 15px;"></div>
+      <div class="flare-particle" style="animation-delay: 1s; left: 25px; top: 10px;"></div>
+      <div class="flare-particle" style="animation-delay: 1.5s; left: 35px; top: 15px;"></div>
+    </div>
+               </button>     
+               
+                                           <button class="toggle-comments-button" style="margin-right: 0%;padding: ;">
+                              <i class="fas fa-share" style="font-size:22px"></i>
+                              </button>
+              </div>
+              <div class="post-comments">
+             
+                <button class="commentButton">Comment</button>
+                
+                <div class="comments">
+           <textarea class="commentBox" placeholder="Write a comment..."></textarea>
+              
+                ${Object.entries(post.comments || {})
+                .map(
+                ([id, comment]) => `
+                <div class="comment">
+                  <img src="${comment.profilePicture}" alt="Profile Picture" >
+                  <strong>${comment.author}</strong>
+                 
+                  <div class="postCNTNT">${comment.text}</div>
+                  <hr>
+                </div>`
+                )
+                .join("")}
+               
+                
+                
+                
+                </div>
+              </div>
+            </div>
+          `;
+          postsContainer.innerHTML += postHTML;
+document.addEventListener('DOMContentLoaded', function() {
+  // Select all posts
+  const posts = document.querySelectorAll('.post');
+
+  posts.forEach(post => {
+    post.addEventListener('click', function() {
+      // Check if the post is already in fullscreen mode
+      if (post.classList.contains('fullscreen-post')) {
+        // If it is, remove the fullscreen class
+        post.classList.remove('fullscreen-post');
+      } else {
+        // Otherwise, add the fullscreen class
+        post.classList.add('fullscreen-post');
+      }
+    });
+  });
+});
+          // Fetch comments
+          const commentsRef = ref(database, `posts/${postId}/comments`);
+          onValue(commentsRef, (commentsSnapshot) => {
+            const commentsList = postsContainer.querySelector(`.post[data-id="${postId}"] .comments-list`);
+            commentsList.innerHTML = "";
+            commentsSnapshot.forEach((commentSnapshot) => {
+              const comment = commentSnapshot.val();
+              const commentHTML = `<div class="comment"><strong>${comment.author}:</strong> ${comment.text}</div>`;
+              commentsList.innerHTML += commentHTML;
+            });
+          });
+        });
+      });
+    }
+
+    // Handle comments
+// Handle like button click
+
+    postsContainer.addEventListener("click", (e) => {
+
+            const postElement = e.target.closest(".post");
+            const postId = postElement.dataset.id;
+    
+          if (e.target.classList.contains("like-button")) {
+            const user = auth.currentUser ? auth.currentUser.uid : "guest";
+            const likesRef = ref(database, `posts/${postId}/likes/${user}`);
+    
+            runTransaction(likesRef, (currentValue) => {
+              return currentValue ? null : true; // Add or remove like
+            });
+          }
+          
+                if (e.target.classList.contains("toggle-comments-button")) {
+                  const commentsSection = postElement.querySelector(".post-comments");
+                  if (commentsSection.style.display === "none" || !commentsSection.style.display) {
+                    
+                    commentsSection.style.display = "block";
+
+}                else {
+                    commentsSection.style.display = "none";
+                            }
+                }
+    
+if (e.target.classList.contains("commentButton")) {
+                const postElement = e.target.closest(".post");
+                const postId = postElement.dataset.id;
+              
+                const commentText = postElement.querySelector(".commentBox").value;
+                const commentsRef = ref(database, `posts/${postId}/comments`);
+        const newComment = {
+                        text: commentText,
+                        author: auth.currentUser?.email || "Anonymous",
+                        profilePicture: auth.currentUser?.photoURL || "default-avatar.png",
+                      };
+                push(commentsRef, newComment);
+                postElement.querySelector(".commentBox").value = "";
+              }
+              });
+              
+              
+                  const noticesContainer = document.getElementById("noticesContainer");
+              
+                  const noticesRef = ref(database, "notices");
+              
+                  // Function to format date with month names
+                  function formatDate(isoDateString) {
+                    const date = new Date(isoDateString);
+                    return date.toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long", // Display full month name (e.g., December)
+                      day: "numeric",
+                    });
+                  }
+              
+                  // Listen for changes in the notices database
+                  onValue(noticesRef, (snapshot) => {
+                    noticesContainer.innerHTML = ""; // Clear existing notices
+                    if (snapshot.exists()) {
+                      snapshot.forEach((noticeSnapshot) => {
+                        const notice = noticeSnapshot.val();
+                        const noticeElement = document.createElement("div");
+                        noticeElement.className = "notice";
+                        noticeElement.innerHTML = `
+         <div style="float:left;width:auto;" class="timeDiv">${formatDate(notice.timestamp)}</div>
+         <br>
+                          <p >${notice.content}</p>
+                        `;
+                        noticesContainer.appendChild(noticeElement);
+                      });
+                    } else {
+                      noticesContainer.textContent = "No notices available.";
+                    }
+                  });
+
+    
+    // Initialize Firebase
+   
+//    const database = getDatabase(app);
+
+    const videoPostsContainer = document.getElementById("video-posts");
+    const loadingSpinner = document.getElementById("loading-spinner");
+    
+    // Fetch Video Posts from Firebase
+    function fetchVideoPosts() {
+      const postsRef = ref(database, "posts");
+      onValue(postsRef, (snapshot) => {
+        videoPostsContainer.innerHTML = "";
+        loadingSpinner.style.display = "none"; // Hide spinner
+        snapshot.forEach((childSnapshot) => {
+          const post = childSnapshot.val();
+          const postId = childSnapshot.key;
+          
+          if (post.fileType && post.fileType.startsWith("video/")) {
+            const postHTML = `
+              <div class="video-container" onclick="openFullscreen('${post.fileURL}', '${postId}', '${post.title || 'Untitled Video'}', '${post.author}', '${post.views || 0} views • ${post.timestamp || ''}', '${post.description || ''}')"><div>
+                <div class="video-list">
+                <div  class="icon-crd" style="display:none;">
+                ${post.category}
+                </div>
+                  <video src="${post.fileURL}" autoplay muted loop controls class="thumbnail" ></video>
+                </div>
+                <div class="video-menu">
+                  <img class="profile-pic"  src="${post.authorPhoto}" />
+                  <div class="video-info">
+                    <h2 class="video-title">${post.title || 'Untitled Video'}</h2>
+                    <div class="video-author">${post.author}</div>
+                    <div class="video-stats">${post.views || 0} views • ${post.timestamp || ''}</div>
+                  </div>
+                </div>
+
+              </div>
+            `;
+            videoPostsContainer.innerHTML += postHTML;
+          }
+        });
+      });
+    }
+    
+    fetchVideoPosts();
+    
+    // Fullscreen Functions
+    window.openFullscreen = (url, postId, title, channel, stats, description) => {
+      const fullscreenVideo = document.getElementById("fullscreen-video");
+      const fullscreenTitle = document.getElementById("fullscreen-title");
+      const fullscreenChannel = document.getElementById("fullscreen-channel");
+      const fullscreenStats = document.getElementById("fullscreen-stats");
+      const fullscreenDescription = document.getElementById("fullscreen-description");
+      const fullscreenModal = document.getElementById("fullscreen-modal");
+      const commentsContainer = document.getElementById("comments-container");
+      
+      // Set video source and attributes
+      fullscreenVideo.src = url;
+      fullscreenVideo.autoplay = true; // Enable autoplay
+      fullscreenVideo.muted = true; // Mute the video (required for autoplay)
+      fullscreenVideo.controls = true; // Show video controls
+      
+      // Update video info
+      fullscreenTitle.textContent = title;
+      fullscreenChannel.textContent = channel;
+      fullscreenStats.textContent = stats;
+      fullscreenDescription.textContent = description;
+      fullscreenModal.classList.add("active");
+      
+      // Fetch and display comments
+      const commentsRef = ref(database, `posts/${postId}/comments`);
+      onValue(commentsRef, (snapshot) => {
+        commentsContainer.innerHTML = ""; // Clear existing comments
+        snapshot.forEach((childSnapshot) => {
+          const comment = childSnapshot.val();
+          const commentHTML = `
+            <div class="comment">
+              <div class="comment-avatar">${comment.author.charAt(0)}</div>
+              <div class="comment-content">
+                <div class="comment-author">${comment.author}</div>
+                <div class="comment-text">${comment.text}</div>
+              </div>
+            </div>
+          `;
+          commentsContainer.innerHTML += commentHTML;
+        });
+      });
+      
+      // Increment views count in Firebase
+      const postRef = ref(database, `posts/${postId}`);
+      update(postRef, {
+        views: (parseInt(fullscreenVideo.dataset.views) || 0) + 1
+      });
+    };
+    
+    window.closeFullscreen = () => {
+      const fullscreenVideo = document.getElementById("fullscreen-video");
+      const fullscreenModal = document.getElementById("fullscreen-modal");
+      
+      fullscreenVideo.pause();
+      fullscreenVideo.src = "";
+      fullscreenModal.classList.remove("active");
+    };
+</script>
+
+<script>
+  
+  
+  
+      function publicToNotice() {
+        var publPost = document.getElementById('publicPost');
+document.getElementById("image-container").style.display='none';
+        document.querySelector('.searchDiv').style.display='none';
+        var schoolNotice = document.getElementById('schoolNotice');
+   var postInpNav = document.getElementById('postInpNav');
+              postInpNav.style.display = 'none';
+  
+        schoolNotice.style.width = '100%';
+        schoolNotice.style.display = 'block';
+        publPost.style.width='0%';
+        publPost.style.display='none';
+     document.getElementById('profileCont').style.display='none'; 
+  
+      }
+      
+      function noticeTopublic() {
+        document.getElementById("image-container").style.display='block';
+          
+        var publPost = document.getElementById('publicPost');
+        var schoolNotice = document.getElementById('schoolNotice');
+        schoolNotice.style.width = '0';
+   schoolNotice.style.display = 'none';
+        publPost.style.width='100%';
+        publPost.style.display='block';
+       document.querySelector('.searchDiv').style.display='block';
+            document.getElementById('profileCont').style.display=''; 
+  
+      }
+
+      
+              const fileInput = document.getElementById('fileInput');
+        const fileList = document.getElementById('fileList');
+        const uploadButton = document.getElementById('uploadButton');
+
+        uploadButton.addEventListener('click', () => {
+          fileInput.click(); // Trigger the file input click
+        });
+
+        fileInput.addEventListener('change', (event) => {
+          const files = event.target.files;
+          let fileNames = [];
+
+          for (let i = 0; i < files.length; i++) {
+            fileNames.push(files[i].name); // Get the file names
+          }
+
+          fileList.value = fileNames.join(', '); // Display file names in the textarea
+          alert(fileList.value)
+
+        });
+        
+            const toggleCircle = document.getElementById('toggleCircle');
+    const dropdownMenu = document.getElementById('dropdownMenu');
+
+    toggleCircle.addEventListener('click', () => {
+      toggleCircle.classList.toggle('active');
+      dropdownMenu.classList.toggle('active');
+    });
+        
+        
+</script>
