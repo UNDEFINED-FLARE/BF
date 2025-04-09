@@ -1,0 +1,212 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentication Page</title>
+   <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-app.js"></script>
+     <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-database.js"></script>
+     <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-storage.js"></script>
+     <style>
+   *{
+      margin: 0;
+     padding: 0;
+      
+   }
+body {
+    font-family: Arial, sans-serif;
+   background-size: 100% 95%;
+   
+}
+
+
+       .logo {
+          margin-top: 15px;
+          margin-left: 40%;
+          width: 100px;
+          height: 100px;
+          border-radius: 100%;
+          border: 2px solid white;
+          box-shadow: 1px 1px 8px  black  ;
+       }
+
+       h1 {
+          margin-left: 30%;
+          font-weight: 900;
+       }
+
+        header{
+        background: linear-gradient(79deg,#42445A,#1D1F34,#0F1127);
+        height: 30px;
+        
+        }
+.container {
+    max-width: 300px;
+    margin: 40px auto;
+    padding: 20px;
+    border: 1px solid #C6C6C65E;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #C6C6C63D;
+    
+    
+    
+}
+
+input[type="email"], input[type="password"] {
+    width: 100%;
+    height: 30px;
+    padding: 5px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    border: none;
+    background: #AEA3A33D;
+}
+
+button {
+
+           background: #328230;
+          z-index:1;
+          font-weight: 900;
+          font-size: 20px;
+          color:white;
+          margin-left: 20%;
+          border-radius: 40px;
+         border: none;
+
+          width:60%;
+          height: 50px;
+          
+          }
+
+
+button:hover {
+    background-color: #2C744D;
+    transition: 2s;
+    font-size: 29px;
+}
+.signUpName{
+   margin-left: 27%;
+   color:#23253A;
+font-weight: 900;
+}
+footer {
+                    grid-area: ;
+                    text-align: center;
+                    height: 30px;
+                    background: linear-gradient(97deg,#4C4E6B,#191B2A,#333440);
+                    box-shadow: 0 0 12px grey;
+                    position: fixed;
+                    bottom: 0;
+                    
+                    left: 0;
+                    right: 0;
+                 }
+            label{
+               margin-left: 35%;
+               font-weight: 900;
+               color:#42445A
+               
+            }
+               	.loader {
+			border: 4px solid transparent; /* Light grey */
+			border-top: 4px solid #42445A;
+			margin-top: 0;
+			margin-left: 0;
+         box-shadow: 0 0px 3px gold;
+			width: 9px;
+			z-index: 4;
+			position: fixed;
+			height: 2px;
+			animation: spin 60s linear infinite;
+		}
+
+		@keyframes spin {
+			0% {
+				padding-right: 0;
+			
+			}
+			100% {
+            padding-right: 100%;
+			
+			}
+		}
+</style>
+</head>
+<body>
+   <header>
+         <div class="loader"></div>
+         	
+
+      </header>
+      <img src="https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/1722686659551.jpg?alt=media&token=baecfd79-f36a-431e-b78c-aac4ca5eeb22" alt="" class="logo">
+      <br>
+      <label for="">Bopedi Bapedi T.H.S</label>
+      
+    <div class="container">
+        <h1>Sign in</h1>
+        <input type="email" id="email" placeholder="Email">
+        <input type="password" id="password" placeholder="Password">
+        <button id="sign-in">Sign in</button>
+        <p id="error-message"></p>
+    </div>
+    <p class="signUpName">press to sign up, <a href="" style="color:gold;">SIGN UP.</a> </p>
+    <script src="script.js"></script>
+</body>
+<footer>
+
+
+</footer>
+</html>
+
+
+<script type='module'>
+document.addEventListener("DOMContentLoaded", function() {
+   document.querySelector(".loader").style.display = "none";
+});
+   
+import { initializeApp} from 'https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js'
+
+
+import { getAnalytics } from 'https://www.gstatic.com/firebasejs/10.12.4/firebase-analytics.js'
+
+
+import { getAuth  , signInWithEmailAndPassword} from 'https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js'
+import { getFirestore } from 'https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js'
+
+const firebaseConfig = {
+        apiKey: "AIzaSyBSMvHpZ0_VkqWjJ94UMa6vqEhFiqrsIWM",
+           authDomain: "rare-5f47e.firebaseapp.com", 
+           projectId: "rare-5f47e",
+           storageBucket: "rare-5f47e.appspot.com",
+           messagingSenderId: "811727087812",
+           appId: "1:811727087812:web:d362e68abf6c26acf24191",
+           measurementId: "G-DE59771G7Q"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+const emailInput = document.getElementById("email");
+const passwordInput = document.getElementById("password");
+const signInButton = document.getElementById("sign-in");
+const errorMessage = document.getElementById("error-message");
+
+signInButton.addEventListener("click", () => {
+    const email = emailInput.value;
+    const password = passwordInput.value;
+
+    signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+            const user = userCredential.user;
+            console.log(user);
+            window.location.href = "https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/app3.html?alt=media&token=622fa662-4eba-4d48-9cdc-42c28730c6d1"; // Redirect to dashboard page
+        })
+        .catch((error) => {
+            errorMessage.innerText = error.message;
+        });
+});
+
+</script>
+
