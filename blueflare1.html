@@ -1,14 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-      <meta http-equiv="Permissions-Policy" content="interest-cohort=()">
   <meta charset="UTF-8">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
 <link href="https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/test%20(1).css?alt=media&token=a7f240ce-394b-4aa9-8c12-116fd7104e51" rel="stylesheet">
 <script type="module" src="https://undefined-flare.github.io/BF/main.js"></script>
-
 
   <title>blueflare</title>
   
@@ -292,7 +290,7 @@ align-content: center ;
               height:auto;
               color: #42445A;
                width:auto;
-               padding: 5px;
+               padding: 0px;
           text-align: center;
          
           background-color: rgba(255, 255, 255, 0.9);
@@ -1390,7 +1388,7 @@ gap: 16px;"></div>
     onAuthStateChanged(auth, (user) => {
   if (!user) {
     alert("You must be signed in to use this platform.");
-    window.location.href = "https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/blueflare%20sign%20in.html?alt=media&token=898fa7cc-6e4b-411a-a612-1e5455ac50e7";
+    window.location.href = "sign-in.html";
   } else {
     fetchPosts();
     document.getElementById('profilePicture').src = user.photoURL;
@@ -1489,31 +1487,19 @@ const categoryIcon = categoryIcons[post.category] || "";
           <hr style="background: transparent;">
          
             <div class="post" data-id="${postId}" >
-                                                                <div class="dots" id="dots">
-                  <div class="dot" ></div>                               <div class="dot" ></div>     
-                                    <div class="dot" ></div>     
-                                    </div>
-              <div class="post-header">
-                <img src="${post.authorPhoto}" alt="Profile Picture" >
-                <div>
-                  <h2 class="postName">${post.author}</h2>
-                  <p class="timestamp">${post.timestamp}</p>
-                </div>
-              </div>
-                          <button class="icon-crd" style="border:none;padding:2px; margin-bottom:3px;">
 
-              <span class="likes" style="font-size:20px;color:green;" class="fa ${categoryIcon}"></span>
-               ${post.category}
-            </button>
-                         <br>
-              <button class="icon-crd" style="border:none;padding:2px;">
-                              <span class="likes" style="font-size:12px;color:green;">
-                       ${postId}    
-                            </span>
-             
-            
-              
-              </button>
+                            <div class="post-header">
+                              <img src="${post.authorPhoto}" alt="User Photo" class="profile-pic">
+                              <div class="post-user-info">
+                                <h3>${post.author}</h3>
+                          <div class="post-meta">
+                                  <span class="icon-crd"><i class="fas ${categoryIcon}"style="font-size:px;"></i> ${post.category}</span>
+                                  <span class="icon-crd"style="color:green;padding:5px;">${formatTime(post.timestamp)}</span>
+                                </div>
+                              </div>
+              </div>
+ 
+
                      <h4 style="text-align:center;font-weight:700;width:auto;" class="icon-crd">
                 ${post.title}
               </h4>
@@ -1588,6 +1574,26 @@ const categoryIcon = categoryIcons[post.category] || "";
             </div>
           `;
           postsContainer.innerHTML += postHTML;
+                  function formatTime(timestamp) {
+            const now = Date.now();
+            const diff = now - timestamp;
+            const seconds = Math.floor(diff / 1000);
+            const minutes = Math.floor(seconds / 60);
+            const hours = Math.floor(minutes / 60);
+            const days = Math.floor(hours / 24);
+
+            if (seconds < 60) return "Just now";
+            if (minutes < 60) return `${minutes} min ago`;
+            if (hours < 24) return `${hours} hr ago`;
+            if (days < 7) return `${days} day${days > 1 ? 's' : ''} ago`;
+            
+            return new Date(timestamp).toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric'
+            });
+        }
+
 document.addEventListener('DOMContentLoaded', function() {
   // Select all posts
   const posts = document.querySelectorAll('.post');
