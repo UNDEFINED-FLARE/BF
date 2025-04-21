@@ -1,1308 +1,1028 @@
-          :root {
-            --primary-color: #4361ee;
-            --secondary-color: #3f37c9;
-            --accent-color: #4895ef;
-            --danger-color: #f72585;
-            --success-color: #4cc9f0;
-            --light-color: #f8f9fa;
-            --dark-color: #212529;
-            --gray-color: #6c757d;
-            --border-radius: 8px;
-            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            --transition: all 0.3s ease;
-        }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link href="test.css" rel="stylesheet">
+<script type="module" src="https://undefined-flare.github.io/BF/main.js"></script>
 
-    .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background-color: white;
-      border-top: 1px solid #e5e5e5;
-      padding: 0.5rem 0;
-    }
+  <title>blueflare</title>
+  
+<style>
+    *{                         
+      margin: 0;
+      padding: 0;#1C1C1C;
     
-    .nav-items {
-      display: flex;
-      justify-content: space-around;
-    }
-    
-    .nav-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    
-    .nav-item i {
-      font-size: 1.25rem;
     
     }
-    
-    .nav-item .fa-plus-circle {
-      font-size: 1.75rem;
-      color: #666;
-    }
-    
-    .nav-item span {
-      font-size: 0.75rem;
-      margin-top: 0.25rem;
-    }
-    
-    .profile-pic {
-      position: relative;
-      width: 1rem;
-      height: 1rem;
-    }
-    
-    .profile-pic img {
+        body {
+          margin: 0;
+          padding: 0;
+        
+        
+          font-family: Arial, sans-serif;
+          display: flex;
+          flex-direction: column;
+          height: 100vh;
+        }
+    header{
+      
       width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      object-fit: cover;
+      
+     
+      
+    }
+
+    
+    .searchDiv{
+     
+     max-height: 50px;
+      width:100%;
+      text-align: center;
+      border: 1px solid #ddd;
+      border-radius: 0;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      background: #fff;
+      
     }
     
-    .online-status {
-      position: absolute;
-      bottom: 0;
-      right: 0;
-      width: 0.5rem;
-      height: 0.5rem;
-      background-color: #0f0;
-      border-radius: 50%;
+    .searchInp
+{    flex: 1;
+float: left;
+width: 80%;
+font-size: 14px;
+padding: 12px;
+border-radius: 8px;
+border: 1px solid #ddd;
+background: #f4f4f4;
+outline: none;
     }
-            .share-icon {
-            position: relative;
+    .searchButton{
+      
+      
+            border-radius:5px 5px 5px 5px;
+    
+  
+              color: #42445A;
+               width:10%;
+         padding: 4%;
+          text-align: center;
+          font-size: 12px;
+          background-color: rgba(255, 255, 255, 0.9);
+          
+        
+          font-weight: 900;
+           box-shadow: 0px 0px 1.6px #B4B4BE;
+          border: 2px solid rgba(255, 255, 255, 0.9);
+          border-left: 2px solid rgba(255, 255, 255, 9);
+          border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+
+    
+      
+    }
+    .searchInpFile{
+      
+      border-radius:15px;
+    
+             float: left;
+               
+              color: #42445A;
+               width:75%;
+               padding-bottom: 10px;
+          text-align: center;
+          font-size: 12px;
+          background-color: rgba(255, 255, 255, 0.9);
+          
+          
+          font-weight: 900;
+           box-shadow: 0px 0px 8px #B4B4BE;
+          border: 2px solid rgba(255, 255, 255, 0.9);
+          border-left: 2px solid rgba(255, 255, 255, 9);
+          border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+
+    
+      
+      
+    }
+    
+    
+    hr{
+      background :#F5EFFF;
+      border: 0.5px solid #E5D9F2;
+      padding-bottom: 3px;
+    }
+    .profileCont{
+                float: left;
+          height:50px ;
+          padding: 4%;
+          width: 90%;
+          
+        
+          
+          text-align: center;
+          font-size: 12px;
+          background-color: rgba(255, 255, 255, 0.9);
+          background: #ECF8F891;
+          border-radius: 12px;
+          font-weight: 900;
+           box-shadow: 0px 0px 8px #B4B4BE;
+          border: 2px solid rgba(255, 255, 255, 0.9);
+          border-left: 2px solid rgba(255, 255, 255, 9);
+          border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+align-content: center ;
+
+    }
+    .profilePicture{
+    
+      float: left;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: 2px solid #fff;
+      box-shadow: 1px 1px 8px #000;
+      
+    }
+    .profileName{
+      
+      
+      color:#2D2F40;
+    }
+    .messNavDiv{
+            display: flex;
+            height: auto;
+            padding: 7px;
+            width: auto;
+            
+           
+          
+      
+    }
+    .messNav{
+      
+           
+           padding:1%;
+           
+          
+         
+           height:30px;
+          width: 16%;
+          
+        margin-left: 5%;
+          text-align: center;
+          font-size: 12px;
+          background :white;
+          
+          border-radius: 12px;
+          font-weight: 900;
+           box-shadow: 0px 0px 2px #B4B4BE;
+          border: 2px solid rgba(255, 255, 255, 0.9);
+          border-left: 2px solid rgba(255, 255, 255, 9);
+          border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+
+    }
+    
+    
+    
+          
+      
+
+
+
+        .imgVidDiv {
+          border-radius: 5px 5px 5px 5px;
+
+          background: #DFE1ED;
+          color: #42445A;
+          width: 100%;
+
+          text-align: center;
+          font-size: 12px;
+
+
+
+          font-weight: 900;
+
+        }
+        .post-content {
+          font-size: 14px;
+                        margin-bottom: 10px;
+            margin-top: 1px;
+            background:#E5E5E58A;
+            border-radius:7px;
+            margin-bottom: 20px;
+        }
+        .post-content p {
+            font-size: 15px;
+            font-weight: 300;
+        }
+        .post-actions {
+            display: flex;
+            justify-content: spce-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+  .post-actions button{
+      margin:2% ;
+  }
+        .post-actions button , .icon-crd {
+               border-radius:15px 15px 15px 15px;
+    
+              height:auto;
+              color: #42445A;
+               width:auto;
+               padding: 0px;
+          text-align: center;
+         
+          background-color: rgba(255, 255, 255, 0.9);
+          
+          font-size: 15px;
+          font-weight: 800;
+           box-shadow: 1px 0.5px 2px #B4B4BE;
+          border: 2px solid rgba(255, 255, 255, 0.9);
+          border-left: 2px solid rgba(255, 255, 255, 9);
+          border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+
+    
+            cursor: pointer;
+        }
+        
+                .ptCMNT {
+               border-radius:15px 15px 15px 15px;
+    
+              height:auto;
+              color: #42445A;
+               width:auto;
+               padding: 7px;
+          text-align: center;
+         
+          background-color: rgba(255, 255, 255, 0.9);
+          
+          
+          font-weight: 900;
+           box-shadow: 1px 0.5px 2px #B4B4BE;
+          border: 2px solid rgba(255, 255, 255, 0.9);
+          border-left: 2px solid rgba(255, 255, 255, 9);
+          border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+
+    
+            cursor: pointer;
+        }
+        .post-actions button:hover {
+            background-color:#D8DAEB;
+        }
+        .post-comments {
+            margin-bottom: 20px;
+            display :none;
+        }
+        .post-comment {
+            background-color: #f7f7f7;
+            padding: 10px;
+            border-bottom: 9px solid #ccc;
+        }
+        .post-comment img {
             width: 30px;
             height: 30px;
-            cursor: pointer;
-            transition: transform 0.3s;
-        }
-        
-        .share-icon:hover {
-            transform: scale(1.1);
-        }
-        
-        .icon-base {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: white;
             border-radius: 50%;
-            box-shadow: 0 4px 12px rgba(0, 102, 255, 0.2);
+            margin-right: 10px;
+        }
+        .post-comment p {
+            font-size: 14px;
+            color:grey;
+        }
+        .likes{
+          font-weight: 700;
+          color: #4E5064;
+        }
+        .comments{
+          font-weight: 700;
+          color: #4E5064;
+        }
+                       .videoNote   {
+          
+        
+         : flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        
+          width: 95%;
+          
+          
+          float: left;
+          text-align: center;
+          font-size: 12px;
+          background-color: rgba(255, 255, 255, 0.9);
+         
+          border-radius: 12px;
+          font-weight: 900;
+           box-shadow: 0px 0px 8px #B4B4BE;
+          border: 2px solid rgba(255, 255, 255, 0.9);
+          border-left: 2px solid rgba(255, 255, 255, 9);
+          border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+
+    
+    
+        }
+        .publicPost{
+          transition: 5s;
+        }
+        
+        
+        
+        .schoolNotice{
+          width:0%;
+          z-index: 2;
+          display :none;
+          float:left;
+          padding-bottom: 100%;
+          transition: 5s;
+          box-shadow: 0px 0px 8px #B4B4BE;
+          border: 2px solid rgba(255, 255, 255, 0.9);
+          border-left: 2px solid rgba(255, 255, 255, 9);
+          border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+
+        }
+                 .noticePost{
+             
+            border:1px solid black;
+            display:block;
+           word-wrap:break-word;
+          overflow-wrap:break-word;
+           padding: 9.999px;
+            height:auto;
+            width:90%;
+            margin: 5%;
+            margin-left: 5%;
+            text-align:center;
+            font-weight: 440;
+            font-size:12px;
+            background:#B2967E;
+            
+            box-sizing:border-box;
+            border-radius:12px;
+            
+            box-shadow: 0 2px 8px grey;
+            backdrop-filter: blur(25px);
+            border-radius: 10px;
+            border:none;
             display: flex;
             justify-content: center;
-            align-items: center;
-            z-index: 2;
-        }
-        
-        .share-arrow {
-            width: 20px;
-            height: 20px;
-            background: linear-gradient(135deg, #0066ff, #00a2ff);
-            clip-path: polygon(100% 50%, 60% 90%, 60% 70%, 0 70%, 0 30%, 60% 30%, 60% 10%);
-        }
-        
-        .flare-effect {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(0, 162, 255, 0.4) 0%, rgba(0, 162, 255, 0) 70%);
-            animation: pulse 2s infinite ease-in-out;
-            z-index: 1;
-        }
-        
-        .flare-particle {
-            position: absolute;
-            width: 8px;
-            height: 8px;
-            background: #00a2ff;
-            border-radius: 50%;
-            filter: blur(2px);
-            opacity: 0;
-            animation: float 3s infinite ease-in-out;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { transform: scale(0.9); opacity: 0.6; }
-            50% { transform: scale(1.1); opacity: 0.9; }
-        }
-        
-        @keyframes float {
-            0% { transform: translate(0, 0); opacity: 0; }
-            20% { opacity: 0.7; }
-            100% { transform: translate(15px, -15px); opacity: 0; }
-        }
-            .post-options {
-      display: flex;
-      justify-content: space-around;
-      padding: 8px;
-      background-color: white;
-      border-bottom: 1px solid #dddfe2;
+           
+            overflow: hidden;
+          
+    
+           
+         }
+                     .NoticePostContent{
+              font-size:    14px;
+              color: white;
+              font-weight: 900;
+             
+            }
+            .commentBox{
+                margin: 0;
+            padding:0 ;
+    width: auto;
+    border: 1px solid #C6C6C65E;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    background-color: ;
+    
+    
+              
+            }
+            .commentButton{
+              
+              background: #B2967E;
+              z-index:1;
+              font-weight: 900;
+              font-size: 15px;
+              color:white;
+             
+              border-radius: 6px;
+              border: none;
+              
+              width:50%;
+              height: 30px;
+              float: right;
+              margin-right: 2%;
+            }
+                .comment img {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
     }
     
-    .option {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-    
-    .option.live {
-      color: #4D5CFF;
-     border-right:2px solid #42445A;
-     padding-right: 10%;
-    }
-    
-    .option.photo {
-      color: #45bd62;
-    }
-    
-    .option.location {
-      border-left:2px solid #42445A;
-      padding-left: 10%;
-      color: #f5533d;
-    }
+              .item{
+          height:50px;
+          width:100%;
+         
+          display:flex;
+          align-items:center;
+          justify-content:center;
 
-        .post-input {
+          }
+          .icon{
+          
+          
+          width:90%;
+         
+      
+          transition:1s;
+          z-index:1;
+          
+          }
+                    
+            .icon-card i {
+                   font-size: 25px;
+                   color: #282B4B;
+                   margin-bottom: 50%;
+                
+                   background-color: rgba(255, 255, 255, 0.9);
+                   box-shadow: 0 0px 2px #2C2E3E;
+                   border-radius: 30%;
+                   transition: 0.9s;
+                     
+                  
+                    }
+                    .icon-card:hover{
+                       border: 3px solid ;
+                       box-shadow: inset 0px 0px   2px ;
+                       border-radius: 15%;
+                    }
+                    .postCNTNT{
+                      COLOR:GREY;
+                      
+                    }
+                    
+                             .image-container {
+      width: 100%;
+      min-height: 250px;
+      
+      background-size: 100%;
+      background-position: center ;
+      overflow: hidden;
+      color: white;
+      font-weight: bold;
       display: flex;
       align-items: center;
-      padding: 16px;
-      background-color: white;
-      border-bottom: 1px solid #dddfe2;
-    }
-    
-    .profile-pic {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      object-fit: cover;
-    }
-    
-    .post-input-field {
-      margin-left: 16px;
-      flex: 1;
-      padding: 8px 16px;
-      border: 1px solid #dddfe2;
-      border-radius: 50px;
-      background-color: #f0f2f5;
-      font-size: 14px;
-    }
-        .post-input {
-      display: flex;
-      align-items: center;
-      padding: 16px;
-      background-color: white;
-      border-bottom: 1px solid #dddfe2;
-    }
-    
-    .profile-pic {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      object-fit: cover;
-    }
-    
-    .post-input-field {
-      margin-left: 16px;
-      flex: 1;
-      padding: 8px 16px;
-      border: 1px solid #dddfe2;
-      border-radius: 50px;
-      background-color: #f0f2f5;
-      font-size: 14px;
-    }
-        .nav {
-      display: flex;
-      justify-content: space-between;
-      padding: 8px 16px;
-      background-color: white;
-      border-bottom: 1px solid #dddfe2;
-    }
-    
-    .nav i {
+      justify-content: center;
+      border-radius: 1px;
       font-size: 20px;
-      color: #65676b;
-    }
-    .nav i:hover {
-      color:#00171f;
-      background:#E2E2D2; 
-      border-radius:50%;
-      padding:2%; 
-      animation: pulse 2s 3 ease-in-out;
-    }
-
-            .logo-text {
-            font-family: 'Arial Black', sans-serif;
-            font-size: 16px;
-            font-weight: bold;
-            background: linear-gradient(to bottom, #00a2ff, #0066ff);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 0 0 10px rgba(0, 150, 255, 0.3);
-            position: relative;
-            z-index: 2;
-            letter-spacing: 2px;
-        }
-        
-        
-        
-                #footer {
-            
-            
-            padding: 20px;
-            text-align: center;
-            transition: transform 0.3s ease-in-out;
-            will-change: transform;
-        }
-        
-        #footer.hidden {
-            transform: translateY(100%);
-        }
-        
-        /* Demo content to explain the controls */
-        .demo-content {
-            position: absolute;
-            top: 80px;
-            left: 20px;
-            right: 20px;
-            text-align: center;
-        }
-
-
-            .video-container h2 {
-font-size: 14px;
-font-weight: bold;
-margin: 0 0 4px 0;
-    }
-        .video-stats {
-      font-size: 12px;
-      color: #606060;
-      margin: 0 0 4px 0;
-    }
-    
-    .video-duration {
-      font-size: 12px;
-      color: #606060;
-    }
-    
-    .video-menu {
-      display: flex;
-      align-items: center;
-    }
-    
-    .video-list {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-    .video-author{
-      font-size: 12px;
-    }
-    
-        .appl {
-      margin-top: 5%;
-    }
-    .applScool {
-      float: left;
-      height: 90px;
-      width: 90%;
-      margin: 1%;
-      font-size: 12px;
-      background-color: rgba(255, 255, 255, 0.9);
-      border-radius: 12px;
-      font-weight: 900;
-      box-shadow: 0px 0px 1px #B4B4BE;
-      border: 2px solid rgba(255, 255, 255, 0.9);
-      border-left: 2px solid rgba(255, 255, 255, 9);
-      border-bottom: 2px solid rgba(255, 255, 255, 0.1);
-    }
-    .applName {
-      margin: 7px;
-      color: #42445A;
-      font-size: 16px;
-      letter-spacing: 1px;
-      font-weight: 600;
-    }
-    .applAm {
-      color: grey;
-      margin-left: 7px;
-      font-size: 12px;
-      font-weight: 400;
-    }
-    .imgDiv {
-      float: left;
-      width: 70px;
-      font-size: 12px;
-      background-color: #9B6F0B;
-      border-radius: 12px;
-      font-weight: 900;
-      box-shadow: 0px 0px 8px #B4B4BE;
-      border: 1px black;
-    }
-    .img {
-      width: 70px;
-      height: 70px;
-      border-radius: 12px;
-      margin-right: 20px;
-      object-fit: cover;
-      float: left;
-    }
-    .category-icon {
-      margin: 10px;
-      font-size: 18px;
-      color: peru;
-    }
-    
-    
-    .header-container {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.75rem 1rem;
-      max-width: 1280px;
-      margin: 0 auto;
-    }
-    
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 0.25rem;
-    }
-    
-    .logo-icon {
-      font-size: 1.5rem;
-      color: var(--primary-blue);
-    }
-    
-        .post-header {
-          display: flex;
-          align-items: flex-start;
-          margin-bottom: 15px;
-          position: relative;
-        }
-        
-        .post-user-info {
-          flex: 1;
-        }
-        
-        .post-user-info h3 {
-          font-size: 16px;
-          margin-bottom: 2px;
-        }
-        
-        .post-meta {
-          display: flex;
-          gap: 10px;
-          font-size: 13px;
-          color: var(--gray-color);
-        }
-        
-        .post-category {
-          display: flex;
-          align-items: center;
-          gap: 5px;
-        }
-        
-        .post-time {
-          color: var(--gray-color);
-        }
-          .category-tag {
-      margin-left: auto;
-      display: inline-flex;
-      align-items: center;
-      border-radius: 9999px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      padding: 0.125rem 0.5rem;
-      user-select: none;
-            background-color: rgba(254, 243, 199, 0.7);
-      color: #92400e;
-    }
-    article {
-      border: 1px solid #e5e7eb;
-      border-radius: 0.75rem;
-      padding: 1rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    }
-    main {
-      max-width: 28rem;
-      margin-left: auto;
-      margin-right: auto;
-      padding: 1rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      padding-bottom: 5rem;
-    }
-    
-    article {
-      border: 1px solid #e5e7eb;
-      border-radius: 0.75rem;
-      padding: 1rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    }
-    
-    header {
-      display: flex;
-      align-items: center;
-      gp: 0.75rem;
-    }
-    
-    .profile-pic {
-      width: 2.5rem;
-      height: 2.5rem;
-      border-radius: 9999px;
-      object-fit: cover;
-    }
-    
-    .header-text {
-      flex: 1;
-      min-width: 0;
-    }
-    
-    .header-text p.name {
-      font-weight: 600;
-      color: #111827;
-      line-height: 1.25;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-    
-    .header-text p.email {
-      font-size: 0.75rem;
-      color: #6b7280;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-    
-    .header-text p.time {
-      font-size: 0.75rem;
-      color: #9ca3af;
-    }
-    
-    .category-tag {
-      margin-left: auto;
-      display: inline-flex;
-      align-items: center;
-      border-radius: 9999px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      padding: 0.125rem 0.5rem;
-      user-select: none;
-    }
-    
-    .category-tag.music {
-      background-color: rgba(216, 180, 254, 0.7);
-      color: #6b21a8;
-    }
-    
-    .category-tag.career {
-      background-color: rgba(254, 243, 199, 0.7);
-      color: #92400e;
-    }
-    
-    .category-tag i {
-      margin-right: 0.25rem;
-    }
-    
-    .options-button {
-      margin-left: 0.5rem;
-      color: #4b5563;
-      background: none;
-      border: none;
-      cursor: pointer;
-    }
-    
-    .options-button:hover {
-      color: #111827;
-    }
-    
-    .post-id {
-      font-size: 0.75rem;
-      color: #2563eb;
-      word-break: break-word;
-      margin-top: -0.25rem;
-      margin-bottom: -0.25rem;
-    }
-    
-    .post-title {
-      font-weight: 700;
-      font-size: 1rem;
-      line-height: 1.25;
-    
-      color: #4252FF;
   
-      border-radius: 9999px;
-      font-size: 12px;
-      padding:4px;
-      background: none;
-      cursor: pointer;
-      user-select: none;
+                             }
+                               .suVidDiv{
+       
+      height: auto;
+      
+      width: 100%;
+        box-shadow: 1px 1px 9px white;
+       background:white;
     }
-    
-    .post-content {
-      font-size: 0.875rem;
-      line-height: 1.5;
+     
+     
+         .suVidImg {
+           font-weight:600;   
+           color:#676768 ;
+           height:230px;
+           width:46%;
+         margin-bottom: 5%;
+           background: white;
+           margin:3px ;
+           border-radius: 10px;
+           border: 0.5px solid white;
+           box-shadow: 1px 1px 5px grey;
+         }
+
+  .suDiv{
+       display: flex;
+      height: auto;
+      
+      width: 100%;
+        box-shadow: 1px 1px 9px white;
+       background:white;
     }
-    
-    footer {
-      display: flex;
-      justify-content: space-between;
-      border-top: 1px solid #e5e7eb;
-      padding-top: 0.5rem;
-      color: #374151;
-      font-size: 0.895rem;
-      user-select: none;
-    }
-    
-    .footer-button {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: inherit;
-    }
-    
-    .footer-button:hover {
-      color: #111827;
-    }
-    
-    .footer-button i {
-      font-size: 1.125rem;
-    }
-    
-    hr {
-      border: none;
-      border-top: 1px solid #e5e7eb;
-      margin: 0;
-    }
-        nav {
-          z-index: 3000;
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background-color: white;
-      border-top: 1px solid #2d2d2d;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 8px 24px;
-    }
-    
-    .nav-button {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      color: #9CA3AF;
-      font-size: 12px;
-      user-select: none;
-      background: none;
-      border: none;
-      cursor: pointer;
-    }
-    
-    .nav-button i {
-      font-size: 17px;
-    }
-    
-    .nav-button.active {
-      color: #4F8FFF;
-      font-weight: 600;
-    }
-    
-    .nav-button .badge {
-      position: absolute;
-      top: -4px;
-      right: -8px;
-      background-color: #DC2626;
-      color: white;
-      font-size: 10px;
-      font-weight: 600;
-      border-radius: 50%;
-      width: 16px;
-      height: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    .nav-button.manage {
-      position: relative;
-    }
-    
-    .manage-icon {
+     
+     
+         .suImg {
+           font-weight:600;   
+           color:#676768 ;
+           height:230px;
+           width:33.33333%;
+           padding-bottom:1%;
+           background: white;
+           margin:2px ;
+           border-radius: 10px;
+           border: 0.5px solid white;
+           box-shadow: 1px 1px 5px grey;
+         }
+         .imgReal{
+             width: 100%;
+             height:100%;
+             border-radius: 10px;
+
+         }
+.avatar {
       width: 40px;
+      z-index: 2000;
       height: 40px;
-      border-radius: 50%;
-      background-color: #2E2E4D;
+      background: #F0F0F08A;
+      color: green;
+      font-weight: bold;
       display: flex;
+      position:absolute;
       align-items: center;
       justify-content: center;
+      border-radius: 50%;
+      font-size: 20px;
     }
+     
+
+main{
+
+  positon:fixed;
+  height:100%;
+  width:100%;
+  background : white;
+}
+    main {
+      
     
-    .manage-icon i {
-      color: white;
-      font-size: 18px;
-    }
     
-    .manage-text {
-      margin-top: 2px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
-    .header {
+
+    h2 {
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #333;
+    }
+
+     select,
+    textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    textarea {
+      resize: none;
+    }
+
+    .toggle-container {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      padding: 8px 12px;
-      border-bottom: 1px solid #e5e5e5;
+      gap: 10px;
     }
-    
-    .logo-container {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-    
-    .logo-play {
-      width: 24px;
+
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
       height: 24px;
     }
-    
-    .logo-text {
-      width: 90px;
-      height: 20px;
-    }
-    
-    .header-buttons {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-    }
-    
-    .header-button {
-      color: #606060;
-      font-size: 20px;
-      background: none;
-      border: none;
-      padding: 0;
-    }
-    
-    .notification-badge {
-      position: absolute;
-      top: -4px;
-      right: -8px;
-      background-color: #ff0000;
-      color: white;
-      font-size: 10px;
-      font-weight: 600;
-      border-radius: 9999px;
-      padding: 0 6px;
-      line-height: 1;
-    }
-    
-    /* Navigation tabs */
-    .nav-tabs {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 12px;
-      border-bottom: 1px solid #e5e5e5;
-      overflow-x: auto;
-      scrollbar-width: none;
-    }
-    
-    .nav-tabs::-webkit-scrollbar {
+
+    .toggle-switch input {
       display: none;
     }
-    
-    .explore-button {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 36px;
-      height: 36px;
-      border-radius: 9999px;
-      background-color: #e5e5e5;
-      border: none;
-    }
-    
-    .explore-icon {
-      color: #606060;
-      font-size: 18px;
-    }
-    
-    .tab-button {
-      padding: 4px 16px;
-      border-radius: 9999px;
-      font-weight: 600;
-      font-size: 14px;
-      border: none;
-    }
-    
-    .tab-button.active {
-      background-color: black;
-      color: white;
-    }
-    
-    .tab-button.inactive {
-      background-color: #e5e5e5;
-      color: #212121;
-    }
-    
-    /* Ad banner */
-    .ad-section {
-      padding: 12px;
-    }
-    
-    .ad-banner-container {
-      position: relative;
-      border-radius: 12px;
-      overflow: hidden;
-    }
-    
-    .ad-banner {
-      width: 100%;
-      height: auto;
-      border-radius: 12px;
-    }
-    
-    .ad-link-button {
+
+    .slider {
       position: absolute;
-      bottom: 12px;
-      right: 12px;
-      background-color: rgba(51, 51, 51, 0.7);
-      border-radius: 9999px;
-      padding: 8px;
-      color: white;
-      font-size: 18px;
-      border: none;
-    }
-    
-    .ad-info {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      margin-top: 12px;
-    }
-    
-    .ad-logo {
-      width: 40px;
-      height: 40px;
-      border-radius: 8px;
-    }
-    
-    .ad-details {
-      display: flex;
-      flex-direction: column;
-    }
-    
-    .ad-title {
-      font-weight: 600;
-      font-size: 14px;
-      line-height: 1.2;
-    }
-    
-    .ad-meta {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 12px;
-      color: #606060;
-      margin-top: 4px;
-    }
-    
-    .ad-rating {
-      font-weight: bold;
-    }
-    
-    .star-icon {
-      color: #ffc107;
-    }
-    
-    .ad-more {
-      margin-left: auto;
-      color: #606060;
-      font-size: 20px;
-      background: none;
-      border: none;
-    }
-        main {
-      flex: 1;
-      overflow-y: auto;
-      padding: 16px 16px 80px;
-    }
-    
-    /* Page styles */
-.page {
-      display: none;
-      padding-bottom: 100%;
-      height:100%;
-      width:100%;
-    }
-    
-     .page.active{
-      display: block;
-    }
-    
-    /* Home Page */
-    .event-card {
-      margin-bottom: 24px;
-    }
-    
-    .event-header {
-      display: flex;
-      gap: 16px;
-      color: #1e293b;
-      font-size: 14px;
-      font-weight: 600;
-      margin-bottom: 8px;
-    }
-    
-    .event-date {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      width: 48px;
-    }
-    
-    .event-day {
-      font-size: 24px;
-      font-weight: 400;
-      line-height: 1;
-    }
-    
-    .event-month {
-      text-transform: uppercase;
-      font-size: 12px;
-      font-weight: 400;
-      line-height: 1;
-    }
-    
-    .event-details {
-      display: flex;
-      flex-direction: column;
-    }
-    
-    .event-title {
-      font-weight: 600;
-      font-size: 16px;
-      line-height: 1.25;
-    }
-    
-    .event-time {
-      color: #64748b;
-      font-size: 14px;
-      line-height: 1.25;
-    }
-    
-    .event-rsvp {
-      color: #64748b;
-      font-size: 14px;
-      margin-top: 4px;
-    }
-    
-    .activity-section {
-      border-top: 1px solid #e2e8f0;
-      padding-top: 16px;
-    }
-    
-    .section-title {
-      color: #1e293b;
-      font-weight: 600;
-      margin-bottom: 12px;
-    }
-    
-    .filter-tag {
-      display: inline-block;
-      background-color: #f1f5f9;
-      border-radius: 9999px;
-      padding: 4px 16px;
-      font-size: 12px;
-      font-weight: 600;
-      margin-bottom: 16px;
-      user-select: none;
-    }
-    
-    .activity-feed {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-    
-    .activity-card {
-      display: flex;
-      align-items: center;
-      border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      padding: 16px;
-    }
-    
-    .activity-icon {
-      flex-shrink: 0;
-      position: relative;
-    }
-    
-    .icon-circle {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background-color: #f8fafc;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #1e293b;
-      font-size: 18px;
-    }
-    
-    .icon-badge {
-      position: absolute;
-      bottom: -4px;
-      right: -4px;
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background-color: #4ade80;
-      border: 2px solid #f8fafc;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 12px;
-      font-weight: 600;
-      color: white;
-    }
-    
-    .activity-content {
-      margin-left: 16px;
-      flex: 1;
-      font-size: 14px;
-      line-height: 1.25;
-      color: #1e293b;
-    }
-    
-    .activity-title {
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-    
-    .activity-time {
-      font-size: 12px;
-      color: #64748b;
-      float: right;
-    }
-    
-    .activity-text a {
-      color: #2563eb;
-      text-decoration: none;
-    }
-    
-    .activity-text a:hover {
-      text-decoration: underline;
-    }
-    
-    .activity-arrow {
-      color: #64748b;
-    }
-    
-    /* Analytics Page */
-    .analytics-container {
-      padding: 16px;
-    }
-    
-    .analytics-card {
-      background-color: white;
-      border-radius: 8px;
-      padding: 16px;
-      margin-bottom: 16px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    }
-    
-    .analytics-title {
-      font-size: 16px;
-      font-weight: 600;
-      margin-bottom: 12px;
-    }
-    
-    .stat-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-    }
-    
-    .stat-item {
-      text-align: center;
-    }
-    
-    .stat-value {
-      font-size: 24px;
-      font-weight: 600;
-      color: #2563eb;
-    }
-    
-    .stat-label {
-      font-size: 12px;
-      color: #64748b;
-    }
-    
-    /* AI Chats Page */
-    .ai-container {
-      padding: 16px;
-    }
-    
-    .ai-card {
-      background-color: white;
-      border-radius: 8px;
-      padding: 16px;
-      margin-bottom: 16px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    }
-    
-    .ai-title {
-      font-size: 16px;
-      font-weight: 600;
-      margin-bottom: 12px;
-    }
-    
-    /* Inbox Page */
-    .inbox-container {
-      padding: 16px;
-    }
-    
-    .message-card {
-      background-color: white;
-      border-radius: 8px;
-      padding: 16px;
-      margin-bottom: 16px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    }
-    
-    .message-header {
-      display: flex;
-      align-items: center;
-      margin-bottom: 8px;
-    }
-    
-    .message-sender {
-      font-weight: 600;
-      margin-left: 8px;
-    }
-    
-    .message-time {
-      font-size: 12px;
-      color: #64748b;
-      margin-left: auto;
-    }
-    
-    .message-preview {
-      font-size: 14px;
-      color: #64748b;
-    }
-    
-    /* Manage Page */
-    .manage-container {
-      padding: 16px;
-    }
-    
-    .manage-card {
-      background-color: white;
-      border-radius: 8px;
-      padding: 16px;
-      margin-bottom: 16px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    }
-    
-    .manage-title {
-      font-size: 16px;
-      font-weight: 600;
-      margin-bottom: 12px;
-    }
-    
-    .manage-item {
-      display: flex;
-      align-items: center;
-      padding: 12px 0;
-      border-bottom: 1px solid #e2e8f0;
-    }
-    
-    .manage-item:last-child {
-      border-bottom: none;
-    }
-    
-    .manage-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 8px;
-      background-color: #f1f5f9;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-right: 12px;
-      color: #2563eb;
-    }
-    
-    .manage-text {
-      flex: 1;
-    }
-    
-    .manage-item-title {
-      font-weight: 600;
-    }
-    
-    .manage-item-desc {
-      font-size: 12px;
-      color: #64748b;
-    }
-    
-    nav {
-      position: fixed;
-      bottom: 0;
+      cursor: pointer;
+      top: 0;
       left: 0;
       right: 0;
-      background-color: #ffffff;
-      border-top: 1px solid #e2e8f0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 8px 24px;
-      font-size: 12px;
-      color: #64748b;
+      bottom: 0;
+      background-color: #ccc;
+      border-radius: 24px;
+      transition: 0.4s;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 4px;
+      bottom: 3px;
+      background-color: white;
+      border-radius: 50%;
+      transition: 0.4s;
+    }
+
+    input:checked+.slider {
+      background-color: #4A90E2;
+    }
+
+    input:checked+.slider:before {
+      transform: translateX(26px);
+    }
+
+    .post-card {
+      border: 1px solid #ccc;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .submit-button {
+      background-color: #4A90E2;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .submit-button:hover {
+      background-color: #357ABD;
     }
     
-    .nav-btn {
+    
+    
+    
+        .searchVidDiv{
+     
+     display :flex;
+      width:100%;
+      text-align: center;
+      border: 1px solid #ddd;
+      border-radius: 0;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      background: #fff;
+      
+    }
+    
+    .searchVidInp
+{    width: 65%;
+padding: 3%;
+float:left;
+font-size: 12px;
+text-align: center ;
+    
+
+      border-radius: 15px;
+      border: none;
+      background: #AEA3A33D;
+    }
+        .searchVidBtn{
+      
+     
+width:15%;
+font-weight: bold;
+margin: 0;
+border-radius: 15px 15px 15px 15px;
+
+
+          background-color: #BBBCC8;
+          justify-content: center;
+        text-align: center;
+          font-weight: 900;
+           box-shadow: 0px 0px 1.6px #B4B4BE;
+          border: 2px solid rgba(255, 255, 255, 0.9);
+          border-left: 2px solid rgba(255, 255, 255, 9);
+          border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+
+    
+      
+    }
+    
+#
+ /* Global Styles */
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+transition: 0.3s ease-in-out;
+font-family: "Poppins", sans-serif;
+}
+
+body {
+background: #f9f9f9;
+color: #333;
+}
+
+/* Header */
+header {
+width: 100%;
+background:;
+border: 1px 1px 9px #B1A7A7;
+
+top: 0;
+z-index: 100;
+}
+
+/* Profile Section */
+.schoolProfile {
+  float: left;
+margin-left: 7%;
+width: 60px;
+height: 60px;
+
+
+
+}
+
+/* Search Bar */
+.searchDiv {
+display: inline-block;
+height:auto;
+align-items: center;
+width: 100%;
+background: #ffffff;
+
+border-radius: 8px;
+box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
+}
+
+.searchInpB {
+flex: 1;
+float: left;
+width: 80%;
+font-size: 14px;
+padding: 12px;
+border-radius: 8px;
+border: 1px solid #ddd;
+background: #f4f4f4;
+outline: none;
+}
+
+.searchButton {
+background: #4A90E2;
+color: white;
+padding: 8px 15px;
+border-radius: 8px;
+border: none;
+font-weight: bold;
+cursor: pointer;
+transition: 0.3s;
+}
+
+.searchButton:hover {
+background: #357ABD;
+}
+
+/* Profile Container */
+.profileCont {
+display: flex;
+align-items: center;
+background: white;
+padding: 10px;
+border-radius: 10px;
+box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
+}
+
+.profilePicture {
+width: 50px;
+height: 50px;
+border-radius: 50%;
+object-fit: cover;
+box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
+}
+
+.profileName {
+font-size: 16px;
+font-weight: bold;
+margin-left: 10px;
+}
+
+/* Navigation */
+    .messNavDiv{
+            display: flex;
+            height: auto;
+            padding: 7px;
+            width: auto;
+            border:2px solid #90959D;
+           
+          
+      
+    }
+    .messNav{
+      
+           
+           padding:1%;
+           
+          
+         
+           height:30px;
+          width: 16%;
+          
+        margin-left: 5%;
+          text-align: center;
+          font-size: 12px;
+          background :white;
+          
+          border-radius: 12px;
+          font-weight: 900;
+           box-shadow: 0px 0px 2px #B4B4BE;
+            border:1px solid black;
+
+    }
+    
+                .icon-card i {
+                   font-size: 25px;
+                   color: #545454;
+                   
+                
+                   background-color: rgba(255, 255, 255, 0.9);
+              
+                   border-radius: 12px;
+                   transition: 0.9s;
+                     
+                  
+                    }
+/* Posts */
+.posts { 
+  
+      
       display: flex;
       flex-direction: column;
-      align-items: center;
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: inherit;
-      text-decoration: none;
-    }
-    
-    .nav-btn i {
-      font-size: 18px;
-      margin-bottom: 4px;
-    }
-    
-    .nav-btn.active {
-      color: #2563eb;
-      font-weight: 600;
-    }
-    
-    .inbox-badge {
-      position: absolute;
-      top: -4px;
-      right: -8px;
-      background-color: #dc2626;
-      color: white;
-      font-size: 10px;
-      font-weight: 600;
-      border-radius: 50%;
-      width: 16px;
-      height: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      line-height: 1;
-    }
-    
-    .relative {
-      position: relative;
-    }
-    .pageName  {
-      overflow: hidden;
-      color: peru;
-      font-weight: 700;
-      letter-spacing: 5px;
-      width: 100%;
-      height: 50px;
-      box-shadow: 0px 0px 8px #B4B4BE;
-      display: flex;
-      justify-content: center;
-      align-items: center
-    }
-      .hdrPage {
-      overflow: hidden;
-      color: peru;
-      font-weight: 700;
-      letter-spacing: 5px;
-      width: 100%;
-      height:65px;
+  
+}
+
+.post {
+background: #fff;
+padding: 15px;
+border-radius: 10px;
+box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
+
+}
+
+.post-header {
+display: flex;
+align-items: center;
+margin-bottom: 10px;
+}
+
+.post-header img {
+width: 50px;
+height: 50px;
+border-radius: 50%;
+object-fit: cover;
+}
+
+.post-header h2 {
+font-size: 16px;
+margin-left: 10px;
+}
+
+/* Post Content */
+.post-content {
+background: #f5f5f5;
+padding: 10px;
+border-radius: 8px;
+}
+
+.post-content p {
+  font-size: 14px; /* Comfortable reading size */
+  line-height: 1.1; /* Improve readability with spacing */
+  color: #0F1014; /* Dark color for text */
+  
+  margin: px 0; /* Add spacing above and below the content */
+  font-family: 'Arial', sans-serif; /* Use a clean, readable font */
+}
+
+/* Post Actions */
+.post-actions {
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 10px 0;
+}
+
+.post-actions button {
+    border-radius: 50px;
+    background: #f5f5f5; /* Facebook's primary blue color */
+    color: #313242;
+    padding: 8px 16px; /* Slightly larger padding for better clickability */
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Space between icon and text */
+    font-size: 14px;
+}
+
+.post-actions button:hover {
+    background: #1659B3; /* Darker blue on hover */
+    transform: scale(1.05); /* Slightly enlarge on hover */
+}
+
+.post-actions button:active {
+    background: #114080; /* Even darker blue on click */
+    transform: scale(0.95); /* Slightly shrink on click */
+}
+
+/* Add a thumbs-up icon using a pseudo-element or an icon library like FontAwesome */
+.post-actions button::before {
+     /* Thumbs-up emoji */
+    font-size: 16px;
+}
+
+/* Alternatively, use FontAwesome for a more polished icon */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
+.post-actions button i {
+    font-size: 16px;
+}
+/* Comments */
+.post-comments {
+display: none;
+}
+
+.post-comment {
+display: flex;
+align-items: center;
+background: #f7f7f7;
+padding: 10px;
+border-radius: 8px;
+margin-top: 10px;
+}
+
+.post-comment img {
+width: 30px;
+height: 30px;
+border-radius: 50%;
+object-fit: cover;
+}
+
+.post-comment p {
+font-size: 14px;
+margin-left: 10px;
+color: grey;
+}
+
+/* Footer */
+
+
+.timestamp {
+  font-size: 12px; /* Smaller font size */
+  color: #888; /* Light gray color for subtlety */
+  font-style: italic; /* Optional: Italicize for a softer look */
+  margin-top: 5px; /* Add some spacing above the timestamp */
+  display: block; /* Ensure it appears on a new line */
+}
+
+.posterName {
+  font-size: 14px; /* Slightly larger than the timestamp */
+  font-weight: bold; /* Make the name stand out */
+  color: #333; /* Dark color for prominence */
+  display: block; /* Ensure it appears on a new line */
+  margin-bottom: 5px; /* Add spacing below the name */
+}
+
+#pstIcon {
+    color: #78787C; /* Gold color */
+    font-size: 20px; /* Icon size */
+    margin: 0 10px; /* Spacing around the icon */
+    transition: color 0.3s ease, transform 0.3s ease; /* Smooth transitions */
+}
+
+.pstIcon:hover {
+    color: #FFA500; /* Orange color on hover */
+    transform: scale(1.2); /* Slightly enlarge on hover */
+}
+
+foter {
+  z-index: 3;
+      grid-area: ;
+      text-align: center;
+      height:10%;
+      width:
+      transition: 5s;
+      background: transparent;
       
-      box-shadow: 0px 0px 8px #B4B4BE;
-      
+      position:fixed;
+      bottom: 5%;
+      left: 0;
+      right: 0;
+    }
     
-    }
-        .toggle-btn {
-      margin-left: 20px;
-      padding: 5px 10px;
-      border: none;
-      border-radius: 5px;
-      background-color: peru;
-      color: white;
-      cursor: pointer;
-    }
-                .fb-loading-dots {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            height: 20px;
-        }
-        
-        .dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-          background-color:#1877f2; /* Facebook blue */
-            opacity: 0.4;
-        }
-        
-        .dot-1 {
-            animation: fb-loading 1s infinite;
-        }
-        
-        .dot-2 {
-            animation: fb-loading 1s infinite 0.2s;
-        }
-        
-        .dot-3 {
-            animation: fb-loading 1s infinite 0.4s;
-        }
-        
-        @keyframes fb-loading {
-            0% {
-                opacity: 0.4;
-                transform: scale(1);
-            }
-            50% {
-                opacity: 1;
-                transform: scale(1.2);
-            }
-            100% {
-                opacity: 0.4;
-                transform: scale(1);
-            }
-        }
-        
-                .video-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-            padding: 20px;
-        }
-        
-        .video-card {
+    
+    
+    
+    
+    
+    
+    
+    
+            .video-card {
             cursor: pointer;
             transition: transform 0.2s;
         }
@@ -1314,9 +1034,7 @@ margin: 0 0 4px 0;
         .thumbnail {
             position: relative;
             margin-bottom: 10px;
-        }
-        
-        .thumbnail img {
+            
             width: 100%;
             border-radius: 8px;
             display: block;
@@ -1372,19 +1090,1015 @@ margin: 0 0 4px 0;
             cursor: pointer;
             z-index: 1001;
         }
+</style>
+  
+</head>
+<body>
+  <div id="loading-spinner" class="loading-spinner"></div>
+
+
+
+  </div>
+
+<div id="home-page" class="page active">
+            <div class="hdrPage">
+  
+  
+  <img src="https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/depositphotos_50462921-stock-photo-3d-icon.jpg?alt=media&token=f4c459c9-1b47-4c58-96d8-4a5de54bd3dc" alt="" class="schoolProfile" style="float:left;"/>
+  <br>
+<p class="logo" style="color:RGB(100, 149, 237);">
+  Blue Flare
+</p>
+  
+</div>
+
+      <div class="pageName" style="color:RGB(65, 105, 225);">
+       Blueflare 
+      <button class="toggle-btn" style="background:RGB(65, 105, 225);">Toggle Dark Mode</button>
+    </div>
+      <div class="searchDiv">
+        <form class="post-frm">
+          <input  class="searchInpB" placeholder="Unlock hidden wonders—type your curiosity here"/>
+
+         </textarea>
+          
+          
+          
+        </form>
+      </div>
+                    <div class="fb-loading-dots">
+        <div class="dot dot-1"></div>
+        <div class="dot dot-2"></div>
+        <div class="dot dot-3"></div>
+    </div>
+
+        </div>     
+        <div id="analytics-page" class="page">
+            <div class="hdrPage">
+              
+              
+              <img src="https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/depositphotos_50462921-stock-photo-3d-icon.jpg?alt=media&token=f4c459c9-1b47-4c58-96d8-4a5de54bd3dc" alt="" class="schoolProfile" style="float:left;">
+                <br>
+<p class="logo" style="color:RGB(100, 149, 237);">
+  Blue Flare
+</p>
+              
+            </div>
+            
+            <div class="pageName" style="color:RGB(65, 105, 225);">
+              Social 
+              <button class="toggle-btn" style="background:RGB(65, 105, 225);">Toggle Dark Mode</button>
+            </div>
+            <div class="searchDiv">
+              <form class="post-frm">
+<input  class="searchInpB" placeholder="Unlock hidden wonders—type your curiosity here"/>
+                
+                
+                
+              </form>
+            </div>
+         <div class="posts" id="publicPost">
+           
+                   <div class="fb-loading-dots">
+          <div class="dot dot-1"></div>
+          <div class="dot dot-2"></div>
+          <div class="dot dot-3"></div>
+        </div>
+         </div>
+
+    </div>
+    
+
+  
+  
+  
+
+    
+    
+    
+    
+    
+    
+ 
+<div id="group-page" class="page">
+  <div class="hdrPage">
+  
+  
+  <img src="https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/depositphotos_50462921-stock-photo-3d-icon.jpg?alt=media&token=f4c459c9-1b47-4c58-96d8-4a5de54bd3dc" alt="" class="schoolProfile" style="float:left;">
+  <br>
+  <p class="logo" style="color:RGB(100, 149, 237);">
+    Blue Flare
+  </p>
+  
+</div>
+
+      <div class="pageName">
+      Groups Page
+      <button class="toggle-btn" >Toggle button</button>
+    </div>
+      <div class="searchDiv">
+        <form class="post-frm">
+          <input id="search-input" class="searchInp" placeholder="search and find where knowledge reeks">
+          
+      
+          
+          
+          
+        </form>
+      </div>
+      
+      <div class="image-container" id="image-container">
+      </div>
+      
+      
+      
+      
+      <div id="group-container" class="grid grid-cols-3 gap-4">
         
-                .category-btn {
-            padding: 8px 16px;
-            border-radius: 20px;
-            background-color: #f0f0f0;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 500;
+        
+                <div class="fb-loading-dots">
+          <div class="dot dot-1"></div>
+          <div class="dot dot-2"></div>
+          <div class="dot dot-3"></div>
+        </div>
+        
+        
+      </div>
+  </div>
+      <div id="video-page" class="page">
+          <div class="hdrPage">
+    
+    
+    <img src="https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/depositphotos_50462921-stock-photo-3d-icon.jpg?alt=media&token=f4c459c9-1b47-4c58-96d8-4a5de54bd3dc" alt="" class="schoolProfile" style="float:left;">
+      <br>
+  <p class="logo" style="color:RGB(100, 149, 237);">
+    Blue Flare
+  </p>
+    
+  </div>
+  
+  <div class="pageName" style="color:RGB(220, 20, 60);">
+    Video PAGE
+    <button class="toggle-btn"style="background:RGB(220, 20, 60);">Toggle Dark Mode</button>
+  </div>
+  <div class="searchDiv">
+    <div class="search-bar">
+      <input type="text" placeholder="Search for inspiring talks..." class="searchInpB">
+    </div>
+  </div>
+
+    
+    <div class="categories">
+        <button class="category-btn active">All</button>
+        <button class="category-btn">TED Talks</button>
+        <button class="category-btn">Motivation</button>
+        <button class="category-btn">Self-Improvement</button>
+        <button class="category-btn">Psychology</button>
+    </div>
+    
+    <div class="video-grid">
+        <!-- Video cards will be inserted here -->
+    </div>
+    
+    <div class="fullscreen-video" id="fullscreenVideo">
+        <span class="close-btn" id="closeBtn">&times;</span>
+        <iframe class="video-player" id="videoPlayer" frameborder="0" allowfullscreen></iframe>
+    </div>
+    
+  <div class="video-container" id="video-posts" style="display: flex;
+flex-direction: column;
+gap: 16px;">
+            <div class="fb-loading-dots">
+          <div class="dot dot-1"></div>
+          <div class="dot dot-2"></div>
+          <div class="dot dot-3"></div>
+        </div>
+  </div>
+    </div>
+
+</body>
+<footer  style="bottom: 0;margin:0;" >
+    <nav>
+      <button class="nav-button " style="position: relative;" >
+        <i class="fas fa-home"></i>
+            <a href="#" class="nav-btn active" data-page="home-page" onclick="switchPage('home-page', 'home')">
+    
+      Home
+    </a>
+                <span class="badge">1</span>
+      </button>
+      <button class="nav-button ">
+        <i class="fas fa-fire"></i>
+           <a href="#" class="nav-btn" data-page="analytics-page" onclick="switchPage('analytics-page', 'Analytics')">
+      
+      Social
+    </a>
+      </button>
+      <button class="nav-button">
+        <i class="fas fa-plus"></i
+            <a href="#" class="nav-btn" data-page="analytics-page" onclick="switchPage('analytics-page', 'Analytics')">
+    
+    Add
+    </a>
+      </button>
+      <button class="nav-button" style="position: relative;" >
+        <i class="fa fa-video"></i>
+            <a href="#" class="nav-btn " data-page="video-page" onclick="switchPage('video-page', 'Home')">
+    
+      Videos
+    </a>
+
+      </button>
+      <button class="nav-button" style="position: relative;">
+        <i class="fa fa-video"></i>
+        <a href="#" class="nav-btn " data-page="group-page" onclick="switchPage('group-page', 'group')">
+        
+          Groups 
+        </a>
+        
+      </button>
+    </nav>
+
+</footer>
+</html>
+
+
+
+  <script>
+    function switchPage(pageId, pageTitle) {
+      // Hide all pages
+      document.querySelectorAll('.page').forEach(page => {
+        page.classList.remove('active');
+      });
+      
+      // Show selected page
+      document.getElementById(pageId).classList.add('active');
+      
+      // Update active nav button
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      event.currentTarget.classList.add('active');
+      
+      // Update page title
+      document.getElementById('page-title').textContent = pageTitle || 'Blue Flare';
+      
+      // Prevent default anchor behavior
+      event.preventDefault();
+    }
+  </script>
+  
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+    import { getDatabase, ref, push, set, onValue, runTransaction } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-database.js";
+    import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-storage.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBSMvHpZ0_VkqWjJ94UMa6vqEhFiqrsIWM",
+      authDomain: "rare-5f47e.firebaseapp.com",
+      projectId: "rare-5f47e",
+      storageBucket: "rare-5f47e.appspot.com",
+      messagingSenderId: "811727087812",
+      appId: "1:811727087812:web:d362e68abf6c26acf24191",
+      measurementId: "G-DE59771G7Q"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const database = getDatabase(app);
+    const storage = getStorage(app);
+    const postForm = document.querySelector(".post-form");
+    const postsContainer = document.querySelector(".posts");
+
+    onAuthStateChanged(auth, (user) => {
+  if (!user) {
+    alert("You must be signed in to use this platform.");
+    window.location.href = "sign-in.html";
+  } else {
+    fetchPosts();
+    document.getElementById('profilePicture').src = user.photoURL;
+    document.getElementById('user-info').innerText = user.email;
+  }
+});
+    const groupDisplayContainer = document.getElementById("image-container");
+
+  let groups = [];
+  let currentIndex = 0;
+
+  function fetchGroups() {
+    const groupsRef = ref(database, "groups");
+    onValue(groupsRef, (snapshot) => {
+      groups = [];
+      snapshot.forEach((childSnapshot) => {
+        const group = childSnapshot.val();
+        groups.push(group);
+      });
+      displayGroups(); // Start displaying the groups
+    });
+  }
+
+  function displayGroups() {
+    // Clear the container
+    groupDisplayContainer.innerHTML = "";
+
+    // Get the next 3 groups to display
+    const selectedGroups = groups.slice(currentIndex, currentIndex + 3);
+    if (selectedGroups.length < 3) {
+      selectedGroups.push(...groups.slice(0, 3 - selectedGroups.length)); // Wrap around if needed
+    }
+    
+    // Render the groups
+  //  selectedGroups.forEach((group) =>
+    selectedGroups.forEach((group) => {
+const categoryIcons = {
+  Social: "fa-solid fa-users",
+  Academics: "fa-solid fa-book",
+  Marketing: "fa-solid fa-chart-line",
+  Service: "fa-solid fa-handshake",
+  Music: "fa-solid fa-music",
+  Newsletter: "fa-solid fa-envelope-open-text"
+}
+const categoryIcon = categoryIcons[group.category] || "";
+      const groupBlockHTML = `
+        <button class="suImg">
+                        <div class="avatar">
+<i class="${categoryIcon} category-icon"></i>
+          </div>
+          
+          <img src="${group.imageURL}" alt="${group.name}" class="imgReal">
+
+     
+       </button>
+      `;
+      groupDisplayContainer.innerHTML += groupBlockHTML;
+    });
+
+    // Update the currentIndex for the next rotation
+    currentIndex = (currentIndex + 3) % groups.length;
+  }
+
+  // Fetch groups and set up interval for rotation
+  fetchGroups();
+  setInterval(() => {
+    if (groups.length > 0) {
+      displayGroups();
+    }
+  }, 30000); // Switch groups every 5 seconds
+
+    // Post submission
+
+    // Fetch and display posts
+    function fetchPosts() {
+
+      const postsRef = ref(database, "posts");
+      
+      onValue(postsRef, (snapshot) => {
+        postsContainer.innerHTML = "";
+        snapshot.forEach((childSnapshot) => {
+          const post = childSnapshot.val();
+          
+                          const categoryIcons = {
+  Social: "fa-solid fa-users",
+  Academics: "fa-solid fa-book",
+  Marketing: "fa-solid fa-chart-line",
+  Service: "fa-solid fa-handshake",
+  Music: "fa-solid fa-music",
+  Newsletter: "fa-solid fa-envelope-open-text"
+}
+const categoryIcon = categoryIcons[post.category] || "";
+   
+          const postId = childSnapshot.key;
+
+
+          const postHTML = `
+    <article aria-label="Post by Maria Garcia about Music" data-id="postId">
+      <header>
+        <img class="profile-pic" alt="Profile picture of Maria Garcia, a circular image with text 'Profile Pic Maria Garcia'" height="40"  width="40" src="${post.authorPhoto}"/>
+        <div class="header-text">
+          <p class="name">${post.author}</p>
+          <p class="email">kekanakarabouf@gmail.com</p>
+          <p class="time">${formatTime(post.timestamp)}</p>
+        </div>
+        <span class="category-tag music">
+          <i class="fas fa-${categoryIcon}"></i
+        ${post.category}
+        </span>
+        <button class="options-button" aria-label="More options">
+          <i class="fas fa-ellipsis-h"></i>
+        </button>
+      </header>
+    
+      <h2 class="icon-crd">${post.title}</h2>
+      <p class="post-content">${post.content}</p>
+                              ${
+                        post.fileURL
+                        ? post.fileType.startsWith("image/")
+                        ? `<img src="${post.fileURL}" alt="Post Image" class="imgVidDiv"/>` // Display image
+                        : post.fileType.startsWith("video/")
+                        ? `<video controls src="${post.fileURL}" class="imgVidDiv"></video>` // Display video
+                        : post.fileType.startsWith("audio/")
+                        ? `<audio controls src="${post.fileURL}" class="imgVidDiv"></audio>` // Display audio
+                        : `<a href="${post.fileURL}" target="_blank">Download File</a>` // Display download link for other files
+                        : ""
+                        }
+      <footer>
+        <button class="footer-button" aria-label="Like post">
+          <i class="far fa-thumbs-up"></i>
+          <span>${Object.keys(post.likes || {}).length} </span>
+        </button>
+
+        <button class="footer-button" aria-label="Comment on post">
+          <i class="far fa-comment"></i>
+          <span>${Object.keys(post.comments || {}).length} 
+                      </span>
+        </button>
+                <button class="footer-button" aria-label="Share post">
+          <i class="fas fa-retweet"></i>
+        </button>
+        <button class="footer-button" aria-label="Share post">
+          <i class="fas fa-share-alt"></i>
+        </button>
+      </footer>
+    </article>
+              <div class="post-comments">
+             
+                <button class="commentButton">Comment</button>
+                
+                <div class="comments">
+           <textarea class="commentBox" placeholder="Write a comment..."></textarea>
+              
+                ${Object.entries(post.comments || {})
+                .map(
+                ([id, comment]) => `
+                <div class="comment">
+                  <img src="${comment.profilePicture}" alt="Profile Picture" >
+                  <strong>${comment.author}</strong>
+                 
+                  <div class="postCNTNT">${comment.text}</div>
+                  <hr>
+                </div>`
+                )
+                .join("")}
+               
+                
+                
+                
+                </div>
+              </div>
+            </div>
+          `;
+          postsContainer.innerHTML += postHTML;
+                  function formatTime(timestamp) {
+            const now = Date.now();
+            const diff = now - timestamp;
+            const seconds = Math.floor(diff / 1000);
+            const minutes = Math.floor(seconds / 60);
+            const hours = Math.floor(minutes / 60);
+            const days = Math.floor(hours / 24);
+
+            if (seconds < 60) return "Just now";
+            if (minutes < 60) return `${minutes} min ago`;
+            if (hours < 24) return `${hours} hr ago`;
+            if (days < 7) return `${days} day${days > 1 ? 's' : ''} ago`;
+            
+            return new Date(timestamp).toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric'
+            });
+        }
+
+document.addEventListener('DOMContentLoaded', function() {
+  // Select all posts
+  const posts = document.querySelectorAll('.post');
+
+  posts.forEach(post => {
+    post.addEventListener('click', function() {
+      // Check if the post is already in fullscreen mode
+      if (post.classList.contains('fullscreen-post')) {
+        // If it is, remove the fullscreen class
+        post.classList.remove('fullscreen-post');
+      } else {
+        // Otherwise, add the fullscreen class
+        post.classList.add('fullscreen-post');
+      }
+    });
+  });
+});
+          // Fetch comments
+          const commentsRef = ref(database, `posts/${postId}/comments`);
+          onValue(commentsRef, (commentsSnapshot) => {
+            const commentsList = postsContainer.querySelector(`.post[data-id="${postId}"] .comments-list`);
+            commentsList.innerHTML = "";
+            commentsSnapshot.forEach((commentSnapshot) => {
+              const comment = commentSnapshot.val();
+              const commentHTML = `<div class="comment"><strong>${comment.author}:</strong> ${comment.text}</div>`;
+              commentsList.innerHTML += commentHTML;
+            });
+          });
+        });
+      });
+    }
+
+    // Handle comments
+// Handle like button click
+
+    postsContainer.addEventListener("click", (e) => {
+
+            const postElement = e.target.closest(".post");
+            const postId = postElement.dataset.id;
+    
+          if (e.target.classList.contains("like-button")) {
+            const user = auth.currentUser ? auth.currentUser.uid : "guest";
+            const likesRef = ref(database, `posts/${postId}/likes/${user}`);
+    
+            runTransaction(likesRef, (currentValue) => {
+              return currentValue ? null : true; // Add or remove like
+            });
+          }
+          
+                if (e.target.classList.contains("toggle-comments-button")) {
+                  const commentsSection = postElement.querySelector(".post-comments");
+                  if (commentsSection.style.display === "none" || !commentsSection.style.display) {
+                    
+                    commentsSection.style.display = "block";
+
+}                else {
+                    commentsSection.style.display = "none";
+                            }
+                }
+    
+if (e.target.classList.contains("commentButton")) {
+                const postElement = e.target.closest(".post");
+                const postId = postElement.dataset.id;
+              
+                const commentText = postElement.querySelector(".commentBox").value;
+                const commentsRef = ref(database, `posts/${postId}/comments`);
+        const newComment = {
+                        text: commentText,
+                        author: auth.currentUser?.email || "Anonymous",
+                        profilePicture: auth.currentUser?.photoURL || "default-avatar.png",
+                      };
+                push(commentsRef, newComment);
+                postElement.querySelector(".commentBox").value = "";
+              }
+              });
+              
+              
+                  const noticesContainer = document.getElementById("noticesContainer");
+              
+                  const noticesRef = ref(database, "notices");
+              
+                  // Function to format date with month names
+                  function formatDate(isoDateString) {
+                    const date = new Date(isoDateString);
+                    return date.toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long", // Display full month name (e.g., December)
+                      day: "numeric",
+                    });
+                  }
+              
+                  // Listen for changes in the notices database
+                  onValue(noticesRef, (snapshot) => {
+                    noticesContainer.innerHTML = ""; // Clear existing notices
+                    if (snapshot.exists()) {
+                      snapshot.forEach((noticeSnapshot) => {
+                        const notice = noticeSnapshot.val();
+                        const noticeElement = document.createElement("div");
+                        noticeElement.className = "notice";
+                        noticeElement.innerHTML = `
+         <div style="float:left;width:auto;" class="timeDiv">${formatDate(notice.timestamp)}</div>
+         <br>
+                          <p >${notice.content}</p>
+                        `;
+                        noticesContainer.appendChild(noticeElement);
+                      });
+                    } else {
+                      noticesContainer.textContent = "No notices available.";
+                    }
+                  });
+
+    
+    // Initialize Firebase
+   
+//    const database = getDatabase(app);
+
+    const videoPostsContainer = document.getElementById("video-posts");
+    const loadingSpinner = document.getElementById("loading-spinner");
+    
+    // Fetch Video Posts from Firebase
+    function fetchVideoPosts() {
+      const postsRef = ref(database, "posts");
+      onValue(postsRef, (snapshot) => {
+        videoPostsContainer.innerHTML = "";
+        loadingSpinner.style.display = "none"; // Hide spinner
+        snapshot.forEach((childSnapshot) => {
+          const post = childSnapshot.val();
+          const postId = childSnapshot.key;
+          
+          if (post.fileType && post.fileType.startsWith("video/")) {
+            const postHTML = `
+              <div class="video-grid" onclick="openFullscreen('${post.fileURL}', '${postId}', '${post.title || 'Untitled Video'}', '${post.author}', '${post.views || 0} views • ${post.timestamp || ''}', '${post.description || ''}')"><div>
+                <div class="video-list">
+                <div  class="icon-crd" style="display:none;">
+                ${post.category}
+                </div>
+                  <video src="${post.fileURL}" autoplay muted loop controls class="thumbnail" ></video>
+                </div>
+                <div class="video-menu">
+                  <img class="profile-pic"  src="${post.authorPhoto}" />
+                  <div class="video-info">
+                    <h2 class="video-title">${post.title || 'Untitled Video'}</h2>
+                    <div class="video-author">${post.author}</div>
+                    <div class="video-stats">${post.views || 0} views • ${post.timestamp || ''}</div>
+                  </div>
+                </div>
+
+              </div>
+            `;
+            videoPostsContainer.innerHTML += postHTML;
+          }
+        });
+      });
+    }
+    
+    fetchVideoPosts();
+    
+    // Fullscreen Functions
+    window.openFullscreen = (url, postId, title, channel, stats, description) => {
+      const fullscreenVideo = document.getElementById("fullscreen-video");
+      const fullscreenTitle = document.getElementById("fullscreen-title");
+      const fullscreenChannel = document.getElementById("fullscreen-channel");
+      const fullscreenStats = document.getElementById("fullscreen-stats");
+      const fullscreenDescription = document.getElementById("fullscreen-description");
+      const fullscreenModal = document.getElementById("fullscreen-modal");
+      const commentsContainer = document.getElementById("comments-container");
+      
+      // Set video source and attributes
+      fullscreenVideo.src = url;
+      fullscreenVideo.autoplay = true; // Enable autoplay
+      fullscreenVideo.muted = true; // Mute the video (required for autoplay)
+      fullscreenVideo.controls = true; // Show video controls
+      
+      // Update video info
+      fullscreenTitle.textContent = title;
+      fullscreenChannel.textContent = channel;
+      fullscreenStats.textContent = stats;
+      fullscreenDescription.textContent = description;
+      fullscreenModal.classList.add("active");
+      
+      // Fetch and display comments
+      const commentsRef = ref(database, `posts/${postId}/comments`);
+      onValue(commentsRef, (snapshot) => {
+        commentsContainer.innerHTML = ""; // Clear existing comments
+        snapshot.forEach((childSnapshot) => {
+          const comment = childSnapshot.val();
+          const commentHTML = `
+            <div class="comment">
+              <div class="comment-avatar">${comment.author.charAt(0)}</div>
+              <div class="comment-content">
+                <div class="comment-author">${comment.author}</div>
+                <div class="comment-text">${comment.text}</div>
+              </div>
+            </div>
+          `;
+          commentsContainer.innerHTML += commentHTML;
+        });
+      });
+      
+      // Increment views count in Firebase
+      const postRef = ref(database, `posts/${postId}`);
+      update(postRef, {
+        views: (parseInt(fullscreenVideo.dataset.views) || 0) + 1
+      });
+    };
+    
+    window.closeFullscreen = () => {
+      const fullscreenVideo = document.getElementById("fullscreen-video");
+      const fullscreenModal = document.getElementById("fullscreen-modal");
+      
+      fullscreenVideo.pause();
+      fullscreenVideo.src = "";
+      fullscreenModal.classList.remove("active");
+    };
+</script>
+
+<script>
+  
+  
+  
+      function publicToNotice() {
+        var publPost = document.getElementById('publicPost');
+document.getElementById("image-container").style.display='none';
+        document.querySelector('.searchDiv').style.display='none';
+        var schoolNotice = document.getElementById('schoolNotice');
+   var postInpNav = document.getElementById('postInpNav');
+              postInpNav.style.display = 'none';
+  
+        schoolNotice.style.width = '100%';
+        schoolNotice.style.display = 'block';
+        publPost.style.width='0%';
+        publPost.style.display='none';
+     document.getElementById('postInpNav').style.display='none'; 
+  document.getElementById('main').style.display='none';
+  
+        
+      }
+      
+      function noticeTopublic() {
+        document.getElementById("image-container").style.display='none';
+          
+        var publPost = document.getElementById('publicPost');
+        var schoolNotice = document.getElementById('schoolNotice');
+        schoolNotice.style.width = '0';
+   schoolNotice.style.display = 'none';
+        publPost.style.width='100%';
+        publPost.style.display='block';
+        document.getElementById('main').style.display='none';
+        
+       document.querySelector('.searchDiv').style.display='none';
+       document.getElementById('main').style.display='none';
+        
+            document.getElementById('postInpNav').style.display='none'; 
+  
+      }
+
+      
+      function noticeTogroup(){
+                document.getElementById("image-container").style.display='block';
+        var publPost = document.getElementById('publicPost');
+        var schoolNotice = document.getElementById('schoolNotice');
+        schoolNotice.style.width = '0';
+   schoolNotice.style.display = 'none';
+        publPost.style.width='0';
+        publPost.style.display='none';
+       document.querySelector('.searchDiv').style.display='none';
+      document.getElementById('postInpNav').style.display='none'; 
+            document.getElementById('main').style.display='block';
+        
+      }
+      
+      
+      
+      
+              const fileInput = document.getElementById('fileInput');
+        const fileList = document.getElementById('fileList');
+        const uploadButton = document.getElementById('uploadButton');
+
+        uploadButton.addEventListener('click', () => {
+          fileInput.click(); // Trigger the file input click
+        });
+
+        fileInput.addEventListener('change', (event) => {
+          const files = event.target.files;
+          let fileNames = [];
+
+          for (let i = 0; i < files.length; i++) {
+            fileNames.push(files[i].name); // Get the file names
+          }
+
+          fileList.value = fileNames.join(', '); // Display file names in the textarea
+          alert(fileList.value)
+
+        });
+        
+            const toggleCircle = document.getElementById('toggleCircle');
+    const dropdownMenu = document.getElementById('dropdownMenu');
+
+    toggleCircle.addEventListener('click', () => {
+      toggleCircle.classList.toggle('active');
+      dropdownMenu.classList.toggle('active');
+    });
+        
+        
+</script>
+
+    <script>
+        // Life enrichment video data
+        const videos = [
+            {
+                id: "RcGyVTAoXEU",
+                title: "The power of vulnerability | Brené Brown",
+                thumbnail: "https://i.ytimg.com/vi/RcGyVTAoXEU/maxresdefault.jpg",
+                channel: "TED",
+                duration: "20:49",
+                views: "25M views",
+                type: "ted-talk",
+                category: "Psychology"
+            },
+            {
+                id: "H14bBuluwB8",
+                title: "How great leaders inspire action | Simon Sinek",
+                thumbnail: "https://i.ytimg.com/vi/H14bBuluwB8/maxresdefault.jpg",
+                channel: "TEDx Talks",
+                duration: "18:04",
+                views: "18M views",
+                type: "ted-talk",
+                category: "Leadership"
+            },
+            {
+                id: "JaRqJjyxFps",
+                title: "Change your mindset, change the game | Dr. Alia Crum",
+                thumbnail: "https://i.ytimg.com/vi/JaRqJjyxFps/maxresdefault.jpg",
+                channel: "TED",
+                duration: "15:22",
+                views: "5.2M views",
+                type: "ted-talk",
+                category: "Psychology"
+            },
+            {
+                id: "sTJ7AzBIJoI",
+                title: "The 7 habits of highly effective people | Sean Covey",
+                thumbnail: "https://i.ytimg.com/vi/sTJ7AzBIJoI/maxresdefault.jpg",
+                channel: "Motivation2Study",
+                duration: "28:35",
+                views: "8.7M views",
+                type: "self-improvement",
+                category: "Self-Improvement"
+            },
+            {
+                id: "ZXsQAXx_ao0",
+                title: "Why you will fail to have a great career | Larry Smith",
+                thumbnail: "https://i.ytimg.com/vi/ZXsQAXx_ao0/maxresdefault.jpg",
+                channel: "TEDx Talks",
+                duration: "15:27",
+                views: "12M views",
+                type: "motivation",
+                category: "Career"
+            },
+            {
+                id: "u4ZoJKF_VuA",
+                title: "How to stop screwing yourself over | Mel Robbins",
+                thumbnail: "https://i.ytimg.com/vi/u4ZoJKF_VuA/maxresdefault.jpg",
+                channel: "TEDx Talks",
+                duration: "21:40",
+                views: "15M views",
+                type: "motivation",
+                category: "Self-Improvement"
+            },
+            {
+                id: "LzbmLQ9NpaE",
+                title: "The psychology of self-motivation | Scott Geller",
+                thumbnail: "https://i.ytimg.com/vi/LzbmLQ9NpaE/maxresdefault.jpg",
+                channel: "TEDx Talks",
+                duration: "16:25",
+                views: "7.3M views",
+                type: "ted-talk",
+                category: "Psychology"
+            },
+            {
+                id: "iCvmsMzlF7o",
+                title: "How to speak so that people want to listen | Julian Treasure",
+                thumbnail: "https://i.ytimg.com/vi/iCvmsMzlF7o/maxresdefault.jpg",
+                channel: "TED",
+                duration: "9:58",
+                views: "32M views",
+                type: "ted-talk",
+                category: "Communication"
+            },
+            {
+                id: "8S0FDjFBj8o",
+                title: "The skill of self-confidence | Dr. Ivan Joseph",
+                thumbnail: "https://i.ytimg.com/vi/8S0FDjFBj8o/maxresdefault.jpg",
+                channel: "TEDx Talks",
+                duration: "13:35",
+                views: "14M views",
+                type: "motivation",
+                category: "Self-Improvement"
+            },
+            {
+                id: "LsA3gX5hNlk",
+                title: "How to make stress your friend | Kelly McGonigal",
+                thumbnail: "https://i.ytimg.com/vi/LsA3gX5hNlk/maxresdefault.jpg",
+                channel: "TED",
+                duration: "14:29",
+                views: "19M views",
+                type: "ted-talk",
+                category: "Psychology"
+            },
+            {
+                id: "vVsXO9brK7M",
+                title: "The power of believing that you can improve | Carol Dweck",
+                thumbnail: "https://i.ytimg.com/vi/vVsXO9brK7M/maxresdefault.jpg",
+                channel: "TED",
+                duration: "10:52",
+                views: "11M views",
+                type: "ted-talk",
+                category: "Psychology"
+            },
+            {
+                id: "U3ElJvK8Kxw",
+                title: "How to build your confidence | Brittany Packnett",
+                thumbnail: "https://i.ytimg.com/vi/U3ElJvK8Kxw/maxresdefault.jpg",
+                channel: "TED",
+                duration: "12:45",
+                views: "6.8M views",
+                type: "self-improvement",
+                category: "Self-Improvement"
+            }
+        ];
+        
+        // Populate video grid
+        const videoGrid = document.querySelector('.video-grid');
+        
+        function displayVideos(videosToShow = videos) {
+            videoGrid.innerHTML = '';
+            
+            videosToShow.forEach(video => {
+                const videoCard = document.createElement('div');
+                videoCard.className = 'video-card';
+                
+                let typeTag;
+                if (video.type === "ted-talk") {
+                    typeTag = '<span class="type-tag ted-talk">TED Talk</span>';
+                } else if (video.type === "motivation") {
+                    typeTag = '<span class="type-tag motivation">Motivation</span>';
+                } else {
+                    typeTag = '<span class="type-tag self-improvement">Self-Improvement</span>';
+                }
+                
+                videoCard.innerHTML = `
+                    <div class="thumbnail">
+                        <img src="${video.thumbnail}" alt="${video.title}">
+                        <span class="duration">${video.duration}</span>
+                    </div>
+                    <div class="video-info">
+                        <h3>${video.title}</h3>
+                        <p>${video.channel}</p>
+                        <p>${video.views}</p>
+                        ${typeTag}
+                    </div>
+                `;
+                
+                videoCard.addEventListener('click', () => playVideo(video.id));
+                videoGrid.appendChild(videoCard);
+            });
         }
         
-        .category-btn.active, .category-btn:hover {
-            background: linear-gradient(135deg, #6e48aa 0%, #9d50bb 100%);
-            color: white;
+        // Initial display
+        displayVideos();
+        
+        // Category filtering
+        const categoryBtns = document.querySelectorAll('.category-btn');
+        categoryBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                categoryBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                const category = btn.textContent;
+                if (category === 'All') {
+                    displayVideos(videos);
+                } else if (category === 'TED Talks') {
+                    displayVideos(videos.filter(video => video.type === 'ted-talk'));
+                } else if (category === 'Motivation') {
+                    displayVideos(videos.filter(video => video.type === 'motivation'));
+                } else if (category === 'Self-Improvement') {
+                    displayVideos(videos.filter(video => 
+                        video.type === 'self-improvement' || video.category === 'Self-Improvement'
+                    ));
+                } else if (category === 'Psychology') {
+                    displayVideos(videos.filter(video => video.category === 'Psychology'));
+                }
+            });
+        });
+        
+        // Search functionality
+        const searchInput = document.querySelector('.search-bar input');
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const filteredVideos = videos.filter(video => 
+                video.title.toLowerCase().includes(searchTerm) || 
+                video.channel.toLowerCase().includes(searchTerm)
+            );
+            displayVideos(filteredVideos);
+        });
+        
+        // Fullscreen video functionality
+        const fullscreenVideo = document.getElementById('fullscreenVideo');
+        const videoPlayer = document.getElementById('videoPlayer');
+        const closeBtn = document.getElementById('closeBtn');
+        
+        function playVideo(videoId) {
+            videoPlayer.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+            fullscreenVideo.style.display = 'block';
+            document.body.style.overflow = 'hidden';
         }
         
+        closeBtn.addEventListener('click', () => {
+            videoPlayer.src = '';
+            fullscreenVideo.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        });
+        
+        // Close when clicking outside video (but inside fullscreen container)
+        fullscreenVideo.addEventListener('click', (e) => {
+            if (e.target === fullscreenVideo) {
+                videoPlayer.src = '';
+                fullscreenVideo.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+    </script>
+    
