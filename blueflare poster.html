@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>blue flare poster</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --border-radius: 8px;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            margin: 0;
+            padding:0 ;
+
+            
+        }
+
+        .post-container {
+            width: 100%;
+            
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+      
+            margin-top: 30px;
+        }
+
+        h1 {
+            color: var(--dark);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        input, select, textarea {
+            width: 90%;
+            padding: 9px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        textarea {
+            min-height: 90px;
+            resize: vertical;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        #filePreview {
+            margin-top: 15px;
+            display: none;
+            position: relative;
+        }
+
+        #previewImage {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: var(--border-radius);
+        }
+
+        #removeFileBtn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .file-input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .file-input-label {
+            background: var(--primary);
+            color: white;
+            padding: 10px 15px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .file-input-label:hover {
+            background: var(--primary-dark);
+        }
+
+        #submitBtn {
+            background:RGB(135, 206, 235);
+            color: white;
+            border: none;
+            padding: 12px;
+            width: 60%;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        #submitBtn:hover {
+            background: var(--primary-dark);
+        }
+
+        #submitBtn:disabled {
+            background: var(--gray);
+            cursor: not-allowed;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .alert.success {
+            background: #d4edda;
+            color: #155724;
+            display: block;
+        }
+
+        .alert.error {
+            background: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
+            .pageName  {
+      overflow: hidden;
+      color: RGB(135, 206, 235);
+      font-weight: 700;
+      letter-spacing: 5px;
+      width: 100%;
+      height: 50px;
+      box-shadow: 0px 0px 8px #B4B4BE;
+      display: flex;
+      justify-content: center;
+      align-items: center
+    }
+      .hdrPage {
+      overflow: hidden;
+      color: RGB(135, 206, 235);
+      font-weight: 700;
+      letter-spacing: 5px;
+      width: 100%;
+      height:65px;
+      
+      box-shadow: 0px 0px 8px #B4B4BE;
+      
+    
+    }
+        .toggle-btn {
+      margin-left: 20px;
+      padding: 5px 10px;
+      border: none;
+      border-radius: 5px;
+      background-color:RGB(135, 206, 235);
+      color: white;
+      cursor: pointer;
+    }
+    .schoolProfile {
+  float: left;
+margin-left: 7%;
+width: 60px;
+height: 60px;
+
+
+
+}
+a {
+  text-decoration: none;
+}
+
+    </style>
+</head>
+<body>
+
+
+      <div class="pageName">
+      Poster
+      <button class="toggle-btn" >
+        <a href="https://undefined-flare.github.io/BF/bluefault">
+        × cancel post
+        </a>
+        </button>
+    </div>
+  <div class="page" id="poster">
+    
+  
+    <div class="post-container">
+        
+        
+        <div id="alertBox" class="alert" style="display: none;"></div>
+        
+        <form id="postForm">
+            <div class="form-group">
+                <label for="postTitle">Title</label>
+                <input type="text" id="postTitle" placeholder="What's your post about?" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="postCategory">Category</label>
+                <select id="postCategory" required>
+                    <option value="">Select a category</option>
+                    <option value="Social">Social</option>
+                    <option value="Academics">Academics</option>
+                    <option value="Marketing">Marketing</option>
+                    <option value="Service">Service</option>
+                    <option value="Music">Music</option>
+                    <option value="Newsletter">Newsletter</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="postText">Content</label>
+                <textarea id="postText" placeholder="Share your thoughts..."></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label>Attachment (Optional)</label>
+                <div class="file-input-wrapper">
+                    <label for="fileInput" class="file-input-label">
+                        <i class="fas fa-paperclip"></i> Choose File
+                    </label>
+                    <span id="fileName">No file chosen</span>
+                    <input type="file" id="fileInput" style="display: none;">
+                </div>
+                
+                <div id="filePreview">
+                    <img id="previewImage" src="" alt="Preview">
+                    <button type="button" id="removeFileBtn"><i class="fas fa-times"></i></button>
+                </div>
+            </div>
+            
+            <button type="submit" id="submitBtn">Post</button>
+        </form>
+    </div>
+</div>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+        import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-database.js";
+        import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-storage.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBSMvHpZ0_VkqWjJ94UMa6vqEhFiqrsIWM",
+            authDomain: "rare-5f47e.firebaseapp.com",
+            projectId: "rare-5f47e",
+            storageBucket: "rare-5f47e.appspot.com",
+            messagingSenderId: "811727087812",
+            appId: "1:811727087812:web:d362e68abf6c26acf24191",
+            measurementId: "G-DE59771G7Q"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const database = getDatabase(app);
+        const storage = getStorage(app);
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const postForm = document.getElementById("postForm");
+            const fileInput = document.getElementById("fileInput");
+            const filePreview = document.getElementById("filePreview");
+            const previewImage = document.getElementById("previewImage");
+            const removeFileBtn = document.getElementById("removeFileBtn");
+            const fileName = document.getElementById("fileName");
+            const alertBox = document.getElementById("alertBox");
+
+            // Check auth state
+            onAuthStateChanged(auth, (user) => {
+                if (!user) {
+                    showAlert("Please sign in to create posts.", "error");
+                    setTimeout(() => window.location.href = "sign-in.html", 2000);
+                }
+            });
+
+            // File input handling
+            fileInput.addEventListener("change", (e) => {
+                if (e.target.files.length) {
+                    const file = e.target.files[0];
+                    fileName.textContent = file.name;
+                    
+                    if (file.type.startsWith("image/")) {
+                        const reader = new FileReader();
+                        reader.onload = (event) => {
+                            previewImage.src = event.target.result;
+                            filePreview.style.display = "block";
+                        };
+                        reader.readAsDataURL(file);
+                    } else {
+                        filePreview.style.display = "none";
+                    }
+                }
+            });
+
+            removeFileBtn.addEventListener("click", () => {
+                fileInput.value = "";
+                filePreview.style.display = "none";
+                fileName.textContent = "No file chosen";
+            });
+
+            // Form submission
+            postForm.addEventListener("submit", async (e) => {
+                e.preventDefault();
+                
+                const postTitle = document.getElementById("postTitle").value.trim();
+                const postText = document.getElementById("postText").value.trim();
+                const category = document.getElementById("postCategory").value;
+
+                if (!postTitle || (!postText && !fileInput.files.length)) {
+                    showAlert("Please enter a title and content or upload a file.", "error");
+                    return;
+                }
+
+                const submitBtn = document.getElementById("submitBtn");
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Posting...';
+
+                try {
+                    const newPostKey = push(ref(database, "posts")).key;
+                    const postData = {
+                        title: postTitle,
+                        category,
+                        content: postText,
+                        author: auth.currentUser.displayName || auth.currentUser.email,
+                        authorEmail: auth.currentUser.email,
+                        authorPhoto: auth.currentUser.photoURL || "https://ui-avatars.com/api/?name=" + 
+                                      encodeURIComponent(auth.currentUser.displayName || auth.currentUser.email) + "&background=random",
+                        timestamp: Date.now(),
+                        likes: 0,
+                        likedBy: {}
+                    };
+
+                    // Handle file upload if exists
+                    if (fileInput.files.length) {
+                        const file = fileInput.files[0];
+                        const fileRef = storageRef(storage, "uploads/" + Date.now() + "_" + file.name);
+                        const snapshot = await uploadBytes(fileRef, file);
+                        const url = await getDownloadURL(snapshot.ref);
+                        postData.fileURL = url;
+                        postData.fileType = file.type;
+                        postData.fileName = file.name;
+                    }
+
+                    await set(ref(database, "posts/" + newPostKey), postData);
+                    
+                    showAlert("Post created successfully!", "success");
+                    postForm.reset();
+                    filePreview.style.display = "none";
+                    fileName.textContent = "No file chosen";
+                    
+                    // Redirect after 2 seconds
+                    setTimeout(() => {
+                        window.location.href = "community.html"; // Change to your posts feed page
+                    }, 2000);
+                    
+                } catch (error) {
+                    console.error("Error creating post:", error);
+                    showAlert("Failed to create post. Please try again.", "error");
+                } finally {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = 'Post';
+                }
+            });
+
+            function showAlert(message, type) {
+                alertBox.textContent = message;
+                alertBox.className = `alert ${type}`;
+                alertBox.style.display = "block";
+                
+                setTimeout(() => {
+                    alertBox.style.display = "none";
+                }, 5000);
+            }
+        });
+    </script>
+</body>
+</html>
