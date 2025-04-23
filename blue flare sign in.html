@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BLUEFLARE SIGN IN</title>
+    <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-storage.js"></script>
+    <style>
+        :root {
+            --primary: #ffffff;
+            --primary-dark: #f0f0f0;
+            --accent: #4285F4;
+            --dark: #ffffff;
+            --darker: #f5f5f5;
+            --light: #333333;
+            --flare-gradient: linear-gradient(135deg, rgba(66, 133, 244, 0.1) 0%, rgba(255, 255, 255, 0.8) 50%, rgba(66, 133, 244, 0.1) 100%);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--primary);
+            color: var(--light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(66, 133, 244, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(66, 133, 244, 0.05) 0%, transparent 20%);
+        }
+
+        .logoBox {
+            margin-top: 5%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .logo {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 15px;
+            border-radius: 50%;
+            border: 3px solid var(--accent);
+            box-shadow: 0 0 20px rgba(66, 133, 244, 0.2);
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(5px);
+            animation: pulse 3s infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 20px rgba(66, 133, 244, 0.2);
+            }
+            100% {
+                box-shadow: 0 0 30px rgba(66, 133, 244, 0.3), 0 0 40px rgba(66, 133, 244, 0.1);
+            }
+        }
+
+        h1 {
+            color: var(--light);
+            text-align: center;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        header {
+            background: var(--primary);
+            height: 40px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid rgba(66, 133, 244, 0.1);
+        }
+
+        .container {
+            max-width: 350px;
+            margin: 20px auto;
+            padding: 30px;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(66, 133, 244, 0.2);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05), 
+                        inset 0 0 15px rgba(66, 133, 244, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1), 
+                        inset 0 0 20px rgba(66, 133, 244, 0.15);
+        }
+
+        input[type="email"], input[type="password"] {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+            border: 1px solid rgba(66, 133, 244, 0.3);
+            background: rgba(255, 255, 255, 0.7);
+            color: var(--light);
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        input[type="email"]:focus, input[type="password"]:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 10px rgba(66, 133, 244, 0.2);
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        input::placeholder {
+            color: rgba(51, 51, 51, 0.6);
+        }
+
+        button {
+            background: var(--accent);
+            color: var(--primary);
+            border: none;
+            width: 100%;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(66, 133, 244, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(66, 133, 244, 0.4);
+            background: #3367d6;
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                transparent,
+                transparent,
+                transparent,
+                rgba(255, 255, 255, 0.3),
+                transparent,
+                transparent,
+                transparent
+            );
+            transform: rotate(30deg);
+            animation: flare 3s infinite;
+        }
+
+        @keyframes flare {
+            0% {
+                left: -50%;
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                left: 150%;
+                opacity: 0;
+            }
+        }
+
+        footer {
+            text-align: center;
+            padding: 15px;
+            background: var(--primary);
+            color: var(--light);
+            margin-top: auto;
+            box-shadow: 0 -2px 15px rgba(0, 0, 0, 0.05);
+            border-top: 1px solid rgba(66, 133, 244, 0.1);
+        }
+
+        .loader {
+            height: 4px;
+            width: 100%;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            position: relative;
+            overflow: hidden;
+            animation: loading 2s linear infinite;
+        }
+
+        @keyframes loading {
+            0% {
+                background-position: -200% 0;
+            }
+            100% {
+                background-position: 200% 0;
+            }
+        }
+
+        #error-message {
+            color: var(--light);
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 16px;
+        }
+
+        .flare-decoration {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(66, 133, 244, 0.05) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: -1;
+        }
+
+        .flare-1 {
+            top: -50px;
+            left: -50px;
+        }
+
+        .flare-2 {
+            bottom: -50px;
+            right: -50px;
+        }
+
+        .signup-link {
+            text-align: center;
+            margin-top: 20px;
+            color: var(--light);
+        }
+
+        .signup-link a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .signup-link a:hover {
+            text-decoration: underline;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+
+        .shake {
+            animation: shake 0.5s;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="loader"></div>
+    </header>
+    
+    <div class="logoBox">
+        <img src="https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/blue-blueflame.gif?alt=media&token=ce3af04b-9a8d-4695-9e39-7a919fe4f9a8" alt="BlueFlare Logo" class="logo">
+        <h1>SIGN IN</h1>
+    </div>
+    
+    <div class="container">
+        <div class="flare-decoration flare-1"></div>
+        <div class="flare-decoration flare-2"></div>
+        <span id="error-message">Welcome back to BlueFlare</span>
+        <input type="email" id="email" placeholder="Email" autocomplete="username">
+        <input type="password" id="password" placeholder="Password" autocomplete="current-password">
+        <button id="sign-in">SIGN IN</button>
+        
+        <div class="signup-link">
+            Don't have an account? <a href="signup.html">Sign up</a>
+        </div>
+    </div>
+
+    <footer>
+        © 2024 BlueFlare | rare-547fe Authentication
+    </footer>
+
+    <script type='module'>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelector(".loader").style.display = "none";
+        });
+        
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js'
+        import { getAnalytics } from 'https://www.gstatic.com/firebasejs/10.12.4/firebase-analytics.js'
+        import { getAuth, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js'
+        import { getFirestore } from 'https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js'
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBSMvHpZ0_VkqWjJ94UMa6vqEhFiqrsIWM",
+            authDomain: "rare-5f47e.firebaseapp.com", 
+            projectId: "rare-5f47e",
+            storageBucket: "rare-5f47e.appspot.com",
+            messagingSenderId: "811727087812",
+            appId: "1:811727087812:web:d362e68abf6c26acf24191",
+            measurementId: "G-DE59771G7Q"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        const emailInput = document.getElementById("email");
+        const passwordInput = document.getElementById("password");
+        const signInButton = document.getElementById("sign-in");
+        const errorMessage = document.getElementById("error-message");
+
+        signInButton.addEventListener("click", () => {
+            const email = emailInput.value;
+            const password = passwordInput.value;
+
+            // Show loading state
+            signInButton.innerHTML = '<span class="loader-btn"></span> SIGNING IN...';
+            signInButton.disabled = true;
+
+            signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    const user = userCredential.user;
+                    console.log(user);
+                    window.location.href = "https://undefined-flare.github.io/BF/bluefault.html";
+                })
+                .catch((error) => {
+                    errorMessage.innerText = error.message;
+                    errorMessage.classList.add("shake");
+                    setTimeout(() => {
+                        errorMessage.classList.remove("shake");
+                    }, 500);
+                    signInButton.innerHTML = 'SIGN IN';
+                    signInButton.disabled = false;
+                });
+        });
+
+        // Add keypress event for Enter key
+        passwordInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                signInButton.click();
+            }
+        });
+    </script>
+</body>
+</html>
