@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="icon" 
+  <meta charset="UTF-8">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+            <link rel="icon" 
       href="https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/android-chrome-512x512.png?alt=media&token=1d185228-95d4-49d6-a7a3-13cc629540ca" 
       type="image/png"
     >
-  <meta charset="UTF-8">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
 <link href="https://undefined-flare.github.io/BF/blueflare.css" rel="stylesheet">
@@ -1117,8 +1117,8 @@ foter {
 </div>
 
       <div class="pageName" style="color:RGB(65, 105, 225);">
-       Blueflare 
-      <button class="toggle-btn" style="background:RGB(65, 105, 225);">press for info</button>
+             <img id="profilePicture" class="profile-pic" src="https://via.placeholder.com/50" alt="Profile Photo">
+             <h3 id="user-info">User Name</h3>
     </div>
       <div class="motivation-slideshow">
     <div class="slides-container">
@@ -1166,11 +1166,7 @@ foter {
   <div class="main">
     <!-- Card 1 -->
     <section class="card" aria-label="EasyEquities investing made easy" role="region">
-<img class="profile-pic" alt="User profile picture" src="https://storage.googleapis.com/a1aa/image/hVZNLKyl3aK_P_hLYIPOWjZ3kTVJPgmC6nL6CFkwkDE.jpg" id="profilePicture"/>
-      <div>
-        <p class="card-description" >welcome back to blueflare</p>
-        <p class="card-title"id="user-info">.....</p>
-      </div>
+
     </section>
     
     <!-- Card 2 -->
@@ -1182,8 +1178,13 @@ foter {
     <div class="favourites-grid">
       <!-- Buy prepaid mobile -->
       <button class="favourite-button" aria-label="Buy prepaid mobile">
+                    <a href="notice.html" class="nav-btn active" >
+    
+
         <img class="favourite-icon" alt="Blue icon of a mobile phone with a pencil" aria-hidden="true" height="80px" src="https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/Question-answer-icon-Graphics-15316746-1.jpg?alt=media&token=91a23a16-fc7f-4d19-b8cd-f4c22204c017" width="32"/>
         <span class="favourite-label">question/answer</span>
+              
+    </a>
       </button>
       
       <!-- Buy electricity -->
@@ -1360,10 +1361,14 @@ gap: 16px;">
     </div>
   <div class="page" id="poster">
     
-  
-shit
-</div>
+    <iframe class="" src="https://undefined-flare.github.io/BF/blueflare poster.html" style="padding-bottom: 100%;" width="100%" height="100%"></iframe>
+
+    
+  </div>
 </body>
+
+
+  
 <footer  style="bottom: 0;margin:0;" >
     <nav>
       <button class="nav-button " style="position: relative;" >
@@ -1536,14 +1541,17 @@ shit
 
     onAuthStateChanged(auth, (user) => {
   if (!user) {
-    alert("You must be signed in to use this platform.");
+    alert("please sign in:You will be redirected to the sign in page");
     window.location.href = "https://undefined-flare.github.io/BF/blue flare sign in.html";
   } else {
     fetchPosts();
+    
     document.getElementById('profilePicture').src = user.photoURL;
-    document.getElementById('user-info').innerText = user.email;
+   var userName = document.getElementById('user-info').innerText = user.email;
+userName.innerText = user.displayName || user.email.split('@')[0];
   }
 });
+
     const groupDisplayContainer = document.getElementById("image-container");
 
   let groups = [];
@@ -1671,7 +1679,7 @@ const categoryIcon = categoryIcons[post.category] || "";
           <span>${Object.keys(post.likes || {}).length} </span>
         </button>
 
-        <button class="footer-button" aria-label="Comment on post">
+        <button class="footer-button" aria-label="Comment on post" class="toggle-comments-button">
           <i class="far fa-comment"></i>
           <span>${Object.keys(post.comments || {}).length} 
                       </span>
