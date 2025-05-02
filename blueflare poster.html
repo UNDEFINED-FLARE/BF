@@ -564,12 +564,10 @@ height: 60px;
 
     // Auth state listener
     auth.onAuthStateChanged(user => {
-      if (!user) {
-        window.location.href = "login.html";
-      } else {
+      
         userPhoto.src = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || user.email)}&background=random`;
         userName.innerText = user.displayName || user.email.split('@')[0];
-      }
+      
     });
 
     // Tab navigation
