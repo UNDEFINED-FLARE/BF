@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blue Flare - Q&A Platform</title>
+  <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-app.js"></script>
+  <link rel="stylesheet" href="https://undefined-flare.github.io/BF/blueflare.css" />
+  <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-auth.js"></script>
+ <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f9f9f9;
+    }
+    
+
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid #ddd;
+      margin-bottom: 20px;
+    }
+    
+    .tab {
+      padding: 10px 20px;
+      cursor: pointer;
+      color: #666;
+    }
+    
+    .tab.active {
+      color: RGB(65, 105, 225);
+      border-bottom: 2px solid RGB(65, 105, 225);
+    }
+    
+    .qa-list {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .qa-question, .qa-answer {
+      padding: 15px;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .qa-question:last-child, .qa-answer:last-child {
+      border-bottom: none;
+    }
+    
+    .post-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    
+    .post-user-img {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+    
+    .post-user-name {
+      font-weight: 600;
+      margin-right: 10px;
+    }
+    
+    .post-time {
+      color: #666;
+      font-size: 13px;
+    }
+    
+    .post-content {
+      margin: 10px 0;
+      line-height: 1.5;
+    }
+    
+    .post-actions {
+      display: flex;
+      margin-top: 10px;
+    }
+    
+    .action-button {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 10px;
+      background: none;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-right: 10px;
+      font-size: 14px;
+    }
+    
+    .action-button:hover {
+      background-color: #f0f0f0;
+    }
+    
+    .action-button svg {
+      width: 16px;
+      height: 16px;
+    }
+    
+    .answer-form {
+      margin: 15px 0;
+      padding: 15px;
+      background: #f5f5f5;
+      border-radius: 8px;
+    }
+    
+    .answer-form textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      resize: vertical;
+      min-height: 80px;
+      font-family: inherit;
+    }
+    
+    .answer-form button {
+      padding: 8px 15px;
+      background-color: RGB(65, 105, 225);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+    
+    .answer-form .cancel-button {
+      background-color: #ccc;
+    }
+    
+    .qa-answers {
+      margin-top: 15px;
+      padding-left: 15px;
+      border-left: 2px solid #eee;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: #666;
+    }
+    
+    .empty-state img {
+      width: 80px;
+      opacity: 0.5;
+      margin-bottom: 15px;
+    }
+    
+    .answers-toggle {
+      display: flex;
+      align-items: center;
+      color: RGB(65, 105, 225);
+      cursor: pointer;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+    
+    .answers-toggle svg {
+      margin-right: 5px;
+      transition: transform 0.2s;
+    }
+    
+    .answers-toggle.collapsed svg {
+      transform: rotate(-90deg);
+    }
+    
+    .hidden-answers {
+      display: none;
+    }
+    
+    .poll-container {
+      margin-top: 10px;
+    }
+    
+    .poll-question {
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+    
+    .poll-option {
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      cursor: pointer;
+      display: flex;
+    }
+    
+    .poll-option:hover {
+      background-color: #f5f5f5;
+    }
+    
+    .poll-option.selected-option {
+      border-color: RGB(65, 105, 225);
+      background-color: rgba(65, 105, 225, 0.05);
+    }
+    
+    .poll-bar {
+      height: 6px;
+      background-color: #eee;
+      border-radius: 3px;
+      margin: 5px 0;
+      overflow: hidden;
+    }
+    
+    .poll-fill {
+      height: 100%;
+      background-color: RGB(65, 105, 225);
+      width: 0%;
+      transition: width 0.3s;
+    }
+    
+    .poll-stats {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+
+
+  <div class="content">
+    <div class="tabs" style="">
+      <div class="tab active" onclick="showTab('questions')">Questions</div>
+      <div class="tab" onclick="showTab('polls')">Polls</div>
+      <div class="tab" onclick="showTab('qa')">AI tutor</div>
+    </div>
+
+    <!-- Questions Tab -->
+    <div id="questions-tab" class="tab-content">
+      <div id="qa-list" class="qa-list">
+        <!-- Questions will be loaded here -->
+      </div>
+    </div>
+
+    <!-- Polls Tab -->
+    <div id="polls-tab" class="tab-content" style="display: none;">
+      <div id="polls-list" class="qa-list">
+        <!-- Polls will be loaded here -->
+      </div>
+    </div>
+    
+    <!-- AI Tutor Tab -->
+    <div id="qa-tab" class="tab-content" style="display: none;">
+      <div class="form-title">Ask a Question</div>
+    </div>
+  </div>
+
+  <script>
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyBSMvHpZ0_VkqWjJ94UMa6vqEhFiqrsIWM",
+      authDomain: "rare-5f47e.firebaseapp.com",
+      projectId: "rare-5f47e",
+      storageBucket: "rare-5f47e.appspot.com",
+      messagingSenderId: "811727087812",
+      appId: "1:811727087812:web:d362e68abf6c26acf24191",
+      measurementId: "G-DE59771G7Q"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const database = firebase.database();
+    
+    // Auth state listener
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        // User is signed in
+        loadQuestions();
+        loadPolls();
+      } else {
+        // No user signed in
+        window.location.href = 'login.html'; // Redirect to login page
+      }
+    });
+    
+    // Tab navigation
+    function showTab(tabName) {
+      // Update active tab
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      event.currentTarget.classList.add('active');
+      
+      // Show selected tab content
+      document.getElementById('questions-tab').style.display = 'none';
+      document.getElementById('qa-tab').style.display = 'none';
+      document.getElementById('polls-tab').style.display = 'none';
+      document.getElementById(`${tabName}-tab`).style.display = 'block';
+    }
+    
+    // Q&A functions
+    function loadQuestions() {
+      const qaRef = database.ref('questions');
+      
+      qaRef.orderByChild('timestamp').on('value', snapshot => {
+        const qaList = document.getElementById('qa-list');
+        qaList.innerHTML = '';
+        
+        if (!snapshot.exists()) {
+          qaList.innerHTML = `
+            <div class="empty-state">
+              <img src="https://cdn-icons-png.flaticon.com/512/4076/4076478.png" alt="No questions">
+              <div>No questions yet.</div>
+            </div>
+          `;
+          return;
+        }
+        
+        // Convert to array and reverse to show newest first
+        const questions = [];
+        snapshot.forEach(questionSnapshot => {
+          questions.push({
+            key: questionSnapshot.key,
+            val: questionSnapshot.val()
+          });
+        });
+        
+        questions.reverse().forEach(question => {
+          const questionElement = document.createElement('div');
+          questionElement.className = 'qa-question';
+          questionElement.innerHTML = `
+            <div class="post-header">
+              <img class="post-user-img" src="${question.val.authorPhoto || 'https://ui-avatars.com/api/?name=User&background=random'}">
+              <span class="post-user-name">${question.val.author || 'Anonymous'}</span>
+              <span class="post-time">${formatTime(question.val.timestamp)}</span>
+            </div>
+            <div class="post-content">${question.val.text}</div>
+            <div class="post-actions">
+              <button class="action-button" onclick="toggleAnswerForm('${question.key}')">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M10 9V5l-7 7 7 7v-4.1c5 0 8.5 1.6 11 5.1-1-5-4-10-11-11z"/>
+                </svg>
+                Answer
+              </button>
+              <button class="action-button" onclick="likeItem('questions', '${question.key}')">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+                <span id="likes-${question.key}">${question.val.likes || 0}</span>
+              </button>
+            </div>
+            <div class="answers-toggle collapsed" onclick="toggleAnswers('${question.key}')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M7 10l5 5 5-5z"/>
+              </svg>
+              Answers (${question.val.answers ? Object.keys(question.val.answers).length : 0})
+            </div>
+            <div class="qa-answers hidden-answers" id="answers-${question.key}"></div>
+          `;
+          qaList.appendChild(questionElement);
+        });
+      });
+    }
+    
+    function toggleAnswers(questionId) {
+      const answersContainer = document.getElementById(`answers-${questionId}`);
+      const toggleButton = answersContainer.previousElementSibling;
+      
+      if (answersContainer.classList.contains('hidden-answers')) {
+        // Show answers
+        answersContainer.classList.remove('hidden-answers');
+        toggleButton.classList.remove('collapsed');
+        loadAnswers(questionId);
+      } else {
+        // Hide answers
+        answersContainer.classList.add('hidden-answers');
+        toggleButton.classList.add('collapsed');
+      }
+    }
+    
+    function loadAnswers(questionId) {
+      const answersRef = database.ref(`questions/${questionId}/answers`);
+      
+      answersRef.orderByChild('timestamp').on('value', snapshot => {
+        const answersContainer = document.getElementById(`answers-${questionId}`);
+        answersContainer.innerHTML = '';
+        
+        if (!snapshot.exists()) {
+          answersContainer.innerHTML = '<div class="empty-state">No answers yet</div>';
+          return;
+        }
+        
+        // Convert to array and reverse to show newest first
+        const answers = [];
+        snapshot.forEach(answerSnapshot => {
+          answers.push({
+            key: answerSnapshot.key,
+            val: answerSnapshot.val()
+          });
+        });
+        
+        answers.reverse().forEach(answer => {
+          const answerElement = document.createElement('div');
+          answerElement.className = 'qa-answer';
+          answerElement.innerHTML = `
+            <div class="post-header">
+              <img class="post-user-img" src="${answer.val.authorPhoto || 'https://ui-avatars.com/api/?name=User&background=random'}">
+              <span class="post-user-name">${answer.val.author || 'Anonymous'}</span>
+              <span class="post-time">${formatTime(answer.val.timestamp)}</span>
+            </div>
+            <div class="post-content">${answer.val.text}</div>
+            <div class="post-actions">
+              <button class="action-button" onclick="likeItem('questions/${questionId}/answers', '${answer.key}')">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+                <span id="likes-${questionId}-${answer.key}">${answer.val.likes || 0}</span>
+              </button>
+            </div>
+          `;
+          answersContainer.appendChild(answerElement);
+        });
+      });
+    }
+    
+    function toggleAnswerForm(questionId) {
+      const answersContainer = document.getElementById(`answers-${questionId}`);
+      const existingForm = answersContainer.querySelector('.answer-form');
+      
+      // Make sure answers are visible
+      if (answersContainer.classList.contains('hidden-answers')) {
+        toggleAnswers(questionId);
+      }
+      
+      if (existingForm) {
+        existingForm.remove();
+        return;
+      }
+      
+      const answerForm = document.createElement('div');
+      answerForm.className = 'answer-form';
+      answerForm.innerHTML = `
+        <textarea id="answer-text-${questionId}" placeholder="Write your answer..." rows="3"></textarea>
+        <button onclick="submitAnswer('${questionId}')">Submit Answer</button>
+        <button onclick="toggleAnswerForm('${questionId}')" class="cancel-button">Cancel</button>
+      `;
+      
+      answersContainer.prepend(answerForm);
+      document.getElementById(`answer-text-${questionId}`).focus();
+    }
+    
+    function submitAnswer(questionId) {
+      const user = auth.currentUser;
+      if (!user) return;
+      
+      const answerText = document.getElementById(`answer-text-${questionId}`).value.trim();
+      if (!answerText) return;
+      
+      const answerData = {
+        text: answerText,
+        author: user.displayName || 'Anonymous',
+        authorPhoto: user.photoURL || '',
+        timestamp: Date.now(),
+        likes: 0
+      };
+      
+      const answersRef = database.ref(`questions/${questionId}/answers`);
+      answersRef.push(answerData)
+        .then(() => {
+          toggleAnswerForm(questionId); // Hide the form after submission
+          // Update the answer count in the toggle button
+          const toggleButton = document.querySelector(`#answers-${questionId}`).previousElementSibling;
+          const currentCount = parseInt(toggleButton.textContent.match(/\((\d+)\)/)[1]) || 0;
+          toggleButton.textContent = toggleButton.textContent.replace(/\(\d+\)/, `(${currentCount + 1})`);
+        })
+        .catch(error => {
+          console.error("Error submitting answer:", error);
+        });
+    }
+    
+    // Poll functions
+    function loadPolls() {
+      const pollsRef = database.ref('polls');
+      
+      pollsRef.orderByChild('timestamp').on('value', snapshot => {
+        const pollsList = document.getElementById('polls-list');
+        pollsList.innerHTML = '';
+        
+        if (!snapshot.exists()) {
+          pollsList.innerHTML = `
+            <div class="empty-state">
+              <img src="https://cdn-icons-png.flaticon.com/512/4076/4076478.png" alt="No polls">
+              <div>No polls yet.</div>
+            </div>
+          `;
+          return;
+        }
+        
+        // Convert to array and reverse to show newest first
+        const polls = [];
+        snapshot.forEach(pollSnapshot => {
+          polls.push({
+            key: pollSnapshot.key,
+            val: pollSnapshot.val()
+          });
+        });
+        
+        polls.reverse().forEach(poll => {
+          const user = auth.currentUser;
+          const userVote = poll.val.votes ? poll.val.votes[user.uid] : null;
+          const totalVotes = poll.val.votes ? Object.keys(poll.val.votes).length : 0;
+          
+          const pollElement = document.createElement('div');
+          pollElement.className = 'qa-question';
+          pollElement.innerHTML = `
+            <div class="post-header">
+              <img class="post-user-img" src="${poll.val.authorPhoto || 'https://ui-avatars.com/api/?name=User&background=random'}">
+              <span class="post-user-name">${poll.val.author || 'Anonymous'}</span>
+              <span class="post-time">${formatTime(poll.val.timestamp)}</span>
+            </div>
+            <div class="poll-container">
+              <div class="poll-question">${poll.val.question}</div>
+              <div id="poll-options-${poll.key}"></div>
+              <div class="poll-stats">Total votes: ${totalVotes}</div>
+            </div>
+          `;
+          pollsList.appendChild(pollElement);
+          
+          // Load poll options
+          loadPollOptions(poll.key, poll.val.options, poll.val.votes, user.uid);
+        });
+      });
+    }
+    
+    function loadPollOptions(pollId, options, votes, userId) {
+      const optionsContainer = document.getElementById(`poll-options-${pollId}`);
+      optionsContainer.innerHTML = '';
+      
+      if (!options) return;
+      
+      const totalVotes = votes ? Object.keys(votes).length : 0;
+      
+      options.forEach((option, index) => {
+        const optionVotes = votes ? Object.values(votes).filter(v => v === index).length : 0;
+        const percentage = totalVotes > 0 ? Math.round((optionVotes / totalVotes) * 100) : 0;
+        const isSelected = votes && votes[userId] === index;
+        
+        const optionElement = document.createElement('div');
+        optionElement.className = `poll-option ${isSelected ? 'selected-option' : ''}`;
+        optionElement.innerHTML = `
+          <div style="flex: 1;">
+            <div>${option}</div>
+            <div class="poll-bar">
+              <div class="poll-fill" style="width: ${percentage}%"></div>
+            </div>
+            <div class="poll-stats">
+              <span>${percentage}%</span>
+              <span>${optionVotes} vote${optionVotes !== 1 ? 's' : ''}</span>
+            </div>
+          </div>
+        `;
+        optionElement.onclick = () => voteInPoll(pollId, index);
+        optionsContainer.appendChild(optionElement);
+      });
+    }
+    
+    function voteInPoll(pollId, optionIndex) {
+      const user = auth.currentUser;
+      if (!user) return;
+      
+      const voteRef = database.ref(`polls/${pollId}/votes/${user.uid}`);
+      voteRef.set(optionIndex);
+    }
+    
+    // Like functionality
+    function likeItem(path, itemId) {
+      const user = auth.currentUser;
+      if (!user) return;
+      
+      // Check if user already liked this item
+      const userLikeRef = database.ref(`${path}/${itemId}/likedBy/${user.uid}`);
+      
+      userLikeRef.transaction(currentLike => {
+        if (currentLike) {
+          // User already liked - unlike
+          userLikeRef.remove();
+          database.ref(`${path}/${itemId}/likes`).transaction(currentLikes => {
+            return (currentLikes || 0) - 1;
+          });
+        } else {
+          // User hasn't liked - add like
+          userLikeRef.set(true);
+          database.ref(`${path}/${itemId}/likes`).transaction(currentLikes => {
+            return (currentLikes || 0) + 1;
+          });
+        }
+        return !currentLike;
+      });
+    }
+    
+    // Helper function
+    function formatTime(timestamp) {
+      const now = Date.now();
+      const diff = now - timestamp;
+      const seconds = Math.floor(diff / 1000);
+      const minutes = Math.floor(seconds / 60);
+      const hours = Math.floor(minutes / 60);
+      const days = Math.floor(hours / 24);
+      
+      if (seconds < 60) return "Just now";
+      if (minutes < 60) return `${minutes} min ago`;
+      if (hours < 24) return `${hours} hr ago`;
+      if (days < 7) return `${days} day${days > 1 ? 's' : ''} ago`;
+      
+      return new Date(timestamp).toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
+      });
+    }
+  </script>
+</body>
+</html>
+    <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+    }
+    
+
+    
+    
+    
+    .schoolProfile {
+      width: 50px;
+      height: 50px
