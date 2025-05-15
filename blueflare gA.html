@@ -572,4 +572,434 @@ function fetchNews() {
 window.openFullscreen = (url, articleId, title, channel, stats) => {
   const fullscreenVideo = document.getElementById("fullscreen-video");
   const fullscreenTitle = document.getElementById("fullscreen-title");
-  const fullscreenChannel = document.getElementById("fullscreen-channel"
+  const fullscreenChannel = document.getElementById("fullscreen-channel");
+  const fullscreenStats = document.getElementById("fullscreen-stats");
+  const fullscreenModal = document.getElementById("fullscreen-modal");
+  const commentsContainer = document.getElementById("comments-container");
+
+  if (!fullscreenVideo || !fullscreenModal) {
+    console.error("Fullscreen elements not found");
+    return;
+  }
+
+  fullscreenVideo.src = url;
+  fullscreenVideo.autoplay = true;
+  fullscreenVideo.muted = false;
+  fullscreenVideo.controls = true;
+
+  if (fullscreenTitle) fullscreenTitle.textContent = title;
+  if (fullscreenChannel) fullscreenChannel.textContent = channel;
+  if (fullscreenStats) fullscreenStats.textContent = stats;
+  fullscreenModal.classList.add("active");
+
+  if (commentsContainer) {
+    const commentsRef = ref(database, `news/${articleId}/comments`);
+    const commentsQuery = query(commentsRef, orderByChild("timestamp"));
+    onValue(commentsQuery, (snapshot) => {
+      commentsContainer.innerHTML = "";
+      const comments = [];
+
+      snapshot.forEach((childSnapshot) => {
+        const comment = childSnapshot.val();
+        comment.id = childSnapshot.key;
+        comments.push(comment);
+      });
+
+      comments.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+
+      comments.forEach((comment) => {
+        const commentHTML = `
+          <div class="comment">
+            <div class="comment-avatar">${(comment.author || "A").charAt(0)}</div>
+            <div class="comment-content">
+              <div class="comment-author">${comment.author || "Anonymous"}</div>
+              <div class="comment-text">${comment.text}</div>
+            </div>
+          </div>
+        `;
+        commentsContainer.innerHTML += commentHTML;
+      });
+    }, (error) => {
+      console.error("Error fetching comments:", error);
+    });
+  }
+};
+
+window.closeFullscreen = () => {
+  const fullscreenVideo = document.getElementById("fullscreen-video");
+  const fullscreenModal = document.getElementById("fullscreen-modal");
+  if (fullscreenVideo && fullscreenModal) {
+    fullscreenVideo.pause();
+    fullscreenVideo.src = "";
+    fullscreenModal.classList.remove("active");
+  }
+};
+
+const groupDisplayContainer = document.getElementById("image-container");
+const groupChat = document.getElementById("group-chat");
+const chatMessages = document.getElementById("chat-messages");
+const messageInput = document.getElementById("message-input");
+const sendMessage = document.getElementById("send-message");
+const backBtn = document.querySelector(".back-btn");
+//const profilePicture = document.getElementById("profilePicture");
+//const userInfo = document.getElementById("user-info");
+
+// Category icons
+//const categoryIcons = {
+//  Social: "fa-solid fa-users",
+//  Academics: "fa-solid fa-book",
+//  Marketing: "fa-solid fa-chart-line",
+//  Service: "fa-solid fa-handshake",
+//  Music: "fa-solid fa-music",
+//  Newsletter: "fa-solid fa-envelope-open-text"
+//};
+
+// Wait for DOM to load
+document.addEventListener("DOMContentLoaded", () => {
+  // Auth state listener
+  onAuthStateChanged(auth, (user) => {
+    if (!user) {
+      alert("You must be signed in to use this platform.");
+      window.location.href = "sign-in.html";
+    } else {
+      if (profilePicture) profilePicture.src = user.photoURL || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png";
+      if (userInfo) userInfo.innerText = user.displayName || "Anonymous";
+      fetchGroups();
+    }
+  });
+  
+  // Back button to return to group list
+  if (backBtn) {
+    backBtn.addEventListener("click", () => {
+      groupChat.style.display = "none";
+      groupDisplayContainer.style.display = "flex";
+    });
+  }
+  
+  // Send message
+  if (sendMessage) {
+    sendMessage.addEventListener("click", () => {
+      const text = messageInput.value.trim();
+      if (text && currentGroupId) {
+        sendMessageToGroup(currentGroupId, text);
+        messageInput.value = "";
+      }
+    });
+  }
+  
+  if (messageInput) {
+    messageInput.addEventListener("keypress", (e) => {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage.click();
+      }
+    });
+  }
+});
+
+// Fetch and display groups
+let groups = [];
+let currentIndex = 0;
+let currentGroupId = null;
+
+function fetchGroups() {
+  if (!groupDisplayContainer) return;
+  const groupsRef = ref(database, "groups");
+  onValue(groupsRef, (snapshot) => {
+    groups = [];
+    snapshot.forEach((childSnapshot) => {
+      const group = childSnapshot.val();
+      group.id = childSnapshot.key;
+      groups.push(group);
+    });
+    displayGroups();
+  }, (error) => {
+    console.error("Error fetching groups:", error);
+    if (groupDisplayContainer) groupDisplayContainer.innerHTML = "<p>Error loading groups.</p>";
+  });
+}
+
+function displayGroups() {
+  if (!groupDisplayContainer) return;
+  groupDisplayContainer.innerHTML = "";
+  groupDisplayContainer.style.display = "flex";
+  const selectedGroups = groups.slice(currentIndex, currentIndex + 3);
+  if (selectedGroups.length < 3 && groups.length > 0) {
+    selectedGroups.push(...groups.slice(0, 3 - selectedGroups.length));
+  }
+  
+  selectedGroups.forEach((group) => {
+    const categoryIcon = categoryIcons[group.category] || "";
+    const groupBlockHTML = `
+      <button class="suImg" data-id="${group.id}">
+        <div class="avatar">
+          <i class="${categoryIcon} category-icon"></i>
+        </div>
+        <img src="${group.imageURL || "https://via.placeholder.com/100x60"}" alt="${group.name || "Group"}" class="imgReal">
+        <div class="group-name">${group.name || "Unnamed Group"}</div>
+      </button>
+    `;
+    groupDisplayContainer.innerHTML += groupBlockHTML;
+  });
+  
+  // Attach click handlers to group cards
+  document.querySelectorAll(".suImg").forEach(button => {
+    button.addEventListener("click", () => {
+      currentGroupId = button.dataset.id;
+      loadGroupChat(currentGroupId);
+    });
+  });
+  
+  currentIndex = (currentIndex + 3) % (groups.length || 1);
+}
+
+// Rotate groups every 30 seconds
+if (groupDisplayContainer) {
+  setInterval(() => {
+    if (groups.length > 0) {
+      displayGroups();
+    }
+  }, 30000);
+}
+
+// Load and display group chat
+function loadGroupChat(groupId) {
+  if (!groupChat || !chatMessages) return;
+  const groupRef = ref(database, `groups/${groupId}`);
+  onValue(groupRef, (snapshot) => {
+    const group = snapshot.val();
+    if (group) {
+      document.querySelector(".group-name").textContent = group.name || "Group Chat";
+      groupDisplayContainer.style.display = "none";
+      groupChat.style.display = "flex";
+      fetchGroupMessages(groupId);
+    }
+  }, (error) => {
+    console.error("Error loading group:", error);
+  });
+}
+
+// Fetch and display messages
+function fetchGroupMessages(groupId) {
+  if (!chatMessages) return;
+  const messagesRef = ref(database, `groups/${groupId}/messages`);
+  onValue(messagesRef, (snapshot) => {
+    chatMessages.innerHTML = "";
+    snapshot.forEach((childSnapshot) => {
+      const message = childSnapshot.val();
+      const isSent = message.author === auth.currentUser?.email;
+      const messageHTML = `
+        <div class="message ${isSent ? "sent" : "received"}">
+          <div class="author">${message.author || "Anonymous"}</div>
+          <div class="text">${message.text}</div>
+          <div class="time">${formatTime(message.timestamp)}</div>
+        </div>
+      `;
+      chatMessages.innerHTML += messageHTML;
+    });
+    chatMessages.scrollTop = chatMessages.scrollHeight; // Auto-scroll to latest message
+  }, (error) => {
+    console.error("Error fetching messages:", error);
+  });
+}
+
+// Send message to group
+function sendMessageToGroup(groupId, text) {
+  const user = auth.currentUser;
+  if (!user) return;
+  const messagesRef = ref(database, `groups/${groupId}/messages`);
+  const newMessage = {
+    text,
+    author: user.email || "Anonymous",
+    profilePicture: user.photoURL || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
+    timestamp: Date.now()
+  };
+  push(messagesRef, newMessage)
+    .catch((error) => {
+      console.error("Error sending message:", error);
+    });
+}
+
+// Format timestamp
+  </script>
+</body>
+</html>
+
+
+  <style>
+
+    /* Header with Tabs */
+    .header {
+      background: #075e54;
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+      color: white;
+    }
+    .brand { font-size: 1.5em; font-weight: bold; }
+    .tabs { display: flex; gap: 10px; }
+    .tab {
+      padding: 5px 15px;
+      background: #075e54;
+      border-radius: 15px;
+      font-size: 0.9em;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .tab.active { background: #054d44; color: white; }
+    .tab:hover { background: #054d44; }
+
+    /* Group List */
+    .main-content {
+      margn-top: 60px;
+    
+      padding: 10px;
+      flex: 1;
+    }
+    #image-container {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .suImg {
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      padding: 10px;
+      width: 100px;
+      text-align: center;
+      border: none;
+      cursor: pointer;
+    }
+    .suImg:hover { transform: scale(1.05); transition: transform 0.3s; }
+    .avatar {
+      position: relative;
+      width: 40px;
+      height: 40px;
+      background: #007bff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 5px;
+    }
+    .category-icon { color: white; font-size: 1.2em; }
+    .imgReal {
+      width: 100%;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+    .group-name {
+      font-size: 0.9em;
+      margin-top: 5px;
+      color: #333;
+    }
+
+    /* Group Chat */
+    #group-chat {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #e5ddd5;
+      flex-direction: column;
+      z-index: 1000;
+    }
+    .chat-header {
+      background: #075e54;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      color: white;
+    }
+    .chat-header .back-btn {
+      margin-right: 10px;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.2em;
+      cursor: pointer;
+    }
+    .chat-header .group-name { font-size: 1.1em; font-weight: bold; }
+    .chat-messages {
+      flex: 1;
+      padding: 10px;
+      overflow-y: auto;
+      margin-bottom: 60px;
+    }
+    .message {
+      margin: 10px 0;
+      max-width: 70%;
+      padding: 8px 12px;
+      border-radius: 10px;
+    }
+    .sent { background: #dcf8c6; margin-left: auto; }
+    .received { background: #fff; }
+    .message .author { font-size: 0.8em; color: #666; }
+    .message .text { margin: 2px 0; }
+    .chat-input {
+      position: fixed;
+      bottom: 60px;
+      width: 100%;
+      background: #f0f0f0;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+    }
+    .chat-input input {
+      flex: 1;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 20px;
+      margin-right: 10px;
+    }
+    .chat-input button {
+      background: #075e54;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+    .chat-input button:hover { background: #054d44; }
+
+    /* Bottom Navigation */
+    .bottom-nav {
+      background: #fff;
+      padding: 10px;
+      border-top: 1px solid #ddd;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      z-index: 1000;
+    }
+    .bottom-nav button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 0.8em;
+      color: #666;
+    }
+    .bottom-nav button i { font-size: 1.2em; }
+    .bottom-nav button.active { color: #007bff; }
+
+    /* User Info */
+    #user-info { margin-left: 10px; }
+    #profilePicture { width: 40px; height: 40px; border-radius: 50%; }
+  </style>
