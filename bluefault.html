@@ -1533,7 +1533,7 @@ gap: 16px;">
     onAuthStateChanged(auth, (user) => {
       if (!user) {
         alert("You must be signed in to use this platform.");
-        window.location.href = "https://undefined-flare.github.io/BF/blueflare sign in.html.html";
+        window.location.href = "https://undefined-flare.github.io/BF/blueflare sign in.html";
       } else {
         if (profilePicture) profilePicture.src = user.photoURL || "default-avatar.png";
         if (userInfo) userInfo.innerText = user.email;
