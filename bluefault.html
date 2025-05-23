@@ -17,15 +17,11 @@
 <style>
     *{                         
       margin: 0;
-      padding: 0;#1C1C1C;
+      padding: 0;
     
     
     }
-        body {
-          margin: 0;
-          padding: 0;
-        
-        
+        body{
           font-family: Arial, sans-serif;
           display: flex;
           flex-direction: column;
@@ -125,7 +121,7 @@ text-align: center ;
     
     hr{
       background :#F5EFFF;
-      border: 0.5px solid #E5D9F2;
+      border: 0.1px solid #E5D9F2;
       padding-bottom: 3px;
     }
     .profileCont{
@@ -204,11 +200,12 @@ align-content: center ;
       
 
         .posts {
-          margin-top:;
+        
             margin-bottom: 20px;
         }
         .post {
-        
+         width:100%;
+         height:100%;
             background-color: #f7f7f7;
             padding: 10px;
             border-bottom: 1px solid #ccc;
@@ -288,7 +285,7 @@ align-content: center ;
   .post-actions button{
       margin:2% ;
   }
-        .post-actions button , .icon-crd {
+         .icon-crd {
                border-radius:15px 15px 15px 15px;
     
               height:auto;
@@ -334,33 +331,12 @@ align-content: center ;
         .post-actions button:hover {
             background-color:#D8DAEB;
         }
-        .post-comments {
-            margin-bottom: 20px;
-            display :none;
-        }
-        .post-comment {
-            background-color: #f7f7f7;
-            padding: 10px;
-            border-bottom: 9px solid #ccc;
-        }
-        .post-comment img {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            margin-right: 10px;
-        }
-        .post-comment p {
-            font-size: 14px;
-            color:grey;
-        }
+   
         .likes{
           font-weight: 700;
           color: #4E5064;
         }
-        .comments{
-          font-weight: 700;
-          color: #4E5064;
-        }
+      
                        .videoNote   {
           
         
@@ -443,39 +419,7 @@ align-content: center ;
               font-weight: 900;
              
             }
-            .commentBox{
-                margin: 0;
-            padding:0 ;
-    width: auto;
-    border: 1px solid #C6C6C65E;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    background-color: ;
-    
-    
-              
-            }
-            .commentButton{
-              
-              background: #B2967E;
-              z-index:1;
-              font-weight: 900;
-              font-size: 15px;
-              color:white;
-             
-              border-radius: 6px;
-              border: none;
-              
-              width:50%;
-              height: 30px;
-              float: right;
-              margin-right: 2%;
-            }
-                .comment img {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-    }
+          
     
               .item{
           height:50px;
@@ -777,7 +721,112 @@ border-radius: 15px 15px 15px 15px;
       
     }
     
-#
+        .post-comments {
+            padding-top: 12px;
+            border-top: 1px solid #e9ebee;
+        }
+        
+        .comment-input {
+            display: flex;
+            margin-bottom: 12px;
+        }
+        
+        .comment-profile-pic {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            margin-right: 8px;
+            object-fit: cover;
+        }
+        
+        .comment-input-container {
+            flex: 1;
+            position: relative;
+        }
+        
+        .comment-input-container textarea {
+            width: 100%;
+            border-radius: 20px;
+            border: 1px solid #dddfe2;
+            padding: 8px 12px;
+            resize: none;
+            min-height: 40px;
+            background: #f0f2f5;
+            font-size: 14px;
+        }
+        
+        .comment-input-container textarea:focus {
+            outline: none;
+            background: white;
+            border-color: #1877f2;
+        }
+        
+        .comment-input-container button {
+            position: absolute;
+            right: 8px;
+            bottom: 8px;
+            background: #1877f2;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 8px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+        }
+        
+        .comments-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .comment {
+            display: flex;
+            margin-bottom: 12px;
+        }
+        
+        .comment-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            margin-right: 8px;
+            object-fit: cover;
+        }
+        
+        .comment-content {
+            flex: 1;
+            background: #f0f2f5;
+            border-radius: 18px;
+            padding: 8px 12px;
+        }
+        
+        .comment-author {
+            font-weight: 600;
+            font-size: 13px;
+            margin-bottom: 2px;
+        }
+        
+        .comment-text {
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+        
+        .comment-actions {
+            font-size: 12px;
+            color: #65676b;
+            margin-top: 4px;
+        }
+        
+        .comment-actions button {
+            background: none;
+            border: none;
+            color: #65676b;
+            font-weight: 600;
+            margin-left: 8px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
  /* Global Styles */
 * {
 margin: 0;
@@ -788,7 +837,7 @@ font-family: "Poppins", sans-serif;
 }
 
 body {
-background: #f9f9f9;
+color:#1D1D1D;
 color: #333;
 }
 
@@ -920,12 +969,15 @@ margin-left: 10px;
                     }
 /* Posts */
 .posts {
-margin-top: 5px;
+margin-top: 0px;
+background: #E8E8E8;
 }
 
 .post {
-background: #fff;
-padding: 15px;
+  width:100%;
+  height:100%;
+background:;
+padding: 25px;
 border-radius: 10px;
 box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
 
@@ -956,47 +1008,17 @@ padding: 10px;
 border-radius: 8px;
 }
 
-.post-content p {
+.post-content  {
   font-size: 14px; /* Comfortable reading size */
   line-height: 1.1; /* Improve readability with spacing */
   color: #0F1014; /* Dark color for text */
-  
+  background: #E1E1E4;
   margin: px 0; /* Add spacing above and below the content */
   font-family: 'Arial', sans-serif; /* Use a clean, readable font */
 }
 
 /* Post Actions */
-.post-actions {
-display: flex;
-justify-content: space-between;
-align-items: center;
-padding: 10px 0;
-}
-
-.post-actions button {
-    border-radius: 50px;
-    background: #f5f5f5; /* Facebook's primary blue color */
-    color: #313242;
-    padding: 8px 16px; /* Slightly larger padding for better clickability */
-    border: none;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.3s;
-    display: flex;
-    align-items: center;
-    gap: 8px; /* Space between icon and text */
-    font-size: 14px;
-}
-
-.post-actions button:hover {
-    background: #1659B3; /* Darker blue on hover */
-    transform: scale(1.05); /* Slightly enlarge on hover */
-}
-
-.post-actions button:active {
-    background: #114080; /* Even darker blue on click */
-    transform: scale(0.95); /* Slightly shrink on click */
-}
+.
 
 /* Add a thumbs-up icon using a pseudo-element or an icon library like FontAwesome */
 .post-actions button::before {
@@ -1082,7 +1104,232 @@ footer {
       right: 0;
     }
     
-    
+            .post-stats {
+            padding: 8px 0;
+            border-top: 1px solid #e9ebee;
+            border-bottom: 1px solid #e9ebee;
+            color: #65676b;
+            font-size: 14px;
+            display: flex;
+        }
+        
+        .likes-count {
+            margin-right: 15px;
+        }
+        
+        /* Post actions */
+        .post-actions {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+        }
+        
+        .post-actions button {
+            flex: 1;
+            background: none;
+            border: none;
+            padding: 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            color: #65676b;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+        
+        .post-actions button i {
+            margin-right: 8px;
+        }
+        
+        .post-actions button:hover {
+            background: #f0f2f5;
+        }
+        
+        .post-actions button.liked {
+            color: #1877f2;
+        }
+        
+                .view-count {
+            position: absoute;
+        
+            background:RGB(100, 149, 237);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 12px;
+        }
+            .brand { font-size: 1.5em; font-weight: bold; color: #007bff; }
+    .tabs { display: flex; gap: 10px; }
+    .tab {
+      padding: 5px 15px;
+      background: #e9ecef;
+      border-radius: 15px;
+      font-size: 0.9em;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .tab.active { background: #007bff; color: white; }
+    .tab:hover { background: #d3d9df; }
+
+    /* Main Content */
+    .news-container {
+      margin-top: 6px;
+      margin-bottom: 60px;
+      padding: 10px;
+      flex: 1;
+    }
+    article {
+      background: white;
+      border-radius: 15px;
+      overflow: hidden;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      cursor: pointer;
+    }
+    .article-preview { padding: 10px; display: flex; align-items: center; }
+    .article-preview img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-right: 10px;
+    }
+    .article-preview-content { flex: 1; position: relative; }
+    .article-title {
+      font-size: 1.1em;
+      font-weight: bold;
+      margin: 0 0 5px 0;
+      color: #333;
+    }
+    .article-snippet {
+      font-size: 0.85em;
+      color: #666;
+      margin: 0;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .timestamp {
+      position: absolute;
+      top: 0;
+      right: 0;
+      background: #e9ecef;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 0.7em;
+      color: #666;
+    }
+
+    /* Full View */
+    .article-full { display: none; padding: 10px; position: relative; }
+    .article-full img.article-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-bottom: 1px solid #ddd;
+    }
+    .article-full .article-description {
+      font-size: 0.9em;
+      color: #666;
+      margin: 10px 0;
+    }
+    .interaction {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      border-top: 1px solid #ddd;
+    }
+    .interaction .footer-button {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 0.9em;
+      color: #666;
+    }
+    .interaction .footer-button i { margin-right: 5px; }
+    .post-comments { display: none; padding: 10px; }
+    .commentBox { width: 100%; margin-top: 10px; padding: 5px; }
+    .comment { display: flex; margin: 5px 0; }
+    .comment-avatar { width: 30px; height: 30px; background: #ddd; border-radius: 50%; text-align: center; line-height: 30px; margin-right: 10px; }
+
+    /* News Form */
+    .news-form {
+      background: white;
+      padding: 15px;
+      border-radius: 15px;
+      margin: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      display: none;
+    }
+    .news-form input, .news-form textarea, .news-form select {
+      width: 100%;
+      margin: 10px 0;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+    .news-form button {
+      padding: 10px 20px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .news-form button:hover { background: #0056b3; }
+
+    /* Bottom Navigation */
+    .bottom-nav {
+      background: #fff;
+      padding: 10px;
+      border-top: 1px solid #ddd;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      z-index: 1000;
+    }
+    .bottom-nav button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 0.8em;
+      color: #666;
+    }
+    .bottom-nav button i { font-size: 1.2em; }
+    .bottom-nav button.active { color: #007bff; }
+
+    /* Fullscreen Modal */
+    #fullscreen-modal {
+      display: none;
+      position: fixed;
+      
+      width: 100%;
+      height: 100%;
+      background: red;
+      z-index: 1000;
+      color: white;
+      padding: 20px;
+    }
+    #fullscreen-modal.active { display: block; }
+    #fullscreen-video { width: 100%; height: 100%; }
+    #fullscreen-modal button { float: right; padding: 5px 10px; }
+
+    /* User Info */
+    #user-info { margin-left: 10px; }
+    #profilePicture { width: 40px; height: 40px; border-radius: 50%; }
 </style>
   
 </head>
@@ -1102,13 +1349,7 @@ footer {
 <p class="logo" style="color:RGB(100, 149, 237);">
   Blue Flare
 </p>
-        <button class="nav-button" style="float:right;">
-        <i class="fas fa-plus"></i>
-            <a href="#" class="nav-btn" data-page="poster" onclick="switchPage('poster', 'poster')">
-    
-    Add
-    </a>
-      </button>
+
       
 </div>
 
@@ -1119,7 +1360,7 @@ footer {
 
 
 
-                  <div class="motivation-slideshow" style="display: none;" >
+                  <div class="motivation-slideshow" style="dispay: none;" >
     <div class="slides-container">
       <!-- Slide 1 -->
       <div class="slide">
@@ -1135,8 +1376,7 @@ footer {
         <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="Student studying with laptop">
         <div class="slide-caption">"Success is the sum of small efforts, repeated day in and day out." - Robert Collier</div>
       </div>
-      
-      <!-- Slide 3 -->
+           <!-- Slide 3 -->
       <div class="slide">
         <img src="https://images.unsplash.com/photo-1546410531-bb4caa6b424d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="Books and coffee">
         <div class="slide-caption">"You don't have to be great to start, but you have to start to be great." - Zig Ziglar</div>
@@ -1167,7 +1407,621 @@ footer {
     
     
   </div>
-<iframe frameborder="0"  src="https://undefined-flare.github.io/BF/blueflare gA.html" style="padding-bottom: 150%; position:fixed;" width="100%" height="100%"></iframe>
+       <div class="nav">
+
+              <div >
+        <button class="nav-button" style="float:right;">
+          <i class="fas fa-plus"></i>
+          <a href="#" class="nav-btn" data-page="poster" onclick="switchPage('poster', 'poster')">
+          
+            Add
+          </a>
+        </button>
+              </div>
+              <div class="nav-item" onclick="publicToNotice()">
+                <i class="fas fa-video"></i>
+                <span>Video</span>
+              </div>
+              <div class="nav-item" onclick="publicToNotice()">
+                <i class="fas fa-video"></i>
+                <span>Video</span>
+              </div>
+              
+    </div>
+
+<body>
+  <div style="display:none;">
+    <img id="profilePicture" src="" alt="Profile Picture">
+    <span id="user-info"></span>
+  </div>
+
+    </header>
+
+    <!-- Main Content -->
+                     <div class="posts" id="publicPost">
+                       
+                       <div class="fb-loading-dots">
+                         <div class="dot dot-1"></div>
+                         <div class="dot dot-2"></div>
+                         <div class="dot dot-3"></div>
+                       </div>
+  </div>
+
+  <script type="module" >
+    
+    import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+import { getDatabase, ref, push, onValue, runTransaction, query, orderByChild } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-database.js";
+import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-storage.js";
+
+// Firebase configuration (secure in production)
+const firebaseConfig = {
+      apiKey: "AIzaSyBSMvHpZ0_VkqWjJ94UMa6vqEhFiqrsIWM",
+        authDomain: "rare-5f47e.firebaseapp.com",
+        projectId: "rare-5f47e",
+        storageBucket: "rare-5f47e.appspot.com",
+        messagingSenderId: "811727087812",
+        appId: "1:811727087812:web:d362e68abf6c26acf24191",
+        measurementId: "G-DE59771G7Q"
+};
+
+// Initialize Firebase only if not already initialized
+let app;
+if (!getApps().length) {
+  app = initializeApp(firebaseConfig);
+} else {
+  app = getApp();
+}
+
+const auth = getAuth(app);
+const database = getDatabase(app);
+const storage = getStorage(app);
+
+// DOM elements with null checks
+const newsForm = document.getElementById("newsForm");
+const newsContainer = document.querySelector(".news-container");
+const profilePicture = document.getElementById("profilePicture");
+const userInfo = document.getElementById("user-info");
+const newsFormContainer = document.getElementById("newsFormContainer");
+
+// Category icons
+const categoryIcons = {
+  Social: "fa-solid fa-users",
+  Academics: "fa-solid fa-book",
+  Marketing: "fa-solid fa-chart-line",
+  Service: "fa-solid fa-handshake",
+  Music: "fa-solid fa-music",
+  Newsletter: "fa-solid fa-envelope-open-text"
+};
+
+// Your Firebase UID to restrict authoring
+const ALLOWED_AUTHOR_UID = "84X5wf8kCNcYYmfWDKt3hNg5jAf1"; // Replace with y Firebase Auth UID
+
+// Wait for DOM to load
+document.addEventListener("DOMContentLoaded", () => {
+  // Auth state listener
+  onAuthStateChanged(auth, (user) => {
+    if (!user) {
+      alert("Please sign in: You will be redirected to the sign-in page");
+      window.location.href = "https://undefined-flare.github.io/BF/blue flare sign in.html";
+    } else {
+      if (profilePicture) profilePicture.src = user.photoURL || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png";
+      if (userInfo) userInfo.innerText = user.displayName || "Anonymous";
+      if (newsFormContainer) {
+        newsFormContainer.style.display = user.uid === ALLOWED_AUTHOR_UID ? "block" : "none";
+      }
+      fetchNews();
+    }
+  });
+
+  // News form submission
+  if (newsForm) {
+    newsForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const user = auth.currentUser;
+      if (!user) {
+        alert("Please sign in to publish articles");
+        return;
+      }
+      if (user.uid !== ALLOWED_AUTHOR_UID) {
+        alert("You are not authorized to publish news articles");
+        return;
+      }
+
+      const title = document.getElementById("newsTitle").value.trim();
+      const content = document.getElementById("newsContent").value.trim();
+      const category = document.getElementById("newsCategory").value;
+      const file = document.getElementById("newsFile").files[0];
+
+      if (!title || !content || !category) {
+        alert("Please fill in all required fields");
+        return;
+      }
+
+      try {
+        let fileURL = "";
+        let fileType = "";
+        if (file) {
+          const fileRef = storageRef(storage, `news/${Date.now()}_${file.name}`);
+          const snapshot = await uploadBytes(fileRef, file);
+          fileURL = await getDownloadURL(snapshot.ref);
+          fileType = file.type;
+        }
+
+        const newsRef = ref(database, "news");
+        const newArticle = {
+          author: user.displayName || "Anonymous",
+          authorPhoto: user.photoURL || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
+          category,
+          content,
+          fileURL,
+          fileType,
+          timestamp: Date.now(),
+          title
+        };
+
+        await push(newsRef, newArticle);
+        newsForm.reset();
+        alert("Article published successfully");
+      } catch (error) {
+        console.error("Error publishing article:", error);
+        alert("Failed to publish article. Please try again.");
+      }
+    });
+  }
+
+  // Toggle between preview and full view
+  if (newsContainer) {
+    newsContainer.addEventListener("click", (e) => {
+      const article = e.target.closest("article");
+      if (!article) return;
+
+      // Skip if clicking on interaction buttons or comments
+      if (e.target.closest(".footer-button, .post-comments")) return;
+
+      const preview = article.querySelector(".article-preview");
+      const full = article.querySelector(".article-full");
+
+      if (preview.style.display === "none") {
+        preview.style.display = "flex";
+        full.style.display = "none";
+      } else {
+        preview.style.display = "none";
+        full.style.display = "block";
+      }
+    });
+  }
+});
+
+// Format timestamp
+function formatTime(timestamp) {
+  if (!timestamp) return "Unknown time";
+  const now = Date.now();
+  const diff = now - timestamp;
+  const seconds = Math.floor(diff / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const hours = Math.floor(minutes / 60);
+  const days = Math.floor(hours / 24);
+
+  if (seconds < 60) return "Just now";
+  if (minutes < 60) return `${minutes}m ago`;
+  if (hours < 24) return `${hours}h ago`;
+  return `${days}d ago`;
+}
+
+// Truncate content for preview
+function truncateContent(content, maxLength = 100) {
+  if (content.length <= maxLength) return content;
+  return content.substring(0, maxLength) + "...";
+}
+
+// Fetch and display news articles (newest to oldest)
+function fetchNews() {
+  if (!newsContainer) return;
+  const newsRef = ref(database, "news");
+  const newsQuery = query(newsRef, orderByChild("timestamp"));
+
+  onValue(newsQuery, (snapshot) => {
+    newsContainer.innerHTML = "";
+    const articles = [];
+
+    snapshot.forEach((childSnapshot) => {
+      const article = childSnapshot.val();
+      article.id = childSnapshot.key;
+      articles.push(article);
+    });
+
+    // Sort articles by timestamp (newest first) as a fallback
+    articles.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+
+    articles.forEach((article) => {
+      const articleHTML = `
+        <article data-id="${article.id}">
+          <div class="article-preview">
+            <img src="${article.fileURL || 'https://via.placeholder.com/80x80'}" alt="${article.title || 'Article Image'}">
+            <div class="article-preview-content">
+              <h2 class="article-title">${article.title || "Untitled"}</h2>
+              <p class="article-snippet">${truncateContent(article.content || "")}</p>
+              <span class="timestamp">${formatTime(article.timestamp)}</span>
+            </div>
+          </div>
+          <div class="article-full">
+            <img src="${article.fileURL || 'https://via.placeholder.com/300x200'}" alt="${article.title || 'Article Image'}" class="article-image">
+            <div class="article-content">
+              <span class="timestamp">${formatTime(article.timestamp)}</span>
+              <h2 class="article-title">${article.title || "Untitled"}</h2>
+              <p class="article-description">${article.content || ""}</p>
+              ${
+                article.fileURL && !article.fileType.startsWith("image/")
+                  ? article.fileType.startsWith("video/")
+                    ? `<video controls src="${article.fileURL}" class="article-image" aria-label="Video content"></video>`
+                    : article.fileType.startsWith("audio/")
+                      ? `<audio controls src="${article.fileURL}" class="article-image" aria-label="Audio content"></audio>`
+                      : `<a href="${article.fileURL}" target="_blank" aria-label="Download file">Download File</a>`
+                  : ""
+              }
+              <div class="interaction">
+                <button class="footer-button like-button" aria-label="Like article">
+                  <i class="fas fa-thumbs-up"></i> <span>${Object.keys(article.likes || {}).length}</span>
+                </button>
+                <button class="footer-button toggle-comments-button" aria-label="Comment on article">
+                  <i class="fas fa-comment"></i> <span>${Object.keys(article.comments || {}).length}</span>
+                </button>
+                <button class="footer-button" aria-label="Retweet article">
+                  <i class="fas fa-retweet"></i>
+                </button>
+                <button class="footer-button" aria-label="Share article">
+                  <i class="fas fa-share-alt"></i>
+                </button>
+              </div>
+              <div class="post-comments" style="display: none;">
+                <button class="commentButton" aria-label="Submit comment">Comment</button>
+                <div class="comments">
+                  <textarea class="commentBox" placeholder="Write a comment..." aria-label="Comment input"></textarea>
+                  ${Object.entries(article.comments || {})
+                    .map(([id, comment]) => `
+                      <div class="comment">
+                        <div class="comment-avatar">${(comment.author || "A").charAt(0)}</div>
+                        <div class="comment-content">
+                          <div class="comment-author">${comment.author || "Anonymous"}</div>
+                          <div class="comment-text">${comment.text}</div>
+                        </div>
+                      </div>`
+                    )
+                    .join("")}
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+      `;
+      newsContainer.innerHTML += articleHTML;
+    });
+  }, (error) => {
+    console.error("Error fetching news:", error);
+    newsContainer.innerHTML = "<p>Error loading news articles.</p>";
+  });
+
+  // Event delegation for article interactions
+  if (newsContainer) {
+    newsContainer.addEventListener("click", (e) => {
+      const articleElement = e.target.closest("article");
+      if (!articleElement) return;
+
+      const articleId = articleElement.dataset.id;
+      const user = auth.currentUser;
+
+      // Like button functionality
+      if (e.target.classList.contains("like-button") || e.target.closest(".like-button")) {
+        if (!user) {
+          alert("Please sign in to like articles");
+          return;
+        }
+        const likesRef = ref(database, `news/${articleId}/likes/${user.uid}`);
+        runTransaction(likesRef, (currentValue) => {
+          return currentValue ? null : true;
+        }).then(() => {
+          fetchNews();
+        }).catch((error) => {
+          console.error("Error updating like:", error);
+        });
+      }
+
+      // Toggle comments section
+      if (e.target.classList.contains("toggle-comments-button") || e.target.closest(".toggle-comments-button")) {
+        const commentsSection = articleElement.querySelector(".post-comments");
+        commentsSection.style.display = commentsSection.style.display === "none" ? "block" : "none";
+      }
+
+      // Submit comment functionality
+      if (e.target.classList.contains("commentButton")) {
+        const commentsSection = articleElement.querySelector(".post-comments");
+        const commentTextarea = commentsSection.querySelector(".commentBox");
+        const commentText = commentTextarea.value.trim();
+
+        if (!commentText) return;
+
+        if (!user) {
+          alert("Please sign in to comment");
+          return;
+        }
+
+        const commentsRef = ref(database, `news/${articleId}/comments`);
+        const newComment = {
+          text: commentText,
+          author: user.displayName || "Anonymous",
+          profilePicture: user.photoURL || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
+          timestamp: Date.now()
+        };
+
+        push(commentsRef, newComment).then(() => {
+          commentTextarea.value = "";
+          fetchNews();
+        }).catch((error) => {
+          console.error("Error posting comment:", error);
+        });
+      }
+    });
+  }
+}
+
+// Fullscreen video functions
+window.openFullscreen = (url, articleId, title, channel, stats) => {
+  const fullscreenVideo = document.getElementById("fullscreen-video");
+  const fullscreenTitle = document.getElementById("fullscreen-title");
+  const fullscreenChannel = document.getElementById("fullscreen-channel");
+  const fullscreenStats = document.getElementById("fullscreen-stats");
+  const fullscreenModal = document.getElementById("fullscreen-modal");
+  const commentsContainer = document.getElementById("comments-container");
+
+  if (!fullscreenVideo || !fullscreenModal) {
+    console.error("Fullscreen elements not found");
+    return;
+  }
+
+  fullscreenVideo.src = url;
+  fullscreenVideo.autoplay = true;
+  fullscreenVideo.muted = false;
+  fullscreenVideo.controls = true;
+
+  if (fullscreenTitle) fullscreenTitle.textContent = title;
+  if (fullscreenChannel) fullscreenChannel.textContent = channel;
+  if (fullscreenStats) fullscreenStats.textContent = stats;
+  fullscreenModal.classList.add("active");
+
+  if (commentsContainer) {
+    const commentsRef = ref(database, `news/${articleId}/comments`);
+    const commentsQuery = query(commentsRef, orderByChild("timestamp"));
+    onValue(commentsQuery, (snapshot) => {
+      commentsContainer.innerHTML = "";
+      const comments = [];
+
+      snapshot.forEach((childSnapshot) => {
+        const comment = childSnapshot.val();
+        comment.id = childSnapshot.key;
+        comments.push(comment);
+      });
+
+      comments.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+
+      comments.forEach((comment) => {
+        const commentHTML = `
+          <div class="comment">
+            <div class="comment-avatar">${(comment.author || "A").charAt(0)}</div>
+            <div class="comment-content">
+              <div class="comment-author">${comment.author || "Anonymous"}</div>
+              <div class="comment-text">${comment.text}</div>
+            </div>
+          </div>
+        `;
+        commentsContainer.innerHTML += commentHTML;
+      });
+    }, (error) => {
+      console.error("Error fetching comments:", error);
+    });
+  }
+};
+
+window.closeFullscreen = () => {
+  const fullscreenVideo = document.getElementById("fullscreen-video");
+  const fullscreenModal = document.getElementById("fullscreen-modal");
+  if (fullscreenVideo && fullscreenModal) {
+    fullscreenVideo.pause();
+    fullscreenVideo.src = "";
+    fullscreenModal.classList.remove("active");
+  }
+};
+
+const groupDisplayContainer = document.getElementById("image-container");
+const groupChat = document.getElementById("group-chat");
+const chatMessages = document.getElementById("chat-messages");
+const messageInput = document.getElementById("message-input");
+const sendMessage = document.getElementById("send-message");
+const backBtn = document.querySelector(".back-btn");
+//const profilePicture = document.getElementById("profilePicture");
+//const userInfo = document.getElementById("user-info");
+
+// Category icons
+//const categoryIcons = {
+//  Social: "fa-solid fa-users",
+//  Academics: "fa-solid fa-book",
+//  Marketing: "fa-solid fa-chart-line",
+//  Service: "fa-solid fa-handshake",
+//  Music: "fa-solid fa-music",
+//  Newsletter: "fa-solid fa-envelope-open-text"
+//};
+
+// Wait for DOM to load
+document.addEventListener("DOMContentLoaded", () => {
+  // Auth state listener
+  onAuthStateChanged(auth, (user) => {
+    if (!user) {
+      alert("You must be signed in to use this platform.");
+      window.location.href = "sign-in.html";
+    } else {
+      if (profilePicture) profilePicture.src = user.photoURL || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png";
+      if (userInfo) userInfo.innerText = user.displayName || "Anonymous";
+      fetchGroups();
+    }
+  });
+  
+  // Back button to return to group list
+  if (backBtn) {
+    backBtn.addEventListener("click", () => {
+      groupChat.style.display = "none";
+      groupDisplayContainer.style.display = "flex";
+    });
+  }
+  
+  // Send message
+  if (sendMessage) {
+    sendMessage.addEventListener("click", () => {
+      const text = messageInput.value.trim();
+      if (text && currentGroupId) {
+        sendMessageToGroup(currentGroupId, text);
+        messageInput.value = "";
+      }
+    });
+  }
+  
+  if (messageInput) {
+    messageInput.addEventListener("keypress", (e) => {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage.click();
+      }
+    });
+  }
+});
+
+// Fetch and display groups
+let groups = [];
+let currentIndex = 0;
+let currentGroupId = null;
+
+function fetchGroups() {
+  if (!groupDisplayContainer) return;
+  const groupsRef = ref(database, "groups");
+  onValue(groupsRef, (snapshot) => {
+    groups = [];
+    snapshot.forEach((childSnapshot) => {
+      const group = childSnapshot.val();
+      group.id = childSnapshot.key;
+      groups.push(group);
+    });
+    displayGroups();
+  }, (error) => {
+    console.error("Error fetching groups:", error);
+    if (groupDisplayContainer) groupDisplayContainer.innerHTML = "<p>Error loading groups.</p>";
+  });
+}
+
+function displayGroups() {
+  if (!groupDisplayContainer) return;
+  groupDisplayContainer.innerHTML = "";
+  groupDisplayContainer.style.display = "flex";
+  const selectedGroups = groups.slice(currentIndex, currentIndex + 3);
+  if (selectedGroups.length < 3 && groups.length > 0) {
+    selectedGroups.push(...groups.slice(0, 3 - selectedGroups.length));
+  }
+  
+  selectedGroups.forEach((group) => {
+    const categoryIcon = categoryIcons[group.category] || "";
+    const groupBlockHTML = `
+      <button class="suImg" data-id="${group.id}">
+        <div class="avatar">
+          <i class="${categoryIcon} category-icon"></i>
+        </div>
+        <img src="${group.imageURL || "https://via.placeholder.com/100x60"}" alt="${group.name || "Group"}" class="imgReal">
+        <div class="group-name">${group.name || "Unnamed Group"}</div>
+      </button>
+    `;
+    groupDisplayContainer.innerHTML += groupBlockHTML;
+  });
+  
+  // Attach click handlers to group cards
+  document.querySelectorAll(".suImg").forEach(button => {
+    button.addEventListener("click", () => {
+      currentGroupId = button.dataset.id;
+      loadGroupChat(currentGroupId);
+    });
+  });
+  
+  currentIndex = (currentIndex + 3) % (groups.length || 1);
+}
+
+// Rotate groups every 30 seconds
+if (groupDisplayContainer) {
+  setInterval(() => {
+    if (groups.length > 0) {
+      displayGroups();
+    }
+  }, 30000);
+}
+
+// Load and display group chat
+function loadGroupChat(groupId) {
+  if (!groupChat || !chatMessages) return;
+  const groupRef = ref(database, `groups/${groupId}`);
+  onValue(groupRef, (snapshot) => {
+    const group = snapshot.val();
+    if (group) {
+      document.querySelector(".group-name").textContent = group.name || "Group Chat";
+      groupDisplayContainer.style.display = "none";
+      groupChat.style.display = "flex";
+      fetchGroupMessages(groupId);
+    }
+  }, (error) => {
+    console.error("Error loading group:", error);
+  });
+}
+
+// Fetch and display messages
+function fetchGroupMessages(groupId) {
+  if (!chatMessages) return;
+  const messagesRef = ref(database, `groups/${groupId}/messages`);
+  onValue(messagesRef, (snapshot) => {
+    chatMessages.innerHTML = "";
+    snapshot.forEach((childSnapshot) => {
+      const message = childSnapshot.val();
+      const isSent = message.author === auth.currentUser?.email;
+      const messageHTML = `
+        <div class="message ${isSent ? "sent" : "received"}">
+          <div class="author">${message.author || "Anonymous"}</div>
+          <div class="text">${message.text}</div>
+          <div class="time">${formatTime(message.timestamp)}</div>
+        </div>
+      `;
+      chatMessages.innerHTML += messageHTML;
+    });
+    chatMessages.scrollTop = chatMessages.scrollHeight; // Auto-scroll to latest message
+  }, (error) => {
+    console.error("Error fetching messages:", error);
+  });
+}
+
+// Send message to group
+function sendMessageToGroup(groupId, text) {
+  const user = auth.currentUser;
+  if (!user) return;
+  const messagesRef = ref(database, `groups/${groupId}/messages`);
+  const newMessage = {
+    text,
+    author: user.email || "Anonymous",
+    profilePicture: user.photoURL || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
+    timestamp: Date.now()
+  };
+  push(messagesRef, newMessage)
+    .catch((error) => {
+      console.error("Error sending message:", error);
+    });
+}
+
+// Format timestamp
+  </script>
+</body>
+
+
 </div>     
         <div id="analytics-page" class="page">
             <div class="hdrPage">
@@ -1185,6 +2039,7 @@ footer {
               questions and polls 
 
             </div>
+            jjjjj a good day 
        <iframe frameborder="0"  src="https://undefined-flare.github.io/BF/blueflare%20qaPolls.html" style="padding-bottom: 100%;" width="100%" height="100%"></iframe>
 
     </div>
@@ -1207,14 +2062,56 @@ footer {
 </p>
               
             </div>
-                     <div class="posts" id="publicPost">
-           
-                   <div class="fb-loading-dots">
-          <div class="dot dot-1"></div>
-          <div class="dot dot-2"></div>
-          <div class="dot dot-3"></div>
-        </div>
-         </div>
+                <div class="pageName">
+      News Page
+      <button class="toggle-btn" ></button>
+    </div>
+              <div class="main-content">
+    <div style="display:none;" id="imge-container"></div>
+  </div>
+  <div id="group-chat">
+    <div class="chat-header">
+      <button class="back-btn" aria-label="Back to groups"></button>
+      <span class="group-name"></span>
+    </div>
+    <div class="chat-messages" id="chat-messages"></div>
+    <div class="chat-input">
+      
+      
+    </div>
+  </div>
+  
+  
+  <div class="news-form" id="newsFormContainer">
+    <form id="newsForm" style="display:none;">
+      <input type="text" id="newsTitle" placeholder="Article Title" required aria-label="Article title">
+      <textarea id="newsContent" placeholder="Article Content" required aria-label="Article content"></textarea>
+      <select id="newsCategory" required aria-label="Article category">
+        <option value="" disabled selected>Select Category</option>
+        <option value="Social">Social</option>
+        <option value="Academics">Academics</option>
+        <option value="Marketing">Marketing</option>
+        <option value="Service">Service</option>
+        <option value="Music">Music</option>
+        <option value="Newsletter">Newsletter</option>
+      </select>
+      <input type="file" id="newsFile" accept="image/*,video/*,audio/*" aria-label="Upload media">
+      <button type="submit" aria-label="Submit news article">Publish Article</button>
+    </form>
+  </div>
+  <div class="news-container"></div>
+  <div id="fullscreen-modal" role="dialog" aria-label="Fullscreen video player">
+    <button onclick="closeFullscreen()" aria-label="Close video">Close</button>
+    <video id="fullscreen-video" controls></video>
+    <h2 id="fullscreen-title"></h2>
+    <div id="fullscreen-channel"></div>
+    <div id="fullscreen-stats"></div>
+    <div id="comments-container"></div>
+        
+        
+      </div>
+
+                     </div>
 
     </div>
 
@@ -1237,9 +2134,9 @@ footer {
   
 </div>
 
-      <div class="pageName">
-      Groups Page
-      <button class="toggle-btn" >Toggle button</button>
+      <div class="pageName" style="color:#2ECC71;">
+      Resources Page
+      <button class="toggle-btn" style="background: ;"></button>
     </div>
       <div class="searchDiv">
         <form class="post-frm">
@@ -1252,23 +2149,7 @@ footer {
         </form>
       </div>
       
-      <div class="image-container" id="image-container">
-      </div>
-      
-      
-      
-      
-      <div id="group-container" class="grid grid-cols-3 gap-4">
-        
-        
-                <div class="fb-loading-dots">
-          <div class="dot dot-1"></div>
-          <div class="dot dot-2"></div>
-          <div class="dot dot-3"></div>
-        </div>
-        
-        
-      </div>
+
   </div>
       <div id="video-page" class="page">
           <div class="hdrPage">
@@ -1284,7 +2165,7 @@ footer {
   
   <div class="pageName" style="color:RGB(220, 20, 60);">
     Video PAGE
-    <button class="toggle-btn"style="background:RGB(220, 20, 60);">press for info</button>
+    <button class="toggle-btn"style="background:RGB(220, 20, 60);"></button>
   </div>
   <div class="searchDiv">
     <div class="search-bar">
@@ -1320,12 +2201,13 @@ gap: 16px;">
         </div>
   </div>
     </div>
+    
   <div class="page" id="poster">
     
-    <iframe class="" src="https://undefined-flare.github.io/BF/blueflare poster.html" style="padding-bottom: 100%;" width="100%" height="100%"></iframe>
+    <iframe class="" src="https://undefined-flare.github.io/BF/blueflare%20poster" style="padding-bottom: 100%;" width="100%" height="100%"></iframe>
 
-    
   </div>
+  
 </body>
 
 
@@ -1341,10 +2223,10 @@ gap: 16px;">
                 <span class="badge">1</span>
       </button>
             <button class="nav-button">
-        <i class="fas fa-plus"></i>
+        <i class="fas fa-newspaper"></i>
             <a href="#" class="nav-btn" data-page="social-page" onclick="switchPage('social-page', 'social')">
     
-    social 
+    news
     </a>
       </button>
       <button class="nav-button ">
@@ -1634,53 +2516,107 @@ gap: 16px;">
   let groups = [];
   let currentIndex = 0;
 
-  function fetchGroups() {
-    if (!groupDisplayContainer) return;
-    const groupsRef = ref(database, "groups");
-    onValue(groupsRef, (snapshot) => {
-      groups = [];
-      snapshot.forEach((childSnapshot) => {
-        groups.push(childSnapshot.val());
-      });
-      displayGroups();
-    }, (error) => {
-      console.error("Error fetching groups:", error);
-    });
-  }
-
-  function displayGroups() {
-    if (!groupDisplayContainer) return;
-    groupDisplayContainer.innerHTML = "";
-    const selectedGroups = groups.slice(currentIndex, currentIndex + 3);
-    if (selectedGroups.length < 3 && groups.length > 0) {
-      selectedGroups.push(...groups.slice(0, 3 - selectedGroups.length));
-    }
-
-    selectedGroups.forEach((group) => {
-      const categoryIcon = categoryIcons[group.category] || "";
-      const groupBlockHTML = `
-        <button class="suImg">
-          <div class="avatar">
-            <i class="${categoryIcon} category-icon"></i>
-          </div>
-          <img src="${group.imageURL || "default-image.png"}" alt="${group.name || "Group"}" class="imgReal">
-        </button>
-      `;
-      groupDisplayContainer.innerHTML += groupBlockHTML;
-    });
-
-    currentIndex = (currentIndex + 3) % (groups.length || 1);
-  }
-
-  if (groupDisplayContainer) {
-    setInterval(() => {
-      if (groups.length > 0) {
-        displayGroups();
-      }
-    }, 30000);
-  }
+  
 
   // Fetch and display posts (latest to oldest)
+  const fullscreenOverlay = document.createElement('div');
+  fullscreenOverlay.className = 'fullscreen-overlay';
+  fullscreenOverlay.style.cssText = `
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color:#f7f7f7;
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: red;
+    padding: 20px;
+    
+  `;
+  document.body.appendChild(fullscreenOverlay);
+
+  const fullscreenPostContainer = document.createElement('div');
+  fullscreenPostContainer.className = 'fullscreen-post-container';
+  fullscreenPostContainer.style.cssText = `
+    background: white;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    overflow-y: auto;
+    position: relative;
+    animation: fadeIn 0.3s ease;
+  `;
+  fullscreenOverlay.appendChild(fullscreenPostContainer);
+
+  const closeFullscreenBtn = document.createElement('button');
+  closeFullscreenBtn.className = 'close-fullscreen';
+  closeFullscreenBtn.innerHTML = '<i class="fas fa-times"></i>';
+  closeFullscreenBtn.style.cssText = `
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: #e4e6eb;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+  `;
+  fullscreenPostContainer.appendChild(closeFullscreenBtn);
+
+  // Add CSS for animation
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(35); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .fullscreen-post-container .post-content img,
+    .fullscreen-post-container .post-content video {
+    
+      width: 100%;
+      height: 100%;
+      display: block;
+      background:#f7f7f7;
+      margin: 0 ;
+      border-radius: 8px;
+    }
+    
+    .fullscreen-post-container .post {
+      width:100%;
+      height:360px;
+      padding:20px;
+      box-shadow: none;
+      padding: 20px;
+    }
+    
+    .fullscreen-post-container .post-comments {
+      display: block !important;
+    }
+    
+    @media (width:100%) {
+      .fullscreen-overlay {
+        padding: 0;
+      }
+      
+      .fullscreen-post-container {
+      position:fixed;
+        width: 100%;
+        height: 1000vm;
+        border-radius: 0;
+      }
+    }
+  `;
+  document.head.appendChild(style);
+const userLiked = auth.currentUser && post.likes && post.likes[auth.currentUser.uid];
+  // Modify your fetchPosts function to add click handlers
+  
   function fetchPosts() {
     if (!postsContainer) return;
     const postsRef = ref(database, "posts");
@@ -1692,102 +2628,314 @@ gap: 16px;">
           ...childSnapshot.val()
         });
       });
-
-      // Sort posts by timestamp (latest first)
+    
       posts.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
       postsContainer.innerHTML = "";
 
       posts.forEach((post) => {
         const categoryIcon = categoryIcons[post.category] || "";
-        const postHTML = `
-          <hr style="background: transparent;">
-          <div class="post" data-id="${post.id}">
-            <header>
-              <img class="profile-pic" alt="Profile picture of ${post.author || " Anonymous"}" height="40" width="40" src="${post.authorPhoto || " https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"}" />
-              <div class="header-text">
-                <p class="name">${post.author || "Anonymous"}</p>
-                <p class="email" style="margin-left:5%;">${post.author || "Anonymous"}</p>
-                <p class="time">${formatTime(post.timestamp)}</p>
-              </div>
-              <span class="category-tag ${post.category ? post.category.toLowerCase() : " uncategorized"}">
-                <i class="${categoryIcon}" aria-hidden="true"></i>
-                ${post.category || "Uncategorized"}
-              </span>
-              <button class="options-button" aria-label="More options">
-                <i class="fas fa-ellipsis-h" aria-hidden="true"></i>
-              </button>
-            </header>
-            <br>
-            <h4 style="text-align:center;font-weight:700;width:auto;" class="icon-crd">
-              ${post.title || "Untitled"}
-            </h4>
-            <br>
-            <div class="post-content" style="margin:0;">
-              <p style="font-weight:400;">${post.content || ""}</p>
-              ${
-                post.fileURL
-                  ? post.fileType.startsWith("image/")
-                    ? `<img src="${post.fileURL}" alt="Post Image" class="imgVidDiv"/>`
-                    : post.fileType.startsWith("video/")
-                      ? `<video controls src="${post.fileURL}" class="imgVidDiv"></video>`
-                      : post.fileType.startsWith("audio/")
-                        ? `<audio controls src="${post.fileURL}" class="imgVidDiv"></audio>`
-                        : `<a href="${post.fileURL}" target="_blank">Download File</a>`
-                  : ""
-              }
+        
+        
+                        
+        
+        
+                function incrementPostViews(postId) {
+            const viewsRef = ref(database, `posts/${postId}/views`);
+            runTransaction(viewsRef, (currentViews) => {
+                return (currentViews || 0) + 1;
+            });
+        }
+
+        
+        const viewedPosts = new Set();
+
+        const postElement = document.createElement("div");
+        postElement.className = "post";
+        postElement.dataset.id = post.id;
+        
+        // Add click handler to open fullscreen
+        postElement.addEventListener('click', (e) => {
+          if (!e.target.closest('.post-actions, .post-comments, .options-button')) {
+            openPostInFullscreen(post);
+          }
+          const observer = new IntersectionObserver((entries) => {
+                  entries.forEach(entry => {
+                    if (entry.isIntersecting && !viewedPosts.has(post.id)) {
+                      viewedPosts.add(post.id);
+                      incrementPostViews(post.id);
+                    }
+                  });
+                }, { threshold: 0.5 });
+                observer.observe(postElement);
+                
+                
+        });
+
+        postElement.innerHTML = `
+          <header>
+            <img class="profile-pic" alt="Profile picture" height="40" width="40" 
+                 src="${post.authorPhoto || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"}" />
+            <div class="header-text">
+              <p class="name">${post.author || "Anonymous"}</p>
+              <p class="email">${post.author || "Anonymous"}</p>
+              <p class="time">${formatTime(post.timestamp)} • <i class="fas fa-globe"></i></p>
             </div>
-            <div class="post-actions" style="margin:0;">
-              <button class="like-button">
-                <i class="far fa-thumbs-up" style="font-size:22px"></i>
-                ${Object.keys(post.likes || {}).length}
-                <span class="likes" style="font-size:20px;"></span>
-              </button>
-              <button class="toggle-comments-button" style="margin-right: 0%;padding:;">
-                <i class="far fa-comment" style="font-size:22px"></i>
-                ${Object.keys(post.comments || {}).length}
-                <span class="likes" style="font-size:20px;"></span>
-              </button>
-              <button>
-                <div class="share-icon">
-                  <div class="flare-effect"></div>
-                  <div class="icon-base">
-                    <div class="share-arrow"></div>
-                  </div>
-                  <div class="flare-particle" style="animation-delay: 0.5s; left: 15px; top: 15px;"></div>
-                  <div class="flare-particle" style="animation-delay: 1s; left: 25px; top: 10px;"></div>
-                  <div class="flare-particle" style="animation-delay: 1.5s; left: 35px; top: 15px;"></div>
-                </div>
-              </button>
-              <button class="toggle-comments-button" style="margin-right: 0%;padding:;">
-                <i class="fas fa-share" style="font-size:22px"></i>
-              </button>
-            </div>
-            <div class="post-comments" style="display: none;">
-              <button class="commentButton">Comment</button>
-              <div class="comments">
+            <span class="category-tag ${post.category ? post.category.toLowerCase() : "uncategorized"}">
+              <i class="${categoryIcon}" aria-hidden="true"></i>
+              ${post.category || "Uncategorized"}
+            </span>
+                            <div class="view-count"> ${post.views || 0} <i class="fas fa-eye" style=""  aria-hidden="true"></i></div>
+
+          </header>
+          <br>
+          <h4 class="icon-crd">${post.title || "Untitled"}</h4>
+          <br>
+          <div class="post-content" >
+            <p>${post.content || ""}</p>
+            ${post.fileURL ? `
+              ${post.fileType.startsWith("image/") ? 
+                `<img src="${post.fileURL}" style="white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+height: 220px;" alt="Post Image" class="imgVidDiv"/>` : 
+               post.fileType.startsWith("video/") ? 
+                `<video controls src="${post.fileURL}" class="imgVidDiv"style="white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+height: 220px;"></video>` : 
+               post.fileType.startsWith("audio/") ? 
+                `<audio controls src="${post.fileURL}" class="imgVidDiv"></audio>` : 
+                `<a href="${post.fileURL}" target="_blank">Download File</a>`}
+            ` : ''}
+          </div>
+                    <div class="post-stats">
+                        <span class="likes-count">${Object.keys(post.likes || {}).length} likes</span>
+                        <span class="comments-count">${Object.keys(post.comments || {}).length} comments</span>
+                    </div>
+                    
+                    <div class="post-actions">
+                        <button class="like-button ${userLiked ? 'liked' : ''}">
+                            <i class="far fa-thumbs-up"></i> Like
+                        </button>
+                                               
+                        <button class="comment-toggle-button">
+                            <i class="far fa-comment"></i> Comment
+                        </button>
+                        <button class="share-button">
+                            <i class="fas fa-share"></i> Share
+                        </button>
+                         <button class="comment-toggle-button">
+                            <i class="fa fa-fire"></i>  </button>
+                    </div>
+                    
+          <div class="post-comments" style="display: none;">
+            <div class="comment-input">
+              <img src="${auth.currentUser?.photoURL || "default-avatar.png"}" class="comment-profile-pic">
+              <div class="comment-input-container">
                 <textarea class="commentBox" placeholder="Write a comment..."></textarea>
-                ${Object.entries(post.comments || {})
-                  .map(([id, comment]) => `
-                    <div class="comment">
-                      <img src="${comment.profilePicture || "default-avatar.png"}" alt="Profile Picture">
-                      <strong>${comment.author || "Anonymous"}</strong>
-                      <div class="postCNTNT">${comment.text}</div>
-                      <hr>
-                    </div>`
-                  )
-                  .join("")}
+                <button class="commentButton">Post</button>
               </div>
             </div>
+            ${Object.entries(post.comments || {}).map(([id, comment]) => `
+              <div class="comment">
+                <img src="${comment.profilePicture || "default-avatar.png"}" alt="Profile Picture">
+                <p class="comment-author">${comment.author || "Anonymous"}</p>
+                <div class="comment-actions">
+                  <p class="category">${formatTime(comment.timestamp)}</p>
+                  <br>
+                  <div class="comment-text">${comment.text}</div>
+                </div>
+                <hr>
+              </div>`
+            ).join('')}
           </div>
         `;
-        postsContainer.innerHTML += postHTML;
+        
+        postsContainer.appendChild(postElement);
       });
+      
+      // Setup post interaction handlers
+      setupPostInteractions();
+      
     }, (error) => {
       console.error("Error fetching posts:", error);
       postsContainer.innerHTML = "<p>Error loading posts.</p>";
     });
   }
 
+  // New function to open post in fullscreen
+  function openPostInFullscreen(post) {
+    const categoryIcon = categoryIcons[post.category] || "";
+    
+    fullscreenPostContainer.innerHTML = `
+      ${closeFullscreenBtn.outerHTML}
+      <div class="post" data-id="${post.id}" style="margin:0;padding:0;width:100%;height:100%;">
+        <header>
+          <img class="profile-pic" alt="Profile picture" height="40" width="40" 
+               src="${post.authorPhoto || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"}" />
+          <div class="header-text">
+            <p class="name">${post.author || "Anonymous"}</p>
+            <p class="email">${post.author || "Anonymous"}</p>
+            <p class="time">${formatTime(post.timestamp)} • <i class="fas fa-globe"></i></p>
+          </div>
+          <span class="category-tag ${post.category ? post.category.toLowerCase() : "uncategorized"}">
+            <i class="${categoryIcon}" aria-hidden="true"></i>
+            ${post.category || "Uncategorized"}
+          </span>
+          <button class="options-button" aria-label="More options">
+            <i class="fas fa-ellipsis-h" aria-hidden="true"></i>
+          </button>
+        </header>
+        <br>
+        <h4 class="icon-crd">${post.title || "Untitled"}</h4>
+        <br>
+        <div class="post-content">
+          <p>${post.content || ""}</p>
+          ${post.fileURL ? `
+            ${post.fileType.startsWith("image/") ? 
+              `<img src="${post.fileURL}" alt="Post Image" class="imgVidDiv"/>` : 
+             post.fileType.startsWith("video/") ? 
+              `<video controls src="${post.fileURL}" class="imgVidDiv"></video>` : 
+             post.fileType.startsWith("audio/") ? 
+              `<audio controls src="${post.fileURL}" class="imgVidDiv"></audio>` : 
+              `<a href="${post.fileURL}" target="_blank">Download File</a>`}
+          ` : ''}
+        </div>
+                    <div class="post-stats">
+                        <span class="likes-count">${Object.keys(post.likes || {}).length} likes</span>
+                        <span class="comments-count">${Object.keys(post.comments || {}).length} comments</span>
+                    </div>
+                    
+                    <div class="post-actions">
+                        <button class="like-button ${userLiked ? 'liked' : ''}">
+                            <i class="far fa-thumbs-up"></i> Like
+                        </button>
+                                               
+                        <button class="comment-toggle-button">
+                            <i class="far fa-comment"></i> Comment
+                        </button>
+                        <button class="share-button">
+                            <i class="fas fa-share"></i> Share
+                        </button>
+                         <button class="comment-toggle-button">
+                            <i class="fa fa-fire"></i>  </button>
+                    </div>
+                    
+                    <div class="post-comments" style="display: none;">
+                        <div class="comment-input">
+                            <img src="${auth.currentUser?.photoURL || "default-avatar.png"}" 
+                                class="comment-profile-pic">
+                            <div class="comment-input-container">
+                                <textarea class="commentBox" placeholder="Write a comment..."></textarea>
+                                <button class="commentButton">Post</button>
+                            </div>
+                        </div>
+                        
+                        <div class="comments-list">
+                            ${Object.entries(post.comments || {})
+                                .sort((a, b) => a[1].timestamp - b[1].timestamp)
+                                .map(([id, comment]) => `
+                                    <div class="comment">
+                                        <img src="${comment.profilePicture || "default-avatar.png"}" 
+                                            class="comment-avatar">
+                                        <div class="comment-content">
+                                            <div class="comment-author">${comment.author}</div>
+                                            <div class="comment-text">${comment.text}</div>
+                                            <div class="comment-actions">
+                                                <span class="comment-time">${formatTime(comment.timestamp)}</span>
+                                                <button class="comment-like">Like</button>
+                                                <button class="comment-reply">Reply</button>
+                                            </div>
+                                        </div>
+                                    </div>`
+          ).join('')}
+        </div>
+      </div>
+    `;
+    
+    // Show the fullscreen overlay
+    fullscreenOverlay.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+    
+    // Setup event listeners for the fullscreen post
+    setupFullscreenPostInteractions(post.id);
+  }
+
+  // Close fullscreen view
+  function closeFullscreen() {
+    fullscreenOverlay.style.display = 'none';
+    document.body.style.overflow = 'auto';
+  }
+
+  // Setup interactions for fullscreen post
+  function setupFullscreenPostInteractions(postId) {
+    const fullscreenPost = fullscreenPostContainer.querySelector('.post');
+    if (!fullscreenPost) return;
+    
+    // Close button
+    fullscreenPostContainer.querySelector('.close-fullscreen').addEventListener('click', closeFullscreen);
+    
+    // Like button
+    const likeButton = fullscreenPost.querySelector('.like-button');
+    if (likeButton) {
+      likeButton.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const user = auth.currentUser ? auth.currentUser.uid : "guest";
+        const likesRef = ref(database, `posts/${postId}/likes/${user}`);
+        runTransaction(likesRef, (currentValue) => {
+          return currentValue ? null : true;
+        }).then(() => {
+          // Update like count display
+          onValue(ref(database, `posts/${postId}/likes`), (snapshot) => {
+            const likes = snapshot.val() || {};
+            likeButton.innerHTML = `<i class="far fa-thumbs-up"></i> ${Object.keys(likes).length}`;
+          });
+        }).catch((error) => {
+          console.error("Error updating like:", error);
+        });
+      });
+    }
+    
+    // Comment button
+    const commentButton = fullscreenPost.querySelector('.commentButton');
+    if (commentButton) {
+      commentButton.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const commentText = fullscreenPost.querySelector('.commentBox').value.trim();
+        if (!commentText) return;
+        
+        const commentsRef = ref(database, `posts/${postId}/comments`);
+        const newComment = {
+          text: commentText,
+          author: auth.currentUser?.email || "Anonymous",
+          profilePicture: auth.currentUser?.photoURL || "default-avatar.png",
+          timestamp: Date.now()
+        };
+        
+        push(commentsRef, newComment)
+          .then(() => {
+            fullscreenPost.querySelector('.commentBox').value = "";
+          })
+          .catch((error) => {
+            console.error("Error posting comment:", error);
+          });
+      });
+    }
+  }
+
+  // Close when clicking outside the post
+  fullscreenOverlay.addEventListener('click', (e) => {
+    if (e.target === fullscreenOverlay) {
+      closeFullscreen();
+    }
+  });
+
+  // Close with Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && fullscreenOverlay.style.display === 'flex') {
+      closeFullscreen();
+    }
+  });
   // Fetch and display notices
   function fetchNotices() {
     if (!noticesContainer) return;
@@ -1930,95 +3078,6 @@ gap: 16px;">
   };
 </script>
 
-<script>
-  
-  
-  
-      function publicToNotice() {
-        var publPost = document.getElementById('publicPost');
-document.getElementById("image-container").style.display='none';
-        document.querySelector('.searchDiv').style.display='none';
-        var schoolNotice = document.getElementById('schoolNotice');
-   var postInpNav = document.getElementById('postInpNav');
-              postInpNav.style.display = 'none';
-  
-        schoolNotice.style.width = '100%';
-        schoolNotice.style.display = 'block';
-        publPost.style.width='0%';
-        publPost.style.display='none';
-     document.getElementById('postInpNav').style.display='none'; 
-  document.getElementById('main').style.display='none';
-  
-        
-      }
-      
-      function noticeTopublic() {
-        document.getElementById("image-container").style.display='none';
-          
-        var publPost = document.getElementById('publicPost');
-        var schoolNotice = document.getElementById('schoolNotice');
-        schoolNotice.style.width = '0';
-   schoolNotice.style.display = 'none';
-        publPost.style.width='100%';
-        publPost.style.display='block';
-        document.getElementById('main').style.display='none';
-        
-       document.querySelector('.searchDiv').style.display='none';
-       document.getElementById('main').style.display='none';
-        
-            document.getElementById('postInpNav').style.display='none'; 
-  
-      }
-
-      
-      function noticeTogroup(){
-                document.getElementById("image-container").style.display='block';
-        var publPost = document.getElementById('publicPost');
-        var schoolNotice = document.getElementById('schoolNotice');
-        schoolNotice.style.width = '0';
-   schoolNotice.style.display = 'none';
-        publPost.style.width='0';
-        publPost.style.display='none';
-       document.querySelector('.searchDiv').style.display='none';
-      document.getElementById('postInpNav').style.display='none'; 
-            document.getElementById('main').style.display='block';
-        
-      }
-      
-      
-      
-      
-              const fileInput = document.getElementById('fileInput');
-        const fileList = document.getElementById('fileList');
-        const uploadButton = document.getElementById('uploadButton');
-
-        uploadButton.addEventListener('click', () => {
-          fileInput.click(); // Trigger the file input click
-        });
-
-        fileInput.addEventListener('change', (event) => {
-          const files = event.target.files;
-          let fileNames = [];
-
-          for (let i = 0; i < files.length; i++) {
-            fileNames.push(files[i].name); // Get the file names
-          }
-
-          fileList.value = fileNames.join(', '); // Display file names in the textarea
-          alert(fileList.value)
-
-        });
-        
-            const toggleCircle = document.getElementById('toggleCircle');
-    const dropdownMenu = document.getElementById('dropdownMenu');
-
-    toggleCircle.addEventListener('click', () => {
-      toggleCircle.classList.toggle('active');
-      dropdownMenu.classList.toggle('active');
-    });
-        
-        
-</script>
 
     <script>
         // Life enrichment video data
@@ -2246,4 +3305,146 @@ document.getElementById("image-container").style.display='none';
             }
         });
     </script>
-    
+<script type="module">
+import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+import { getDatabase, ref, push, onValue, runTransaction } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-database.js";
+import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-storage.js";
+
+// Firebase configuration (replace with your actual config)
+const firebaseConfig = {
+  apiKey: "AIzaSyABC123...",
+  authDomain: "your-project.firebaseapp.com",
+  projectId: "your-project",
+  storageBucket: "your-project.appspot.com",
+  messagingSenderId: "123456789",
+  appId: "1:123456789:web:abc123def456",
+  measurementId: "G-ABC123"
+};
+
+// Initialize Firebase
+let app;
+if (!getApps().length) {
+  app = initializeApp(firebaseConfig);
+} else {
+  app = getApp();
+}
+
+const auth = getAuth(app);
+const database = getDatabase(app);
+const storage = getStorage(app);
+
+// DOM elements
+const postForm = document.querySelector(".post-form");
+const postsContainer = document.querySelector(".posts");
+const loadingSpinner = document.getElementById("loading-spinner");
+
+// Create fullscreen overlay elements
+const fullscreenOverlay = document.createElement('div');
+fullscreenOverlay.className = 'fullscreen-overlay';
+document.body.appendChild(fullscreenOverlay);
+
+// Reaction types
+const reactionTypes = {
+  like: { icon: '👍', class: 'like' },
+  love: { icon: '❤️', class: 'love' },
+  laugh: { icon: '😂', class: 'laugh' },
+  wow: { icon: '😮', class: 'wow' },
+  sad: { icon: '😢', class: 'sad' },
+  angry: { icon: '😠', class: 'angry' }
+};
+
+// Track post views
+
+// Initialize the app
+document.addEventListener("DOMContentLoaded", () => {
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      fetchPosts();
+    } else {
+      showSignInPrompt();
+    }
+  });
+});
+
+// Show sign in prompt
+function showSignInPrompt() {
+  postsContainer.innerHTML = `
+    <div class="signin-prompt">
+      <h2>Welcome to Social Platform</h2>
+      <p>Please sign in to view and create posts</p>
+      <button id="sign-in-button">Sign In with Google</button>
+    </div>
+  `;
+  
+  document.getElementById("sign-in-button").addEventListener("click", () => {
+    signInWithPopup(auth, provider)
+      .catch((error) => {
+        console.error("Sign in error:", error);
+        showToast("Error signing in");
+      });
+  });
+}
+
+// [Rest of your functions...]
+
+// Format timestamp
+function formatTime(timestamp) {
+  if (!timestamp) return "Unknown time";
+  const now = Date.now();
+  const diff = now - timestamp;
+  const seconds = Math.floor(diff / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const hours = Math.floor(minutes / 60);
+  const days = Math.floor(hours / 24);
+
+  if (seconds < 60) return "Just now";
+  if (minutes < 60) return `${minutes} min ago`;
+  if (hours < 24) return `${hours} hr ago`;
+  if (days < 7) return `${days} day${days > 1 ? "s" : ""} ago`;
+  return new Date(timestamp).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric"
+  });
+}
+
+// Add CSS for new features
+const style = document.createElement('style');
+style.textContent = `
+  .fullscreen-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.9);
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .signin-prompt {
+    text-align: center;
+    padding: 40px;
+    background: white;
+    border-radius: 8px;
+  }
+  
+  #sign-in-button {
+    padding: 10px 20px;
+    background: #1877f2;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+`;
+document.head.appendChild(style);
+</script>
+
+
+
+
