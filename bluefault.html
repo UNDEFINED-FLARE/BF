@@ -1353,7 +1353,7 @@ footer {
       
 </div>
 
-      <div class="pageName" style="color:RGB(65, 105, 225);">
+      <div class="pageName" style="color:RGB(65, 105, 225); display:none;">
              <img id="profilePicture" class="profile-pic" src="https://via.placeholder.com/50" alt="Profile Photo">
              <h3 id="user-info">User Name</h3>
     </div>
@@ -1407,10 +1407,25 @@ footer {
     
     
   </div>
-       <div class="nav" style="display:none;">
 
-              <div >
-        <button class="nav-button" style="float:right;">
+
+<body>
+    <div class="academic-header">
+      <br />
+      <h2><i class="fas fa-file"></i> News Feed</h2>
+      <p>Share your thoughts and indight on everything academics </p>
+    </div>
+
+    </header>
+       <div class="nav" style="display:flex;">
+
+
+              <div class="nav-item" onclick="publicToNotice()">
+                <i class="fas fa-user"></i>
+                <span>profile</span>
+              </div>
+                            <div >
+        <button class="nav-button" >
           <i class="fas fa-plus"></i>
           <a href="#" class="nav-btn" data-page="poster" onclick="switchPage('poster', 'poster')">
           
@@ -1419,24 +1434,11 @@ footer {
         </button>
               </div>
               <div class="nav-item" onclick="publicToNotice()">
-                <i class="fas fa-video"></i>
-                <span>Video</span>
-              </div>
-              <div class="nav-item" onclick="publicToNotice()">
-                <i class="fas fa-video"></i>
-                <span>Video</span>
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
               </div>
               
     </div>
-
-<body>
-  <div style="display:none;">
-    <img id="profilePicture" src="" alt="Profile Picture">
-    <span id="user-info"></span>
-  </div>
-
-    </header>
-
     <!-- Main Content -->
                      <div class="posts" id="publicPost">
                        
