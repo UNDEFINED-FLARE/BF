@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Community App</title>
+</head>
+<body>
+  <div class="container">
+    <div class="tabs">
+      <button class="tab active" data-tab="qa">Q&A</button>
+      <button class="tab" data-tab="polls">Polls</button>
+    </div>
+    <div class="tab-content" id="qa-tab" style="display: block;">
+      <div class="post-form" style="display: none;">
+        <textarea id="question-text" placeholder="Ask a question..." rows="4"></textarea>
+        <button onclick="submitQuestion()">Post Question</button>
+      </div>
+      <div class="posts">
+        <div id="qa-list"></div>
+      </div>
+    </div>
+    <div class="tab-content" id="polls-tab" style="display: none;">
+      <div class="post-form" style="display: none;">
+        <input type="text" id="poll-question" placeholder="Poll question...">
+        <div id="poll-options">
+          <input type="text" class="poll-option-input" placeholder="Option 1">
+          <input type="text" class="poll-option-input" placeholder="Option 2">
+        </div>
+        <button onclick="addPollOption()">Add Option</button>
+        <button onclick="submitPoll()">Post Poll</button>
+      </div>
+      <div class="posts">
+        <div id="polls-list"></div>
+      </div>
+    </div>
+    <div id="loading-spinner" style="display: none;"></div>
+  </div>
+
+  <script type="module">
+    import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+    import { 
+      getAuth, 
+      onAuthStateChanged, 
+      GoogleAuthProvider, 
+      signInWithPopup 
+    } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+    import { 
+      getDatabase, 
+      ref, 
+      push, 
+      onValue, 
+      runTransaction,
+      orderByChild,
+      query,
+      get
+    } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-database.js";
+
+    // Firebase configuration (replace with your actual config)
+    const firebaseConfig = {
+      apiKey: "AIzaSyBSMvHpZ0_VkqWjJ94UMa6vqEhFiqrsIWM",
+  authDomain: "rare-5f47e.firebaseapp.com",
+  projectId: "rare-5f47e",
+  storageBucket: "rare-5f47e.appspot.com",
+  messagingSenderId: "811727087812",
+  appId: "1:811727087812:web:d362e68abf6c26acf24191",
+  measurementId: "G-DE59771G7Q"
+
+    };
+
+    // Initialize Firebase
+    let app;
+    if (!getApps().length) {
+      app = initializeApp(firebaseConfig);
+    } else {
+      app = getApp();
+    }
+
+    const auth = getAuth(app);
+    const database = getDatabase(app);
+    const provider = new GoogleAuthProvider();
+
+    // DOM elements
+    const postForm = document.querySelector(".post-form");
+    const postsContainer = document.querySelector(".posts");
+    const tabs = document.querySelectorAll('.tab');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    // Create fullscreen overlay
+    const fullscreenOverlay = document.createElement('div');
+    fullscreenOverlay.className = 'fullscreen-overlay';
+    document.body.appendChild(fullscreenOverlay);
+
+    // Reaction types
+    const reactionTypes = {
+      love: { icon: '❤️', class: 'love' },
+      like: { icon: '👍', class: 'like' }
+    };
+
+    // Initialize the app
+    document.addEventListener("DOMContentLoaded", () => {
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          const tabName = tab.dataset.tab;
+          showTab(tabName);
+        });
+      });
+
+      // Check for shared post in URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const postType = urlParams.get('type');
+      const postId = urlParams.get('id');
+      if (postType && postId) {
+        loadSharedPost(postType, postId);
+      }
+
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          loadQuestions();
+          loadPolls();
+          document.querySelectorAll('.post-form').forEach(form => form.style.display = 'block');
+        } else {
+          showSignInPrompt();
+          document.querySelectorAll('.post-form').forEach(form => form.style.display = 'none');
+        }
+      });
+    });
+
+    // Load shared post
+    async function loadSharedPost(type, postId) {
+      try {
+        const postRef = ref(database, `${type}s/${postId}`);
+        const snapshot = await get(postRef);
+        if (snapshot.exists()) {
+          const postData = snapshot.val();
+          if (type === 'question') {
+            showFullscreenQuestion(postId, postData);
+          } else if (type === 'poll') {
+            showFullscreenPoll(postId, postData);
+          }
+        } else {
+          showToast("Post not found");
+        }
+      } catch (error) {
+        console.error("Error loading shared post:", error);
+        showToast("Error loading post");
+      }
+    }
+
+    // Tab navigation
+    function showTab(tabName) {
+      tabs.forEach(tab => {
+        tab.classList.remove('active');
+        if (tab.dataset.tab === tabName) {
+          tab.classList.add('active');
+        }
+      });
+
+      tabContents.forEach(content => {
+        content.style.display = 'none';
+        if (content.id === `${tabName}-tab`) {
+          content.style.display = 'block';
+        }
+      });
+    }
+
+    // Sign in prompt
+    function showSignInPrompt() {
+      const promptHTML = `
+        <div class="signin-prompt">
+          <h2>Welcome to Our Community</h2>
+          <p>Please sign in to view and create content</p>
+          <button id="sign-in-button">Sign In with Google</button>
+        </div>
+      `;
+      
+      if (postsContainer) {
+        postsContainer.innerHTML = promptHTML;
+        document.getElementById("sign-in-button").addEventListener("click", () => {
+          signInWithPopup(auth, provider)
+            .catch((error) => {
+              console.error("Sign in error:", error);
+              showToast("Error signing in");
+            });
+        });
+      }
+    }
+
+    // Submit question
+    function submitQuestion() {
+      const user = auth.currentUser;
+      if (!user) {
+        showSignInPrompt();
+        return;
+      }
+
+      const questionText = document.getElementById('question-text')?.value.trim();
+      if (!questionText) {
+        showToast("Please enter a question");
+        return;
+      }
+
+      const questionData = {
+        text: questionText,
+        author: user.displayName || 'Anonymous',
+        authorPhoto: user.photoURL || '',
+        timestamp: Date.now(),
+        reactions: {}
+      };
+
+      push(ref(database, 'questions'), questionData)
+        .then(() => {
+          document.getElementById('question-text').value = '';
+          showToast("Question posted!");
+        })
+        .catch((error) => {
+          console.error("Error posting question:", error);
+          showToast("Error posting question");
+        });
+    }
+
+    // Submit poll
+    function submitPoll() {
+      const user = auth.currentUser;
+      if (!user) {
+        showSignInPrompt();
+        return;
+      }
+
+      const question = document.getElementById('poll-question')?.value.trim();
+      const options = Array.from(document.querySelectorAll('.poll-option-input'))
+        .map(input => input.value.trim())
+        .filter(value => value);
+
+      if (!question || options.length < 2) {
+        showToast("Please enter a question and at least two options");
+        return;
+      }
+
+      const pollData = {
+        question,
+        options,
+        votes: {},
+        author: user.displayName || 'Anonymous',
+        authorPhoto: user.photoURL || '',
+        timestamp: Date.now(),
+        reactions: {}
+      };
+
+      push(ref(database, 'polls'), pollData)
+        .then(() => {
+          document.getElementById('poll-question').value = '';
+          document.querySelectorAll('.poll-option-input').forEach(input => input.value = '');
+          showToast("Poll posted!");
+        })
+        .catch((error) => {
+          console.error("Error posting poll:", error);
+          showToast("Error posting poll");
+        });
+    }
+
+    // Add poll option
+    function addPollOption() {
+      const optionsContainer = document.getElementById('poll-options');
+      const newOption = document.createElement('input');
+      newOption.type = 'text';
+      newOption.className = 'poll-option-input';
+      newOption.placeholder = `Option ${optionsContainer.children.length + 1}`;
+      optionsContainer.appendChild(newOption);
+    }
+
+    // Load questions
+    function loadQuestions() {
+      const qaRef = query(ref(database, 'questions'), orderByChild('timestamp'));
+      const qaList = document.getElementById('qa-list');
+      
+      if (!qaList) return;
+
+      onValue(qaRef, (snapshot) => {
+        qaList.innerHTML = '';
+
+        if (!snapshot.exists()) {
+          qaList.innerHTML = `
+            <div class="empty-state">
+              <img src="https://cdn-icons-png.flaticon.com/512/4076/4076478.png" alt="No questions">
+              <div>No questions yet.</div>
+            </div>
+          `;
+          return;
+        }
+
+        const questions = [];
+        snapshot.forEach((questionSnapshot) => {
+          questions.push({
+            key: questionSnapshot.key,
+            val: questionSnapshot.val()
+          });
+        });
+
+        questions.reverse().forEach((question) => {
+          const questionElement = document.createElement('div');
+          questionElement.className = 'qa-question';
+          questionElement.innerHTML = `
+            <div class="post-header">
+              <img class="post-user-img" src="${question.val.authorPhoto || 'https://ui-avatars.com/api/?name=User&background=random'}">
+              <span class="post-user-name">${question.val.author || 'Anonymous'}</span>
+              <span class="post-time">${formatTime(question.val.timestamp)}</span>
+            </div>
+            <div class="post-content">${escapeHtml(question.val.text)}</div>
+            <div class="post-actions">
+              <button class="action-button" onclick="toggleAnswerForm('${question.key}')">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M10 9V5l-7 7 7 7v-4.1c5 0 8.5 1.6 11 5.1-1-5-4-10-11-11z"/>
+                </svg>
+                Answer
+              </button>
+              ${createReactionButtons('questions', question.key, question.val.reactions)}
+              <button class="action-button share-button" onclick="sharePost('question', '${question.key}', '${(question.val.text)}')">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92c0-1.61-1.31-2.92-2.92-2.92z"/>
+                </svg>
+                Share
+              </button>
+              <div class="answers-toggle collapsed" onclick="toggleAnswers('${question.key}')">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M7 10l5 5 5-5z"/>
+                </svg>
+                Answers (${question.val.answers ? Object.keys(question.val.answers).length : 0})
+              </div>
+            </div>
+            <div class="qa-answers hidden-answers" id="answers-${question.key}"></div>
+          `;
+          questionElement.addEventListener('click', (e) => {
+            if (e.target.closest('.post-actions, .action-button, .reaction-button, .answers-toggle, .share-button')) return;
+            showFullscreenQuestion(question.key, question.val);
+          });
+          qaList.appendChild(questionElement);
+        });
+      });
+    }
+
+    // Load polls
+    function loadPolls() {
+      const pollsRef = query(ref(database, 'polls'), orderByChild('timestamp'));
+      const pollsList = document.getElementById('polls-list');
+      
+      if (!pollsList) return;
+
+      onValue(pollsRef, (snapshot) => {
+        pollsList.innerHTML = '';
+
+        if (!snapshot.exists()) {
+          pollsList.innerHTML = `
+            <div class="empty-state">
+              <img src="https://cdn-icons-png.flaticon.com/512/4076/4076478.png" alt="No polls">
+              <div>No polls yet.</div>
+            </div>
+          `;
+          return;
+        }
+
+        const polls = [];
+        snapshot.forEach((pollSnapshot) => {
+          polls.push({
+            key: pollSnapshot.key,
+            val: pollSnapshot.val()
+          });
+        });
+
+        polls.reverse().forEach((poll) => {
+          const user = auth.currentUser;
+          const userVote = poll.val.votes ? poll.val.votes[user ? user.uid : ''] : null;
+          const totalVotes = poll.val.votes ? Object.keys(poll.val.votes).length : 0;
+
+          const pollElement = document.createElement('div');
+          pollElement.className = 'qa-question';
+          pollElement.innerHTML = `
+            <div class="post-header">
+              <img class="post-user-img" src="${poll.val.authorPhoto || 'https://ui-avatars.com/api/?name=User&background=random'}">
+              <span class="post-user-name">${poll.val.author || 'Anonymous'}</span>
+              <span class="post-time">${formatTime(poll.val.timestamp)}</span>
+            </div>
+            <div class="poll-container">
+              <div class="post-content">${escapeHtml(poll.val.question)}</div>
+              <div id="poll-options-${poll.key}"></div>
+              <div class="poll-stats">Total votes: ${totalVotes}</div>
+              <div class="post-actions">
+                ${createReactionButtons('polls', poll.key, poll.val.reactions)}
+                <button class="action-button share-button" onclick="sharePost('poll', '${poll.key}', '${escapeHtml(poll.val.question)}')">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92c0-1.61-1.31-2.92-2.92-2.92z"/>
+                  </svg>
+                  Share
+                </button>
+              </div>
+            </div>
+          `;
+          pollElement.addEventListener('click', (e) => {
+            if (e.target.closest('.poll-option, .post-actions, .action-button, .reaction-button, .share-button')) return;
+            showFullscreenPoll(poll.key, poll.val);
+          });
+          pollsList.appendChild(pollElement);
+
+          loadPollOptions(poll.key, poll.val.options, poll.val.votes, user ? user.uid : '');
+        });
+      });
+    }
+
+    function loadPollOptions(pollId, options, votes, userId) {
+      const optionsContainer = document.getElementById(`poll-options-${pollId}`);
+      if (!optionsContainer) return;
+
+      optionsContainer.innerHTML = '';
+
+      if (!options) return;
+
+      const totalVotes = votes ? Object.keys(votes).length : 0;
+
+      options.forEach((option, index) => {
+        const optionVotes = votes ? Object.values(votes).filter(v => v === index).length : 0;
+        const percentage = totalVotes > 0 ? Math.round((optionVotes / totalVotes) * 100) : 0;
+        const isSelected = votes && votes[userId] === index;
+
+        const optionElement = document.createElement('div');
+        optionElement.className = `poll-option ${isSelected ? 'selected-option' : ''}`;
+        optionElement.innerHTML = `
+          <div style="flex: 1;">
+            <div>${escapeHtml(option)}</div>
+            <div class="poll-bar">
+              <div class="poll-fill" style="width: ${percentage}%"></div>
+            </div>
+            <div class="poll-stats">
+              <span>${percentage}%</span>
+              <span>${optionVotes} vote${optionVotes !== 1 ? 's' : ''}</span>
+            </div>
+          </div>
+        `;
+        optionElement.onclick = () => voteInPoll(pollId, index);
+        optionsContainer.appendChild(optionElement);
+      });
+    }
+
+    function voteInPoll(pollId, optionIndex) {
+      const user = auth.currentUser;
+      if (!user) {
+        showSignInPrompt();
+        return;
+      }
+
+      const voteRef = ref(database, `polls/${pollId}/votes/${user.uid}`);
+      runTransaction(voteRef, () => optionIndex);
+    }
+
+    function toggleAnswers(questionId) {
+      const isFullscreen = fullscreenOverlay.style.display === 'flex';
+      const answersContainer = isFullscreen
+        ? fullscreenOverlay.querySelector(`#answers-${questionId}`)
+        : document.getElementById(`answers-${questionId}`);
+      const toggleButton = answersContainer?.previousElementSibling;
+
+      if (!answersContainer || !toggleButton) return;
+
+      if (answersContainer.classList.contains('hidden-answers')) {
+        answersContainer.classList.remove('hidden-answers');
+        toggleButton.classList.remove('collapsed');
+        loadAnswers(questionId);
+      } else {
+        answersContainer.classList.add('hidden-answers');
+        toggleButton.classList.add('collapsed');
+      }
+    }
+
+    function loadAnswers(questionId) {
+      const answersRef = query(ref(database, `questions/${questionId}/answers`), orderByChild('timestamp'));
+      const isFullscreen = fullscreenOverlay.style.display === 'flex';
+      const answersContainer = isFullscreen
+        ? fullscreenOverlay.querySelector(`#answers-${questionId}`)
+        : document.getElementById(`answers-${questionId}`);
+      
+      if (!answersContainer) return;
+
+      onValue(answersRef, (snapshot) => {
+        answersContainer.innerHTML = '';
+
+        if (!snapshot.exists()) {
+          answersContainer.innerHTML = '<div class="empty-state">No answers yet</div>';
+          return;
+        }
+
+        const answers = [];
+        snapshot.forEach((answerSnapshot) => {
+          answers.push({
+            key: answerSnapshot.key,
+            val: answerSnapshot.val()
+          });
+        });
+
+        answers.reverse().forEach((answer) => {
+          const answerElement = document.createElement('div');
+          answerElement.className = 'qa-answer';
+          answerElement.innerHTML = `
+            <div class="post-header">
+              <img class="post-user-img" src="${answer.val.authorPhoto || 'https://ui-avatars.com/api/?name=User&background=random'}">
+              <span class="post-user-name">${answer.val.author || 'Anonymous'}</span>
+              <span class="post-time">${formatTime(answer.val.timestamp)}</span>
+            </div>
+            <div class="post-content">${escapeHtml(answer.val.text)}</div>
+            <div class="post-actions">
+              ${createReactionButtons(`questions/${questionId}/answers`, answer.key, answer.val.reactions)}
+            </div>
+          `;
+          answersContainer.appendChild(answerElement);
+        });
+      });
+    }
+
+    function toggleAnswerForm(questionId) {
+      const isFullscreen = fullscreenOverlay.style.display === 'flex';
+      const answersContainer = isFullscreen
+        ? fullscreenOverlay.querySelector(`#answers-${questionId}`)
+        : document.getElementById(`answers-${questionId}`);
+      const existingForm = answersContainer?.querySelector('.answer-form');
+
+      if (answersContainer?.classList.contains('hidden-answers')) {
+        toggleAnswers(questionId);
+      }
+
+      if (existingForm) {
+        existingForm.remove();
+        return;
+      }
+
+      const answerForm = document.createElement('div');
+      answerForm.className = 'answer-form';
+      answerForm.innerHTML = `
+        <textarea id="answer-text-${questionId}" placeholder="Write your answer..." rows="3"></textarea>
+        <button onclick="submitAnswer('${questionId}')">Submit Answer</button>
+        <button onclick="toggleAnswerForm('$
