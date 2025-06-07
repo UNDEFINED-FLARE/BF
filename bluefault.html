@@ -208,7 +208,7 @@ align-content: center ;
          height:100%;
             background-color: #f7f7f7;
             padding: 10px;
-            border-bottom: 1px solid #ccc;
+            margin-bottom:5px;
         }
         .post-header {
             display: flex;
@@ -266,11 +266,11 @@ align-content: center ;
         }
         .post-content {
           font-size: 14px;
-                        margin-bottom: 10px;
-            margin-top: 5px;
-            background:#E5E5E58A;
+                        margin-bottom: 5px;
+            margin-top: 1px;
+            background:red;
             border-radius:7px;
-            margin-bottom: 20px;
+          
         }
         .post-content p {
             font-size: 15px;
@@ -1002,17 +1002,14 @@ margin-left: 10px;
 }
 
 /* Post Content */
-.post-content {
-background: #f5f5f5;
-padding: 10px;
-border-radius: 8px;
-}
+
 
 .post-content  {
   font-size: 14px; /* Comfortable reading size */
   line-height: 1.1; /* Improve readability with spacing */
-  color: #0F1014; /* Dark color for text */
-  background: #E1E1E4;
+  color: black; /* Dark color for text */
+  width: 100%;
+  background: #E9EBFF;
   margin: px 0; /* Add spacing above and below the content */
   font-family: 'Arial', sans-serif; /* Use a clean, readable font */
 }
@@ -3513,7 +3510,7 @@ function showToast(message) {
         });
 
         postElement.innerHTML = `
-          
+        
           <header>
             <img class="profile-pic" alt="Profile picture" height="40" width="40" 
                  src="${post.authorPhoto || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"}" />
@@ -3523,13 +3520,13 @@ function showToast(message) {
               </p>
               <p class="time"></p>
             </div>
-
+                                                 <button class="comment-toggle-button" style="font-size:17px;color:blue;">
+                                                   <i class="fa fa-fire"></i> </button>
           </header>
           <br>
-          <h4 class="icon-crd">${post.title || "Untitled"}</h4>
-          <br>
-          <div class="post-content" >
-            <p>${post.content || ""}</p>
+            <p >${post.content || ""}</p>
+          <div class="post-content" style="background:white;margin:0;padding:0;" >
+
             ${post.fileURL ? `
               ${post.fileType.startsWith("image/") ? 
                 `<img src="${post.fileURL}" style="white-space: nowrap;
@@ -3566,11 +3563,12 @@ height: 220px;"></video>` :
                         <button class="comment-toggle-button">
                             <i class="far fa-comment"></i> Comment
                         </button>
+                                                 <button class="comment-toggle-button">
+                           <i class="far fa-bookmark"></i> </button>
                         <button class="share-button" onclick="sharePost('question', '${post.content}', '${(post.content)}')">
                             <i class="fas fa-share"></i> Share
                         </button>
-                         <button class="comment-toggle-button">
-                            <i class="fa fa-fire"></i>  </button>
+
                     </div>
                   
           <div class="post-comments" style="display: none;">
@@ -3633,11 +3631,10 @@ height: 220px;"></video>` :
             <i class="fas fa-ellipsis-h" aria-hidden="true"></i>
           </button>
         </header>
-        <br>
-        <h4 class="icon-crd">${post.title || "Untitled"}</h4>
-        <br>
-        <div class="post-content">
+          <br>
           <p>${post.content || ""}</p>
+        <div class="post-content">
+
           ${post.fileURL ? `
             ${post.fileType.startsWith("image/") ? 
               `<img src="${post.fileURL}" alt="Post Image" class="imgVidDiv"/>` : 
@@ -3661,11 +3658,12 @@ height: 220px;"></video>` :
                         <button class="comment-toggle-button">
                             <i class="far fa-comment"></i> Comment
                         </button>
+                                                 <button class="comment-toggle-button">
+                           <i class="fa fa-bookmark"></i> </button>
                         <button class="share-button">
                             <i class="fas fa-share"></i> Share
                         </button>
-                         <button class="comment-toggle-button">
-                            <i class="fa fa-fire"></i>  </button>
+
                     </div>
                     
                     <div class="post-comments" style="display: none;">
