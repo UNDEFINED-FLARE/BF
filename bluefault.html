@@ -3536,10 +3536,11 @@ overflow: hidden;
 text-overflow: ellipsis;
 height: 220px;" alt="Post Image" class="imgVidDiv"/>` : 
                post.fileType.startsWith("video/") ? 
-                `<video controls src="${post.fileURL}" class="imgVidDiv"style="white-space: nowrap;
+                `<video  src="${post.fileURL}" class="imgVidDiv"style="white-space: nowrap;
 overflow: hidden;
 text-overflow: ellipsis;
-height: 220px;"></video>` : 
+height: 220px;" autoplay
+muted loop></video>` : 
                post.fileType.startsWith("audio/") ? 
                 `<audio controls src="${post.fileURL}" class="imgVidDiv"></audio>` : 
                 `<a href="${post.fileURL}" target="_blank">Download File</a>`}
@@ -4857,27 +4858,31 @@ document.addEventListener('DOMContentLoaded', function() {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.9);
+    width: 100vw !important; /* Use viewport units */
+    height: 100vh !important;
+    background-color: rgba(0, 0, 0, 1);
     display: none;
     justify-content: center;
     align-items: center;
     z-index: 1000;
     cursor: pointer;
     transition: opacity 0.3s ease;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
   `;
 
   const mediaContainer = document.createElement('div');
   mediaContainer.id = 'fullscreen-media-container';
   mediaContainer.style.cssText = `
-    width: 100%;
-    height: 100%;
+    width: 100vw !important; /* Full viewport width */
+    height: 100vh !important; /* Full viewport height */
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 0;
-    padding: 0;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
   `;
 
   const closeButton = document.createElement('div');
@@ -4976,7 +4981,7 @@ document.addEventListener('DOMContentLoaded', function() {
   downloadButton.addEventListener('mouseover', () => downloadButton.style.backgroundColor = 'rgba(255, 255, 255, 0.3)');
   downloadButton.addEventListener('mouseout', () => downloadButton.style.backgroundColor = 'rgba(255, 255, 255, 0.2)');
 
-  // Append elements to the viewer
+  // Append elements
   fullscreenViewer.appendChild(closeButton);
   fullscreenViewer.appendChild(navPrev);
   fullscreenViewer.appendChild(mediaContainer);
@@ -5002,12 +5007,17 @@ document.addEventListener('DOMContentLoaded', function() {
       img.id = 'fullscreen-image';
       img.src = media.src;
       img.style.cssText = `
-        width: 100%;
-        height: 100%;
+        width: 100vw !important; /* Full viewport width */
+        height: 100vh !important; /* Full viewport height */
         object-fit: contain;
         cursor: default;
+        margin: 0 !important;
+        padding: 0 !important;
       `;
       img.addEventListener('error', () => console.error('Image failed to load:', media.src));
+      img.addEventListener('load', () => {
+        console.log('Image dimensions:', img.naturalWidth, 'x', img.naturalHeight);
+      });
       return img;
     } else if (media.tagName === 'VIDEO') {
       const video = document.createElement('video');
@@ -5015,10 +5025,12 @@ document.addEventListener('DOMContentLoaded', function() {
       video.controls = true;
       video.autoplay = true;
       video.style.cssText = `
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
+        width: 100vw !important; /* Full viewport width */
+        height: 100vh !important; /* Full viewport height */
+        object-fit: contain; /* Preserves aspect ratio */
         cursor: default;
+        margin: 0 !important;
+        padding: 0 !important;
       `;
       Array.from(media.querySelectorAll('source')).forEach(source => {
         const sourceClone = document.createElement('source');
@@ -5030,7 +5042,9 @@ document.addEventListener('DOMContentLoaded', function() {
         video.src = media.src;
       }
       video.addEventListener('error', () => console.error('Video failed to load:', media.src));
-      video.addEventListener('loadeddata', () => console.log('Video loaded successfully'));
+      video.addEventListener('loadedmetadata', () => {
+        console.log('Video dimensions:', video.videoWidth, 'x', video.videoHeight);
+      });
       return video;
     }
     return null;
@@ -5069,6 +5083,9 @@ document.addEventListener('DOMContentLoaded', function() {
     fullscreenViewer.style.opacity = '0';
     setTimeout(() => {
       fullscreenViewer.style.opacity = '1';
+      // Log container dimensions for debugging
+      console.log('Viewer dimensions:', fullscreenViewer.offsetWidth, 'x', fullscreenViewer.offsetHeight);
+      console.log('Container dimensions:', mediaContainer.offsetWidth, 'x', mediaContainer.offsetHeight);
     }, 10);
 
     // Prevent background scrolling
@@ -5111,11 +5128,27 @@ document.addEventListener('DOMContentLoaded', function() {
   async function downloadMedia() {
     const media = allMedia[currentMediaIndex];
     const mediaSrc = media.src;
-    const fileName = mediaSrc.split('/').pop() || (media.tagName === 'IMG' ? 'image.jpg' : 'video.mp4');
+    let fileName = mediaSrc.split('/').pop().includes('.') ? mediaSrc.split('/').pop() : `media.${media.tagName === 'IMG' ? 'jpg' : 'mp4'}`;
 
     try {
+      console.log('Attempting to download:', mediaSrc);
       const response = await fetch(mediaSrc, { mode: 'cors' });
-      if (!response.ok) throw new Error('Network response was not ok');
+      console.log('Response status:', response.status, 'MIME type:', response.headers.get('content-type'));
+      if (!response.ok) throw new Error(`Network response was not ok: ${response.status}`);
+
+      const contentType = response.headers.get('content-type');
+      if (contentType.includes('image/png')) {
+        fileName = fileName.replace(/\.[^/.]+$/, '.png');
+      } else if (contentType.includes('image/jpeg')) {
+        fileName = fileName.replace(/\.[^/.]+$/, '.jpg');
+      } else if (contentType.includes('image/gif')) {
+        fileName = fileName.replace(/\.[^/.]+$/, '.gif');
+      } else if (contentType.includes('video/mp4')) {
+        fileName = fileName.replace(/\.[^/.]+$/, '.mp4');
+      } else if (contentType.includes('video/webm')) {
+        fileName = fileName.replace(/\.[^/.]+$/, '.webm');
+      }
+
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -5127,7 +5160,7 @@ document.addEventListener('DOMContentLoaded', function() {
       a.remove();
     } catch (error) {
       console.error('Download failed:', error);
-      alert('Failed to download media. The file may be restricted by CORS or unavailable.');
+      alert('Failed to download media due to CORS restrictions or other issues. Try right-clicking the media and selecting "Save As".');
     }
   }
 
