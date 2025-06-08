@@ -4849,187 +4849,367 @@ window.showFullscreenPoll = showFullscreenPoll;
 window.closeFullscreen = closeFullscreen;
 </script>
 <script>
-  // Fullscreen Image Viewer
 document.addEventListener('DOMContentLoaded', function() {
-  // Create the fullscreen viewer elements
+  // Create fullscreen viewer elements
   const fullscreenViewer = document.createElement('div');
   fullscreenViewer.id = 'fullscreen-viewer';
   fullscreenViewer.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.9);
-        display: none;
-        justify-content: center;
-        align-items: center;
-        z-index: 1000;
-        cursor: pointer;
-    `;
-  
-  const fullscreenImage = document.createElement('img');
-  fullscreenImage.id = 'fullscreen-image';
-  fullscreenImage.style.cssText = `
-        max-width: 90%;
-        max-height: 90%;
-        object-fit: contain;
-        cursor: default;
-    `;
-  
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+  `;
+
+  const mediaContainer = document.createElement('div');
+  mediaContainer.id = 'fullscreen-media-container';
+  mediaContainer.style.cssText = `
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+  `;
+
   const closeButton = document.createElement('div');
   closeButton.id = 'close-fullscreen';
-  closeButton.innerHTML = '&times;';
+  closeButton.innerHTML = '×';
+  closeButton.setAttribute('aria-label', 'Close fullscreen viewer');
   closeButton.style.cssText = `
-        position: absolute;
-        top: 20px;
-        right: 30px;
-        color: white;
-        font-size: 40px;
-        font-weight: bold;
-        cursor: pointer;
-        z-index: 1001;
-    `;
-  
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    color: white;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 1001;
+    transition: color 0.3s;
+  `;
+  closeButton.addEventListener('mouseover', () => closeButton.style.color = '#ccc');
+  closeButton.addEventListener('mouseout', () => closeButton.style.color = 'white');
+
   const navPrev = document.createElement('div');
   navPrev.id = 'nav-prev';
-  navPrev.innerHTML = '&lsaquo;';
+  navPrev.innerHTML = '‹';
+  navPrev.setAttribute('aria-label', 'Previous media');
   navPrev.style.cssText = `
-        position: absolute;
-        left: 30px;
-        color: white;
-        font-size: 60px;
-        font-weight: bold;
-        cursor: pointer;
-        z-index: 1001;
-        opacity: 0.7;
-        transition: opacity 0.3s;
-    `;
-  
+    position: absolute;
+    left: 30px;
+    color: white;
+    font-size: 60px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 1001;
+    opacity: 0.7;
+    transition: opacity 0.3s;
+  `;
+  navPrev.addEventListener('mouseover', () => navPrev.style.opacity = '1');
+  navPrev.addEventListener('mouseout', () => navPrev.style.opacity = '0.7');
+
   const navNext = document.createElement('div');
   navNext.id = 'nav-next';
-  navNext.innerHTML = '&rsaquo;';
+  navNext.innerHTML = '›';
+  navNext.setAttribute('aria-label', 'Next media');
   navNext.style.cssText = `
-        position: absolute;
-        right: 30px;
-        color: white;
-        font-size: 60px;
-        font-weight: bold;
-        cursor: pointer;
-        z-index: 1001;
-        opacity: 0.7;
-        transition: opacity 0.3s;
-    `;
-  
-  // Add elements to the viewer
+    position: absolute;
+    right: 30px;
+    color: white;
+    font-size: 60px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 1001;
+    opacity: 0.7;
+    transition: opacity 0.3s;
+  `;
+  navNext.addEventListener('mouseover', () => navNext.style.opacity = '1');
+  navNext.addEventListener('mouseout', () => navNext.style.opacity = '0.7');
+
+  const saveButton = document.createElement('button');
+  saveButton.id = 'save-media';
+  saveButton.innerHTML = '★ Save';
+  saveButton.setAttribute('aria-label', 'Save media to favorites');
+  saveButton.style.cssText = `
+    position: absolute;
+    bottom: 20px;
+    left: 30px;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 1px solid white;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    z-index: 1001;
+    transition: background-color 0.3s;
+  `;
+  saveButton.addEventListener('mouseover', () => saveButton.style.backgroundColor = 'rgba(255, 255, 255, 0.3)');
+  saveButton.addEventListener('mouseout', () => saveButton.style.backgroundColor = 'rgba(255, 255, 255, 0.2)');
+
+  const downloadButton = document.createElement('button');
+  downloadButton.id = 'download-media';
+  downloadButton.innerHTML = '↓ Download';
+  downloadButton.setAttribute('aria-label', 'Download media');
+  downloadButton.style.cssText = `
+    position: absolute;
+    bottom: 20px;
+    right: 30px;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 1px solid white;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    z-index: 1001;
+    transition: background-color 0.3s;
+  `;
+  downloadButton.addEventListener('mouseover', () => downloadButton.style.backgroundColor = 'rgba(255, 255, 255, 0.3)');
+  downloadButton.addEventListener('mouseout', () => downloadButton.style.backgroundColor = 'rgba(255, 255, 255, 0.2)');
+
+  // Append elements to the viewer
   fullscreenViewer.appendChild(closeButton);
   fullscreenViewer.appendChild(navPrev);
-  fullscreenViewer.appendChild(fullscreenImage);
+  fullscreenViewer.appendChild(mediaContainer);
   fullscreenViewer.appendChild(navNext);
+  fullscreenViewer.appendChild(saveButton);
+  fullscreenViewer.appendChild(downloadButton);
   document.body.appendChild(fullscreenViewer);
-  
-  // Track all images on the page
-  let allImages = [];
-  let currentImageIndex = 0;
-  
-  // Function to update the image list
-  function updateImageList() {
-    allImages = Array.from(document.querySelectorAll('img:not(#fullscreen-image)'));
+
+  // Track media and state
+  let allMedia = [];
+  let currentMediaIndex = 0;
+  let favorites = JSON.parse(localStorage.getItem('mediaFavorites')) || [];
+
+  // Update media list
+  function updateMediaList() {
+    allMedia = Array.from(document.querySelectorAll('img:not(#fullscreen-image), video:not(#fullscreen-video)'));
   }
-  
-  // Function to show image in fullscreen
-  function showFullscreenImage(index) {
-    if (allImages.length === 0) return;
-    
-    currentImageIndex = index;
-    const imgSrc = allImages[currentImageIndex].src;
-    fullscreenImage.src = imgSrc;
-    
-    // Show/hide navigation buttons
-    navPrev.style.display = currentImageIndex > 0 ? 'block' : 'none';
-    navNext.style.display = currentImageIndex < allImages.length - 1 ? 'block' : 'none';
-    
-    // Animate the appearance
+
+  // Create media element
+  function createMediaElement(media) {
+    if (media.tagName === 'IMG') {
+      const img = document.createElement('img');
+      img.id = 'fullscreen-image';
+      img.src = media.src;
+      img.style.cssText = `
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        cursor: default;
+      `;
+      img.addEventListener('error', () => console.error('Image failed to load:', media.src));
+      return img;
+    } else if (media.tagName === 'VIDEO') {
+      const video = document.createElement('video');
+      video.id = 'fullscreen-video';
+      video.controls = true;
+      video.autoplay = true;
+      video.style.cssText = `
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        cursor: default;
+      `;
+      Array.from(media.querySelectorAll('source')).forEach(source => {
+        const sourceClone = document.createElement('source');
+        sourceClone.src = source.src;
+        sourceClone.type = source.type;
+        video.appendChild(sourceClone);
+      });
+      if (!video.querySelector('source') && media.src) {
+        video.src = media.src;
+      }
+      video.addEventListener('error', () => console.error('Video failed to load:', media.src));
+      video.addEventListener('loadeddata', () => console.log('Video loaded successfully'));
+      return video;
+    }
+    return null;
+  }
+
+  // Update save button state
+  function updateSaveButton(mediaSrc) {
+    const isSaved = favorites.includes(mediaSrc);
+    saveButton.innerHTML = isSaved ? '★ Saved' : '★ Save';
+    saveButton.style.backgroundColor = isSaved ? 'rgba(255, 215, 0, 0.3)' : 'rgba(255, 255, 255, 0.2)';
+  }
+
+  // Show media in fullscreen
+  function showFullscreenMedia(index) {
+    if (allMedia.length === 0) return;
+
+    currentMediaIndex = index;
+    const media = allMedia[currentMediaIndex];
+
+    // Clear previous media
+    mediaContainer.innerHTML = '';
+    const mediaElement = createMediaElement(media);
+    if (mediaElement) {
+      mediaContainer.appendChild(mediaElement);
+    }
+
+    // Update navigation buttons
+    navPrev.style.display = currentMediaIndex > 0 ? 'block' : 'none';
+    navNext.style.display = currentMediaIndex < allMedia.length - 1 ? 'block' : 'none';
+
+    // Update save button
+    updateSaveButton(media.src);
+
+    // Show viewer
     fullscreenViewer.style.display = 'flex';
     fullscreenViewer.style.opacity = '0';
     setTimeout(() => {
       fullscreenViewer.style.opacity = '1';
     }, 10);
-    
-    // Prevent scrolling of background
+
+    // Prevent background scrolling
     document.body.style.overflow = 'hidden';
   }
-  
-  // Function to hide fullscreen viewer
+
+  // Hide fullscreen viewer
   function hideFullscreen() {
+    const video = mediaContainer.querySelector('video');
+    if (video) video.pause();
+
     fullscreenViewer.style.opacity = '0';
     setTimeout(() => {
       fullscreenViewer.style.display = 'none';
+      mediaContainer.innerHTML = '';
       document.body.style.overflow = '';
     }, 300);
   }
-  
+
+  // Save media to favorites
+  function toggleSaveMedia() {
+    const media = allMedia[currentMediaIndex];
+    const mediaSrc = media.src;
+    const isSaved = favorites.includes(mediaSrc);
+
+    if (isSaved) {
+      favorites = favorites.filter(src => src !== mediaSrc);
+      saveButton.innerHTML = '★ Save';
+      saveButton.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
+    } else {
+      favorites.push(mediaSrc);
+      saveButton.innerHTML = '★ Saved';
+      saveButton.style.backgroundColor = 'rgba(255, 215, 0, 0.3)';
+    }
+
+    localStorage.setItem('mediaFavorites', JSON.stringify(favorites));
+  }
+
+  // Download media
+  async function downloadMedia() {
+    const media = allMedia[currentMediaIndex];
+    const mediaSrc = media.src;
+    const fileName = mediaSrc.split('/').pop() || (media.tagName === 'IMG' ? 'image.jpg' : 'video.mp4');
+
+    try {
+      const response = await fetch(mediaSrc, { mode: 'cors' });
+      if (!response.ok) throw new Error('Network response was not ok');
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      a.remove();
+    } catch (error) {
+      console.error('Download failed:', error);
+      alert('Failed to download media. The file may be restricted by CORS or unavailable.');
+    }
+  }
+
   // Event listeners
   document.addEventListener('click', function(e) {
-    if (e.target.tagName === 'IMG' && e.target.id !== 'fullscreen-image') {
-      updateImageList();
-      const clickedIndex = allImages.indexOf(e.target);
+    if ((e.target.tagName === 'IMG' && e.target.id !== 'fullscreen-image') ||
+        (e.target.tagName === 'VIDEO' && e.target.id !== 'fullscreen-video')) {
+      updateMediaList();
+      const clickedIndex = allMedia.indexOf(e.target);
       if (clickedIndex !== -1) {
-        showFullscreenImage(clickedIndex);
+        showFullscreenMedia(clickedIndex);
       }
     }
   });
-  
-  closeButton.addEventListener('click', function(e) {
+
+  closeButton.addEventListener('click', (e) => {
     e.stopPropagation();
     hideFullscreen();
   });
-  
-  navPrev.addEventListener('click', function(e) {
+
+  navPrev.addEventListener('click', (e) => {
     e.stopPropagation();
-    if (currentImageIndex > 0) {
-      showFullscreenImage(currentImageIndex - 1);
+    if (currentMediaIndex > 0) {
+      showFullscreenMedia(currentMediaIndex - 1);
     }
   });
-  
-  navNext.addEventListener('click', function(e) {
+
+  navNext.addEventListener('click', (e) => {
     e.stopPropagation();
-    if (currentImageIndex < allImages.length - 1) {
-      showFullscreenImage(currentImageIndex + 1);
+    if (currentMediaIndex < allMedia.length - 1) {
+      showFullscreenMedia(currentMediaIndex + 1);
     }
   });
-  
-  fullscreenViewer.addEventListener('click', function(e) {
+
+  saveButton.addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleSaveMedia();
+  });
+
+  downloadButton.addEventListener('click', (e) => {
+    e.stopPropagation();
+    downloadMedia();
+  });
+
+  fullscreenViewer.addEventListener('click', (e) => {
     if (e.target === fullscreenViewer) {
       hideFullscreen();
     }
   });
-  
+
   // Keyboard navigation
   document.addEventListener('keydown', function(e) {
     if (fullscreenViewer.style.display === 'flex') {
       if (e.key === 'Escape') {
         hideFullscreen();
-      } else if (e.key === 'ArrowLeft' && currentImageIndex > 0) {
-        showFullscreenImage(currentImageIndex - 1);
-      } else if (e.key === 'ArrowRight' && currentImageIndex < allImages.length - 1) {
-        showFullscreenImage(currentImageIndex + 1);
+      } else if (e.key === 'ArrowLeft' && currentMediaIndex > 0) {
+        showFullscreenMedia(currentMediaIndex - 1);
+      } else if (e.key === 'ArrowRight' && currentMediaIndex < allMedia.length - 1) {
+        showFullscreenMedia(currentMediaIndex + 1);
+      } else if (e.key === 's') {
+        toggleSaveMedia();
+      } else if (e.key === 'd') {
+        downloadMedia();
       }
     }
   });
-  
-  // Handle dynamically loaded images (for infinite scroll, etc.)
+
+  // Handle dynamically loaded media
   const observer = new MutationObserver(function(mutations) {
     mutations.forEach(function(mutation) {
       if (mutation.addedNodes.length) {
-        updateImageList();
+        updateMediaList();
       }
     });
   });
-  
+
   observer.observe(document.body, {
     childList: true,
     subtree: true
   });
+
+  // Initial media list update
+  updateMediaList();
 });
 </script>
