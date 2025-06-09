@@ -21,12 +21,7 @@
 
 
     }
-        body{
-          font-family: Arial, sans-serif;
-          display: flex;
-          flex-direction: column;
-          height: 100vh;
-        }
+        
     header{
 
       width: 100%;
@@ -1374,76 +1369,271 @@ footer {
 .fullscreen-close:hover {
   background: #555;
 }
-    .header1-left {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    
-    .profile-photo {
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      object-fit: cover;
-    }
-    
-    .online-status {
-      position: absolute;
-      bottom: 0;
-      right: 0;
-      width: 12px;
-      height: 12px;
-      background-color: white;
-      border-radius: 50%;
-      border: 2px solid #0E0B23;
-    }
-    
-    .profile-container {
-      position: relative;
-    }
-    
-    .app-title {
-      color: #42445A;
-      font-weight: 800;
-      font-size: 24px;
-      letter-spacing: -0.5px;
-      user-select: none;
-    }
-    
-    .app-title span {
-      color: #3BD1D1;
-    }
-    
-    .header1-icons {
-      color: #42445A;
-      font-size: 20px;
-      display: flex;
-      gap: 8px;
-    }
-    
-    .nav2-tabs {
-      display: flex;
-      justify-content: center;
-      gap: 32px;
-      border-bottom: 1px solid #3B3A6B;
-      padding-bottom: 8px;
-    }
-    
-    .tab-button {
-      color: #5B5B7F;
-      font-weight: 600;
-      font-size: 14px;
-      background: none;
-      border: none;
-      position: relative;
-      padding: 0;
-    }
-    
-    .tab-button.active {
-      color: white;
-      border-bottom: 2px solid #5B5FC7;
-      padding-bottom: 8px;
-    }
+        :root {
+            --primary: #6e45e2;
+            --secondary: #88d3ce;
+            --accent: #ff7e5f;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f7;
+        }
+
+        .social-header {
+            position: relative;
+            width: 100%;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            z-index: 100;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 100%;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 1.8rem;
+            letter-spacing: -0.5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: translateY(-2px);
+        }
+
+        .logo-icon {
+            font-size: 0.8rem;
+            color: var(--accent);
+            animation: pulse 2s infinite;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-item {
+            position: relative;
+            font-weight: 500;
+            font-size: 1rem;
+            cursor: pointer;
+            padding: 0.5rem 0;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item:hover {
+            color: var(--accent);
+        }
+
+        .nav-item::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--accent);
+            transition: width 0.3s ease;
+        }
+
+        .nav-item:hover::after {
+            width: 100%;
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .action-icon {
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .action-icon:hover {
+            color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--accent);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid white;
+            object-fit: cover;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.1);
+            border-color: var(--accent);
+        }
+
+        /* Floating bubbles background */
+        .bubbles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .bubble {
+            position: absolute;
+            bottom: -100px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 15s infinite ease-in;
+        }
+
+        .bubble:nth-child(1) {
+            width: 40px;
+            height: 40px;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .bubble:nth-child(2) {
+            width: 20px;
+            height: 20px;
+            left: 20%;
+            animation-delay: 2s;
+            animation-duration: 12s;
+        }
+
+        .bubble:nth-child(3) {
+            width: 50px;
+            height: 50px;
+            left: 35%;
+            animation-delay: 4s;
+        }
+
+        .bubble:nth-child(4) {
+            width: 80px;
+            height: 80px;
+            left: 50%;
+            animation-delay: 0s;
+            animation-duration: 18s;
+        }
+
+        .bubble:nth-child(5) {
+            width: 35px;
+            height: 35px;
+            left: 55%;
+            animation-delay: 1s;
+        }
+
+        .bubble:nth-child(6) {
+            width: 45px;
+            height: 45px;
+            left: 65%;
+            animation-delay: 3s;
+            animation-duration: 10s;
+        }
+
+        .bubble:nth-child(7) {
+            width: 25px;
+            height: 25px;
+            left: 75%;
+            animation-delay: 2s;
+            animation-duration: 14s;
+        }
+
+        .bubble:nth-child(8) {
+            width: 80px;
+            height: 80px;
+            left: 80%;
+            animation-delay: 1s;
+            animation-duration: 20s;
+        }
+
+        /* Animations */
+        @keyframes float {
+            0% {
+                bottom: -100px;
+                transform: translateX(0);
+            }
+            50% {
+                transform: translateX(100px);
+            }
+            100% {
+                bottom: 100%;
+                transform: translateX(-100px);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-container {
+                padding: 0 1rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .logo-text {
+                display: none;
+            }
+        }
+    </style>
     
 </style>
 
@@ -1456,38 +1646,47 @@ footer {
   </div>
 
 <div id="home-page" class="page active">
-    <header1 class="header1">
-      <div class="header1-left">
-        <div class="profile-container">
-          <img class="profile-pic" id="profilePicture" class="profile-photo" src="https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/depositphotos_50462921-stock-photo-3d-icon.jpg?alt=media&token=f4c459c9-1b47-4c58-96d8-4a5de54bd3dc" alt="Profile Photo"/>
-          <span class="online-status"></span>
-        </div>
-      </div>
-      <h1 class="app-title">
-        BLUEFLARE<span>.</span>
-      </h1>
-      <div class="header1-icons">
-        <i class="fas fa-star"></i>
-        <i class="fas fa-star"></i>
-      </div>
-    </header1>
-    
-    <!-- nav2igation Tabs -->
-    <nav2 class="nav2-tabs">
-      <button class="tab-button active" aria-current="page">For You</button>
-      <button class="tab-button">
-        Following
-        <span class="notification-dot" aria-label="notification dot"></span>
-      </button>
-      <button class="tab-button">
-        Groups
-        <span class="notification-dot" aria-label="notification dot"></span>
-      </button>
-    </nav2>
+            <div class="hdrPage">
+  
+  
+  <img src="https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/depositphotos_50462921-stock-photo-3d-icon.jpg?alt=media&token=f4c459c9-1b47-4c58-96d8-4a5de54bd3dc" alt="" class="schoolProfile" style="float:left;"/>
+  <br>
+<p class="logo" style="color:RGB(100, 149, 237);">
+  Blue Flare
+  
+</p>
 
-      <div class="pageName" style="color:RGB(65, 105, 225); display:none;">
-             <img id="profilePicture" class="profile-pic" src="https://via.placeholder.com/50" alt="Profile Photo">
-             <h3 id="user-info">User Name</h3>
+      
+</div>
+
+      <div class="pageName" style="color:RGB(65, 105, 225);">
+            <div class="logo">
+
+
+            </div>
+            
+            <nav class="nav-links">
+              <div class="nav-item">Home</div>
+              <div class="nav-item">Explore</div>
+              <div class="nav-item">Create</div>
+              <div class="nav-item">Messages</div>
+              <div class="nav-item">Profile</div>
+            </nav>
+            
+            <div class="user-actions">
+              <div class="action-icon">
+                <i class="fas fa-search"></i>
+              </div>
+              <div class="action-icon">
+                <i class="fas fa-bell"></i>
+                <div class="notification-badge">3</div>
+              </div>
+              <div class="action-icon">
+                <i class="fas fa-envelope"></i>
+                <div class="notification-badge">5</div>
+              </div>
+              <img id="profilePicture" class="profile-pic" src="https://via.placeholder.com/50" alt alt="User" class="user-avatar">
+            </div>
     </div>
 
 
@@ -1521,6 +1720,7 @@ footer {
               </div>
 
     </div>
+
     <!-- Main Content -->
                      <div class="posts" id="publicPost">
 
@@ -3588,11 +3788,11 @@ muted loop></video>` :
                         <span class="likes-count">${Object.keys(post.likes || {}).length} likes</span>
                         <span class="comments-count">${Object.keys(post.comments || {}).length} comments</span>
                         
-                                    <span class="category-tag ${post.category ? post.category.toLowerCase() : "uncategorized"}">
+                                    <span class="category-tag  ${post.category ? post.category.toLowerCase() : "uncategorized"}">
               <i class="${categoryIcon}" aria-hidden="true"></i>
               ${post.category || "Uncategorized"}
             </span>
-                            <div class="view-count"> ${post.views || 0} <i class="fas fa-eye" style=""  aria-hidden="true"></i></div>
+                            <div class="view-count"> ${post.views || 0} <i class="fas fa-eye logo-icon"></i></div>
 
                     </div>
                     
