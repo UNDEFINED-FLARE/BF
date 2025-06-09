@@ -1374,6 +1374,77 @@ footer {
 .fullscreen-close:hover {
   background: #555;
 }
+    .header1-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .profile-photo {
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      object-fit: cover;
+    }
+    
+    .online-status {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 12px;
+      height: 12px;
+      background-color: white;
+      border-radius: 50%;
+      border: 2px solid #0E0B23;
+    }
+    
+    .profile-container {
+      position: relative;
+    }
+    
+    .app-title {
+      color: #42445A;
+      font-weight: 800;
+      font-size: 24px;
+      letter-spacing: -0.5px;
+      user-select: none;
+    }
+    
+    .app-title span {
+      color: #3BD1D1;
+    }
+    
+    .header1-icons {
+      color: #42445A;
+      font-size: 20px;
+      display: flex;
+      gap: 8px;
+    }
+    
+    .nav2-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      border-bottom: 1px solid #3B3A6B;
+      padding-bottom: 8px;
+    }
+    
+    .tab-button {
+      color: #5B5B7F;
+      font-weight: 600;
+      font-size: 14px;
+      background: none;
+      border: none;
+      position: relative;
+      padding: 0;
+    }
+    
+    .tab-button.active {
+      color: white;
+      border-bottom: 2px solid #5B5FC7;
+      padding-bottom: 8px;
+    }
+    
 </style>
 
 </head>
@@ -1385,17 +1456,34 @@ footer {
   </div>
 
 <div id="home-page" class="page active">
-            <div class="hdrPage">
-
-
-  <img src="https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/depositphotos_50462921-stock-photo-3d-icon.jpg?alt=media&token=f4c459c9-1b47-4c58-96d8-4a5de54bd3dc" alt="" class="schoolProfile" style="float:left;"/>
-  <br>
-<p class="logo" style="color:RGB(100, 149, 237);">
-  Blue Flare
-</p>
-
-
-</div>
+    <header1 class="header1">
+      <div class="header1-left">
+        <div class="profile-container">
+          <img class="profile-pic" id="profilePicture" class="profile-photo" src="https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/depositphotos_50462921-stock-photo-3d-icon.jpg?alt=media&token=f4c459c9-1b47-4c58-96d8-4a5de54bd3dc" alt="Profile Photo"/>
+          <span class="online-status"></span>
+        </div>
+      </div>
+      <h1 class="app-title">
+        BLUEFLARE<span>.</span>
+      </h1>
+      <div class="header1-icons">
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+      </div>
+    </header1>
+    
+    <!-- nav2igation Tabs -->
+    <nav2 class="nav2-tabs">
+      <button class="tab-button active" aria-current="page">For You</button>
+      <button class="tab-button">
+        Following
+        <span class="notification-dot" aria-label="notification dot"></span>
+      </button>
+      <button class="tab-button">
+        Groups
+        <span class="notification-dot" aria-label="notification dot"></span>
+      </button>
+    </nav2>
 
       <div class="pageName" style="color:RGB(65, 105, 225); display:none;">
              <img id="profilePicture" class="profile-pic" src="https://via.placeholder.com/50" alt="Profile Photo">
@@ -1404,61 +1492,11 @@ footer {
 
 
 
-                  <div class="motivation-slideshow" style="display: none;" >
-    <div class="slides-container">
-      <!-- Slide 1 -->
-      <div class="slide">
-        <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="Graduation celebration">
-        <div class="slide-caption">"The future belongs to those who believe in the beauty of their dreams." - Eleanor Roosevelt</div>
-      </div>
 
-
-
-
-      <!-- Slide 2 -->
-      <div class="slide">
-        <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="Student studying with laptop">
-        <div class="slide-caption">"Success is the sum of small efforts, repeated day in and day out." - Robert Collier</div>
-      </div>
-           <!-- Slide 3 -->
-      <div class="slide">
-        <img src="https://images.unsplash.com/photo-1546410531-bb4caa6b424d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="Books and coffee">
-        <div class="slide-caption">"You don't have to be great to start, but you have to start to be great." - Zig Ziglar</div>
-      </div>
-
-      <!-- Slide 4 -->
-      <div class="slide">
-        <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="Team of students collaborating">
-        <div class="slide-caption">"Alone we can do so little; together we can do so much." - Helen Keller</div>
-      </div>
-
-      <!-- Slide 5 -->
-      <div class="slide">
-        <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="Student writing in notebook">
-        <div class="slide-caption">"The expert in anything was once a beginner." - Helen Hayes</div>
-      </div>
-    </div>
-
-    <div class="slideshow-controls" style="display:none;">
-      <button class="prev-slide" aria-label="Previous slide"><i class="fas fa-chevron-left"></i></button>
-      <button class="next-slide" aria-label="Next slide"><i class="fas fa-chevron-right"></i></button>
-    </div>
-
-    <div class="slideshow-dots"style="display:none;">
-      <!-- Dots will be added by JavaScript -->
-    </div>
-
-
-
-  </div>
 
 
 <body>
-    <div class="academic-header">
-      <br />
-      <h2><i class="fas fa-file"></i> News Feed</h2>
-      <p>Share your thoughts and indight on everything academics </p>
-    </div>
+
 
     </header>
        <div class="nav" style="display:none;">
@@ -1553,7 +1591,7 @@ document.addEventListener("DOMContentLoaded", () => {
       alert("Please sign in: You will be redirected to the sign-in page");
       window.location.href = "https://undefined-flare.github.io/BF/blue flare sign in.html";
     } else {
-      if (profilePicture) profilePicture.src = user.photoURL || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png";
+      if (profilePicture) profilePicture.src = user.photoURL || "https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/depositphotos_50462921-stock-photo-3d-icon.jpg?alt=media&token=f4c459c9-1b47-4c58-96d8-4a5de54bd3dc";
       if (userInfo) userInfo.innerText = user.displayName || "Anonymous";
       if (newsFormContainer) {
         newsFormContainer.style.display = user.uid === ALLOWED_AUTHOR_UID ? "block" : "none";
@@ -1599,7 +1637,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const newsRef = ref(database, "news");
         const newArticle = {
           author: user.displayName || "Anonymous",
-          authorPhoto: user.photoURL || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
+          authorPhoto: user.photoURL || "https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/depositphotos_50462921-stock-photo-3d-icon.jpg?alt=media&token=f4c459c9-1b47-4c58-96d8-4a5de54bd3dc",
           category,
           content,
           fileURL,
@@ -1798,7 +1836,7 @@ function fetchNews() {
         const newComment = {
           text: commentText,
           author: user.displayName || "Anonymous",
-          profilePicture: user.photoURL || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
+          profilePicture: user.photoURL || "https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/depositphotos_50462921-stock-photo-3d-icon.jpg?alt=media&token=f4c459c9-1b47-4c58-96d8-4a5de54bd3dc",
           timestamp: Date.now()
         };
 
@@ -1907,7 +1945,7 @@ document.addEventListener("DOMContentLoaded", () => {
       alert("You must be signed in to use this platform.");
       window.location.href = "sign-in.html";
     } else {
-      if (profilePicture) profilePicture.src = user.photoURL || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png";
+      if (profilePicture) profilePicture.src = user.photoURL || "https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/depositphotos_50462921-stock-photo-3d-icon.jpg?alt=media&token=f4c459c9-1b47-4c58-96d8-4a5de54bd3dc";
       if (userInfo) userInfo.innerText = user.displayName || "Anonymous";
       fetchGroups();
     }
@@ -2056,7 +2094,7 @@ function sendMessageToGroup(groupId, text) {
   const newMessage = {
     text,
     author: user.email || "Anonymous",
-    profilePicture: user.photoURL || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
+    profilePicture: user.photoURL || "https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/depositphotos_50462921-stock-photo-3d-icon.jpg?alt=media&token=f4c459c9-1b47-4c58-96d8-4a5de54bd3dc",
     timestamp: Date.now()
   };
   push(messagesRef, newMessage)
@@ -2650,7 +2688,7 @@ function sendMessageToGroup(groupId, text) {
       const answerData = {
         text: answerText,
         author: user.displayName || 'Anonymous',
-        authorPhoto: user.photoURL || '',
+        authorPhoto: user.photoURL || 'https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/depositphotos_50462921-stock-photo-3d-icon.jpg?alt=media&token=f4c459c9-1b47-4c58-96d8-4a5de54bd3dc',
         timestamp: Date.now(),
         likes: 0
       };
