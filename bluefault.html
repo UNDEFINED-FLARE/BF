@@ -3748,17 +3748,24 @@ function showToast(message) {
 
 
         });
-
+          const userName = post.userName || 'Unknown User';
+          const userPic = post.userProfilePic || 'https://via.placeholder.com/50';
+          const postDate = post.timestamp ? formatDate(post.timestamp) : 'Just now';
+          const userCity = post.userCity || 'Unknown City';
+          const userProvince = post.userProvince || 'Unknown Province';
+          const userSchool = post.userSchool || 'Unknown School';
+          
         postElement.innerHTML = `
         
           <header>
             <img class="profile-pic" alt="Profile picture" height="40" width="40" 
-                 src="${post.authorPhoto || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"}" />
+                 src="${post.userProfilePic || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"}" />
             <div class="header-text">
-              <p class="name">${post.author || "Anonymous"}</p>
-              <p class="email"><i class="fas fa-location-dot"></i>Limpopo.${formatTime(post.timestamp)} •  <i class="fas fa-globe"></i>
+              <p class="name">${post.userName|| "Anonymous"}</p>
+              <p class="email"><i class="fas fa-location-dot"></i>${post.userProvince}•${formatTime(post.timestamp)} •  <i class="fas fa-globe"></i>
               </p>
-              <p class="time"></p>
+              <br>
+              <p class="icon-crd"style="float:left;font-size:12px;" window.open('https://www.google.com/search?q=' + encodeURIComponent(this.textContent.trim()), '_blank')>@${post.userSchool}</p>
             </div>
                                                  <button class="comment-toggle-button" style="font-size:17px;color:blue;">
                                                    <i class="fas fa-grid-2"></i> </button>
