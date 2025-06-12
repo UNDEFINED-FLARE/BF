@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BlueFlare SIGN UP</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
+        <style>
+
     :root {
       --fb-blue: #1877f2;
       --fb-blue-hover: #166fe5;
@@ -324,529 +325,541 @@
         }
 
   </style>
+
 </head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup Form</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; }
+        .form-section { display: none; }
+        .form-section.active { display: block; }
+        .progress-bar { display: flex; justify-content: space-between; margin-bottom: 20px; }
+        .step { 
+          flex: 1; 
+          color: black;
+          font-size: 10px;
+          text-align: center; 
+          padding: 3px; background: #eee; margin: 0 5px; }
+        .step.active { 
+          border-bottom:1px solid royalBlue; color:#42445A; 
+          font-weight:700;
+        }
+        .step.completed {
+          background-color: lightblue;
+          color: white; }
+        .error-message { color: red; display: none; margin-top: 5px; }
+        .school-results { border: 1px solid #ddd; max-height: 150px; overflow-y: auto; display: none; }
+        .school-result { padding: 8px; cursor: pointer; }
+        .school-result:hover { background: #f0f0f0; }
+        button { padding: 10px 15px; margin: 10px 5px 0 0; }
+                .header2 {
+            background-color: var(--light);
+            padding: 15px 30px;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: ;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .profile-pic {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+    </style>
+ </head>
 <body>
-              <div class="hdrPage">
-              
-              
-              <img src="https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/depositphotos_50462921-stock-photo-3d-icon.jpg?alt=media&token=f4c459c9-1b47-4c58-96d8-4a5de54bd3dc" alt="" class="schoolProfile" style="float:left;" />
-              
-              <p class="logo" style="color:RGB(100, 149, 237);">
-                BlueFlare
-                
-              </p>
-              
-              
-            </div>
-  <div class="container">
 
-    <div class="signup-card">
-      <h1>Create a Student Account</h1>
-      
-      <div class="progress-bar">
-        <div class="progress-step active" id="step1">1</div>
-        <div class="progress-step" id="step2">2</div>
-        <div class="progress-step" id="step3">3</div>
-        <div class="progress-step" id="step4">4</div>
+              
+    <div class="header2">
+
+      <div class="user-info">
+<img src="https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/depositphotos_50462921-stock-photo-3d-icon.jpg?alt=media&token=f4c459c9-1b47-4c58-96d8-4a5de54bd3dc" alt="" class="profile-pic" style="float:left;"/>
+        <span style="color:RGB(100, 149, 237);font-weight: 600;">BLUEFLARE SIGN UP</span>
       </div>
-      
-      <form id="signupForm">
-        <!-- Section 1: Basic Information -->
-        <div class="form-section active" id="section1">
-          <div class="form-row">
-            <div class="form-group">
-              <label for="firstName">First Name</label>
-              <input type="text" id="firstName" name="firstName" required>
-              <div class="error-message" id="firstNameError">First name is required</div>
-            </div>
-            <div class="form-group">
-              <label for="lastName">Last Name</label>
-              <input type="text" id="lastName" name="lastName" required>
-              <div class="error-message" id="lastNameError">Last name is required</div>
-            </div>
-          </div>
-          
-          <div class="form-group">
-            <label for="email">Email Address</label>
-            <input type="email" id="email" name="email" required>
-            <div class="error-message" id="emailError">Please enter a valid email</div>
-          </div>
-          
-          <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" required minlength="8">
-            <div class="error-message" id="passwordError">Password must be at least 8 characters</div>
-          </div>
-          
-          <div class="form-group">
-            <label for="confirmPassword">Confirm Password</label>
-            <input type="password" id="confirmPassword" name="confirmPassword" required>
-            <div class="error-message" id="confirmPasswordError">Passwords do not match</div>
-          </div>
-          
-          <div class="form-group">
-            <label for="birthday">Date of Birth</label>
-            <input type="date" id="birthday" name="birthday" required>
-            <div class="error-message" id="birthdayError">Birthday is required</div>
-          </div>
-          
-          <div class="form-group">
-            <label>Gender</label>
-            <div class="radio-group">
-              <label class="radio-option">
-                <input type="radio" name="gender" value="male" required> Male
-              </label>
-              <label class="radio-option">
-                <input type="radio" name="gender" value="female"> Female
-              </label>
-              <label class="radio-option">
-                <input type="radio" name="gender" value="other"> Other
-              </label>
-            </div>
-            <div class="error-message" id="genderError">Please select a gender</div>
-          </div>
-          
-          <button type="button" class="btn btn-primary" onclick="nextSection(2)">Continue</button>
-        </div>
-        
-        <!-- Section 2: Education Information -->
-        <div class="form-section" id="section2">
-          <div class="form-group">
-            <label for="educationLevel">Education Level</label>
-            <select id="educationLevel" name="educationLevel" required>
-              <option value="">Select your education level</option>
-              <option value="highschool">High School</option>
-              <option value="college">College/University</option>
-              <option value="graduate">Postgraduate</option>
-              <option value="tvet">TVET College</option>
-              <option value="other">Other</option>
-            </select>
-            <div class="error-message" id="educationLevelError">Education level is required</div>
-          </div>
-          
-          <div class="form-group school-search-container">
-            <label for="school">School/Institution</label>
-            <input type="text" id="school" name="school" required placeholder="Search for your institution">
-            <div class="school-results" id="schoolResults"></div>
-            <div class="error-message" id="schoolError">Institution is required</div>
-          </div>
-          
-          <div class="form-group">
-            <label for="major">Field of Study</label>
-            <input type="text" id="major" name="major" placeholder="e.g. Computer Science, Business">
-          </div>
-          
-          <div class="form-group">
-            <label for="graduationYear">Expected Graduation Year</label>
-            <select id="graduationYear" name="graduationYear">
-              <option value="">Select year</option>
-              <script>
-                const currentYear = new Date().getFullYear();
-                for (let i = currentYear; i <= currentYear + 10; i++) {
-                  document.write(`<option value="${i}">${i}</option>`);
-                }
-              </script>
-            </select>
-          </div>
-          
-          <div class="form-row">
-            <button type="button" class="btn btn-secondary" onclick="prevSection()">Back</button>
-            <button type="button" class="btn btn-primary" onclick="nextSection(3)">Continue</button>
-          </div>
-        </div>
-        
-        <!-- Section 3: Location Information -->
-        <div class="form-section" id="section3">
-          <div class="form-group">
-            <label for="country">Country</label>
-            <select id="country" name="country" required>
-              <option value="South Africa" selected>South Africa</option>
-              <option value="Other">Other</option>
-            </select>
-            <div class="error-message" id="countryError">Country is required</div>
-          </div>
-          
-          <div class="form-group">
-            <label for="province">Province</label>
-            <select id="province" name="province" required>
-              <option value="">Select your province</option>
-              <option value="Eastern Cape">Eastern Cape</option>
-              <option value="Free State">Free State</option>
-              <option value="Gauteng">Gauteng</option>
-              <option value="KwaZulu-Natal">KwaZulu-Natal</option>
-              <option value="Limpopo">Limpopo</option>
-              <option value="Mpumalanga">Mpumalanga</option>
-              <option value="North West">North West</option>
-              <option value="Northern Cape">Northern Cape</option>
-              <option value="Western Cape">Western Cape</option>
-            </select>
-            <div class="error-message" id="provinceError">Province is required</div>
-          </div>
-          
-          <div class="form-group">
-            <label for="city">City/Town</label>
-            <input type="text" id="city" name="city" required>
-            <div class="error-message" id="cityError">City/Town is required</div>
-          </div>
-          
-          <div class="form-group">
-            <label for="interests">Academic Interests (Select up to 5)</label>
-            <select id="interests" name="interests" multiple style="height: auto; min-height: 100px;">
-              <option value="Computer Science">Computer Science</option>
-              <option value="Engineering">Engineering</option>
-              <option value="Business">Business</option>
-              <option value="Medicine">Medicine</option>
-              <option value="Law">Law</option>
-              <option value="Education">Education</option>
-              <option value="Agriculture">Agriculture</option>
-              <option value="Tourism">Tourism</option>
-              <option value="Social Sciences">Social Sciences</option>
-              <option value="Natural Sciences">Natural Sciences</option>
-            </select>
-            <small>Hold Ctrl/Cmd to select multiple</small>
-          </div>
-          
-          <div class="form-row">
-            <button type="button" class="btn btn-secondary" onclick="prevSection()">Back</button>
-            <button type="button" class="btn btn-primary" onclick="nextSection(4)">Continue</button>
-          </div>
-        </div>
-        
-        <!-- Section 4: Profile Setup -->
-        <div class="form-section" id="section4">
-          <div class="form-group">
-            <label for="bio">Bio/Introduction</label>
-            <textarea id="bio" name="bio" rows="4" placeholder="Tell other students about yourself..."></textarea>
-          </div>
-          
-          <div class="form-group">
-            <label for="profilePicture">Profile Picture</label>
-            <input type="file" id="profilePicture" name="profilePicture" accept="image/*">
-          </div>
-          
-          <div class="form-group">
-            <label>
-              <input type="checkbox" name="terms" required> 
-              <span class="terms-text">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></span>
-            </label>
-            <div class="error-message" id="termsError">You must accept the terms</div>
-          </div>
-          
-          <div class="form-row">
-            <button type="button" class="btn btn-secondary" onclick="prevSection()">Back</button>
-            <button type="submit" class="btn btn-success">Sign Up</button>
-          </div>
-        </div>
-      </form>
     </div>
-    
-    <div class="login-link">
-      Already have an account? <a href="https://undefined-flare.github.io/BF/blue%20flare%20sign%20in">Log In</a>
     </div>
-  </div>
+            
+    <div class="progress-bar">
+        <div id="step1" class="step active">1. Personal Info</div>
+        <div id="step2" class="step">2. Education</div>
+        <div id="step3" class="step">3. Location</div>
+        <div id="step4" class="step">4. Complete</div>
+    </div>
 
-  <!-- Firebase Compatibility SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage-compat.js"></script>
+    <form id="signupForm">
+        <!-- Section 1: Personal Info -->
+        <div id="section1" class="form-section active">
+            <h2>Personal Information</h2>
+            <div>
+                <label for="firstName">First Name:</label>
+                <input type="text" id="firstName" required>
+                <div id="firstNameError" class="error-message">Please enter your first name</div>
+            </div>
+            <div>
+                <label for="lastName">Last Name:</label>
+                <input type="text" id="lastName" required>
+                <div id="lastNameError" class="error-message">Please enter your last name</div>
+            </div>
+            <div>
+                <label for="email">Email:</label>
+                <input type="email" id="email" required>
+                <div id="emailError" class="error-message">Please enter a valid email</div>
+            </div>
+            <div>
+                <label for="password">Password:</label>
+                <input type="password" id="password" required minlength="8">
+                <div id="passwordError" class="error-message">Password must be at least 8 characters</div>
+            </div>
+            <div>
+                <label for="confirmPassword">Confirm Password:</label>
+                <input type="password" id="confirmPassword" required>
+                <div id="confirmPasswordError" class="error-message">Passwords don't match</div>
+            </div>
+            <div>
+                <label for="birthday">Birthday:</label>
+                <input type="date" id="birthday" required>
+                <div id="birthdayError" class="error-message">Please enter your birthday</div>
+            </div>
+            <div>
+                <label>Gender:</label>
+                <input type="radio" id="male" name="gender" value="male">
+                <label for="male">Male</label>
+                <input type="radio" id="female" name="gender" value="female">
+                <label for="female">Female</label>
+                <input type="radio" id="other" name="gender" value="other">
+                <label for="other">Other</label>
+                <div id="genderError" class="error-message">Please select your gender</div>
+            </div>
+            <button type="button" onclick="nextSection(2)">Next</button>
+        </div>
 
-  <script>
-    // Firebase configuration
-    const firebaseConfig = {
-      apiKey: "AIzaSyBSMvHpZ0_VkqWjJ94UMa6vqEhFiqrsIWM",
-  authDomain: "rare-5f47e.firebaseapp.com",
-  projectId: "rare-5f47e",
-  storageBucket: "rare-5f47e.appspot.com",
-  messagingSenderId: "811727087812",
-  appId: "1:811727087812:web:d362e68abf6c26acf24191",
-  measurementId: "G-DE59771G7Q"
-    };
+        <!-- Section 2: Education -->
+        <div id="section2" class="form-section">
+            <h2>Education Information</h2>
+            <div>
+                <label for="educationLevel">Education Level:</label>
+                <select id="educationLevel" required>
+                    <option value="">Select...</option>
+                    <option value="high_school">High School</option>
+                    <option value="bachelors">Bachelor's Degree</option>
+                    <option value="masters">Master's Degree</option>
+                    <option value="phd">PhD</option>
+                    <option value="other">Other</option>
+                </select>
+                <div id="educationLevelError" class="error-message">Please select your education level</div>
+            </div>
+            <div>
+                <label for="school">School/University:</label>
+                <input type="text" id="school" required>
+                <div id="schoolResults" class="school-results"></div>
+                <div id="schoolError" class="error-message">Please enter your school</div>
+            </div>
+            <div>
+                <label for="major">Major (optional):</label>
+                <input type="text" id="major">
+            </div>
+            <div>
+                <label for="graduationYear">Graduation Year (optional):</label>
+                <input type="number" id="graduationYear" min="1900" max="2100">
+            </div>
+            <button type="button" onclick="prevSection()">Back</button>
+            <button type="button" onclick="nextSection(3)">Next</button>
+        </div>
 
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.firestore();
-    const storage = firebase.storage();
+        <!-- Section 3: Location -->
+        <div id="section3" class="form-section">
+            <h2>Location Information</h2>
+            <div>
+                <label for="country">Country:</label>
+                <select id="country" required>
+                    <option value="">Select...</option>
+                    <option value="South Africa">South Africa</option>
+                    <option value="Other">Other</option>
+                </select>
+                <div id="countryError" class="error-message">Please select your country</div>
+            </div>
+            <div>
+                <label for="province">Province/State:</label>
+                <select id="province" required>
+                    <option value="">Select...</option>
+                    <option value="Eastern Cape">Eastern Cape</option>
+                    <option value="Free State">Free State</option>
+                    <option value="Gauteng">Gauteng</option>
+                    <option value="KwaZulu-Natal">KwaZulu-Natal</option>
+                    <option value="Limpopo">Limpopo</option>
+                    <option value="Mpumalanga">Mpumalanga</option>
+                    <option value="Northern Cape">Northern Cape</option>
+                    <option value="North West">North West</option>
+                    <option value="Western Cape">Western Cape</option>
+                </select>
+                <div id="provinceError" class="error-message">Please select your province</div>
+            </div>
+            <div>
+                <label for="city">City:</label>
+                <input type="text" id="city" required>
+                <div id="cityError" class="error-message">Please enter your city</div>
+            </div>
+            <div>
+                <label for="interests">Interests (select multiple):</label>
+                <select id="interests" multiple>
+                    <option value="technology">Technology</option>
+                    <option value="science">Science</option>
+                    <option value="art">Art</option>
+                    <option value="sports">Sports</option>
+                    <option value="music">Music</option>
+                </select>
+            </div>
+            <div>
+                <label for="bio">Bio (optional):</label>
+                <textarea id="bio" rows="4"></textarea>
+            </div>
+            <div>
+                <label for="profilePicture">Profile Picture (optional):</label>
+                <input type="file" id="profilePicture" accept="image/*">
+            </div>
+            <button type="button" onclick="prevSection()">Back</button>
+            <button type="button" onclick="nextSection(4)">Next</button>
+        </div>
 
-    // Current section tracking
-    let currentSection = 1;
-    
-    // South African institutions for autocomplete
-    const schools = [
-      "University of Cape Town",
-      "University of the Witwatersrand",
-      "Stellenbosch University",
-      "University of Pretoria",
-      "University of KwaZulu-Natal",
-      "University of Johannesburg",
-      "University of the Western Cape",
-      "Rhodes University",
-      "Nelson Mandela University",
-      "University of the Free State",
-      "Tshwane University of Technology",
-      "Cape Peninsula University of Technology",
-      "Durban University of Technology",
-      "Vaal University of Technology",
-      "Mangosuthu University of Technology"
-    ];
-    
-    // Initialize the form
-    document.addEventListener('DOMContentLoaded', function() {
-      updateProgressBar();
-      setupSchoolSearch();
-      document.getElementById('signupForm').addEventListener('submit', handleSignup);
-    });
-    
-    // Form navigation functions
-    function nextSection(sectionNumber) {
-      if (validateCurrentSection()) {
-        showSection(sectionNumber);
-      }
-    }
-    
-    function prevSection() {
-      showSection(currentSection - 1);
-    }
-    
-    function showSection(sectionNumber) {
-      document.querySelectorAll('.form-section').forEach(section => {
-        section.classList.remove('active');
-      });
-      document.getElementById(`section${sectionNumber}`).classList.add('active');
-      currentSection = sectionNumber;
-      updateProgressBar();
-    }
-    
-    function updateProgressBar() {
-      for (let i = 1; i <= 4; i++) {
-        const step = document.getElementById(`step${i}`);
-        if (i < currentSection) {
-          step.classList.remove('active');
-          step.classList.add('completed');
-        } else if (i === currentSection) {
-          step.classList.add('active');
-          step.classList.remove('completed');
-        } else {
-          step.classList.remove('active', 'completed');
+        <!-- Section 4: Complete -->
+        <div id="section4" class="form-section">
+            <h2>Complete Registration</h2>
+            <div>
+                <input type="checkbox" id="terms" name="terms" required>
+                <label for="terms">I agree to the Terms and Conditions</label>
+                <div id="termsError" class="error-message">You must agree to the terms</div>
+            </div>
+            <button type="button" onclick="prevSection()">Back</button>
+            <button type="submit">Submit</button>
+        </div>
+    </form>
+
+    <!-- Firebase SDK and App Script -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBSMvHpZ0_VkqWjJ94UMa6vqEhFiqrsIWM",
+            authDomain: "rare-5f47e.firebaseapp.com",
+            databaseURL: "https://rare-5f47e-default-rtdb.firebaseio.com",
+            projectId: "rare-5f47e",
+            storageBucket: "rare-5f47e.appspot.com",
+            messagingSenderId: "811727087812",
+            appId: "1:811727087812:web:d362e68abf6c26acf24191",
+            measurementId: "G-DE59771G7Q"
+        };
+
+        // Initialize Firebase
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
         }
-      }
-    }
-    
-    // School search functionality
-    function setupSchoolSearch() {
-      const schoolInput = document.getElementById('school');
-      const resultsContainer = document.getElementById('schoolResults');
-      
-      schoolInput.addEventListener('input', function() {
-        const query = this.value.toLowerCase();
+        const auth = firebase.auth();
+        const database = firebase.database();
+        const storage = firebase.storage();
+
+        // Current section tracking
+        let currentSection = 1;
         
-        if (query.length < 2) {
-          resultsContainer.style.display = 'none';
-          return;
-        }
+        // South African institutions for autocomplete
+        const schools = [
+            "University of Cape Town",
+            "University of the Witwatersrand",
+            "Stellenbosch University",
+            "University of Pretoria",
+            "University of KwaZulu-Natal",
+            "University of Johannesburg",
+            "University of the Western Cape",
+            "Rhodes University",
+            "Nelson Mandela University",
+            "University of the Free State",
+            "Tshwane University of Technology",
+            "Cape Peninsula University of Technology",
+            "Durban University of Technology",
+            "Vaal University of Technology",
+            "Mangosuthu University of Technology"
+        ];
         
-        const matches = schools.filter(school => 
-          school.toLowerCase().includes(query)).slice(0, 5);
-        
-        if (matches.length > 0) {
-          resultsContainer.innerHTML = matches.map(school => 
-            `<div class="school-result" onclick="selectSchool('${school}')">${school}</div>`
-          ).join('');
-          resultsContainer.style.display = 'block';
-        } else {
-          resultsContainer.style.display = 'none';
-        }
-      });
-      
-      document.addEventListener('click', function(e) {
-        if (e.target !== schoolInput) {
-          resultsContainer.style.display = 'none';
-        }
-      });
-    }
-    
-    function selectSchool(school) {
-      document.getElementById('school').value = school;
-      document.getElementById('schoolResults').style.display = 'none';
-      document.getElementById('schoolError').style.display = 'none';
-    }
-    
-    // Form validation
-    function validateCurrentSection() {
-      let isValid = true;
-      document.querySelectorAll('.error-message').forEach(error => {
-        error.style.display = 'none';
-      });
-      
-      if (currentSection === 1) {
-        const firstName = document.getElementById('firstName').value.trim();
-        const lastName = document.getElementById('lastName').value.trim();
-        const email = document.getElementById('email').value.trim();
-        const password = document.getElementById('password').value;
-        const confirmPassword = document.getElementById('confirmPassword').value;
-        const birthday = document.getElementById('birthday').value;
-        const gender = document.querySelector('input[name="gender"]:checked');
-        
-        if (!firstName) {
-          document.getElementById('firstNameError').style.display = 'block';
-          isValid = false;
-        }
-        if (!lastName) {
-          document.getElementById('lastNameError').style.display = 'block';
-          isValid = false;
-        }
-        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-          document.getElementById('emailError').style.display = 'block';
-          isValid = false;
-        }
-        if (!password || password.length < 8) {
-          document.getElementById('passwordError').style.display = 'block';
-          isValid = false;
-        }
-        if (password !== confirmPassword) {
-          document.getElementById('confirmPasswordError').style.display = 'block';
-          isValid = false;
-        }
-        if (!birthday) {
-          document.getElementById('birthdayError').style.display = 'block';
-          isValid = false;
-        }
-        if (!gender) {
-          document.getElementById('genderError').style.display = 'block';
-          isValid = false;
-        }
-      } else if (currentSection === 2) {
-        const educationLevel = document.getElementById('educationLevel').value;
-        const school = document.getElementById('school').value.trim();
-        
-        if (!educationLevel) {
-          document.getElementById('educationLevelError').style.display = 'block';
-          isValid = false;
-        }
-        if (!school) {
-          document.getElementById('schoolError').style.display = 'block';
-          isValid = false;
-        }
-      } else if (currentSection === 3) {
-        const country = document.getElementById('country').value;
-        const province = document.getElementById('province').value;
-        const city = document.getElementById('city').value.trim();
-        
-        if (!country) {
-          document.getElementById('countryError').style.display = 'block';
-          isValid = false;
-        }
-        if (!province) {
-          document.getElementById('provinceError').style.display = 'block';
-          isValid = false;
-        }
-        if (!city) {
-          document.getElementById('cityError').style.display = 'block';
-          isValid = false;
-        }
-      } else if (currentSection === 4) {
-        const terms = document.querySelector('input[name="terms"]').checked;
-        
-        if (!terms) {
-          document.getElementById('termsError').style.display = 'block';
-          isValid = false;
-        }
-      }
-      
-      return isValid;
-    }
-    
-    // Firebase signup handler
-    function handleSignup(e) {
-      e.preventDefault();
-      
-      if (!validateCurrentSection()) return;
-      
-      const email = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value;
-      const firstName = document.getElementById('firstName').value.trim();
-      const lastName = document.getElementById('lastName').value.trim();
-      const birthday = document.getElementById('birthday').value;
-      const gender = document.querySelector('input[name="gender"]:checked').value;
-      const educationLevel = document.getElementById('educationLevel').value;
-      const school = document.getElementById('school').value.trim();
-      const major = document.getElementById('major').value.trim();
-      const graduationYear = document.getElementById('graduationYear').value;
-      const country = document.getElementById('country').value;
-      const province = document.getElementById('province').value;
-      const city = document.getElementById('city').value.trim();
-      const interests = Array.from(document.getElementById('interests').selectedOptions).map(option => option.value);
-      const bio = document.getElementById('bio').value.trim();
-      const profilePicture = document.getElementById('profilePicture').files[0];
-      
-      auth.createUserWithEmailAndPassword(email, password)
-        .then(userCredential => {
-          const user = userCredential.user;
-          
-          // Upload profile picture to Firebase Storage (if provided)
-          let profilePictureUrl = '';
-          if (profilePicture) {
-            const storageRef = storage.ref(`profile_pictures/${user.uid}`);
-            return storageRef.put(profilePicture)
-              .then(() => storageRef.getDownloadURL())
-              .then(url => {
-                profilePictureUrl = url;
-                // Store user data in Firestore
-                return db.collection('users').doc(user.uid).set({
-                  firstName,
-                  lastName,
-                  email,
-                  birthday,
-                  gender,
-                  educationLevel,
-                  school,
-                  major: major || null,
-                  graduationYear: graduationYear || null,
-                  country,
-                  province,
-                  city,
-                  interests: interests.length > 0 ? interests : null,
-                  bio: bio || null,
-                  profilePicture: profilePictureUrl || null,
-                  createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-              });
-          } else {
-            // Store user data in Firestore without profile picture
-            return db.collection('users').doc(user.uid).set({
-              firstName,
-              lastName,
-              email,
-              birthday,
-              gender,
-              educationLevel,
-              school,
-              major: major || null,
-              graduationYear: graduationYear || null,
-              country,
-              province,
-              city,
-              interests: interests.length > 0 ? interests : null,
-              bio: bio || null,
-              profilePicture: null,
-              createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            });
-          }
-        })
-        .then(() => {
-          alert('Account created successfully!');
-          window.location.href = 'https://undefined-flare.github.io/BF/bluefault'; // Redirect to dashboard
-        })
-        .catch(error => {
-          console.error('Error during signup:', error);
-          const errorMessage = document.createElement('div');
-          errorMessage.className = 'error-message';
-          errorMessage.style.display = 'block';
-          errorMessage.textContent = error.message || 'An error occurred during signup.';
-          document.getElementById('signupForm').prepend(errorMessage);
+        // Initialize the form
+        document.addEventListener('DOMContentLoaded', function() {
+            updateProgressBar();
+            setupSchoolSearch();
+            document.getElementById('signupForm').addEventListener('submit', handleSignup);
         });
-    }
-  </script>
+        
+        // Form navigation functions
+        function nextSection(sectionNumber) {
+            if (validateCurrentSection()) {
+                showSection(sectionNumber);
+            }
+        }
+        
+        function prevSection() {
+            showSection(currentSection - 1);
+        }
+        
+        function showSection(sectionNumber) {
+            document.querySelectorAll('.form-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(`section${sectionNumber}`).classList.add('active');
+            currentSection = sectionNumber;
+            updateProgressBar();
+        }
+        
+        function updateProgressBar() {
+            for (let i = 1; i <= 4; i++) {
+                const step = document.getElementById(`step${i}`);
+                if (i < currentSection) {
+                    step.classList.remove('active');
+                    step.classList.add('completed');
+                } else if (i === currentSection) {
+                    step.classList.add('active');
+                    step.classList.remove('completed');
+                } else {
+                    step.classList.remove('active', 'completed');
+                }
+            }
+        }
+        
+        // School search functionality
+        function setupSchoolSearch() {
+            const schoolInput = document.getElementById('school');
+            const resultsContainer = document.getElementById('schoolResults');
+            
+            schoolInput.addEventListener('input', function() {
+                const query = this.value.toLowerCase();
+                
+                if (query.length < 2) {
+                    resultsContainer.style.display = 'none';
+                    return;
+                }
+                
+                const matches = schools.filter(school => 
+                    school.toLowerCase().includes(query)).slice(0, 5);
+                
+                if (matches.length > 0) {
+                    resultsContainer.innerHTML = matches.map(school => 
+                        `<div class="school-result" onclick="selectSchool('${school}')">${school}</div>`
+                    ).join('');
+                    resultsContainer.style.display = 'block';
+                } else {
+                    resultsContainer.style.display = 'none';
+                }
+            });
+            
+            document.addEventListener('click', function(e) {
+                if (e.target !== schoolInput) {
+                    resultsContainer.style.display = 'none';
+                }
+            });
+        }
+        
+        function selectSchool(school) {
+            document.getElementById('school').value = school;
+            document.getElementById('schoolResults').style.display = 'none';
+            document.getElementById('schoolError').style.display = 'none';
+        }
+        
+        // Form validation
+        function validateCurrentSection() {
+            let isValid = true;
+            document.querySelectorAll('.error-message').forEach(error => {
+                error.style.display = 'none';
+            });
+            
+            if (currentSection === 1) {
+                const firstName = document.getElementById('firstName').value.trim();
+                const lastName = document.getElementById('lastName').value.trim();
+                const email = document.getElementById('email').value.trim();
+                const password = document.getElementById('password').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+                const birthday = document.getElementById('birthday').value;
+                const gender = document.querySelector('input[name="gender"]:checked');
+                
+                if (!firstName) {
+                    document.getElementById('firstNameError').style.display = 'block';
+                    isValid = false;
+                }
+                if (!lastName) {
+                    document.getElementById('lastNameError').style.display = 'block';
+                    isValid = false;
+                }
+                if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                    document.getElementById('emailError').style.display = 'block';
+                    isValid = false;
+                }
+                if (!password || password.length < 8) {
+                    document.getElementById('passwordError').style.display = 'block';
+                    isValid = false;
+                }
+                if (password !== confirmPassword) {
+                    document.getElementById('confirmPasswordError').style.display = 'block';
+                    isValid = false;
+                }
+                if (!birthday) {
+                    document.getElementById('birthdayError').style.display = 'block';
+                    isValid = false;
+                }
+                if (!gender) {
+                    document.getElementById('genderError').style.display = 'block';
+                    isValid = false;
+                }
+            } else if (currentSection === 2) {
+                const educationLevel = document.getElementById('educationLevel').value;
+                const school = document.getElementById('school').value.trim();
+                
+                if (!educationLevel) {
+                    document.getElementById('educationLevelError').style.display = 'block';
+                    isValid = false;
+                }
+                if (!school) {
+                    document.getElementById('schoolError').style.display = 'block';
+                    isValid = false;
+                }
+            } else if (currentSection === 3) {
+                const country = document.getElementById('country').value;
+                const province = document.getElementById('province').value;
+                const city = document.getElementById('city').value.trim();
+                
+                if (!country) {
+                    document.getElementById('countryError').style.display = 'block';
+                    isValid = false;
+                }
+                if (!province) {
+                    document.getElementById('provinceError').style.display = 'block';
+                    isValid = false;
+                }
+                if (!city) {
+                    document.getElementById('cityError').style.display = 'block';
+                    isValid = false;
+                }
+            } else if (currentSection === 4) {
+                const terms = document.getElementById('terms').checked;
+                
+                if (!terms) {
+                    document.getElementById('termsError').style.display = 'block';
+                    isValid = false;
+                }
+            }
+            
+            return isValid;
+        }
+        
+        // Firebase signup handler
+        function handleSignup(e) {
+            e.preventDefault();
+            
+            if (!validateCurrentSection()) return;
+            
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const firstName = document.getElementById('firstName').value.trim();
+            const lastName = document.getElementById('lastName').value.trim();
+            const birthday = document.getElementById('birthday').value;
+            const gender = document.querySelector('input[name="gender"]:checked').value;
+            const educationLevel = document.getElementById('educationLevel').value;
+            const school = document.getElementById('school').value.trim();
+            const major = document.getElementById('major').value.trim();
+            const graduationYear = document.getElementById('graduationYear').value;
+            const country = document.getElementById('country').value;
+            const province = document.getElementById('province').value;
+            const city = document.getElementById('city').value.trim();
+            const interests = Array.from(document.getElementById('interests').selectedOptions).map(option => option.value);
+            const bio = document.getElementById('bio').value.trim();
+            const profilePicture = document.getElementById('profilePicture').files[0];
+            
+            auth.createUserWithEmailAndPassword(email, password)
+                .then(userCredential => {
+                    const user = userCredential.user;
+                    
+                    // Upload profile picture to Firebase Storage (if provided)
+                    let profilePictureUrl = '';
+                    if (profilePicture) {
+                        const storageRef = storage.ref(`profile_pictures/${user.uid}`);
+                        return storageRef.put(profilePicture)
+                            .then(() => storageRef.getDownloadURL())
+                            .then(url => {
+                                profilePictureUrl = url;
+                                // Store user data in Realtime Database
+                                return database.ref('users/' + user.uid).set({
+                                    firstName,
+                                    lastName,
+                                    email,
+                                    birthday,
+                                    gender,
+                                    educationLevel,
+                                    school,
+                                    major: major || null,
+                                    graduationYear: graduationYear || null,
+                                    country,
+                                    province,
+                                    city,
+                                    interests: interests.length > 0 ? interests : null,
+                                    bio: bio || null,
+                                    profilePicture: profilePictureUrl || null,
+                                    createdAt: firebase.database.ServerValue.TIMESTAMP
+                                });
+                            });
+                    } else {
+                        // Store user data in Realtime Database without profile picture
+                        return database.ref('users/' + user.uid).set({
+                            firstName,
+                            lastName,
+                            email,
+                            birthday,
+                            gender,
+                            educationLevel,
+                            school,
+                            major: major || null,
+                            graduationYear: graduationYear || null,
+                            country,
+                            province,
+                            city,
+                            interests: interests.length > 0 ? interests : null,
+                            bio: bio || null,
+                            profilePicture: null,
+                            createdAt: firebase.database.ServerValue.TIMESTAMP
+                        });
+                    }
+                })
+                .then(() => {
+                    alert('Account created successfully!');
+                    window.location.href = 'https://undefined-flare.github.io/BF/bluefault'; // Redirect to dashboard
+                })
+                .catch(error => {
+                    console.error('Error during signup:', error);
+                    const errorMessage = document.createElement('div');
+                    errorMessage.className = 'error-message';
+                    errorMessage.style.display = 'block';
+                    errorMessage.textContent = error.message || 'An error occurred during signup.';
+                    document.getElementById('signupForm').prepend(errorMessage);
+                });
+        }
+    </script>
 </body>
 </html>
