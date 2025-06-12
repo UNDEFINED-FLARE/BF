@@ -1724,11 +1724,11 @@ footer {
     <!-- Main Content -->
                      <div class="posts" id="publicPost">
 
-                       <div class="fb-loading-dots">
-                         <div class="dot dot-1"></div>
-                         <div class="dot dot-2"></div>
-                         <div class="dot dot-3"></div>
-                       </div>
+      <div class="empty-state academic">
+        <i class="fas fa-spinner fa-pulse"></i>
+        <h3>Loading Feed</h3>
+        <p>please wait...</p>
+      </div>
   </div>
 
 
@@ -1788,7 +1788,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Auth state listener
   onAuthStateChanged(auth, (user) => {
     if (!user) {
-      alert("Please sign in: You will be redirected to the sign-in page");
+     // alert("Please sign in: You will be redirected to the sign-in page");
       window.location.href = "https://undefined-flare.github.io/BF/blue flare sign in.html";
     } else {
       if (profilePicture) profilePicture.src = user.photoURL || "https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/depositphotos_50462921-stock-photo-3d-icon.jpg?alt=media&token=f4c459c9-1b47-4c58-96d8-4a5de54bd3dc";
@@ -2142,8 +2142,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Auth state listener
   onAuthStateChanged(auth, (user) => {
     if (!user) {
-      alert("You must be signed in to use this platform.");
-      window.location.href = "sign-in.html";
+      console.log('not signed in')
     } else {
       if (profilePicture) profilePicture.src = user.photoURL || "https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/depositphotos_50462921-stock-photo-3d-icon.jpg?alt=media&token=f4c459c9-1b47-4c58-96d8-4a5de54bd3dc";
       if (userInfo) userInfo.innerText = user.displayName || "Anonymous";
@@ -2708,7 +2707,7 @@ function sendMessageToGroup(groupId, text) {
         loadPolls();
       } else {
         // No user signed in
-        window.location.href = 'login.html'; // Redirect to login page
+        console.log('login.html';) // Redirect to login page
       }
     });
 
@@ -3404,8 +3403,9 @@ gap: 16px;">
   document.addEventListener("DOMContentLoaded", () => {
     // Auth state listener
     onAuthStateChanged(auth, (user) => {
+      //real one
       if (!user) {
-        alert("You must be signed in to use this platform.");
+      //  alert("You must be signed in to use this platform.");
         window.location.href = "https://undefined-flare.github.io/BF/blue flare sign in.html";
       } else {
         if (profilePicture) profilePicture.src = user.photoURL || "default-avatar.png";
