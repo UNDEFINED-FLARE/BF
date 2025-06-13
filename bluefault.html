@@ -30,13 +30,18 @@
 
     }
     .schoolProfile{
-            margin-top: 5px;
-      margin-left: 2%;
-      width: 55px;
-      height: 55px;
-      border-radius: 0;
-      border: 2px solid #fff;
-      border: none;
+            display: flex;
+      flex-direction: column;
+      align-items: center;
+      align-self: ;
+  
+      margin-left: 5%;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      
+      border: 2px solid #FF7070;
+    
 
     }
 
@@ -847,14 +852,7 @@ z-index: 100;
 }
 
 /* Profile Section */
-.schoolProfile {
-margin-left: 7%;
-width: 50px;
-height: 50px;
 
-
-
-}
 
 /* Search Bar */
 .searchDiv {
@@ -1633,9 +1631,18 @@ footer {
           transform: scale(1.1);
           border-color: var(--accent);
         }
+        .engageP{
+
+  color: #3A3A3A;
+  font-weight: 600;
+  font-size: 0.9em;
+  letter-spacing: 0.5px;
+  
+}
+        
     </style>
     
-</style>
+
 
 </head>
 <body>
@@ -1649,10 +1656,10 @@ footer {
             <div class="hdrPage">
   
   
-  <img src="https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/depositphotos_50462921-stock-photo-3d-icon.jpg?alt=media&token=f4c459c9-1b47-4c58-96d8-4a5de54bd3dc" alt="" class="schoolProfile" style="float:left;"/>
+  <img src="https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/depositphotos_50462921-stock-photo-3d-icon.jpg?alt=media&token=f4c459c9-1b47-4c58-96d8-4a5de54bd3dc" alt="" class="schoolProfile" style="float:left;border:none;width:55px;height:55px;"/>
   <br>
 <p class="logo" style="color:RGB(100, 149, 237);">
-  Blue Flare
+  blueflare
   
 </p>
 
@@ -1690,7 +1697,22 @@ footer {
     </div>
 
 
-
+  <header style="display:none;">
+    <h1>All Users</h1>
+    <div id="user-info-container">
+      <img id="profilePicture" src="" alt="Profile Picture">
+      <span id="user-info">Loading...</span>
+      <button id="signOutBtn">Sign Out</button>
+    </div>
+  </header>
+  <main >
+    <p class="engageP" style="float:left;"><i class="fas fa-fire" style="color:red;"></i>Engaging Users</p>
+    <div id="users-container" class="users-container">
+      <!-- User cards will be injected here -->
+      <p id="loading" style="display: block;"></p>
+      <p id="error" style="display: none; color: red;"></p>
+    </div>
+  </main>
 
 
 
@@ -1766,7 +1788,7 @@ const storage = getStorage(app);
 // DOM elements with null checks
 const newsForm = document.getElementById("newsForm");
 const newsContainer = document.querySelector(".news-container");
-const profilePicture = document.getElementById("profilePicture");
+//const profilePicture = document.getElementById("profilePicture");
 const userInfo = document.getElementById("user-info");
 const newsFormContainer = document.getElementById("newsFormContainer");
 
@@ -2403,6 +2425,27 @@ function sendMessageToGroup(groupId, text) {
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <style>
+    main {
+    
+      border-bottom: 0.8px solid lightgray;
+      padding: 0 16px;
+      display:flex;
+      text-align:center ;
+       
+    }
+    
+    .users-container {
+      display: flex;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 16px;
+    }
+    .truncate {
+      font-size: 9px;
+  white-space: nowrap;      /* Prevents text from wrapping */
+  overflow: hidden;         /* Hides overflow */
+  text-overflow: ellipsis;  /* Adds '...' at the end */
+  max-width: 40px;         /* Optional: limits width */
+}
   .academic-theme {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: #333;
@@ -2707,7 +2750,7 @@ function sendMessageToGroup(groupId, text) {
         loadPolls();
       } else {
         // No user signed in
-        console.log('login.html';) // Redirect to login page
+        console.log('login.html') // Redirect to login page
       }
     });
 
@@ -3386,7 +3429,7 @@ gap: 16px;">
   const noticesContainer = document.getElementById("noticesContainer");
   const videoPostsContainer = document.getElementById("video-posts");
   const loadingSpinner = document.getElementById("loading-spinner");
-  const profilePicture = document.getElementById("profilePicture");
+//  const profilePicture = document.getElementById("profilePicture");
   const userInfo = document.getElementById("user-info");
 
   // Category icons
@@ -5491,3 +5534,123 @@ document.addEventListener('DOMContentLoaded', function() {
   updateMediaList();
 });
 </script>
+
+  <script type="module">
+  //users script 
+    import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-database.js";
+
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyBSMvHpZ0_VkqWjJ94UMa6vqEhFiqrsIWM",
+      authDomain: "rare-5f47e.firebaseapp.com",
+      projectId: "rare-5f47e",
+      storageBucket: "rare-5f47e.appspot.com",
+      messagingSenderId: "811727087812",
+      appId: "1:811727087812:web:d362e68abf6c26acf24191",
+      measurementId: "G-DE59771G7Q"
+    };
+
+    // Initialize Firebase
+    let app;
+    if (!getApps().length) {
+      app = initializeApp(firebaseConfig);
+    } else {
+      app = getApp();
+    }
+
+    const auth = getAuth(app);
+    const database = getDatabase(app);
+
+    // DOM elements
+    const usersContainer = document.getElementById("users-container");
+    const profilePicture = document.getElementById("profilePicture");
+    const userInfo = document.getElementById("user-info");
+    const signOutBtn = document.getElementById("signOutBtn");
+    const loading = document.getElementById("loading");
+    const error = document.getElementById("error");
+
+    // Wait for DOM to load
+    document.addEventListener("DOMContentLoaded", () => {
+      // Auth state listener
+      onAuthStateChanged(auth, (user) => {
+        if (!user) {
+          alert("Please sign in to view users.");
+          window.location.href = "https://undefined-flare.github.io/BF/blue flare sign in.html";
+        } else {
+          if (profilePicture) profilePicture.src = user.photoURL || "https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/depositphotos_50462921-stock-photo-3d-icon.jpg?alt=media&token=f4c459c9-1b47-4c58-96d8-4a5de54bd3dc";
+          if (userInfo) userInfo.innerText = user.displayName || "Anonymous";
+          fetchUsers();
+        }
+      });
+      
+      // Sign out button
+      if (signOutBtn) {
+        signOutBtn.addEventListener("click", () => {
+          signOut(auth)
+            .then(() => {
+              window.location.href = "https://undefined-flare.github.io/BF/blue flare sign in.html";
+            })
+            .catch((err) => {
+              console.error("Sign out error:", err);
+              alert("Failed to sign out. Please try again.");
+            });
+        });
+      }
+    });
+
+    // Fetch and display users
+    function fetchUsers() {
+      if (!usersContainer) return;
+      const usersRef = ref(database, "users");
+      
+      onValue(usersRef, (snapshot) => {
+        usersContainer.innerHTML = ""; // Clear previous content
+        loading.style.display = "none"; // Hide loading
+        error.style.display = "none"; // Hide error
+        
+        if (!snapshot.exists()) {
+          error.style.display = "block";
+          error.innerText = "No users found.";
+          return;
+        }
+        
+        const users = [];
+        snapshot.forEach((childSnapshot) => {
+          const user = childSnapshot.val();
+          user.uid = childSnapshot.key;
+          users.push(user);
+        });
+        
+        // Sort users alphabetically by displayName
+        users.sort((a, b) => (a.displayName || "").localeCompare(b.displayName || ""));
+        
+        // Render user cards
+        users.forEach((user) => {
+          const userCard = document.createElement("div");
+          userCard.className = "user-card";
+                    const userName = user.userName || 'Unknown User';
+          const userPic = user.userProfilePic || 'https://via.placeholder.com/50';
+    //      const postDate = post.timestamp ? formatDate(post.timestamp) : 'Just now';
+          const userCity = user.userCity || 'Unknown City';
+          const userProvince = user.userProvince || 'Unknown Province';
+          const userSchool = user.userSchool || 'Unknown School';
+          
+          userCard.innerHTML = `
+                      <a href="bluesite02.html?uid=${user.uid}" aria-label="View profile">
+            <img src="${user.profilePicture||  'https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/depositphotos_50462921-stock-photo-3d-icon.jpg?alt=media&token=f4c459c9-1b47-4c58-96d8-4a5de54bd3dc'}" alt="${user.displayName || 'User'}" class="schoolProfile">
+          </a>
+            <p class="truncate">@${user.email || "No email provided"}</p>
+
+          `;
+          usersContainer.appendChild(userCard);
+        });
+      }, (err) => {
+        console.error("Error fetching users:", err);
+        loading.style.display = "none";
+        error.style.display = "block";
+        error.innerText = "Failed to load users. Please try again.";
+      });
+    } 
+  </script>
