@@ -3807,11 +3807,11 @@ function showToast(message) {
               <p class="name">${post.userName|| "Anonymous"}</p>
               <p class="email"><i class="fas fa-location-dot"></i>${post.userProvince}•${formatTime(post.timestamp)} •  <i class="fas fa-globe"></i>
               </p>
+              
               <br>
               <p class="icon-crd"style="float:left;font-size:12px;" window.open('https://www.google.com/search?q=' + encodeURIComponent(this.textContent.trim()), '_blank')>@${post.userSchool}</p>
             </div>
-                                                 <button class="comment-toggle-button" style="font-size:17px;color:blue;">
-                                                   <i class="fas fa-grid-2"></i> </button>
+
           </header>
           <br>
             <p >${post.content || ""}</p>
@@ -3898,21 +3898,28 @@ muted loop></video>` :
       postsContainer.innerHTML = "<p>Error loading posts.</p>";
     });
   }
-
   // New function to open post in fullscreen
   function openPostInFullscreen(post) {
-    const categoryIcon = categoryIcons[post.category] || "";
+    const user = auth.currentUser
 
+    const categoryIcon = categoryIcons[post.category] || "";
+          const userName = post.userName || 'Unknown User';
+          const userPic = post.userProfilePic || 'https://via.placeholder.com/50';
+          const postDate = post.timestamp ? formatDate(post.timestamp) : 'Just now';
+          const postCity =user.userCity || 'Unknown City';
+          const postProvince = post.userProvince || 'Unknown Province';
+          const postSchool = post.userSchool || 'Unknown School';
+          
     fullscreenPostContainer.innerHTML = `
       ${closeFullscreenBtn.outerHTML}
       <div class="post" data-id="${post.id}" style="margin:0;padding:0;width:100%;height:100%;">
         <header>
           <img class="profile-pic" alt="Profile picture" height="40" width="40" 
-               src="${post.authorPhoto || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"}" />
+               src="${post.userProfilePic || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"}" />
           <div class="header-text">
-            <p class="name">${post.author || "Anonymous"}</p>
-            <p class="email">${post.author || "Anonymous"}</p>
-            <p class="time">${formatTime(post.timestamp)} • <i class="fas fa-globe"></i></p>
+            <p class="name">${post.userName || "Anonymous"}</p>
+              <p class="email"><i class="fas fa-location-dot"></i>${post.userProvince}•${formatTime(post.timestamp)} • <i class="fas fa-globe"></i>
+              </p>
           </div>
           <span class="category-tag ${post.category ? post.category.toLowerCase() : "uncategorized"}">
             <i class="${categoryIcon}" aria-hidden="true"></i>
@@ -3972,10 +3979,10 @@ muted loop></video>` :
                                 .sort((a, b) => a[1].timestamp - b[1].timestamp)
                                 .map(([id, comment]) => `
                                     <div class="comment">
-                                        <img src="${comment.profilePicture || "default-avatar.png"}" 
+                                        <img src="${comment.comprofilePicture || "default-avatar.png"}" 
                                             class="comment-avatar">
                                         <div class="comment-content">
-                                            <div class="comment-author">${comment.author}</div>
+                                            <div class="comment-author">${comment.commentName|| "Anonymous"}</div>
                                             <div class="comment-text">${comment.text}</div>
                                             <div class="comment-actions">
                                                 <span class="comment-time">${formatTime(comment.timestamp)}</span>
@@ -5570,6 +5577,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const signOutBtn = document.getElementById("signOutBtn");
     const loading = document.getElementById("loading");
     const error = document.getElementById("error");
+    const user = auth.currentUser ;
+
 
     // Wait for DOM to load
     document.addEventListener("DOMContentLoaded", () => {
@@ -5579,7 +5588,8 @@ document.addEventListener('DOMContentLoaded', function() {
           alert("Please sign in to view users.");
           window.location.href = "https://undefined-flare.github.io/BF/blue flare sign in.html";
         } else {
-          if (profilePicture) profilePicture.src = user.photoURL || "https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/depositphotos_50462921-stock-photo-3d-icon.jpg?alt=media&token=f4c459c9-1b47-4c58-96d8-4a5de54bd3dc";
+                   const userPic = user.userProfilePic ;
+          if (profilePicture) profilePicture.src = userPic || "https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/depositphotos_50462921-stock-photo-3d-icon.jpg?alt=media&token=f4c459c9-1b47-4c58-96d8-4a5de54bd3dc";
           if (userInfo) userInfo.innerText = user.displayName || "Anonymous";
           fetchUsers();
         }
@@ -5592,10 +5602,7 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(() => {
               window.location.href = "https://undefined-flare.github.io/BF/blue flare sign in.html";
             })
-            .catch((err) => {
-              console.error("Sign out error:", err);
-              alert("Failed to sign out. Please try again.");
-            });
+
         });
       }
     });
@@ -5638,10 +5645,10 @@ document.addEventListener('DOMContentLoaded', function() {
           const userSchool = user.userSchool || 'Unknown School';
           
           userCard.innerHTML = `
-                      <a href="bluesite02.html?uid=${user.uid}" aria-label="View profile">
+                      <a href="https://undefined-flare.github.io/BF/tester.html?uid=${user.uid}" aria-label="View profile">
             <img src="${user.profilePicture||  'https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/depositphotos_50462921-stock-photo-3d-icon.jpg?alt=media&token=f4c459c9-1b47-4c58-96d8-4a5de54bd3dc'}" alt="${user.displayName || 'User'}" class="schoolProfile">
           </a>
-            <p class="truncate">@${user.email || "No email provided"}</p>
+            <p class="truncate">@${user.firstName || "No email provided"} ${user.lastName || "No email provided"}</p>
 
           `;
           usersContainer.appendChild(userCard);
