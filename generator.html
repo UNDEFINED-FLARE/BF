@@ -1,0 +1,1972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <link rel="icon" 
+      href="https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/android-chrome-512x512.png?alt=media&token=1d185228-95d4-49d6-a7a3-13cc629540ca" 
+      type="image/png"
+    >
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>BlueSite.Number Generator </title>
+    <!-- Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Roboto+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+    
+:root {
+  /* Core Colors - Vibrant yet balanced */
+  --primary: #00e1ff;        /* Electric cyan (from original #00a2ff) */
+  --primary-hover: #00b8ff;   /* Deeper cyan for interactions */
+  --primary-transparent: rgba(0, 225, 255, 0.15);
+  
+  --secondary: #6a00ff;      /* Deep purple (from original #0066ff) */
+  --secondary-hover: #5a00d4;
+  
+  --accent: #00ff9d;         /* Neon aqua green (from original #15cc15) */
+  --accent-hover: #00e08a;
+  
+  /* Modern Dark Theme - Rich gradients */
+  --dark: #0f0f1f;          /* Deep space blue (from #0a0a1a) */
+  --darker: #070714;         /* Near-black with blue undertone */
+  --darkest: #020208;        /* True black for accents */
+  
+  /* Light/Neutral Colors - Futuristic */
+  --light: #5a5d7a;         /* Cool gray-purple (from #42445a) */
+  --lighter: #7d82a3;
+  --lightest: #b4b8d9;
+  
+  /* Glass Morphism Effects */
+  --glass: rgba(255, 255, 255, 0.08);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-highlight: rgba(255, 255, 255, 0.2);
+  
+  /* Special Effects */
+  --glow: 0 0 15px rgba(0, 225, 255, 0.7);
+  --glow-accent: 0 0 15px rgba(0, 255, 157, 0.7);
+  
+  /* Gradient Presets */
+  --gradient-primary: linear-gradient(135deg, var(--primary), var(--secondary));
+  --gradient-accent: linear-gradient(135deg, var(--accent), #00d4ff);
+  --gradient-dark: linear-gradient(to bottom right, var(--darker), var(--dark));
+  
+  /* Status Colors */
+  --success: #00ff88;
+  --warning: #ffcc00;
+  --error: #ff3366;
+  --info: #00ddff;
+  
+  /* Modern Utility Colors */
+  --selection: rgba(0, 225, 255, 0.3);  /* Text selection color */
+  --focus-ring: 0 0 0 3px rgba(0, 225, 255, 0.5); /* Accessibility */
+}
+*{
+  margin:0;
+  padding:0;
+}
+        
+        body {
+            font-family: 'Roboto Mono', monospace;
+            background-color: var(--darker);
+            color: #e0e0e0;
+        }
+        
+        .logo-text {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 10px rgba(0, 150, 255, 0.3);
+            letter-spacing: 2px;
+        }
+        
+        .schoolProfile {
+            margin-top: 5px;
+            margin-left: 2%;
+            width: 55px;
+            height: 55px;
+            border-radius: 0;
+            border: none;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .blink {
+            animation: blink 1s step-end infinite;
+        }
+        
+        .auto-btn-active {
+            background-color: #ff5555 !important;
+        }
+        
+        .history-item {
+            transition: all 0.3s ease;
+        }
+        
+        .history-item:hover {
+            transform: translateX(5px);
+            background-color: rgba(21, 204, 21, 0.1);
+        }
+        
+        .page {
+            display: none;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        .history-container {
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+        
+        .probability-badge {
+            font-size: 0.7rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 9999px;
+            background-color: rgba(0, 162, 255, 0.2);
+            color: var(--primary);
+        }
+        
+        .number-ball {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            font-weight: bold;
+            margin: 0.2rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+        
+        .stat-card {
+            background: rgba(10, 10, 26, 0.7);
+            border: 1px solid rgba(66, 68, 90, 0.3);
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            border-color: var(--primary);
+        }
+        
+        .tab-button {
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+        
+        .tab-button.active {
+            border-bottom-color: var(--accent);
+            color: var(--accent);
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--darker);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--light);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
+        
+        /* Animation for generated numbers */
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            80% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .pop-in {
+            animation: popIn 0.3s ease-out forwards;
+        }
+.green-gradient-button {
+  /* Gradient background */
+  background-image: linear-gradient(to right, #10b981, #059669);
+  
+  /* Text styling */
+  color: white;
+  font-weight: bold;
+  
+  /* Spacing */
+  padding: 0.25rem 1.5rem; /* py-1 (0.25rem) px-6 (1.5rem) */
+  
+  /* Sizing & Overflow Prevention */
+  width: fit-content; /* Prevents overflow by shrinking to content width */
+  max-width: 100%; /* Ensures it doesn't exceed parent's width */
+  box-sizing: border-box; /* Includes padding in width calculation */
+  
+  /* Border & shadow */
+  border-radius: 0.5rem; /* rounded-lg */
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-lg */
+  
+  /* Flex & alignment */
+  display: flex;
+  align-items: center;
+  
+  /* Transition */
+  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Hover effect */
+.green-gradient-button:hover {
+  background-image: linear-gradient(to right, #059669, #047857);
+}
+
+/* Hover effect */
+.green-gradient-button:hover {
+  background-image: linear-gradient(to right, #059669, #047857);
+}
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+    <header class="bg-black py-4 px-6 border-b border-gray-800 flex items-center cursor-pointer" onclick="showPage('generator')">
+        <img src="https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/blue-blueflame.gif?alt=media&token=ce3af04b-9a8d-4695-9e39-7a919fe4f9a8" alt="" class="schoolProfile">
+        <div class="logo-text text-xl">BLUE FLARE blueSite 02</div>
+    </header>
+
+    <main class="flex-grow container mx-auto px-4 py-8">
+        <!-- Generator Page -->
+        <div id="generatorPage" class="page active">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Left column - Generator -->
+                <div class="lg:col-span-2">
+                    <div class="bg-gray-900 p-6 rounded-xl shadow-2xl border border-gray-800 mb-8">
+                        <div class="flex justify-between items-center mb-6">
+
+                      <div class="flex space-x-3">
+                                <button id="autoGenerateBtn" class="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-lg font-bold transition-all flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
+                                    </svg>
+                                    AUTO
+                                </button>
+                                <button id="generateBtn" class="green-gradient-button">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" />
+                                    </svg>
+                                    
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div id="result" class="bg-gray-950 p-6 rounded-xl border border-gray-800 text-3xl text-center font-bold tracking-wider min-h-24 flex flex-wrap justify-center items-center">
+                            <div class="text-gray-600">Click GENERATE to create numbers</div>
+                        </div>
+                        
+                        <!-- Stats Section -->
+                        <div id="statsSection" class="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4 hidden">
+                            <div class="stat-card p-4">
+                                <div class="text-sm text-gray-400">Combinations</div>
+                                <div id="totalCombinations" class="text-xl font-bold">0</div>
+                            </div>
+                            <div class="stat-card p-4">
+                                <div class="text-sm text-gray-400">Probability</div>
+                                <div id="winProbability" class="text-xl font-bold">0</div>
+                            </div>
+                            <div class="stat-card p-4">
+                                <div class="text-sm text-gray-400">Odds</div>
+                                <div id="winOdds" class="text-xl font-bold">1 in 0</div>
+                            </div>
+                            <div class="stat-card p-4">
+                                <div class="text-sm text-gray-400">Last Generated</div>
+                                <div id="lastGenerated" class="text-sm">Never</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Configuration -->
+                    <div class="bg-gray-900 p-6 rounded-xl shadow-2xl border border-gray-800">
+                        <h2 class="text-2xl font-bold text-gradient bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent mb-6">
+                            Configuration
+                        </h2>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <label for="numbersCount" class="block mb-2 text-gray-300">Numbers to pick</label>
+                                <input type="number" id="numbersCount" min="1" max="20" value="6" 
+                                       class="w-full bg-gray-950 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+                            </div>
+                            <div>
+                                <label for="maxNumber" class="block mb-2 text-gray-300">Max number</label>
+                                <input type="number" id="maxNumber" min="1" max="1000" value="49" 
+                                       class="w-full bg-gray-950 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+                            </div>
+                            <div>
+                                <label for="minNumber" class="block mb-2 text-gray-300">Min number</label>
+                                <input type="number" id="minNumber" min="1" max="1000" value="1" 
+                                       class="w-full bg-gray-950 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+                            </div>
+                            <div>
+                                <label for="allowDuplicates" class="flex items-center mb-2 text-gray-300 cursor-pointer">
+                                    <input type="checkbox" id="allowDuplicates" class="mr-2 h-5 w-5 text-blue-600 rounded focus:ring-blue-500">
+                                    Allow duplicate numbers
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="flex space-x-4">
+                            <button id="saveBtn" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-bold transition-all flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M7.707 10.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V6h5a2 2 0 012 2v7a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2h5v5.586l-1.293-1.293zM9 4a1 1 0 012 0v2H9V4z" />
+                                </svg>
+                                SAVE SETTINGS
+                            </button>
+                            <button id="resetBtn" class="flex-1 bg-gray-700 hover:bg-gray-600 text-white px-6 py-3 rounded-lg font-bold transition-all flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" />
+                                </svg>
+                                RESET
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Quick Actions -->
+                    <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <button id="viewHistoryBtn" class="bg-gray-900 hover:bg-gray-800 border border-gray-700 text-white px-6 py-3 rounded-lg font-bold transition-all flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 2a8 8 0 100 16 8 8 0 000-16zm0 14a6 6 0 110-12 6 6 0 010 12z" clip-rule="evenodd" />
+                                <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h2a1 1 0 110 2h-3a1 1 0 01-1-1V6a1 1 0 011-1z" clip-rule="evenodd" />
+                            </svg>
+                            HISTORY
+                        </button>
+                        <button id="viewStatsBtn" class="bg-gray-900 hover:bg-gray-800 border border-gray-700 text-white px-6 py-3 rounded-lg font-bold transition-all flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
+                            </svg>
+                            STATISTICS
+                        </button>
+                        <button id="viewFavoritesBtn" class="bg-gray-900 hover:bg-gray-800 border border-gray-700 text-white px-6 py-3 rounded-lg font-bold transition-all flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" />
+                            </svg>
+                            FAVORITES
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Right column - Statistics -->
+                <div class="lg:col-span-1">
+                    <div class="bg-gray-900 p-6 rounded-xl shadow-2xl border border-gray-800 sticky top-4">
+                        <h2 class="text-2xl font-bold text-gradient bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent mb-6">
+                            Probability Calculator
+                        </h2>
+                        
+                        <div class="space-y-6">
+                            <div>
+                                <h3 class="text-lg font-semibold mb-2 text-gray-300">Current Settings</h3>
+                                <div class="bg-gray-950 p-4 rounded-lg">
+                                    <div class="flex justify-between py-2 border-b border-gray-800">
+                                        <span class="text-gray-400">Numbers to pick:</span>
+                                        <span id="currentNumbersCount" class="font-bold">6</span>
+                                    </div>
+                                    <div class="flex justify-between py-2 border-b border-gray-800">
+                                        <span class="text-gray-400">Range:</span>
+                                        <span id="currentRange" class="font-bold">1-49</span>
+                                    </div>
+                                    <div class="flex justify-between py-2">
+                                        <span class="text-gray-400">Duplicates:</span>
+                                        <span id="currentDuplicates" class="font-bold">Not allowed</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <h3 class="text-lg font-semibold mb-2 text-gray-300">Probability Analysis</h3>
+                                <div class="bg-gray-950 p-4 rounded-lg">
+                                    <div class="flex justify-between py-2 border-b border-gray-800">
+                                        <span class="text-gray-400">Total combinations:</span>
+                                        <span id="analysisCombinations" class="font-bold">13,983,816</span>
+                                    </div>
+                                    <div class="flex justify-between py-2 border-b border-gray-800">
+                                        <span class="text-gray-400">Probability:</span>
+                                        <span id="analysisProbability" class="font-bold">0.000007%</span>
+                                    </div>
+                                    <div class="flex justify-between py-2 border-b border-gray-800">
+                                        <span class="text-gray-400">Odds:</span>
+                                        <span id="analysisOdds" class="font-bold">1 in 13,983,816</span>
+                                    </div>
+                                    <div class="flex justify-between py-2">
+                                        <span class="text-gray-400">Expected frequency:</span>
+                                        <span id="analysisFrequency" class="font-bold">Once every 26,000 years</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <h3 class="text-lg font-semibold mb-2 text-gray-300">Number Frequency</h3>
+                                <div class="bg-gray-950 p-4 rounded-lg">
+                                    <div class="grid grid-cols-5 gap-2">
+                                        <!-- Number frequency will be inserted here -->
+                                        <div class="text-center">
+                                            <div class="number-ball mx-auto">1</div>
+                                            <div class="text-xs mt-1">0%</div>
+                                        </div>
+                                        <!-- More numbers would be added dynamically -->
+                                    </div>
+                                    <div class="mt-3 text-sm text-gray-400">
+                                        Based on last 100 generations
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <button id="advancedCalcBtn" class="w-full bg-gray-800 hover:bg-gray-700 text-white px-4 py-3 rounded-lg font-bold transition-all">
+                                Advanced Probability Calculator
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- History Page -->
+        <div id="historyPage" class="page">
+            <div class="bg-gray-900 p-6 rounded-xl shadow-2xl border border-gray-800">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-gradient bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
+                        Generation History
+                    </h2>
+                    <button id="backToGeneratorBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-bold transition-all flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+                        </svg>
+                        BACK TO GENERATOR
+                    </button>
+                </div>
+                
+                <div class="mb-6 flex justify-between items-center">
+                    <div class="text-lg">
+                        <span id="historyCount" class="font-bold text-blue-400">0</span> saved generations
+                    </div>
+                    <div class="flex space-x-3">
+                        <button id="exportHistoryBtn" class="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-lg text-sm flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                            EXPORT
+                        </button>
+                        <button id="clearHistoryBtn" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                            </svg>
+                            CLEAR
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="mb-4 border-b border-gray-800 flex">
+                    <button class="tab-button py-2 px-4 mr-2 active" data-tab="all-history">All</button>
+                    <button class="tab-button py-2 px-4 mr-2" data-tab="favorites">Favorites</button>
+                    <button class="tab-button py-2 px-4" data-tab="analysis">Analysis</button>
+                </div>
+                
+                <div id="historyList" class="history-container">
+                    <!-- History items will be inserted here -->
+                    <div class="text-center py-8 text-gray-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        No generation history yet
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Statistics Page -->
+        <div id="statsPage" class="page">
+            <div class="bg-gray-900 p-6 rounded-xl shadow-2xl border border-gray-800">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-gradient bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
+                        Advanced Statistics
+                    </h2>
+                    <button id="backToGeneratorBtn2" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-bold transition-all flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+                        </svg>
+                        BACK TO GENERATOR
+                    </button>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div class="bg-gray-950 p-6 rounded-xl border border-gray-800">
+                        <h3 class="text-xl font-semibold mb-4 text-blue-400">Number Frequency</h3>
+                        <div class="grid grid-cols-5 gap-4">
+                            <!-- Number frequency chart will be inserted here -->
+                            <div class="text-center">
+                                <div class="number-ball mx-auto">1</div>
+                                <div class="h-2 bg-gray-800 rounded-full mt-2 overflow-hidden">
+                                    <div class="h-full bg-blue-500 rounded-full" style="width: 0%"></div>
+                                </div>
+                                <div class="text-xs mt-1">0% (0)</div>
+                            </div>
+                            <!-- More numbers would be added dynamically -->
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-950 p-6 rounded-xl border border-gray-800">
+                        <h3 class="text-xl font-semibold mb-4 text-blue-400">Odd/Even Distribution</h3>
+                        <div class="h-64 flex items-end justify-center space-x-4">
+                            <!-- Odd/even chart will be inserted here -->
+                            <div class="flex flex-col items-center">
+                                <div class="w-8 bg-blue-500" style="height: 0px"></div>
+                                <div class="text-xs mt-1">Odd</div>
+                            </div>
+                            <div class="flex flex-col items-center">
+                                <div class="w-8 bg-green-500" style="height: 0px"></div>
+                                <div class="text-xs mt-1">Even</div>
+                            </div>
+                        </div>
+                        <div class="mt-4 text-center text-sm text-gray-400">
+                            Average: <span id="oddEvenAvg">0% odd, 0% even</span>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-950 p-6 rounded-xl border border-gray-800">
+                        <h3 class="text-xl font-semibold mb-4 text-blue-400">Number Sum Analysis</h3>
+                        <div class="h-64">
+                            <!-- Sum distribution chart will be inserted here -->
+                            <div class="text-center py-16 text-gray-600">
+                                Not enough data to display
+                            </div>
+                        </div>
+                        <div class="mt-4 grid grid-cols-2 gap-4">
+                            <div>
+                                <div class="text-sm text-gray-400">Minimum sum</div>
+                                <div id="minSum" class="font-bold">0</div>
+                            </div>
+                            <div>
+                                <div class="text-sm text-gray-400">Maximum sum</div>
+                                <div id="maxSum" class="font-bold">0</div>
+                            </div>
+                            <div>
+                                <div class="text-sm text-gray-400">Average sum</div>
+                                <div id="avgSum" class="font-bold">0</div>
+                            </div>
+                            <div>
+                                <div class="text-sm text-gray-400">Most common sum</div>
+                                <div id="commonSum" class="font-bold">0</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-950 p-6 rounded-xl border border-gray-800">
+                        <h3 class="text-xl font-semibold mb-4 text-blue-400">Number Patterns</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span>Consecutive numbers</span>
+                                    <span id="consecutivePercent">0%</span>
+                                </div>
+                                <div class="h-2 bg-gray-800 rounded-full overflow-hidden">
+                                    <div class="h-full bg-purple-500 rounded-full" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span>Same last digit</span>
+                                    <span id="sameDigitPercent">0%</span>
+                                </div>
+                                <div class="h-2 bg-gray-800 rounded-full overflow-hidden">
+                                    <div class="h-full bg-yellow-500 rounded-full" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span>All numbers in same decade</span>
+                                    <span id="sameDecadePercent">0%</span>
+                                </div>
+                                <div class="h-2 bg-gray-800 rounded-full overflow-hidden">
+                                    <div class="h-full bg-red-500 rounded-full" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-6">
+                            <h4 class="text-lg font-semibold mb-2 text-blue-400">Most Common Pairs</h4>
+                            <div id="commonPairs" class="text-sm">
+                                Not enough data to analyze pairs
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-950 p-6 rounded-xl border border-gray-800 mt-6">
+                    <h3 class="text-xl font-semibold mb-4 text-blue-400">Advanced Probability Calculator</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <div class="mb-4">
+                                <label for="calcNumbersCount" class="block mb-2 text-gray-300">Numbers to pick</label>
+                                <input type="number" id="calcNumbersCount" min="1" max="20" value="6" 
+                                       class="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+                            </div>
+                            <div class="mb-4">
+                                <label for="calcMaxNumber" class="block mb-2 text-gray-300">Max number</label>
+                                <input type="number" id="calcMaxNumber" min="1" max="1000" value="49" 
+                                       class="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+                            </div>
+                            <div class="mb-4">
+                                <label for="calcMatches" class="block mb-2 text-gray-300">Matches required</label>
+                                <input type="number" id="calcMatches" min="1" max="20" value="6" 
+                                       class="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+                            </div>
+                            <button id="calculateProbabilityBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-bold transition-all">
+                                Calculate Probability
+                            </button>
+                        </div>
+                        <div>
+                            <div class="bg-gray-900 p-4 rounded-lg">
+                                <h4 class="text-lg font-semibold mb-3 text-blue-400">Results</h4>
+                                <div class="space-y-3">
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-400">Total combinations:</span>
+                                        <span id="calcTotalCombinations" class="font-bold">0</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-400">Winning combinations:</span>
+                                        <span id="calcWinningCombinations" class="font-bold">0</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-400">Probability:</span>
+                                        <span id="calcProbability" class="font-bold">0%</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-400">Odds:</span>
+                                        <span id="calcOdds" class="font-bold">1 in 0</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-400">Expected frequency:</span>
+                                        <span id="calcFrequency" class="font-bold">Never</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Favorites Page -->
+        <div id="favoritesPage" class="page">
+            <div class="bg-gray-900 p-6 rounded-xl shadow-2xl border border-gray-800">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-gradient bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
+                        Favorite Numbers
+                    </h2>
+                    <button id="backToGeneratorBtn3" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-bold transition-all flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+                        </svg>
+                        BACK TO GENERATOR
+                    </button>
+                </div>
+                
+                <div class="mb-6 flex justify-between items-center">
+                    <div class="text-lg">
+                        <span id="favoritesCount" class="font-bold text-blue-400">0</span> favorite sets
+                    </div>
+                    <div class="flex space-x-3">
+                        <button id="generateFromFavoritesBtn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" />
+                            </svg>
+                            GENERATE SIMILAR
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="favoritesList" class="history-container">
+                    <!-- Favorite items will be inserted here -->
+                    <div class="text-center py-8 text-gray-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        </svg>
+                        No favorite number sets yet
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-black py-6 px-6 border-t border-gray-800 mt-8">
+        <div class="container mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <div class="logo-text text-xl">BLUE FLARE blueSite 02</div>
+                    <p class="text-gray-500 text-sm mt-1">Advanced number generation and analysis tool</p>
+                </div>
+                <div class="text-gray-500 text-sm">
+                    <p>© 2023 BlueSite 02. All rights reserved.</p>
+                    <p class="mt-1">Version 2.1.0</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize settings with default values
+        let settings = {
+            numbersCount: 6,
+            maxNumber: 49,
+            minNumber: 1,
+            allowDuplicates: false
+        };
+
+        // DOM elements
+        const generateBtn = document.getElementById('generateBtn');
+        const autoGenerateBtn = document.getElementById('autoGenerateBtn');
+        const resultDisplay = document.getElementById('result');
+        const numbersCountInput = document.getElementById('numbersCount');
+        const maxNumberInput = document.getElementById('maxNumber');
+        const minNumberInput = document.getElementById('minNumber');
+        const allowDuplicatesInput = document.getElementById('allowDuplicates');
+        const saveBtn = document.getElementById('saveBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const viewHistoryBtn = document.getElementById('viewHistoryBtn');
+        const viewStatsBtn = document.getElementById('viewStatsBtn');
+        const viewFavoritesBtn = document.getElementById('viewFavoritesBtn');
+        const backToGeneratorBtn = document.getElementById('backToGeneratorBtn');
+        const backToGeneratorBtn2 = document.getElementById('backToGeneratorBtn2');
+        const backToGeneratorBtn3 = document.getElementById('backToGeneratorBtn3');
+        const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+        const exportHistoryBtn = document.getElementById('exportHistoryBtn');
+        const historyList = document.getElementById('historyList');
+        const favoritesList = document.getElementById('favoritesList');
+        const historyCount = document.getElementById('historyCount');
+        const favoritesCount = document.getElementById('favoritesCount');
+        const generatorPage = document.getElementById('generatorPage');
+        const historyPage = document.getElementById('historyPage');
+        const statsPage = document.getElementById('statsPage');
+        const favoritesPage = document.getElementById('favoritesPage');
+        const statsSection = document.getElementById('statsSection');
+        const generateFromFavoritesBtn = document.getElementById('generateFromFavoritesBtn');
+        const calculateProbabilityBtn = document.getElementById('calculateProbabilityBtn');
+        const tabButtons = document.querySelectorAll('.tab-button');
+
+        // State
+        let autoGenerateInterval = null;
+        let isAutoGenerating = false;
+        let lastGeneratedNumbers = [];
+        let currentHistoryTab = 'all-history';
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSettings();
+            updateCurrentSettingsDisplay();
+            updateHistoryDisplay();
+            updateFavoritesDisplay();
+            
+            // Set up event listeners
+            setupEventListeners();
+            
+            // Calculate initial probabilities
+            calculateProbabilities();
+        });
+
+        function loadSettings() {
+            const savedSettings = localStorage.getItem('blueSiteSettings');
+            if (savedSettings) {
+                settings = JSON.parse(savedSettings);
+                numbersCountInput.value = settings.numbersCount;
+                maxNumberInput.value = settings.maxNumber;
+                minNumberInput.value = settings.minNumber;
+                allowDuplicatesInput.checked = settings.allowDuplicates;
+            }
+        }
+
+        function saveSettings() {
+            settings.numbersCount = parseInt(numbersCountInput.value) || 6;
+            settings.maxNumber = parseInt(maxNumberInput.value) || 49;
+            settings.minNumber = parseInt(minNumberInput.value) || 1;
+            settings.allowDuplicates = allowDuplicatesInput.checked;
+            
+            localStorage.setItem('blueSiteSettings', JSON.stringify(settings));
+            updateCurrentSettingsDisplay();
+            calculateProbabilities();
+            
+            // Show save confirmation
+            const originalText = saveBtn.innerHTML;
+            saveBtn.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                </svg>
+                SETTINGS SAVED
+            `;
+            saveBtn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+            saveBtn.classList.add('bg-green-600', 'hover:bg-green-700');
+            
+            setTimeout(() => {
+                saveBtn.innerHTML = originalText;
+                saveBtn.classList.remove('bg-green-600', 'hover:bg-green-700');
+                saveBtn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+            }, 2000);
+        }
+
+        function generateNumbers() {
+            const numbers = [];
+            const count = settings.numbersCount;
+            const min = settings.minNumber;
+            const max = settings.maxNumber;
+            const allowDupes = settings.allowDuplicates;
+            
+            if (min >= max) {
+                alert("Minimum number must be less than maximum number");
+                return [];
+            }
+            
+            if (!allowDupes && (max - min + 1) < count) {
+                alert(`Cannot generate ${count} unique numbers between ${min} and ${max}`);
+                return [];
+            }
+            
+            while (numbers.length < count) {
+                const num = Math.floor(Math.random() * (max - min + 1)) + min;
+                if (allowDupes || !numbers.includes(num)) {
+                    numbers.push(num);
+                }
+            }
+            
+            if (!allowDupes) {
+                numbers.sort((a, b) => a - b);
+            }
+            
+            lastGeneratedNumbers = numbers;
+            displayNumbersWithAnimation(numbers);
+            saveToHistory(numbers);
+            updateStatsSection(numbers);
+            calculateProbabilities();
+            return numbers;
+        }
+
+        function displayNumbersWithAnimation(numbers) {
+            resultDisplay.innerHTML = '';
+            
+            if (numbers.length === 0) {
+                resultDisplay.innerHTML = '<div class="text-gray-600">Error generating numbers</div>';
+                return;
+            }
+            
+            numbers.forEach((num, i) => {
+                setTimeout(() => {
+                    const ball = document.createElement('div');
+                    ball.className = 'number-ball pop-in';
+                    ball.textContent = num.toString().padStart(2, '0');
+                    ball.style.animationDelay = `${i * 0.1}s`;
+                    resultDisplay.appendChild(ball);
+                }, i * 50);
+            });
+        }
+
+        function saveToHistory(numbers) {
+            let history = JSON.parse(localStorage.getItem('blueSiteHistory') || '[]');
+            const timestamp = new Date().toLocaleString();
+            
+            history.unshift({
+                numbers: numbers,
+                timestamp: timestamp,
+                settings: {...settings},
+                isFavorite: false
+            });
+            
+            if (history.length > 1000) {
+                history = history.slice(0, 1000);
+            }
+            
+            localStorage.setItem('blueSiteHistory', JSON.stringify(history));
+            updateHistoryDisplay();
+        }
+
+        function updateHistoryDisplay() {
+            const history = JSON.parse(localStorage.getItem('blueSiteHistory')) || [];
+            historyCount.textContent = history.length;
+            
+            if (history.length === 0) {
+                historyList.innerHTML = `
+                    <div class="text-center py-8 text-gray-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        No generation history yet
+                    </div>
+                `;
+                return;
+            }
+            
+            let filteredHistory = history;
+            if (currentHistoryTab === 'favorites') {
+                filteredHistory = history.filter(item => item.isFavorite);
+            } else if (currentHistoryTab === 'analysis') {
+                // For analysis tab, we might want to show something different
+                // For now, just show all
+            }
+            
+            if (filteredHistory.length === 0 && currentHistoryTab === 'favorites') {
+                historyList.innerHTML = `
+                    <div class="text-center py-8 text-gray-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        </svg>
+                        No favorite number sets yet
+                    </div>
+                `;
+                return;
+            }
+            
+            historyList.innerHTML = '';
+            filteredHistory.forEach((entry, index) => {
+                const item = document.createElement('div');
+                item.className = `history-item bg-gray-950 border border-gray-800 py-4 px-5 mb-3 rounded-lg hover:border-blue-500 transition-all ${entry.isFavorite ? 'border-l-4 border-l-yellow-500' : ''}`;
+                
+                const numbersHtml = entry.numbers.map(num => 
+                    `<div class="number-ball">${num.toString().padStart(2, '0')}</div>`
+                ).join('');
+                
+                const favoriteIcon = entry.isFavorite ? 
+                    `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-500" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    </svg>` :
+                    `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 hover:text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                    </svg>`;
+                
+                item.innerHTML = `
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="text-sm text-gray-400">#${index + 1} • ${entry.timestamp}</span>
+                        <button class="toggle-favorite-btn" data-index="${index}">
+                            ${favoriteIcon}
+                        </button>
+                    </div>
+                    <div class="flex flex-wrap gap-2 mb-2">${numbersHtml}</div>
+                    <div class="text-xs text-gray-500 mt-2">
+                        Config: Pick ${entry.settings.numbersCount} from ${entry.settings.minNumber}-${entry.settings.maxNumber} 
+                        ${entry.settings.allowDuplicates ? '(duplicates allowed)' : '(no duplicates)'}
+                    </div>
+                `;
+                
+                historyList.appendChild(item);
+            });
+            
+            // Add event listeners to favorite buttons
+            document.querySelectorAll('.toggle-favorite-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const index = parseInt(this.getAttribute('data-index'));
+                    toggleFavorite(index);
+                });
+            });
+            
+            // Add click event to history items to copy numbers
+            document.querySelectorAll('.history-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const index = parseInt(this.querySelector('.toggle-favorite-btn').getAttribute('data-index'));
+                    const history = JSON.parse(localStorage.getItem('blueSiteHistory')) || [];
+                    const numbers = history[index].numbers;
+                    copyToClipboard(numbers.join(', '));
+                    
+                    // Show copied notification
+                    const notification = document.createElement('div');
+                    notification.className = 'fixed bottom-4 right-4 bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg';
+                    notification.textContent = 'Copied to clipboard!';
+                    document.body.appendChild(notification);
+                    
+                    setTimeout(() => {
+                        notification.remove();
+                    }, 2000);
+                });
+            });
+        }
+
+        function updateFavoritesDisplay() {
+            const history = JSON.parse(localStorage.getItem('blueSiteHistory')) || [];
+            const favorites = history.filter(item => item.isFavorite);
+            favoritesCount.textContent = favorites.length;
+            
+            if (favorites.length === 0) {
+                favoritesList.innerHTML = `
+                    <div class="text-center py-8 text-gray-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        </svg>
+                        No favorite number sets yet
+                    </div>
+                `;
+                return;
+            }
+            
+            favoritesList.innerHTML = '';
+            favorites.forEach((entry, index) => {
+                const item = document.createElement('div');
+                item.className = 'history-item bg-gray-950 border border-yellow-500 py-4 px-5 mb-3 rounded-lg hover:border-blue-500 transition-all';
+                
+                const numbersHtml = entry.numbers.map(num => 
+                    `<div class="number-ball">${num.toString().padStart(2, '0')}</div>`
+                ).join('');
+                
+                item.innerHTML = `
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="text-sm text-gray-400">#${index + 1} • ${entry.timestamp}</span>
+                        <button class="toggle-favorite-btn" data-index="${getHistoryIndex(entry)}">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-500" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="flex flex-wrap gap-2 mb-2">${numbersHtml}</div>
+                    <div class="text-xs text-gray-500 mt-2">
+                        Config: Pick ${entry.settings.numbersCount} from ${entry.settings.minNumber}-${entry.settings.maxNumber} 
+                        ${entry.settings.allowDuplicates ? '(duplicates allowed)' : '(no duplicates)'}
+                    </div>
+                `;
+                
+                favoritesList.appendChild(item);
+            });
+            
+            // Add event listeners to favorite buttons
+            document.querySelectorAll('.toggle-favorite-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const index = parseInt(this.getAttribute('data-index'));
+                    toggleFavorite(index);
+                });
+            });
+        }
+
+        function getHistoryIndex(entry) {
+            const history = JSON.parse(localStorage.getItem('blueSiteHistory')) || [];
+            return history.findIndex(item => 
+                item.timestamp === entry.timestamp && 
+                JSON.stringify(item.numbers) === JSON.stringify(entry.numbers)
+            );
+        }
+
+        function toggleFavorite(index) {
+            const history = JSON.parse(localStorage.getItem('blueSiteHistory')) || [];
+            if (index >= 0 && index < history.length) {
+                history[index].isFavorite = !history[index].isFavorite;
+                localStorage.setItem('blueSiteHistory', JSON.stringify(history));
+                
+                if (currentHistoryTab === 'all-history') {
+                    updateHistoryDisplay();
+                } else if (currentHistoryTab === 'favorites') {
+                    updateHistoryDisplay();
+                }
+                
+                updateFavoritesDisplay();
+            }
+        }
+
+        function clearHistory() {
+            if (confirm("Are you sure you want to clear all generation history? This cannot be undone.")) {
+                localStorage.removeItem('blueSiteHistory');
+                updateHistoryDisplay();
+                updateFavoritesDisplay();
+            }
+        }
+
+        function exportHistory() {
+            const history = JSON.parse(localStorage.getItem('blueSiteHistory')) || [];
+            if (history.length === 0) {
+                alert("No history to export");
+                return;
+            }
+            
+            let csv = "Timestamp,Numbers,Settings\n";
+            history.forEach(entry => {
+                csv += `"${entry.timestamp}","${entry.numbers.join(', ')}","Pick ${entry.settings.numbersCount} from ${entry.settings.minNumber}-${entry.settings.maxNumber} ${entry.settings.allowDuplicates ? '(duplicates allowed)' : '(no duplicates)'}"\n`;
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.setAttribute('href', url);
+            link.setAttribute('download', 'blueflare_generator_history.csv');
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function toggleAutoGenerate() {
+            isAutoGenerating = !isAutoGenerating;
+            
+            if (isAutoGenerating) {
+                autoGenerateBtn.classList.add('auto-btn-active');
+                autoGenerateBtn.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8 7a1 1 0 00-1 1v4a1 1 0 001 1h4a1 1 0 100-2H9V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                    </svg>
+                    STOP
+                `;
+                generateNumbers();
+                autoGenerateInterval = setInterval(generateNumbers, 2000);
+            } else {
+                autoGenerateBtn.classList.remove('auto-btn-active');
+                autoGenerateBtn.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
+                    </svg>
+                    AUTO
+                `;
+                clearInterval(autoGenerateInterval);
+            }
+        }
+
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById(pageId).classList.add('active');
+            
+            if (pageId === 'historyPage') {
+                updateHistoryDisplay();
+            } else if (pageId === 'statsPage') {
+                updateStatsDisplay();
+            } else if (pageId === 'favoritesPage') {
+                updateFavoritesDisplay();
+            }
+            
+            if (isAutoGenerating && pageId !== 'generatorPage') {
+                toggleAutoGenerate();
+            }
+        }
+
+        function updateCurrentSettingsDisplay() {
+            document.getElementById('currentNumbersCount').textContent = settings.numbersCount;
+            document.getElementById('currentRange').textContent = `${settings.minNumber}-${settings.maxNumber}`;
+            document.getElementById('currentDuplicates').textContent = settings.allowDuplicates ? 'Allowed' : 'Not allowed';
+        }
+
+        function updateStatsSection(numbers) {
+            statsSection.classList.remove('hidden');
+            
+            const totalCombinations = calculateCombinations();
+            document.getElementById('totalCombinations').textContent = formatNumber(totalCombinations);
+            
+            const probability = 1 / totalCombinations;
+            document.getElementById('winProbability').textContent = probability.toExponential(2);
+            document.getElementById('winOdds').textContent = `1 in ${formatNumber(totalCombinations)}`;
+            
+            const now = new Date();
+            document.getElementById('lastGenerated').textContent = now.toLocaleTimeString();
+        }
+
+        function updateStatsDisplay() {
+            const history = JSON.parse(localStorage.getItem('blueSiteHistory')) || [];
+            if (history.length === 0) return;
+            
+            // Number frequency
+            const numberFrequency = {};
+const minNum = Math.min(...history.map(h => h.settings.minNumber));
+const maxNum = Math.max(...history.map(h => h.settings.maxNumber));
+            
+            for (let i = minNum; i <= maxNum; i++) {
+                numberFrequency[i] = 0;
+            }
+            
+            history.forEach(entry => {
+                entry.numbers.forEach(num => {
+                    if (numberFrequency[num] !== undefined) {
+                        numberFrequency[num]++;
+                    }
+                });
+            });
+            
+            const frequencyContainer = document.querySelector('#statsPage .grid.grid-cols-5.gap-4');
+            if (frequencyContainer) {
+                frequencyContainer.innerHTML = '';
+                for (let i = minNum; i <= maxNum; i++) {
+                    const count = numberFrequency[i] || 0;
+                    const percentage = (count / history.length * 100).toFixed(1);
+                    
+                    const numberEl = document.createElement('div');
+                    numberEl.className = 'text-center';
+                    numberEl.innerHTML = `
+                        <div class="number-ball mx-auto">${i.toString().padStart(2, '0')}</div>
+                        <div class="h-2 bg-gray-800 rounded-full mt-2 overflow-hidden">
+                            <div class="h-full bg-blue-500 rounded-full" style="width: ${percentage}%"></div>
+                        </div>
+                        <div class="text-xs mt-1">${percentage}% (${count})</div>
+                    `;
+                    frequencyContainer.appendChild(numberEl);
+                }
+            }
+            
+            // Odd/even distribution
+// Count odd/even numbers
+let oddCount = 0;
+let evenCount = 0;
+
+history.forEach(entry => {
+  if (entry.numbers && Array.isArray(entry.numbers)) {
+    entry.numbers.forEach(num => {
+      if (typeof num === 'number') {
+        if (num % 2 === 0) evenCount++;
+        else oddCount++;
+      }
+    });
+  }
+});
+
+// Calculate percentages (with fallback for division by zero)
+const totalNumbers = oddCount + evenCount || 1; // Avoid NaN if empty
+const oddPercentage = totalNumbers ? (oddCount / totalNumbers * 100).toFixed(1) : "0";
+const evenPercentage = totalNumbers ? (evenCount / totalNumbers * 100).toFixed(1) : "0";
+
+// Debug logs
+console.log(`Odd: ${oddCount}, Even: ${evenCount}, Total: ${totalNumbers}`);
+console.log(`Odd %: ${oddPercentage}%, Even %: ${evenPercentage}%`);
+
+// Update the graph bars
+const oddBar = document.querySelector('#statsPage .flex.flex-col.items-center:nth-child(1) .w-8');
+const evenBar = document.querySelector('#statsPage .flex.flex-col.items-center:nth-child(2) .w-8');
+
+if (oddBar && evenBar) {
+  oddBar.style.height = `${oddPercentage}%`;
+  oddBar.style.backgroundColor = "#3b82f6"; // Blue for odd
+  oddBar.style.transition = "height 0.5s ease"; // Smooth animation
+  
+  evenBar.style.height = `${evenPercentage}%`;
+  evenBar.style.backgroundColor = "#10b981"; // Green for even
+  evenBar.style.transition = "height 0.5s ease"; // Smooth animation
+} else {
+  console.error("Graph bars not found in DOM!");
+}
+
+// Update the text display
+const oddEvenText = document.getElementById('oddEvenAvg');
+if (oddEvenText) {
+  oddEvenText.textContent = `${oddPercentage}% odd, ${evenPercentage}% even`;
+} else {
+  console.error("Text element 'oddEvenAvg' not found!");
+}
+            
+            // Sum analysis
+            const sums = history.map(entry => entry.numbers.reduce((a, b) => a + b, 0));
+            const minSum = Math.min(...sums);
+            const maxSum = Math.max(...sums);
+        //    const avgSum = (sums.reduce((a, b) => a + b, 0) / sums.length;
+            
+            // Find most common sum
+            const sumFrequency = {};
+            sums.forEach(sum => {
+                sumFrequency[sum] = (sumFrequency[sum] || 0) + 1;
+            });
+            
+            let commonSum = 0;
+            let maxFrequency = 0;
+            for (const sum in sumFrequency) {
+                if (sumFrequency[sum] > maxFrequency) {
+                    maxFrequency = sumFrequency[sum];
+                    commonSum = sum;
+                }
+            }
+            
+            document.getElementById('minSum').textContent = minSum;
+            document.getElementById('maxSum').textContent = maxSum;
+// Convert to number first (if it might be a string)
+const avgSumNum = Number(avgSum);
+document.getElementById('avgSum').textContent = avgSumNum.toFixed(1);
+            document.getElementById('commonSum').textContent = `${commonSum} (${maxFrequency} times)`;
+            
+            // Number patterns
+            let consecutiveCount = 0;
+            let sameDigitCount = 0;
+            let sameDecadeCount = 0;
+            
+            history.forEach(entry => {
+                const nums = [...entry.numbers].sort((a, b) => a - b);
+                
+                // Check for consecutive numbers
+                let hasConsecutive = false;
+                for (let i = 1; i < nums.length; i++) {
+                    if (nums[i] === nums[i-1] + 1) {
+                        hasConsecutive = true;
+                        break;
+                    }
+                }
+                if (hasConsecutive) consecutiveCount++;
+                
+                // Check for same last digit
+                const lastDigits = nums.map(n => n % 10);
+                if (new Set(lastDigits).size < nums.length) sameDigitCount++;
+                
+                // Check for all numbers in same decade (e.g., 10-19, 20-29)
+                const decades = nums.map(n => Math.floor(n / 10));
+                if (new Set(decades).size === 1) sameDecadeCount++;
+            });
+            
+            document.getElementById('consecutivePercent').textContent = `${(consecutiveCount / history.length * 100).toFixed(1)}%`;
+            document.querySelector('#statsPage .bg-purple-500').style.width = `${(consecutiveCount / history.length * 100).toFixed(1)}%`;
+            
+            document.getElementById('sameDigitPercent').textContent = `${(sameDigitCount / history.length * 100).toFixed(1)}%`;
+            document.querySelector('#statsPage .bg-yellow-500').style.width = `${(sameDigitCount / history.length * 100).toFixed(1)}%`;
+            
+            document.getElementById('sameDecadePercent').textContent = `${(sameDecadeCount / history.length * 100).toFixed(1)}%`;
+            document.querySelector('#statsPage .bg-red-500').style.width = `${(sameDecadeCount / history.length * 100).toFixed(1)}%`;
+            
+            // Most common pairs (simplified - just show top 5)
+            const pairFrequency = {};
+            history.forEach(entry => {
+                const nums = [...entry.numbers].sort((a, b) => a - b);
+                for (let i = 0; i < nums.length; i++) {
+                    for (let j = i + 1; j < nums.length; j++) {
+                        const pair = `${nums[i]},${nums[j]}`;
+                        pairFrequency[pair] = (pairFrequency[pair] || 0) + 1;
+                    }
+                }
+            });
+            
+            const sortedPairs = Object.entries(pairFrequency).sort((a, b) => b[1] - a[1]).slice(0, 5);
+            const pairsContainer = document.getElementById('commonPairs');
+            if (pairsContainer) {
+                pairsContainer.innerHTML = sortedPairs.length > 0 ? 
+                    sortedPairs.map(pair => `${pair[0]} (${pair[1]} times)`).join('<br>') : 
+                    'Not enough data to analyze pairs';
+            }
+        }
+
+        function calculateCombinations() {
+            const n = settings.maxNumber - settings.minNumber + 1;
+            const k = settings.numbersCount;
+            
+            if (settings.allowDuplicates) {
+                // With duplicates: n^k
+                return Math.pow(n, k);
+            } else {
+                // Without duplicates: n! / (k! * (n - k)!)
+                if (k > n) return 0;
+                return factorial(n) / (factorial(k) * factorial(n - k));
+            }
+        }
+
+        function factorial(num) {
+            let result = 1;
+            for (let i = 2; i <= num; i++) {
+                result *= i;
+            }
+            return result;
+        }
+
+        function calculateProbabilities() {
+            const totalCombinations = calculateCombinations();
+            
+            // Update main display
+            document.getElementById('analysisCombinations').textContent = formatNumber(totalCombinations);
+            
+            const probability = 1 / totalCombinations;
+            document.getElementById('analysisProbability').textContent = probability.toExponential(2);
+            document.getElementById('analysisOdds').textContent = `1 in ${formatNumber(totalCombinations)}`;
+            
+            // Calculate expected frequency (assuming 1 draw per week)
+            if (totalCombinations > 0) {
+                const years = totalCombinations / 52;
+                let frequencyText;
+                if (years < 1) {
+                    frequencyText = `Once every ${Math.ceil(years * 52)} weeks`;
+                } else if (years < 100) {
+                    frequencyText = `Once every ${years.toFixed(1)} years`;
+                } else if (years < 1000) {
+                    frequencyText = `Once every ${Math.round(years / 10) * 10} years`;
+                } else {
+                    frequencyText = `Once every ${Math.round(years / 100) * 100} years`;
+                }
+                document.getElementById('analysisFrequency').textContent = frequencyText;
+            } else {
+                document.getElementById('analysisFrequency').textContent = 'Never';
+            }
+            
+            // Update number frequency display (simplified)
+            const frequencyContainer = document.querySelector('.grid.grid-cols-5.gap-2');
+            if (frequencyContainer) {
+                frequencyContainer.innerHTML = '';
+                const numbersToShow = Math.min(20, settings.maxNumber - settings.minNumber + 1);
+                for (let i = settings.minNumber; i < settings.minNumber + numbersToShow; i++) {
+                    const numberEl = document.createElement('div');
+                    numberEl.className = 'text-center';
+                    numberEl.innerHTML = `
+                        <div class="number-ball mx-auto">${i.toString().padStart(2, '0')}</div>
+                        <div class="text-xs mt-1">${(1 / (settings.maxNumber - settings.minNumber + 1) * 100).toFixed(1)}%</div>
+                    `;
+                    frequencyContainer.appendChild(numberEl);
+                }
+            }
+        }
+
+        function calculateAdvancedProbability() {
+            const numbersCount = parseInt(document.getElementById('calcNumbersCount').value) || 6;
+            const maxNumber = parseInt(document.getElementById('calcMaxNumber').value) || 49;
+            const matchesRequired = parseInt(document.getElementById('calcMatches').value) || numbersCount;
+            
+            if (matchesRequired > numbersCount) {
+                alert("Matches required cannot be greater than numbers to pick");
+                return;
+            }
+            
+            // Calculate total combinations (n choose k)
+            const totalCombinations = factorial(maxNumber) / (factorial(numbersCount) * factorial(maxNumber - numbersCount));
+            
+            // Calculate winning combinations (k choose m) * ((n - k) choose (k - m))
+            const winningCombinations = factorial(numbersCount) / (factorial(matchesRequired) * factorial(numbersCount - matchesRequired)) *
+                                      factorial(maxNumber - numbersCount) / (factorial(numbersCount - matchesRequired) * factorial(maxNumber - 2 * numbersCount + matchesRequired));
+            
+            const probability = winningCombinations / totalCombinations;
+            
+            document.getElementById('calcTotalCombinations').textContent = formatNumber(totalCombinations);
+            document.getElementById('calcWinningCombinations').textContent = formatNumber(winningCombinations);
+            document.getElementById('calcProbability').textContent = `${(probability * 100).toExponential(2)}%`;
+            document.getElementById('calcOdds').textContent = `1 in ${formatNumber(totalCombinations / winningCombinations)}`;
+            
+            // Calculate expected frequency (assuming 1 draw per week)
+            const years = (totalCombinations / winningCombinations) / 52;
+            let frequencyText;
+            if (years < 1) {
+                frequencyText = `Once every ${Math.ceil(years * 52)} weeks`;
+            } else if (years < 100) {
+                frequencyText = `Once every ${years.toFixed(1)} years`;
+            } else if (years < 1000) {
+                frequencyText = `Once every ${Math.round(years / 10) * 10} years`;
+            } else {
+                frequencyText = `Once every ${Math.round(years / 100) * 100} years`;
+            }
+            document.getElementById('calcFrequency').textContent = frequencyText;
+        }
+
+        function generateFromFavorites() {
+            const history = JSON.parse(localStorage.getItem('blueSiteHistory')) || [];
+            const favorites = history.filter(item => item.isFavorite);
+            
+            if (favorites.length === 0) {
+                alert("No favorite sets to generate from");
+                return;
+            }
+            
+            // Simple strategy: pick numbers that appear most frequently in favorites
+            const numberFrequency = {};
+            favorites.forEach(entry => {
+                entry.numbers.forEach(num => {
+                    numberFrequency[num] = (numberFrequency[num] || 0) + 1;
+                });
+            });
+            
+            // Sort numbers by frequency
+            const sortedNumbers = Object.keys(numberFrequency).map(Number).sort((a, b) => numberFrequency[b] - numberFrequency[a]);
+            
+            // Pick top numbers (or random from top 10 if not enough)
+            const count = settings.numbersCount;
+            const numbers = [];
+            
+            while (numbers.length < count && sortedNumbers.length > 0) {
+                // Pick randomly from top 10 most frequent numbers
+                const poolSize = Math.min(10, sortedNumbers.length);
+                const randomIndex = Math.floor(Math.random() * poolSize);
+                const num = sortedNumbers[randomIndex];
+                
+                if (!numbers.includes(num)) {
+                    numbers.push(num);
+                }
+                
+                // Remove to avoid duplicates if not allowed
+                if (!settings.allowDuplicates) {
+                    sortedNumbers.splice(randomIndex, 1);
+                }
+            }
+            
+            // If we still don't have enough numbers, fill with random ones
+            while (numbers.length < count) {
+                const num = Math.floor(Math.random() * (settings.maxNumber - settings.minNumber + 1)) + settings.minNumber;
+                if (!numbers.includes(num) || settings.allowDuplicates) {
+                    numbers.push(num);
+                }
+            }
+            
+            if (!settings.allowDuplicates) {
+                numbers.sort((a, b) => a - b);
+            }
+            
+            lastGeneratedNumbers = numbers;
+            displayNumbersWithAnimation(numbers);
+            saveToHistory(numbers);
+            updateStatsSection(numbers);
+        }
+
+        function copyToClipboard(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+        }
+
+        function formatNumber(num) {
+            return num.toLocaleString();
+        }
+
+        function setupEventListeners() {
+            generateBtn.addEventListener('click', generateNumbers);
+            autoGenerateBtn.addEventListener('click', toggleAutoGenerate);
+            
+            saveBtn.addEventListener('click', saveSettings);
+            
+            resetBtn.addEventListener('click', () => {
+                settings = { 
+                    numbersCount: 6, 
+                    maxNumber: 49,
+                    minNumber: 1,
+                    allowDuplicates: false
+                };
+                numbersCountInput.value = '6';
+                maxNumberInput.value = '49';
+                minNumberInput.value = '1';
+                allowDuplicatesInput.checked = false;
+                localStorage.removeItem('blueSiteSettings');
+                updateCurrentSettingsDisplay();
+                calculateProbabilities();
+                
+                if (isAutoGenerating) {
+                    toggleAutoGenerate();
+                }
+            });
+            
+            viewHistoryBtn.addEventListener('click', () => showPage('historyPage'));
+            viewStatsBtn.addEventListener('click', () => showPage('statsPage'));
+            viewFavoritesBtn.addEventListener('click', () => showPage('favoritesPage'));
+            
+            backToGeneratorBtn.addEventListener('click', () => showPage('generatorPage'));
+            backToGeneratorBtn2.addEventListener('click', () => showPage('generatorPage'));
+            backToGeneratorBtn3.addEventListener('click', () => showPage('generatorPage'));
+            
+            clearHistoryBtn.addEventListener('click', clearHistory);
+            exportHistoryBtn.addEventListener('click', exportHistory);
+            
+            generateFromFavoritesBtn.addEventListener('click', generateFromFavorites);
+            calculateProbabilityBtn.addEventListener('click', calculateAdvancedProbability);
+            
+            // Tab buttons for history page
+            tabButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    tabButtons.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentHistoryTab = this.getAttribute('data-tab');
+                    updateHistoryDisplay();
+                });
+            });
+            
+            // Update probability calculations when settings change
+            numbersCountInput.addEventListener('change', calculateProbabilities);
+            maxNumberInput.addEventListener('change', calculateProbabilities);
+            minNumberInput.addEventListener('change', calculateProbabilities);
+            allowDuplicatesInput.addEventListener('change', calculateProbabilities);
+        }
+    </script>
+    
+    
+        <script>
+        // Initialize settings with default values
+        let settings = {
+            numbersCount: 6,
+            maxNumber: 49,
+            minNumber: 1,
+            allowDuplicates: false
+        };
+
+        // DOM elements
+        const generateBtn = document.getElementById('generateBtn');
+        const autoGenerateBtn = document.getElementById('autoGenerateBtn');
+        const resultDisplay = document.getElementById('result');
+        const numbersCountInput = document.getElementById('numbersCount');
+        const maxNumberInput = document.getElementById('maxNumber');
+        const minNumberInput = document.getElementById('minNumber');
+        const allowDuplicatesInput = document.getElementById('allowDuplicates');
+        const saveBtn = document.getElementById('saveBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const viewHistoryBtn = document.getElementById('viewHistoryBtn');
+        const viewStatsBtn = document.getElementById('viewStatsBtn');
+        const viewFavoritesBtn = document.getElementById('viewFavoritesBtn');
+        const backToGeneratorBtn = document.getElementById('backToGeneratorBtn');
+        const backToGeneratorBtn2 = document.getElementById('backToGeneratorBtn2');
+        const backToGeneratorBtn3 = document.getElementById('backToGeneratorBtn3');
+        const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+        const exportHistoryBtn = document.getElementById('exportHistoryBtn');
+        const historyList = document.getElementById('historyList');
+        const favoritesList = document.getElementById('favoritesList');
+        const historyCount = document.getElementById('historyCount');
+        const favoritesCount = document.getElementById('favoritesCount');
+        const generatorPage = document.getElementById('generatorPage');
+        const historyPage = document.getElementById('historyPage');
+        const statsPage = document.getElementById('statsPage');
+        const favoritesPage = document.getElementById('favoritesPage');
+        const generateFromFavoritesBtn = document.getElementById('generateFromFavoritesBtn');
+        const calculateProbabilityBtn = document.getElementById('calculateProbabilityBtn');
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const statsTabs = document.querySelectorAll('.stats-tab');
+        const currentSettingsDisplay = document.getElementById('currentSettings');
+        const probabilityInfo = document.getElementById('probabilityInfo');
+        const probabilityResult = document.getElementById('probabilityResult');
+        const probabilityValue = document.getElementById('probabilityValue');
+        const probabilityExplanation = document.getElementById('probabilityExplanation');
+        const hotNumbers = document.getElementById('hotNumbers');
+        const coldNumbers = document.getElementById('coldNumbers');
+
+        // State
+        let autoGenerateInterval = null;
+        let isAutoGenerating = false;
+        let lastGeneratedNumbers = [];
+        let currentHistoryTab = 'all-history';
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSettings();
+            updateCurrentSettingsDisplay();
+            updateHistoryDisplay();
+            updateFavoritesDisplay();
+            
+            // Set up event listeners
+            setupEventListeners();
+            
+            // Calculate initial probabilities
+            calculateProbabilities();
+        });
+
+        function loadSettings() {
+            const savedSettings = localStorage.getItem('blueSiteSettings');
+            if (savedSettings) {
+                settings = JSON.parse(savedSettings);
+                numbersCountInput.value = settings.numbersCount;
+                maxNumberInput.value = settings.maxNumber;
+                minNumberInput.value = settings.minNumber;
+                allowDuplicatesInput.checked = settings.allowDuplicates;
+            }
+        }
+
+        function saveSettings() {
+            settings.numbersCount = parseInt(numbersCountInput.value) || 6;
+            settings.maxNumber = parseInt(maxNumberInput.value) || 49;
+            settings.minNumber = parseInt(minNumberInput.value) || 1;
+            settings.allowDuplicates = allowDuplicatesInput.checked;
+            
+            localStorage.setItem('blueSiteSettings', JSON.stringify(settings));
+            updateCurrentSettingsDisplay();
+            calculateProbabilities();
+            
+            // Show save confirmation
+            const originalText = saveBtn.innerHTML;
+            saveBtn.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                </svg>
+                SETTINGS SAVED
+            `;
+            saveBtn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+            saveBtn.classList.add('bg-green-600', 'hover:bg-green-700');
+            
+            setTimeout(() => {
+                saveBtn.innerHTML = originalText;
+                saveBtn.classList.remove('bg-green-600', 'hover:bg-green-700');
+                saveBtn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+            }, 2000);
+        }
+
+        function generateNumbers() {
+            const numbers = [];
+            const count = settings.numbersCount;
+            const min = settings.minNumber;
+            const max = settings.maxNumber;
+            const allowDupes = settings.allowDuplicates;
+            
+            if (min >= max) {
+                alert("Minimum number must be less than maximum number");
+                return [];
+            }
+            
+            if (!allowDupes && (max - min + 1) < count) {
+                alert(`Cannot generate ${count} unique numbers between ${min} and ${max}`);
+                return [];
+            }
+            
+            while (numbers.length < count) {
+                const num = Math.floor(Math.random() * (max - min + 1)) + min;
+                if (allowDupes || !numbers.includes(num)) {
+                    numbers.push(num);
+                }
+            }
+            
+            if (!allowDupes) {
+                numbers.sort((a, b) => a - b);
+            }
+            
+            lastGeneratedNumbers = numbers;
+            displayNumbersWithAnimation(numbers);
+            saveToHistory(numbers);
+            updateStatsSection(numbers);
+            calculateProbabilities();
+            return numbers;
+        }
+
+        function displayNumbersWithAnimation(numbers) {
+            resultDisplay.innerHTML = '';
+            
+            if (numbers.length === 0) {
+                resultDisplay.innerHTML = '<div class="text-gray-600">Error generating numbers</div>';
+                return;
+            }
+            
+            numbers.forEach((num, i) => {
+                setTimeout(() => {
+                    const ball = document.createElement('div');
+                    ball.className = 'number-ball pop-in';
+                    ball.textContent = num.toString().padStart(2, '0');
+                    ball.style.animationDelay = `${i * 0.1}s`;
+                    resultDisplay.appendChild(ball);
+                }, i * 50);
+            });
+        }
+
+        function saveToHistory(numbers) {
+            let history = JSON.parse(localStorage.getItem('blueSiteHistory') || '[]');
+            const timestamp = new Date().toLocaleString();
+            
+            history.unshift({
+                numbers: numbers,
+                timestamp: timestamp,
+                settings: {...settings},
+                isFavorite: false
+            });
+            
+            if (history.length > 1000) {
+                history = history.slice(0, 1000);
+            }
+            
+            localStorage.setItem('blueSiteHistory', JSON.stringify(history));
+            updateHistoryDisplay();
+        }
+
+        function updateHistoryDisplay() {
+            const history = JSON.parse(localStorage.getItem('blueSiteHistory')) || [];
+            historyCount.textContent = history.length;
+            
+            if (history.length === 0) {
+                historyList.innerHTML = `
+                    <div class="text-center py-8 text-gray-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        No generation history yet
+                    </div>
+                `;
+                return;
+            }
+            
+            let filteredHistory = history;
+            if (currentHistoryTab === 'favorites') {
+                filteredHistory = history.filter(item => item.isFavorite);
+            } else if (currentHistoryTab === 'analysis') {
+                // For analysis tab, we might want to show something different
+                // For now, just show all
+            }
+            
+            if (filteredHistory.length === 0 && currentHistoryTab === 'favorites') {
+                historyList.innerHTML = `
+                    <div class="text-center py-8 text-gray-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        </svg>
+                        No favorite number sets yet
+                    </div>
+                `;
+                return;
+            }
+            
+            historyList.innerHTML = '';
+            filteredHistory.forEach((entry, index) => {
+                const item = document.createElement('div');
+                item.className = `history-item bg-gray-950 border border-gray-800 py-4 px-5 mb-3 rounded-lg hover:border-blue-500 transition-all ${entry.isFavorite ? 'border-l-4 border-l-yellow-500' : ''}`;
+                
+                const numbersHtml = entry.numbers.map(num => 
+                    `<div class="number-ball">${num.toString().padStart(2, '0')}</div>`
+                ).join('');
+                
+                const favoriteIcon = entry.isFavorite ? 
+                    `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-500" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    </svg>` :
+                    `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 hover:text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                    </svg>`;
+                
+                item.innerHTML = `
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="text-sm text-gray-400">#${index + 1} • ${entry.timestamp}</span>
+                        <button class="toggle-favorite-btn" data-index="${index}">
+                            ${favoriteIcon}
+                        </button>
+                    </div>
+                    <div class="flex flex-wrap gap-2 mb-2">${numbersHtml}</div>
+                    <div class="text-xs text-gray-500 mt-2">
+                        Config: Pick ${entry.settings.numbersCount} from ${entry.settings.minNumber}-${entry.settings.maxNumber} 
+                        ${entry.settings.allowDuplicates ? '(duplicates allowed)' : '(no duplicates)'}
+                    </div>
+                `;
+                
+                historyList.appendChild(item);
+            });
+            
+            // Add event listeners to favorite buttons
+            document.querySelectorAll('.toggle-favorite-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const index = parseInt(this.getAttribute('data-index'));
+                    toggleFavorite(index);
+                });
+            });
+            
+            // Add click event to history items to copy numbers
+            document.querySelectorAll('.history-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const index = parseInt(this.querySelector('.toggle-favorite-btn').getAttribute('data-index'));
+                    const history = JSON.parse(localStorage.getItem('blueSiteHistory')) || [];
+                    const numbers = history[index].numbers;
+                    copyToClipboard(numbers.join(', '));
+                    
+                    // Show copied notification
+                    const notification = document.createElement('div');
+                    notification.className = 'fixed bottom-4 right-4 bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg';
+                    notification.textContent = 'Copied to clipboard!';
+                    document.body.appendChild(notification);
+                    
+                    setTimeout(() => {
+                        notification.remove();
+                    }, 2000);
+                });
+            });
+        }
+
+        function updateFavoritesDisplay() {
+            const history = JSON.parse(localStorage.getItem('blueSiteHistory')) || [];
+            const favorites = history.filter(item => item.isFavorite);
+            favoritesCount.textContent = favorites.length;
+            
+            if (favorites.length === 0) {
+                favoritesList.innerHTML = `
+                    <div class="text-center py-8 text-gray-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        </svg>
+                        No favorite number sets yet
+                    </div>
+                `;
+                return;
+            }
+            
+            favoritesList.innerHTML = '';
+            favorites.forEach((entry, index) => {
+                const item = document.createElement('div');
+                item.className = 'history-item bg-gray-950 border border-yellow-500 py-4 px-5 mb-3 rounded-lg hover:border-blue-500 transition-all';
+                
+                const numbersHtml = entry.numbers.map(num => 
+                    `<div class="number-ball">${num.toString().padStart(2, '0')}</div>`
+                ).join('');
+                
+                item.innerHTML = `
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="text-sm text-gray-400">#${index + 1} • ${entry.timestamp}</span>
+                        <button class="toggle-favorite-btn" data-index="${getHistoryIndex(entry)}">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-500" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="flex flex-wrap gap-2 mb-2">${numbersHtml}</div>
+                    <div class="text-xs text-gray-500 mt-2">
+                        Config: Pick ${entry.settings.numbersCount} from ${entry.settings.minNumber}-${entry.settings.maxNumber} 
+                        ${entry.settings.allowDuplicates ? '(duplicates allowed)' : '(no duplicates)'}
+                    </div>
+                `;
+                
+                favoritesList.appendChild(item);
+            });
+            
+            // Add event listeners to favorite buttons
+            document.querySelectorAll('.toggle-favorite-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const index = parseInt(this.getAttribute('data-index'));
+                    toggleFavorite(index);
+                });
+            });
+        }
+
+        function getHistoryIndex(entry) {
+            const history = JSON.parse(localStorage.getItem('blueSiteHistory')) || [];
+            return history.findIndex(item => 
+                item.timestamp === entry.timestamp && 
+                JSON.stringify(item.numbers) === JSON.stringify(entry.numbers)
+            );
+        }
+
+        function toggleFavorite(index) {
+            const history = JSON.parse(localStorage.getItem('blueSiteHistory')) || [];
+            if (index >= 0 && index < history.length) {
+                history[index].isFavorite = !history[index].isFavorite;
+                localStorage.setItem('blueSiteHistory', JSON.stringify(history));
+                
+                if (currentHistoryTab === 'all-history') {
+                    updateHistoryDisplay();
+                } else if (currentHistoryTab === 'favorites') {
+                    updateHistoryDisplay();
+                }
+                
+                updateFavoritesDisplay();
+            }
+        }
+
+        function clearHistory() {
+            if (confirm("Are you sure you want to clear all generation history? This cannot be undone.")) {
+                localStorage.removeItem('blueSiteHistory');
+                updateHistoryDisplay();
+                updateFavoritesDisplay();
+            }
+        }
+
+        function exportHistory() {
+            const history = JSON.parse(localStorage.getItem('blueSiteHistory')) || [];
+            if (history.length === 0) {
+                alert("No history to export");
+                return;
+            }
+            
+            let csv = "Timestamp,Numbers,Settings\n";
+            history.forEach(entry => {
+                csv += `"${entry.timestamp}","${entry.numbers.join(', ')}","Pick ${entry.settings.numbersCount} from ${entry.settings.minNumber}-${entry.settings.maxNumber} ${entry.settings.allowDuplicates ? '(duplicates allowed)' : '(no duplicates)'}"\n`;
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.setAttribute('href', url);
+            link.setAttribute('download', 'blueflare_2')
+    
+    
+      
+    </script>
+</body>
+</html>
