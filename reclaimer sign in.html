@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Q&A - Sign In / Sign Up</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://undefined-flare.github.io/BF/blueflare.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        
+      }
+        
+        body {
+            background: white;
+            color: #333;
+            
+            
+            
+    
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 100%;
+            display: flex;
+            text-align: center;
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 0.8s ease-out, slideUp 0.8s ease-out;
+        }
+        
+
+        
+        .auth-panel {
+            flex: 1;
+            padding: 40px;
+        }
+        
+        .pageName {
+            border-radius: 10px;
+            display: flex;
+            width:100%;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .auth-tab {
+            padding: 15px 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            color: #777;
+            transition: all 0.3s;
+            text-align: center;
+            flex: 1;
+        }
+        
+        .auth-tab.active {
+            color: #4169E1;
+            border-bottom: 3px solid #4169E1;
+        }
+        
+        .auth-form {
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        .auth-form.active {
+            display: block;
+        }
+        
+        .form-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .form-header h2 {
+            color: #4169E1;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .form-header p {
+            color: #666;
+            font-size: 1rem;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #444;
+            font-size: 0.95rem;
+        }
+        
+        .input-with-icon {
+            position: relative;
+        }
+        
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 15px 15px 15px 45px;
+            border: 2px solid #e1e5eb;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            border-color: #4169E1;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(65, 105, 225, 0.2);
+        }
+        
+        .optional-note {
+            font-size: 0.85rem;
+            color: #777;
+            font-style: italic;
+            margin-top: 5px;
+        }
+        
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            font-size: 0.9rem;
+        }
+        
+        .remember {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .remember input {
+            width: auto;
+            padding: 0;
+        }
+        
+        .forgot-password {
+            color: #4169E1;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #4169E1 0%, #3151b3 100%);
+            color: white;
+            margin-bottom: 15px;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(65, 105, 225, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #444;
+            border: 2px solid #e1e5eb;
+        }
+        
+        .btn-secondary:hover {
+            background: #e9ecef;
+            border-color: #ced4da;
+        }
+        
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 25px 0;
+            color: #777;
+            font-size: 0.9rem;
+        }
+        
+        .divider::before,
+        .divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #e1e5eb;
+        }
+        
+        .divider span {
+            padding: 0 15px;
+        }
+        
+        .social-login {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .social-btn {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #e1e5eb;
+            border-radius: 10px;
+            background: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .social-btn:hover {
+            border-color: #4169E1;
+            transform: translateY(-2px);
+        }
+        
+        .social-btn i {
+            font-size: 1.2rem;
+        }
+        
+        .google-btn {
+            color: #DB4437;
+        }
+        
+        .facebook-btn {
+            color: #4267B2;
+        }
+        
+        .twitter-btn {
+            color: #1DA1F2;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            background: #4CAF50;
+            color: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transform: translateX(100%);
+            opacity: 0;
+            transition: transform 0.5s, opacity 0.5s;
+            z-main: 1000;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(50px); }
+            to { transform: translateY(0); }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                max-width: 440px;
+            }
+            
+            .welcome-panel {
+                padding: 30px 20px;
+            }
+            
+            .auth-panel {
+                padding: 30px 20px;
+            }
+            
+            .social-login {
+                flex-direction: column;
+            }
+        }
+        .logo{
+            text-align: center;
+            font-size: 22px;
+        }
+    </style>
+</head>
+                    <div class="hdrPage">
+                        
+                        
+                        <img src="https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/1758334341084.jpg?alt=media&token=af2bb626-f7c8-44db-be34-e4cbaf00914d" alt="" class="schoolProfile" style="float:left;border:none;width:55px;height:55px;" />
+                        <br>
+                        <p class="logo" style="color:RGB(100, 149, 237);letter-spacing: none;">
+                            Reclaim<b style="color:peru">•SA</b>
+                        </p>
+                        
+                        
+                    </div>
+<body>
+    <div class="container">
+
+
+        
+        <div class="auth-panel">
+            <div class="pageName">
+                <div class="auth-tab active" id="signin-tab">Sign In</div>
+                <div class="auth-tab" id="signup-tab">Sign Up</div>
+            </div>
+            
+            <div class="auth-form active" id="signin-form">
+                <div class="form-header">
+        <p>Sign in to continue to your account</p>
+                </div>
+                
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-envelope input-icon"></i>
+                            <input type="email" id="email" placeholder="Enter your email" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-lock input-icon"></i>
+                            <input type="password" id="password" placeholder="Enter your password" required>
+                        </div>
+                    </div>
+                    
+                    <div class="remember-forgot">
+                        <div class="remember">
+                            <input type="checkbox" id="remember">
+                            <label for="remember">Remember me</label>
+                        </div>
+                        <a href="#" class="forgot-password">Forgot password?</a>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-sign-in-alt"></i> Sign In
+                    </button>
+                </form>
+
+
+                
+                <button class="btn btn-secondary" id="guestBtn">
+                    <i class="fas fa-user-alt"></i> Guest User
+                </button>
+                
+
+          </div>
+            
+            <div class="auth-form" id="signup-form">
+                <div class="form-header">
+                    <h2>Create Account</h2>
+                    <p>Join our community today</p>
+                </div>
+                
+                <form id="registerForm">
+                    <div class="form-group">
+                        <label for="fullname">Full Name</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-user input-icon"></i>
+                            <input type="text" id="fullname" placeholder="Enter your full name" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="signup-email">Email Address</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-envelope input-icon"></i>
+                            <input type="email" id="signup-email" placeholder="Enter your email" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="signup-password">Password</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-lock input-icon"></i>
+                            <input type="password" id="signup-password" placeholder="Create a password" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="age">Age</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-birthday-cake input-icon"></i>
+                            <input type="number" id="age" min="13" max="120" placeholder="Enter your age" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="province">Province</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-map-marker-alt input-icon"></i>
+                            <select id="province" required>
+                                <option value="" disabled selected>Select your province</option>
+                                <option value="Eastern Cape">Eastern Cape</option>
+                                <option value="Free State">Free State</option>
+                                <option value="Gauteng">Gauteng</option>
+                                <option value="KwaZulu-Natal">KwaZulu-Natal</option>
+                                <option value="Limpopo">Limpopo</option>
+                                <option value="Mpumalanga">Mpumalanga</option>
+                                <option value="Northern Cape">Northern Cape</option>
+                                <option value="North West">North West</option>
+                                <option value="Western Cape">Western Cape</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="politics">Your View on South African Politics (Optional)</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-comment-dots input-icon"></i>
+                            <textarea id="politics" rows="3" placeholder="Share your perspective on SA politics"></textarea>
+                        </div>
+                        <p class="optional-note">This question is optional. Your response will be anonymous.</p>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-user-plus"></i> Create Account
+                    </button>
+                </form>
+                
+
+            </div>
+        </div>
+    </div>
+    
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i> Signed in successfully!
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBSMvHpZ0_VkqWjJ94UMa6vqEhFiqrsIWM",
+            authDomain: "rare-5f47e.firebaseapp.com",
+            projectId: "rare-5f47e",
+            storageBucket: "rare-5f47e.appspot.com",
+            messagingSenderId: "811727087812",
+            appId: "1:811727087812:web:d362e68abf6c26acf24191",
+            measurementId: "G-DE59771G7Q"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const database = firebase.database();
+        
+        // DOM elements
+        let signinTab, signupTab, signinForm, signupForm, loginForm, registerForm, guestBtn, notification;
+        
+        // Wait for DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize DOM elements after page loads
+            signinTab = document.getElementById('signin-tab');
+            signupTab = document.getElementById('signup-tab');
+            signinForm = document.getElementById('signin-form');
+            signupForm = document.getElementById('signup-form');
+            loginForm = document.getElementById('loginForm');
+            registerForm = document.getElementById('registerForm');
+            guestBtn = document.getElementById('guestBtn');
+            notification = document.getElementById('notification');
+            
+            // Set up event listeners
+            setupEventListeners();
+            
+            // Check if user is already logged in
+            checkAuthState();
+        });
+        
+        function setupEventListeners() {
+            // Tab switching
+            signinTab.addEventListener('click', () => {
+                signinTab.classList.add('active');
+                signupTab.classList.remove('active');
+                signinForm.classList.add('active');
+                signupForm.classList.remove('active');
+            });
+            
+            signupTab.addEventListener('click', () => {
+                signupTab.classList.add('active');
+                signinTab.classList.remove('active');
+                signupForm.classList.add('active');
+                signinForm.classList.remove('active');
+            });
+            
+            // Sign in with email and password
+            loginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                
+                auth.signInWithEmailAndPassword(email, password)
+                    .then((userCredential) => {
+                        // Signed in 
+                        showNotification('Signed in successfully!');
+                        
+                        // Redirect to main page after a short delay
+                        setTimeout(() => {
+                            window.location.href = 'main.html';
+                        }, 1500);
+                    })
+                    .catch((error) => {
+                        const errorCode = error.code;
+                        const errorMessage = error.message;
+                        
+                        if (errorCode === 'auth/user-not-found') {
+                            showNotification('No account found with this email.', false);
+                        } else if (errorCode === 'auth/wrong-password') {
+                            showNotification('Incorrect password.', false);
+                        } else {
+                            showNotification(errorMessage, false);
+                        }
+                    });
+            });
+            
+            // Register new user
+            registerForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                const email = document.getElementById('signup-email').value;
+                const password = document.getElementById('signup-password').value;
+                const fullname = document.getElementById('fullname').value;
+                const age = document.getElementById('age').value;
+                const province = document.getElementById('province').value;
+                const politics = document.getElementById('politics').value;
+                
+                auth.createUserWithEmailAndPassword(email, password)
+                    .then((userCredential) => {
+                        // Signed up 
+                        const user = userCredential.user;
+                        
+                        // Save additional user data to database
+                        const userData = {
+                            email: email,
+                            fullname: fullname,
+                            age: age,
+                            province: province,
+                            politics: politics,
+                            createdAt: new Date().toISOString()
+                        };
+                        
+                        database.ref('users/' + user.uid).set(userData)
+                            .then(() => {
+                                showNotification('Account created successfully!');
+                                
+                                // Redirect to main page after a short delay
+                                setTimeout(() => {
+                                    window.location.href = 'main.html';
+                                }, 1500);
+                            })
+                            .catch((error) => {
+                                console.error("Error saving user data:", error);
+                                showNotification('Account created but there was an error saving your profile data.', false);
+                            });
+                    })
+                    .catch((error) => {
+                        const errorCode = error.code;
+                        const errorMessage = error.message;
+                        
+                        if (errorCode === 'auth/email-already-in-use') {
+                            showNotification('This email is already registered.', false);
+                        } else if (errorCode === 'auth/weak-password') {
+                            showNotification('Password should be at least 6 characters.', false);
+                        } else {
+                            showNotification(errorMessage, false);
+                        }
+                    });
+            });
+            
+            // Sign in as guest (anonymous authentication)
+            guestBtn.addEventListener('click', () => {
+                auth.signInAnonymously()
+                    .then((userCredential) => {
+                        // Signed in as guest
+                        showNotification('Signed in as guest!');
+                        
+                        // Redirect to main page after a short delay
+                        setTimeout(() => {
+                            window.location.href = 'main.html';
+                        }, 1500);
+                    })
+                    .catch((error) => {
+                        const errorCode = error.code;
+                        const errorMessage = error.message;
+                        showNotification(errorMessage, false);
+                    });
+            });
+            
+            // Social login handlers (placeholder functionality)
+            document.querySelectorAll('.social-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    showNotification('Social sign-in would be implemented here', false);
+                });
+            });
+        }
+        
+        // Check if user is already logged in
+        function checkAuthState() {
+            auth.onAuthStateChanged((user) => {
+                if (user && window.location.pathname.endsWith('login.html')) {
+                    // User is signed in and on login page, redirect to main page
+                    setTimeout(() => {
+                        window.location.href = 'main.html';
+                    }, 1000);
+                }
+            });
+        }
+        
+        // Show notification function
+        function showNotification(message, isSuccess = true) {
+            if (!notification) return;
+            
+            notification.innerHTML = `<i class="fas ${isSuccess ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${message}`;
+            notification.style.background = isSuccess ? '#4CAF50' : '#F44336';
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
