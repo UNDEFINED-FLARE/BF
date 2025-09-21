@@ -1,0 +1,1542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-app.js"></script>
+            <link rel="icon" 
+      href="https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/1758334341084.jpg?alt=media&token=af2bb626-f7c8-44db-be34-e4cbaf00914d" 
+      type="image/png"
+    >
+      <link rel="stylesheet" href="blueflare.css" title="" type="" />
+      <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-database.js"></script>
+
+  <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-auth.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>RECLAIMER SA🇿🇦</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color:black;
+            line-height: 1.6;
+        }
+        
+
+        nav {
+            
+            
+            
+            
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-widt: 1200px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo-icon {
+            margin-right: 10px;
+            font-size: 1.8rem;
+        }
+        
+        .nav-links {
+            border-radius:10px;
+font-size: 9px;
+  white-space: nowrap;      /* Prevents text from wrapping */
+  overflow: hidden;         /* Hides overflow */
+  text-overflow: ellipsis;  /* Adds '...' at the end */
+  max-widh: 80px;         /* Optional: limits width */
+
+              height:auto;
+              color: #42445A;
+               width:auto;
+    padding: 0px;
+          text-align: center;
+
+          background-color: rgba(255, 255, 255, 0.9);
+
+
+          font-weight: 900;
+           box-shadow: 1px 0.5px 2px #B4B4BE;
+
+  margin:9px;
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 1.5rem;
+        }
+        
+        .nav-links a {
+            color: black;
+            text-decoration: none;
+            font-weight: 700;
+            font-size:10px;
+            padding: 0.5rem;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        
+        .nav-links a:hover, .nav-links a.active {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .container {
+            width:100%;
+            margi-top:5px;
+            padding: 0;
+        }
+        
+        .page {
+            margin:0;
+            padding:0;
+            width:100%;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .hero {
+            background: url('https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/IMG-20250912-WA0101.jpg?alt=media&token=66a018e2-c3e1-4d25-9028-d911a5050150');
+            background-size: cover;
+            padding: 3rem;
+            width:100%;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 2rem;
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .card {
+            background: white;
+            width:100%;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-img {
+            height: 200px;
+            background: linear-gradient(45deg, #, #FFB81C);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+        
+        .card-content {
+            padding: 1.5rem;
+        }
+        
+        .card h3 {
+            margin-bottom: 0.5rem;
+            color: #;
+        }
+        
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 2rem auto;
+        }
+        
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            background-color: #;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -3px;
+        }
+        
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            width: 50%;
+            box-sizing: border-box;
+        }
+        
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            border: 4px solid #FFB81C;
+            border-radius: 50%;
+            top: 15px;
+            right: -12px;
+            z-index: 1;
+        }
+        
+        .left {
+            left: 0;
+        }
+        
+        .right {
+            left: 50%;
+        }
+        
+        .right::after {
+            left: -12px;
+        }
+        
+        .timeline-content {
+            padding: 1rem;
+            background-color: white;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        footer {
+            background: linear-gradient(135deg, # 0%, #000000 50%, #FFB81C 100%);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+        .user-info{
+            color:peru;
+            display:none;
+            font-weight: 600;
+        }
+        @media (max-width: 900px) {
+            .nav-links {
+                display: noe;
+        
+            
+        
+                
+        
+        
+            }
+            
+            .nav-links.active {
+                display: flex;
+            }
+            
+            .nav-links li {
+                margin: 0.rem 0;
+            }
+            
+            .menu-btn {
+                display: block;
+                font-size: 1.5rem;
+                
+            }
+            
+            .timeline::after {
+                left: 31px;
+            }
+            
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+            
+            .timeline-item::after {
+                left: 22px;
+            }
+            
+            .left, .right {
+                left: 0;
+            }
+        }
+
+    
+        i{
+            color:royalblue;
+            
+        }
+        a{
+            color:grey;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+
+                    <div class="hdrPage">
+                
+                
+                <img src="https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/1758334341084.jpg?alt=media&token=af2bb626-f7c8-44db-be34-e4cbaf00914d" alt="" class="schoolProfile" style="float:left;border:none;width:55px;height:55px;" />
+                <br>
+                <p class="logo" style="color:RGB(100, 149, 237);letter-spacing: none;">
+                    Reclaim<b style="color:peru">•SA</b>
+                </p>
+                
+                
+            </div>
+<body>
+    
+
+
+
+
+    
+          <div class="pageName" style="color:RGB(65, 105, 225);">
+            <div class="logo">
+
+
+            </div>
+             <!--               <nav>
+                                
+                                <ul class="nav-links">
+                                    <li><a href="#home" class="nav-link active">Home</a></li>
+                                    <li><a href="#Q/Ay" class="nav-link">Q/Ay</a></li>
+                                    <li><a href="#leaders" class="nav-link">Key Figures</a></li>
+                                    <li><a href="#impact" class="nav-link">Impact</a></li>
+                                </ul>
+                                
+                            </nav>
+      
+-->
+              <img id="profilePicture" class="user-avatar" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" alt="Profile" style="width:30px;height:30px" class="user-avatar">
+              <br />
+      <div class="user-actions">
+                <div class="nav-links">
+                <span id="user-info">Guest</span>
+              </div>
+
+            </div>
+            
+    </div>
+
+            <div class="user-info" style="display:noe">
+                
+
+            </div>
+    <div class="container">
+        <!-- Home Page -->
+        <section id="home" class="page">
+            <div class="hero" >
+                <h1>South African Student Revolution</h1>
+#ReclaimSA is a youth-driven and citizen-powered movement dedicated to effective and positive change in South Africa.
+
+
+
+Through community action, accountability monitoring, and the strategic mobilisation of its members’ skills, #ReclaimSA works towards a future defined by ethical leadership, economic justice, and united communities.
+
+
+
+The movement is independent and funded by the contributions of its members.
+            </div>
+            
+            <div class="content-grid">
+                <div class="card">
+
+                    <div class="card-content">
+We are reclaiming SA!
+Our power does not lie in a ballot box alone. It lies in our hands, our skills, and our unwavering commitment to each other. #ReclaimSA is a citizen-powered platform turning frustration into focused action. We channel our collective energy into tangible projects that rebuild our communities and hold power to account.
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-img">🔥</div>
+                    <div class="card-content">
+                        <h3>Soweto Uprising</h3>
+                        <p>The 1976 student protests that began in Soweto and spread across South Africa, becoming a pivotal moment in the anti-apartheid struggle.</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-img">✊</div>
+                    <div class="card-content">
+                        <h3>#FeesMustFall</h3>
+                        <p>The 2015-2016 student protests that challenged university fee increases and called for decolonized education.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Q/Ay Page -->
+        <section id="Q/Ay" class="page">
+    <div class="container">
+    
+        <div class="tabs">
+            <div class="tab active" onclick="showTab('questions')">Questions</div>
+            <div class="tab" onclick="showTab('qa')">Q&A</div>
+            <div class="tab" onclick="showTab('polls')">Polls</div>
+        </div>
+        
+        <div id="questions-tab" class="tab-content">
+            <div class="post-form">
+                <h2 class="form-title">Ask a Question</h2>
+                <div class="form-group">
+                    <textarea id="question-text" placeholder="What would you like to ask?" rows="4"></textarea>
+                </div>
+                <button onclick="submitQuestion()">Post Question</button>
+            </div>
+            
+            <div class="questions-list" id="questions-list">
+                <div class="loading">
+                    <i class="fas fa-spinner fa-spin"></i> Loading questions...
+                </div>
+            </div>
+        </div>
+        
+        <div id="qa-tab" class="tab-content">
+            <div class="questions-list" id="qa-list">
+                <div class="loading">
+                    <i class="fas fa-spinner fa-spin"></i> Loading Q&A...
+                </div>
+            </div>
+        </div>
+        
+        <div id="polls-tab" class="tab-content">
+            <div class="post-form">
+                <h2 class="form-title">Create a Poll</h2>
+                <div class="form-group">
+                    <input type="text" id="poll-question" placeholder="Enter your poll question">
+                </div>
+                <div class="form-group">
+                    <input type="text" id="poll-option1" placeholder="Option 1">
+                    <input type="text" id="poll-option2" placeholder="Option 2">
+                    <input type="text" id="poll-option3" placeholder="Option 3 (optional)">
+                    <input type="text" id="poll-option4" placeholder="Option 4 (optional)">
+                </div>
+                <button onclick="submitPoll()">Create Poll</button>
+            </div>
+            
+            <div class="questions-list" id="polls-list">
+                <div class="loading">
+                    <i class="fas fa-spinner fa-spin"></i> Loading polls...
+                </div>
+            </div>
+        </div>
+    </div>
+        </section>
+
+        <!-- Leaders Page -->
+        <section id="leaders" class="page active" >
+    <div class="container">
+
+        
+        <div id="newsFormContainer" style="display: none;">
+            <h2 class="form-title">Publish New Article</h2>
+            <form id="newsForm">
+                <div class="form-group">
+                    <label for="newsTitle">Title</label>
+                    <input type="text" id="newsTitle" required>
+                </div>
+                <div class="form-group">
+                    <label for="newsContent">Content</label>
+                    <textarea id="newsContent" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="newsCategory">Category</label>
+                    <select id="newsCategory" required>
+                        <option value="">Select a category</option>
+                        <option value="Technology">Technology</option>
+                        <option value="Sports">Sports</option>
+                        <option value="Entertainment">Entertainment</option>
+                        <option value="Politics">Politics</option>
+                        <option value="Business">Business</option>
+                        <option value="Health">Health</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="newsFile">Image (optional)</label>
+                    <input type="file" id="newsFile" accept="image/*">
+                </div>
+                <button type="submit">Publish Article</button>
+            </form>
+        </div>
+        
+        <h2>Latest News</h2>
+        <div id="newsContainer">
+            <div class="loading">
+                <i class="fas fa-spinner fa-spin"></i> Loading articles...
+            </div>
+        </div>
+    </div>
+    
+    <!-- Full Article View -->
+    <div id="articleFullView">
+        <button class="article-back-button" id="articleBackButton">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+        <div class="full-article-content" id="articleContent">
+            <!-- Full article content will be loaded here -->
+        </div>
+    </div>
+
+
+        </section>
+
+    </div>
+
+
+
+</body>
+<link href="https://undefined-flare.github.io/BF/blueflare.css" rel="stylesheet">
+<footer style="bottom: 0;margin:0;">
+    <nav>
+     <button class="nav-button">
+            <i class="fas fa-newspaper"></i>
+<a href="#leaders" class="nav-link active">
+            
+                news
+            </a>
+        </button>
+        <button class="nav-button ">
+            <i class="fas fa-fire"></i>
+<a href="#Q/Ay" class="nav-link active">
+            
+                q/p
+            </a>
+        </button>
+        
+        <button class="nav-button" style="position: relative;">
+            <i class="fa fa-video"></i>
+<a href="#home" class="nav-link active">    
+                About
+            </a>
+            
+        </button>
+    </nav>
+    
+</footer>
+</html>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBSMvHpZ0_VkqWjJ94UMa6vqEhFiqrsIWM",
+            authDomain: "rare-5f47e.firebaseapp.com",
+            projectId: "rare-5f47e",
+            storageBucket: "rare-5f47e.appspot.com",
+            messagingSenderId: "811727087812",
+            appId: "1:811727087812:web:d362e68abf6c26acf24191",
+            measurementId: "G-DE59771G7Q"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const database = firebase.database();
+
+        // Auth state listener
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                // User is signed in
+                document.getElementById('profilePicture').src = user.photoURL || 'https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/original-aef3771cc124ac9ca3be8c4e0ee71ff5.jpg?alt=media&token=83ef4409-f010-49d1-9809-832febab42d6';
+                document.getElementById('user-info').textContent = user.email || user.email;
+                loadQuestions();
+                loadPolls();
+            } else {
+                // No user signed in
+                window.location.href = 'reclaimer sign in.html'; // Redirect to login page
+            }
+        });
+
+        // Tab navigation
+        function showTab(tabName) {
+            // Update active tab
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+
+            // Show selected tab content
+            document.getElementById('questions-tab').style.display = 'none';
+            document.getElementById('qa-tab').style.display = 'none';
+            document.getElementById('polls-tab').style.display = 'none';
+            document.getElementById(`${tabName}-tab`).style.display = 'block';
+        }
+
+        // Q&A functions
+        function loadQuestions() {
+            const qaRef = database.ref('questions');
+
+            qaRef.orderByChild('timestamp').on('value', snapshot => {
+                const qaList = document.getElementById('questions-list');
+                qaList.innerHTML = '';
+
+                if (!snapshot.exists()) {
+                    qaList.innerHTML = `
+                        <div class="empty-state">
+                            <img src="https://cdn-icons-png.flaticon.com/512/4076/4076478.png" alt="No questions">
+                            <div>No questions yet. Be the first to ask!</div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Convert to array and reverse to show newest first
+                const questions = [];
+                snapshot.forEach(questionSnapshot => {
+                    questions.push({
+                        key: questionSnapshot.key,
+                        val: questionSnapshot.val()
+                    });
+                });
+
+                questions.reverse().forEach(question => {
+                    const questionElement = document.createElement('div');
+                    questionElement.className = 'qa-question';
+                    questionElement.innerHTML = `
+                        <div class="post-header">
+                            <img class="post-user-img" src="${question.val.authorPhoto || 'https://ui-avatars.com/api/?name=User&background=random'}">
+                            <span class="post-user-name">${question.val.author || 'Anonymous'}</span>
+                            <span class="post-time">${formatTime(question.val.timestamp)}</span>
+                        </div>
+                        <div class="post-content">${question.val.text}</div>
+                        <div class="post-actions">
+                            <button class="action-button" onclick="toggleAnswerForm('${question.key}')">
+                                <i class="fas fa-reply"></i>
+                                Answer
+                            </button>
+                            <div class="reaction-container">
+                                <button class="action-button reaction-button">
+                                    <i class="fas fa-smile"></i>
+                                    React
+                                </button>
+                                <div class="reaction-picker">
+                                    <span class="reaction-option" onclick="reactToItem('questions', '${question.key}', 'like')">👍</span>
+                                    <span class="reaction-option" onclick="reactToItem('questions', '${question.key}', 'love')">❤️</span>
+                                    <span class="reaction-option" onclick="reactToItem('questions', '${question.key}', 'laugh')">😄</span>
+                                    <span class="reaction-option" onclick="reactToItem('questions', '${question.key}', 'wow')">😲</span>
+                                    <span class="reaction-option" onclick="reactToItem('questions', '${question.key}', 'sad')">😢</span>
+                                    <span class="reaction-option" onclick="reactToItem('questions', '${question.key}', 'angry')">😠</span>
+                                </div>
+                            </div>
+                            ${generateReactionSummary(question.val.reactions)}
+                        </div>
+                        <div class="answers-toggle collapsed" onclick="toggleAnswers('${question.key}')">
+                            <i class="fas fa-chevron-down"></i>
+                            Answers (${question.val.answers ? Object.keys(question.val.answers).length : 0})
+                        </div>
+                        <div class="qa-answers hidden-answers" id="answers-${question.key}"></div>
+                    `;
+                    qaList.appendChild(questionElement);
+                });
+            });
+        }
+
+        function toggleAnswers(questionId) {
+            const answersContainer = document.getElementById(`answers-${questionId}`);
+            const toggleButton = answersContainer.previousElementSibling;
+
+            if (answersContainer.classList.contains('hidden-answers')) {
+                // Show answers
+                answersContainer.classList.remove('hidden-answers');
+                toggleButton.classList.remove('collapsed');
+                loadAnswers(questionId);
+            } else {
+                // Hide answers
+                answersContainer.classList.add('hidden-answers');
+                toggleButton.classList.add('collapsed');
+            }
+        }
+
+        function loadAnswers(questionId) {
+            const answersRef = database.ref(`questions/${questionId}/answers`);
+
+            answersRef.orderByChild('timestamp').on('value', snapshot => {
+                const answersContainer = document.getElementById(`answers-${questionId}`);
+                answersContainer.innerHTML = '';
+
+                if (!snapshot.exists()) {
+                    answersContainer.innerHTML = '<div class="empty-state">No answers yet</div>';
+                    return;
+                }
+
+                // Convert to array and reverse to show newest first
+                const answers = [];
+                snapshot.forEach(answerSnapshot => {
+                    answers.push({
+                        key: answerSnapshot.key,
+                        val: answerSnapshot.val()
+                    });
+                });
+
+                answers.reverse().forEach(answer => {
+                    const answerElement = document.createElement('div');
+                    answerElement.className = 'qa-answer';
+                    answerElement.innerHTML = `
+                        <div class="post-header">
+                            <img class="post-user-img" src="${answer.val.authorPhoto || 'https://ui-avatars.com/api/?name=User&background=random'}">
+                            <span class="post-user-name">${answer.val.author || 'Anonymous'}</span>
+                            <span class="post-time">${formatTime(answer.val.timestamp)}</span>
+                        </div>
+                        <div class="post-content">${answer.val.text}</div>
+                        <div class="post-actions">
+                            <div class="reaction-container">
+                                <button class="action-button reaction-button">
+                                    <i class="fas fa-smile"></i>
+                                    React
+                                </button>
+                                <div class="reaction-picker">
+                                    <span class="reaction-option" onclick="reactToItem('questions/${questionId}/answers', '${answer.key}', 'like')">👍</span>
+                                    <span class="reaction-option" onclick="reactToItem('questions/${questionId}/answers', '${answer.key}', 'love')">❤️</span>
+                                    <span class="reaction-option" onclick="reactToItem('questions/${questionId}/answers', '${answer.key}', 'laugh')">😄</span>
+                                    <span class="reaction-option" onclick="reactToItem('questions/${questionId}/answers', '${answer.key}', 'wow')">😲</span>
+                                    <span class="reaction-option" onclick="reactToItem('questions/${questionId}/answers', '${answer.key}', 'sad')">😢</span>
+                                    <span class="reaction-option" onclick="reactToItem('questions/${questionId}/answers', '${answer.key}', 'angry')">😠</span>
+                                </div>
+                            </div>
+                            ${generateReactionSummary(answer.val.reactions)}
+                        </div>
+                    `;
+                    answersContainer.appendChild(answerElement);
+                });
+            });
+        }
+
+        function toggleAnswerForm(questionId) {
+            const answersContainer = document.getElementById(`answers-${questionId}`);
+            const existingForm = answersContainer.querySelector('.answer-form');
+
+            // Make sure answers are visible
+            if (answersContainer.classList.contains('hidden-answers')) {
+                toggleAnswers(questionId);
+            }
+
+            if (existingForm) {
+                existingForm.remove();
+                return;
+            }
+
+            const answerForm = document.createElement('div');
+            answerForm.className = 'answer-form';
+            answerForm.innerHTML = `
+                <textarea id="answer-text-${questionId}" placeholder="Write your answer..." rows="3"></textarea>
+                <button onclick="submitAnswer('${questionId}')">Submit Answer</button>
+                <button onclick="toggleAnswerForm('${questionId}')" class="cancel-button">Cancel</button>
+            `;
+
+            answersContainer.prepend(answerForm);
+            document.getElementById(`answer-text-${questionId}`).focus();
+        }
+
+        function submitQuestion() {
+            const user = auth.currentUser;
+            if (!user) return;
+
+            const questionText = document.getElementById('question-text').value.trim();
+            if (!questionText) {
+                alert('Please enter a question');
+                return;
+            }
+
+            const questionData = {
+                text: questionText,
+                author: user.email || 'Anonymous',
+                authorPhoto: user.photoURL || '',
+                timestamp: Date.now(),
+                likes: 0
+            };
+
+            const questionsRef = database.ref('questions');
+            questionsRef.push(questionData)
+                .then(() => {
+                    document.getElementById('question-text').value = '';
+                    alert('Question posted successfully!');
+                })
+                .catch(error => {
+                    console.error("Error submitting question:", error);
+                    alert('Failed to post question. Please try again.');
+                });
+        }
+
+        function submitAnswer(questionId) {
+            const user = auth.currentUser;
+            if (!user) return;
+
+            const answerText = document.getElementById(`answer-text-${questionId}`).value.trim();
+            if (!answerText) {
+                alert('Please enter an answer');
+                return;
+            }
+
+            const answerData = {
+                text: answerText,
+                author: user.email || 'Anonymous',
+                authorPhoto: user.photoURL || '',
+                timestamp: Date.now(),
+                likes: 0
+            };
+
+            const answersRef = database.ref(`questions/${questionId}/answers`);
+            answersRef.push(answerData)
+                .then(() => {
+                    toggleAnswerForm(questionId); // Hide the form after submission
+                    // Update the answer count in the toggle button
+                    const toggleButton = document.querySelector(`#answers-${questionId}`).previousElementSibling;
+                    const currentCount = parseInt(toggleButton.textContent.match(/\((\d+)\)/)[1]) || 0;
+                    toggleButton.textContent = toggleButton.textContent.replace(/\(\d+\)/, `(${currentCount + 1})`);
+                })
+                .catch(error => {
+                    console.error("Error submitting answer:", error);
+                    alert('Failed to submit answer. Please try again.');
+                });
+        }
+
+        // Poll functions
+        function loadPolls() {
+            const pollsRef = database.ref('polls');
+
+            pollsRef.orderByChild('timestamp').on('value', snapshot => {
+                const pollsList = document.getElementById('polls-list');
+                pollsList.innerHTML = '';
+
+                if (!snapshot.exists()) {
+                    pollsList.innerHTML = `
+                        <div class="empty-state">
+                            <img src="https://cdn-icons-png.flaticon.com/512/4076/4076478.png" alt="No polls">
+                            <div>No polls yet. Be the first to create one!</div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Convert to array and reverse to show newest first
+                const polls = [];
+                snapshot.forEach(pollSnapshot => {
+                    polls.push({
+                        key: pollSnapshot.key,
+                        val: pollSnapshot.val()
+                    });
+                });
+
+                polls.reverse().forEach(poll => {
+                    const user = auth.currentUser;
+                    const userVote = poll.val.votes ? poll.val.votes[user.uid] : null;
+                    const totalVotes = poll.val.votes ? Object.keys(poll.val.votes).length : 0;
+
+                    const pollElement = document.createElement('div');
+                    pollElement.className = 'qa-question';
+                    pollElement.innerHTML = `
+                        <div class="post-header">
+                            <img class="post-user-img" src="${poll.val.authorPhoto || 'https://ui-avatars.com/api/?name=User&background=random'}">
+                            <span class="post-user-name">${poll.val.author || 'Anonymous'}</span>
+                            <span class="post-time">${formatTime(poll.val.timestamp)}</span>
+                        </div>
+                        <div class="poll-container">
+                            <div class="poll-question">${poll.val.question}</div>
+                            <div id="poll-options-${poll.key}"></div>
+                            <div class="poll-stats">Total votes: ${totalVotes}</div>
+                        </div>
+                    `;
+                    pollsList.appendChild(pollElement);
+
+                    // Load poll options
+                    loadPollOptions(poll.key, poll.val.options, poll.val.votes, user.uid);
+                });
+            });
+        }
+
+        function loadPollOptions(pollId, options, votes, userId) {
+            const optionsContainer = document.getElementById(`poll-options-${pollId}`);
+            optionsContainer.innerHTML = '';
+
+            if (!options) return;
+
+            const totalVotes = votes ? Object.keys(votes).length : 0;
+
+            options.forEach((option, index) => {
+                const optionVotes = votes ? Object.values(votes).filter(v => v === index).length : 0;
+                const percentage = totalVotes > 0 ? Math.round((optionVotes / totalVotes) * 100) : 0;
+                const isSelected = votes && votes[userId] === index;
+
+                const optionElement = document.createElement('div');
+                optionElement.className = `poll-option ${isSelected ? 'selected-option' : ''}`;
+                optionElement.innerHTML = `
+                    <div style="flex: 1;">
+                        <div>${option}</div>
+                        <div class="poll-bar">
+                            <div class="poll-fill" style="width: ${percentage}%"></div>
+                        </div>
+                        <div class="poll-stats">
+                            <span>${percentage}%</span>
+                            <span>${optionVotes} vote${optionVotes !== 1 ? 's' : ''}</span>
+                        </div>
+                    </div>
+                `;
+                optionElement.onclick = () => voteInPoll(pollId, index);
+                optionsContainer.appendChild(optionElement);
+            });
+        }
+
+        function submitPoll() {
+            const user = auth.currentUser;
+            if (!user) return;
+
+            const pollQuestion = document.getElementById('poll-question').value.trim();
+            const option1 = document.getElementById('poll-option1').value.trim();
+            const option2 = document.getElementById('poll-option2').value.trim();
+            const option3 = document.getElementById('poll-option3').value.trim();
+            const option4 = document.getElementById('poll-option4').value.trim();
+
+            if (!pollQuestion || !option1 || !option2) {
+                alert('Please enter a question and at least two options');
+                return;
+            }
+
+            const options = [option1, option2];
+            if (option3) options.push(option3);
+            if (option4) options.push(option4);
+
+            const pollData = {
+                question: pollQuestion,
+                options: options,
+                author: user.email || 'Anonymous',
+                authorPhoto: user.photoURL || '',
+                timestamp: Date.now()
+            };
+
+            const pollsRef = database.ref('polls');
+            pollsRef.push(pollData)
+                .then(() => {
+                    // Clear form
+                    document.getElementById('poll-question').value = '';
+                    document.getElementById('poll-option1').value = '';
+                    document.getElementById('poll-option2').value = '';
+                    document.getElementById('poll-option3').value = '';
+                    document.getElementById('poll-option4').value = '';
+                    
+                    alert('Poll created successfully!');
+                })
+                .catch(error => {
+                    console.error("Error creating poll:", error);
+                    alert('Failed to create poll. Please try again.');
+                });
+        }
+
+        function voteInPoll(pollId, optionIndex) {
+            const user = auth.currentUser;
+            if (!user) return;
+
+            const voteRef = database.ref(`polls/${pollId}/votes/${user.uid}`);
+            voteRef.set(optionIndex)
+                .then(() => {
+                    // Reload the poll to show updated results
+                    const pollRef = database.ref(`polls/${pollId}`);
+                    pollRef.once('value').then(snapshot => {
+                        loadPollOptions(pollId, snapshot.val().options, snapshot.val().votes, user.uid);
+                    });
+                })
+                .catch(error => {
+                    console.error("Error voting:", error);
+                    alert('Failed to vote. Please try again.');
+                });
+        }
+
+        // Reaction functionality
+        function reactToItem(path, itemId, reactionType) {
+            const user = auth.currentUser;
+            if (!user) return;
+
+            const userReactionRef = database.ref(`${path}/${itemId}/reactions/${user.uid}`);
+            
+            // Check if user already has a reaction
+            userReactionRef.once('value').then(snapshot => {
+                if (snapshot.exists() && snapshot.val() === reactionType) {
+                    // User is removing their reaction
+                    userReactionRef.remove();
+                } else {
+                    // User is adding/updating their reaction
+                    userReactionRef.set(reactionType);
+                }
+            });
+        }
+
+        function generateReactionSummary(reactions) {
+            if (!reactions) return '';
+            
+            // Count each reaction type
+            const reactionCounts = {};
+            Object.values(reactions).forEach(reaction => {
+                reactionCounts[reaction] = (reactionCounts[reaction] || 0) + 1;
+            });
+            
+            // Create summary HTML
+            let summaryHTML = '<div class="reaction-summary">';
+            for (const [reaction, count] of Object.entries(reactionCounts)) {
+                const emoji = getReactionEmoji(reaction);
+                summaryHTML += `<span class="reaction-item">${emoji} ${count}</span>`;
+            }
+            summaryHTML += '</div>';
+            
+            return summaryHTML;
+        }
+
+        function getReactionEmoji(reactionType) {
+            const emojiMap = {
+                'like': '👍',
+                'love': '❤️',
+                'laugh': '😄',
+                'wow': '😲',
+                'sad': '😢',
+                'angry': '😠'
+            };
+            
+            return emojiMap[reactionType] || '👍';
+        }
+
+        // Helper function
+        function formatTime(timestamp) {
+            if (!timestamp) return "Unknown time";
+            
+            // Convert to number if it's a string
+            const timeValue = typeof timestamp === 'string' ? parseInt(timestamp) : timestamp;
+            
+            const now = Date.now();
+            const diff = now - timeValue;
+            const seconds = Math.floor(diff / 1000);
+            const minutes = Math.floor(seconds / 60);
+            const hours = Math.floor(minutes / 60);
+            const days = Math.floor(hours / 24);
+
+            if (seconds < 60) return "Just now";
+            if (minutes < 60) return `${minutes} min ago`;
+            if (hours < 24) return `${hours} hr ago`;
+            if (days < 7) return `${days} day${days > 1 ? 's' : ''} ago`;
+            
+            // For older dates, show actual date
+            const date = new Date(timeValue);
+            return date.toLocaleDateString();
+        }
+    </script>
+
+
+
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Navigation functionality
+            const navLinks = document.querySelectorAll('.nav-link');
+            const pages = document.querySelectorAll('.page');
+            const menuBtn = document.querySelector('.menu-btn');
+            const navLinksContainer = document.querySelector('.nav-links');
+            
+            // Handle navigation clicks
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Get the target page ID
+                    const targetId = this.getAttribute('href').substring(1);
+                    
+                    // Update active navigation link
+                    navLinks.forEach(navLink => navLink.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Show the target page and hide others
+                    pages.forEach(page => {
+                        page.classList.remove('active');
+                        if (page.id === targetId) {
+                            page.classList.add('active');
+                        }
+                    });
+                    
+                    // Close mobile menu if open
+                    navLinksContainer.classList.remove('active');
+                    
+                    // Scroll to top
+                    window.scrollTo(0, 0);
+                });
+            });
+            
+            // Mobile menu toggle
+            menuBtn.addEventListener('click', function() {
+                navLinksContainer.classList.toggle('active');
+            });
+            
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('nav')) {
+                    navLinksContainer.classList.remove('active');
+                }
+            });
+        });
+    </script>
+
+
+
+
+    <script type="module">
+        import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+        import { getDatabase, ref, push, onValue, runTransaction, query, orderByChild, set, get } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-database.js";
+        import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-storage.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBSMvHpZ0_VkqWjJ94UMa6vqEhFiqrsIWM",
+            authDomain: "rare-5f47e.firebaseapp.com",
+            projectId: "rare-5f47e",
+            storageBucket: "rare-5f47e.appspot.com",
+            messagingSenderId: "811727087812",
+            appId: "1:811727087812:web:d362e68abf6c26acf24191",
+            measurementId: "G-DE59771G7Q"
+        };
+
+        // Initialize Firebase only if not already initialized
+        let app;
+        if (!getApps().length) {
+            app = initializeApp(firebaseConfig);
+        } else {
+            app = getApp();
+        }
+
+        const auth = getAuth(app);
+        const database = getDatabase(app);
+        const storage = getStorage(app);
+
+        // DOM elements
+        const newsForm = document.getElementById("newsForm");
+        const newsContainer = document.getElementById("newsContainer");
+        const profilePicture = document.getElementById("profilePicture");
+        const userInfo = document.getElementById("user-info");
+        const newsFormContainer = document.getElementById("newsFormContainer");
+        const articleFullView = document.getElementById("articleFullView");
+        const articleBackButton = document.getElementById("articleBackButton");
+        const articleContent = document.getElementById("articleContent");
+
+        // Your Firebase UID to restrict authoring
+        const ALLOWED_AUTHOR_UID = "KacHZRMKrDMOsIwPKUDLv8YfH5K82";
+
+        // Function to detect and format links and hashtags
+        function formatContent(content) {
+            if (!content) return '';
+            
+            // Convert URLs to clickable links
+            let formattedContent = content.replace(
+                /(https?:\/\/[^\s]+)/g, 
+                '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>'
+            );
+            
+            // Convert hashtags to styled spans
+            formattedContent = formattedContent.replace(
+                /#(\w+)/g, 
+                '<span class="hashtag">#$1</span>'
+            );
+            
+            return formattedContent;
+        }
+
+        // Wait for DOM to load
+        document.addEventListener("DOMContentLoaded", () => {
+            // Auth state listener
+            onAuthStateChanged(auth, (user) => {
+                if (!user) {
+                    alert("Please sign in: You will be redirected to the sign-in page");
+             
+             window.location.href = "#";
+                } else {
+                    if (profilePicture) profilePicture.src = user.photoURL || "https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/1758334341084.jpg?alt=media&token=af2bb626-f7c8-44db-be34-e4cbaf00914d";
+                    if (userInfo) userInfo.innerText = user.email || "Anonymous";
+                    if (newsFormContainer) {
+                        newsFormContainer.style.display = user.uid === ALLOWED_AUTHOR_UID ? "block" : "none";
+                    }
+                    fetchNews();
+                }
+            });
+
+            // News form submission
+            if (newsForm) {
+                newsForm.addEventListener("submit", async (e) => {
+                    e.preventDefault();
+                    const user = auth.currentUser;
+                    if (!user) {
+                        alert("Please sign in to publish articles");
+                        return;
+                    }
+                    if (user.uid !== ALLOWED_AUTHOR_UID) {
+                        alert("You are not authorized to publish news articles");
+                        return;
+                    }
+
+                    const title = document.getElementById("newsTitle").value.trim();
+                    const content = document.getElementById("newsContent").value.trim();
+                    const category = document.getElementById("newsCategory").value;
+                    const file = document.getElementById("newsFile").files[0];
+
+                    if (!title || !content || !category) {
+                        alert("Please fill in all required fields");
+                        return;
+                    }
+
+                    try {
+                        let fileURL = "";
+                        if (file) {
+                            const fileRef = storageRef(storage, `news/${Date.now()}_${file.name}`);
+                            const snapshot = await uploadBytes(fileRef, file);
+                            fileURL = await getDownloadURL(snapshot.ref);
+                        }
+
+                        const newsRef = ref(database, "news");
+                        const newArticle = {
+                            author: user.email || "Reclaimer🤍",
+                            authorPhoto: user.photoURL || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
+                            category,
+                            content,
+                            fileURL,
+                            timestamp: Date.now(),
+                            title,
+                            views: 0
+                        };
+
+                        await push(newsRef, newArticle);
+                        newsForm.reset();
+                        alert("Article published successfully");
+                    } catch (error) {
+                        console.error("Error publishing article:", error);
+                        alert("Failed to publish article. Please try again.");
+                    }
+                });
+            }
+
+            // Back button for full article view
+            if (articleBackButton) {
+                articleBackButton.addEventListener("click", () => {
+                    articleFullView.style.display = "none";
+                    newsContainer.style.display = "grid";
+                });
+            }
+        });
+
+        // Format timestamp
+        function formatTime(timestamp) {
+            if (!timestamp) return "Unknown time";
+            
+            // Convert to number if it's a string
+            const timeValue = typeof timestamp === 'string' ? parseInt(timestamp) : timestamp;
+            
+            const now = Date.now();
+            const diff = now - timeValue;
+            const seconds = Math.floor(diff / 1000);
+            const minutes = Math.floor(seconds / 60);
+            const hours = Math.floor(minutes / 60);
+            const days = Math.floor(hours / 24);
+
+            if (seconds < 60) return "Just now";
+            if (minutes < 60) return `${minutes}m ago`;
+            if (hours < 24) return `${hours}h ago`;
+            if (days < 7) return `${days}d ago`;
+            
+            // For older dates, show actual date
+            const date = new Date(timeValue);
+            return date.toLocaleDateString();
+        }
+
+        // Truncate content for preview
+        function truncateContent(content, maxLength = 100) {
+            if (!content) return '';
+            if (content.length <= maxLength) return content;
+            return content.substring(0, maxLength) + "...";
+        }
+
+        // Track article view
+        function trackArticleView(articleId) {
+            const user = auth.currentUser;
+            if (!user) return;
+            
+            const viewRef = ref(database, `news/${articleId}/views/${user.uid}`);
+            
+            // Record view with timestamp
+            set(viewRef, Date.now()).catch((error) => {
+                console.error("Error tracking view:", error);
+            });
+        }
+
+        // Show full article in full-page view
+        function showFullArticle(articleId, article) {
+            // Track view
+            trackArticleView(articleId);
+            
+            // Count views
+            const viewCount = article.views ? Object.keys(article.views).length : 0;
+            const likeCount = article.likes ? Object.keys(article.likes).length : 0;
+            const commentCount = article.comments ? Object.keys(article.comments).length : 0;
+            
+            // Render article content
+            articleContent.innerHTML = `
+                ${article.fileURL ? `<img src="${article.fileURL}" alt="${article.title}" class="full-article-image">` : ''}
+                <div class="full-article-header">
+                    <span class="category-badge">${article.category || "General"}</span>
+                    <h1 class="full-article-title">${article.title || "Untitled"}</h1>
+                    <div class="full-article-meta">
+                        <span class="timestamp">${formatTime(article.timestamp)}</span>
+                        <span class="author">By ${article.author || "Anonymous"}</span>
+                    </div>
+                </div>
+                <div class="full-article-body">
+                    <p>${formatContent(article.content || "")}</p>
+                </div>
+                <div class="full-article-stats">
+                    <div class="stat">
+                        <i class="fas fa-eye"></i> ${viewCount} views
+                    </div>
+                    <div class="stat">
+                        <i class="fas fa-thumbs-up"></i> ${likeCount} likes
+                    </div>
+                    <div class="stat">
+                        <i class="fas fa-comment"></i> ${commentCount} comments
+                    </div>
+                </div>
+                <div class="full-article-interactions">
+                    <button class="interaction-button like-button ${article.likes && article.likes[auth.currentUser?.uid] ? 'liked' : ''}" data-article="${articleId}" aria-label="Like article">
+                        <i class="fas fa-thumbs-up"></i> Like
+                    </button>
+                    <button class="interaction-button comment-button" data-article="${articleId}" aria-label="Comment on article">
+                        <i class="fas fa-comment"></i> Comment
+                    </button>
+                </div>
+                <div class="comments-section">
+                    <h3 class="comments-title">Comments</h3>
+                    ${auth.currentUser ? `
+                        <div class="comment-form">
+                            <textarea class="comment-input" placeholder="Write a comment..." aria-label="Comment input"></textarea>
+                            <button class="comment-submit" data-article="${articleId}">Post Comment</button>
+                        </div>
+                    ` : `
+                        <div class="comment-login-prompt">
+                            <p>Please <a href="https://undefined-flare.github.io/BF/blue flare sign in.html">sign in</a> to leave a comment.</p>
+                        </div>
+                    `}
+                    <div class="comments-list">
+                        ${commentCount > 0 ? 
+                            Object.entries(article.comments)
+                                .sort(([,a], [,b]) => (b.timestamp || 0) - (a.timestamp || 0))
+                                .map(([id, comment]) => `
+                                    <div class="comment-item">
+                                        <div class="comment-avatar">${(comment.author || "A").charAt(0).toUpperCase()}</div>
+                                        <div class="comment-content">
+                                            <div class="comment-author">${comment.author || "Anonymous"}</div>
+                                            <div class="comment-text">${comment.text}</div>
+                                            <div class="comment-time">${formatTime(comment.timestamp)}</div>
+                                        </div>
+                                    </div>
+                                `).join("")
+                            : '<div class="no-comments">No comments yet. Be the first to comment!</div>'
+                        }
+                    </div>
+                </div>
+            `;
+            
+            // Add event listeners for interactions
+            const likeButton = articleContent.querySelector('.like-button');
+            if (likeButton) {
+                likeButton.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const user = auth.currentUser;
+                    
+                    if (!user) {
+                        alert("Please sign in to like articles");
+                        return;
+                    }
+                    
+                    const likesRef = ref(database, `news/${articleId}/likes/${user.uid}`);
+                    runTransaction(likesRef, (currentValue) => {
+                        return currentValue ? null : true;
+                    }).then((result) => {
+                        if (result.committed) {
+                            // Refresh the article to update counts
+                            const articleRef = ref(database, `news/${articleId}`);
+                            onValue(articleRef, (snapshot) => {
+                                const updatedArticle = snapshot.val();
+                                showFullArticle(articleId, updatedArticle);
+                            });
+                        }
+                    }).catch((error) => {
+                        console.error("Error updating like:", error);
+                    });
+                });
+            }
+            
+            const commentSubmit = articleContent.querySelector('.comment-submit');
+            if (commentSubmit) {
+                commentSubmit.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const commentInput = articleContent.querySelector('.comment-input');
+                    const commentText = commentInput.value.trim();
+                    
+                    if (!commentText) {
+                        alert("Please enter a comment");
+                        return;
+                    }
+                    
+                    submitComment(articleId, commentText);
+                });
+            }
+            
+            // Show full article view
+            newsContainer.style.display = "none";
+            articleFullView.style.display = "block";
+        }
+
+        // Submit a comment
+        function submitComment(articleId, commentText) {
+            const user = auth.currentUser;
+            if (!user) {
+                alert("Please sign in to comment");
+                return;
+            }
+            
+            const commentsRef = ref(database, `news/${articleId}/comments`);
+            const newComment = {
+                text: commentText,
+                author: user.email || user.email || "Anonymous",
+                timestamp: Date.now()
+            };
+
+            push(commentsRef, newComment).then(() => {
+                // Clear the input
+                const commentInput = articleContent.querySelector('.comment-input');
+                if (commentInput) commentInput.value = "";
+                
+                // Refresh the article to show the new comment
+                const articleRef = ref(database, `news/${articleId}`);
+                onValue(articleRef, (snapshot) => {
+                    const updatedArticle = snapshot.val();
+                    showFullArticle(articleId, updatedArticle);
+                });
+            }).catch((error) => {
+                console.error("Error posting comment:", error);
+                alert("Failed to post comment. Please try again.");
+            });
+        }
+
+        // Fetch and display news articles from Firebase
+        function fetchNews() {
+            if (!newsContainer) return;
+            
+            const newsRef = ref(database, "news");
+            const newsQuery = query(newsRef, orderByChild("timestamp"));
+
+            onValue(newsQuery, (snapshot) => {
+                newsContainer.innerHTML = "";
+                const articles = [];
+
+                snapshot.forEach((childSnapshot) => {
+                    const article = childSnapshot.val();
+                    article.id = childSnapshot.key;
+                    articles.push(article);
+                });
+
+                // Sort articles by timestamp (newest first)
+                articles.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+
+                if (articles.length === 0) {
+                    newsContainer.innerHTML = `
+                        <div class="error-message">
+                            <i class="fas fa-newspaper"></i>
+                            <p>No articles found</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                articles.forEach((article) => {
+                    // Count views
+                    const viewCount = article.views ? Object.keys(article.views).length : 0;
+                    const likeCount = article.likes ? Object.keys(article.likes).length : 0;
+                    const commentCount = article.comments ? Object.keys(article.comments).length : 0;
+                    
+                    const articleHTML = `
+                        <article data-id="${article.id}">
+                            <div class="article-preview">
+                                <img src="${article.fileURL || 'https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/IMG-20250912-WA0101.jpg?alt=media&token=66a018e2-c3e1-4d25-9028-d911a5050150'}" alt="${article.title || 'Article Image'}">
+                                <div class="article-preview-content">
+                                    <span class="category-badge">${article.category || "General"}</span>
+                                    <h2 class="article-title">${article.title || "Untitled"}</h2>
+                                    <p class="article-snippet">${truncateContent(article.content || "")}</p>
+                                    <div class="stats">
+                                        <div class="stat">
+                                            <i class="fas fa-eye"></i> ${viewCount}
+                                        </div>
+                                        <div class="stat">
+                                            <i class="fas fa-thumbs-up"></i> ${likeCount}
+                                        </div>
+                                        <div class="stat">
+                                            <i class="fas fa-comment"></i> ${commentCount}
+                                        </div>
+                                    </div>
+                                    <span class="timestamp">${formatTime(article.timestamp)} • By ${article.author || "Anonymous"}</span>
+                                </div>
+                            </div>
+                        </article>
+                    `;
+                    newsContainer.innerHTML += articleHTML;
+                });
+                
+                // Add click event to articles
+                const articleElements = newsContainer.querySelectorAll("article");
+                articleElements.forEach((articleElement) => {
+                    articleElement.addEventListener("click", () => {
+                        const articleId = articleElement.dataset.id;
+                        const article = articles.find(a => a.id === articleId);
+                        if (article) {
+                            showFullArticle(articleId, article);
+                        }
+                    });
+                });
+            }, (error) => {
+                console.error("Error fetching news:", error);
+                newsContainer.innerHTML = `
+                    <div class="error-message">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <p>Error loading news articles. Please try again later.</p>
+                    </div>
+                `;
+            });
+        }
+    </script>
+
