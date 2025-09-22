@@ -3,477 +3,363 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profile</title>
+    <title>News Articles with Shareable Links</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        * {
             margin: 0;
             padding: 0;
-            background-color: #f5f5f5;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
             color: #333;
-        }
-        .container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        .profile-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #eee;
-        }
-        .profile-pic {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin-right: 30px;
-            border: 3px solid #4285f4;
-        }
-        .profile-info {
-            flex: 1;
-        }
-        .profile-name {
-            margin: 0;
-            font-size: 28px;
-            color: #333;
-        }
-        .profile-email {
-            margin: 5px 0;
-            color: #666;
-            font-size: 16px;
-        }
-        .profile-date {
-            margin: 5px 0;
-            color: #888;
-            font-size: 14px;
-        }
-        .profile-section {
-            margin-bottom: 25px;
-        }
-        .section-title {
-            font-size: 20px;
-            margin-bottom: 10px;
-            color: #4285f4;
-            border-bottom: 2px solid #4285f4;
-            padding-bottom: 5px;
-        }
-        .profile-bio {
-            padding: 15px;
-            background: #f9f9f9;
-            border-radius: 8px;
             line-height: 1.6;
         }
-        .action-buttons {
-            margin-top: 20px;
-        }
-        button {
-            background: #4285f4;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-right: 10px;
-            font-size: 14px;
-            transition: background 0.3s;
-        }
-        button:hover {
-            background: #3367d6;
-        }
-        .btn-secondary {
-            background: #f1f1f1;
-            color: #333;
-        }
-        .btn-secondary:hover {
-            background: #ddd;
-        }
-        #profile-edit-form {
-            display: none;
-            margin-top: 30px;
-            padding: 25px;
-            background: #f9f9f9;
-            border-radius: 8px;
-            border: 1px solid #eee;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #555;
-        }
-        input[type="text"],
-        input[type="email"],
-        textarea,
-        input[type="file"] {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            box-sizing: border-box;
-            font-size: 14px;
-        }
-        textarea {
-            height: 120px;
-            resize: vertical;
-        }
-        .form-actions {
-            margin-top: 25px;
-            display: flex;
-            justify-content: flex-end;
-        }
-        .profile-stats {
-            display: flex;
-            gap: 20px;
-            margin-top: 20px;
-        }
-        .stat-item {
-            text-align: center;
-            padding: 15px;
-            background: #f9f9f9;
-            border-radius: 8px;
-            flex: 1;
-        }
-        .stat-number {
-            font-size: 24px;
-            font-weight: bold;
-            color: #4285f4;
-        }
-        .stat-label {
-            font-size: 14px;
-            color: #777;
-        }
-        .preview-image {
-            max-width: 100px;
-            max-height: 100px;
-            margin-top: 10px;
-            display: none;
-            border-radius: 5px;
-        }
-        .follow-section {
-            margin-top: 15px;
-            display: flex;
-            gap: 10px;
-        }
-        #follow-btn {
-            background: #1877f2;
-        }
-        #following-btn {
-            background: #42b72a;
-        }
-        #followers-btn {
-            background: #f0f2f5;
-            color: #333;
-            border: 1px solid #ddd;
-        }
-        #followers-btn:hover {
-            background: #e4e6e9;
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.4);
-        }
-        .modal-content {
-            background-color: #fefefe;
-            margin: 10% auto;
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
             padding: 20px;
-            border-radius: 8px;
-            width: 80%;
-            max-width: 500px;
-            max-height: 80vh;
-            overflow-y: auto;
         }
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
+
+        header {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
         }
-        .follower-item {
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
             display: flex;
             align-items: center;
-            padding: 10px;
-            border-bottom: 1px solid #eee;
         }
-        .follower-avatar {
+
+        .logo i {
+            margin-right: 10px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .profile-picture {
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            margin-right: 10px;
+            border: 2px solid white;
         }
-        .follower-name {
-            font-weight: 500;
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #2c3e50;
         }
-        /* Content Tabs */
-        .content-tabs {
-            display: flex;
-            border-bottom: 1px solid #ddd;
-            margin-bottom: 20px;
+
+        .page-title h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
         }
-        .tab-button {
-            padding: 10px 20px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-            color: #666;
-            border-bottom: 3px solid transparent;
-            transition: all 0.3s;
+
+        .page-title p {
+            font-size: 18px;
+            color: #7f8c8d;
         }
-        .tab-button.active {
-            color: #4285f4;
-            border-bottom: 3px solid #4285f4;
-            font-weight: bold;
-        }
-        .tab-content {
-            display: none;
-        }
-        .tab-content.active {
-            display: block;
-        }
-        /* Content Cards */
-        .posts-container, .questions-container, .polls-container {
+
+        .articles-grid {
             display: grid;
-            grid-template-columns: 1fr;
-            gap: 15px;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
         }
-        .post-card, .question-card, .poll-card {
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 15px;
+
+        .article-card {
             background: white;
-            transition: transform 0.2s;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
         }
-        .post-card:hover, .question-card:hover, .poll-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+
+        .article-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
         }
-        .post-image {
+
+        .article-image {
             width: 100%;
             height: 200px;
             object-fit: cover;
-            border-radius: 4px;
-            margin-bottom: 10px;
         }
-        .post-title, .question-title, .poll-title {
-            margin: 0 0 10px 0;
-            font-size: 18px;
-            color: #333;
-        }
-        .post-text, .question-text, .poll-question {
-            margin: 0 0 15px 0;
-            color: #666;
-            line-height: 1.5;
-        }
-        .content-meta {
-            display: flex;
-            justify-content: space-between;
-            font-size: 14px;
-            color: #888;
-        }
-        .view-link {
-            display: inline-block;
-            margin-top: 10px;
-            color: #4285f4;
-            text-decoration: none;
-            font-weight: 500;
-        }
-        .view-link:hover {
-            text-decoration: underline;
-        }
-        /* Poll specific styles */
-        .poll-options {
-            margin-top: 15px;
-        }
-        .poll-option {
-            margin-bottom: 10px;
-        }
-        .poll-bar {
-            height: 10px;
-            background: #e0e0e0;
-            border-radius: 5px;
-            margin-top: 5px;
-            overflow: hidden;
-        }
-        .poll-fill {
-            height: 100%;
-            background: #4285f4;
-            width: 0%;
-            transition: width 0.5s ease;
-        }
-        .poll-stats {
-            display: flex;
-            justify-content: space-between;
-            font-size: 12px;
-            color: #888;
-            margin-top: 3px;
-        }
-        .no-content {
-            text-align: center;
-            padding: 30px;
-            color: #888;
-            font-style: italic;
-        }
-        .loading {
-            text-align: center;
+
+        .article-content {
             padding: 20px;
         }
-        .loading-spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #4285f4;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto;
+
+        .category-badge {
+            display: inline-block;
+            background: #6a11cb;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 10px;
         }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+
+        .article-title {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #2c3e50;
+            line-height: 1.4;
+        }
+
+        .article-snippet {
+            color: #7f8c8d;
+            margin-bottom: 15px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .article-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 12px;
+            color: #7f8c8d;
+        }
+
+        .article-stats {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+
+        .share-section {
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+        }
+
+        .share-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+
+        .share-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .share-option {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 6px 12px;
+            background: #f1f3f4;
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .share-option:hover {
+            background: #e8eaed;
+            transform: translateY(-2px);
+        }
+
+        .share-option i {
+            font-size: 14px;
+        }
+
+        .facebook {
+            color: #3b5998;
+        }
+
+        .twitter {
+            color: #1da1f2;
+        }
+
+        .linkedin {
+            color: #0077b5;
+        }
+
+        .whatsapp {
+            color: #25d366;
+        }
+
+        .telegram {
+            color: #0088cc;
+        }
+
+        .link {
+            color: #6a11cb;
+        }
+
+        .share-url {
+            display: flex;
+            margin-top: 10px;
+        }
+
+        .share-url input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px 0 0 8px;
+            font-size: 12px;
+            background: #f9f9f9;
+        }
+
+        .copy-url {
+            background: #6a11cb;
+            color: white;
+            border: none;
+            padding: 0 15px;
+            border-radius: 0 8px 8px 0;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 12px;
+        }
+
+        .copy-url:hover {
+            background: #5a0db3;
+        }
+
+        .no-articles {
+            text-align: center;
+            padding: 50px 20px;
+            color: #7f8c8d;
+        }
+
+        .no-articles i {
+            font-size: 50px;
+            margin-bottom: 20px;
+            color: #ddd;
+        }
+
+        .filter-section {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            gap: 15px;
+        }
+
+        .filter-button {
+            padding: 10px 20px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .filter-button.active {
+            background: #6a11cb;
+            color: white;
+            border-color: #6a11cb;
+        }
+
+        .filter-button:hover {
+            background: #f1f3f4;
+        }
+
+        .filter-button.active:hover {
+            background: #5a0db3;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #2c3e50;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            display: none;
+            z-index: 1000;
+        }
+
+        @media (max-width: 768px) {
+            .articles-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .filter-section {
+                flex-wrap: wrap;
+            }
+            
+            .share-options {
+                justify-content: center;
+            }
         }
     </style>
 </head>
 <body>
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-newspaper"></i>
+                <span>News Portal</span>
+            </div>
+            <div class="user-info">
+                <img id="profilePicture" class="profile-picture" src="https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/1758334341084.jpg?alt=media&token=af2bb626-f7c8-44db-be34-e4cbaf00914d" alt="Profile">
+                <span id="user-info">User</span>
+            </div>
+        </div>
+    </header>
+
     <div class="container">
-        <div class="profile-header">
-            <img id="profile-pic" class="profile-pic" src="https://via.placeholder.com/120" alt="Profile Picture">
-            <div class="profile-info">
-                <h1 id="profile-name" class="profile-name">Loading...</h1>
-                <p id="user-email" class="profile-email">Loading email...</p>
-                <p id="user-date" class="profile-date">Joined: Loading...</p>
-                <div class="action-buttons">
-                    <button id="edit-profile-btn" style="display: none;">Edit Profile</button>
-                    <button id="signOutBtn">Sign Out</button>
-                </div>
-                <div class="follow-section">
-                    <button id="follow-btn" style="display: none;">Follow</button>
-                    <button id="following-btn" style="display: none;">Following</button>
-                    <button id="followers-btn">Followers: <span id="followers-count">0</span></button>
-                </div>
-            </div>
+        <div class="page-title">
+            <h1>All Articles</h1>
+            <p>Browse and share our latest news articles</p>
         </div>
 
-        <div class="profile-stats">
-            <div class="stat-item">
-                <div class="stat-number" id="post-count">0</div>
-                <div class="stat-label">Posts</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number" id="question-count">0</div>
-                <div class="stat-label">Questions</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number" id="follower-count">0</div>
-                <div class="stat-label">Followers</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number" id="poll-count">0</div>
-                <div class="stat-label">Polls</div>
-            </div>
+        <div class="filter-section">
+            <button class="filter-button active" data-filter="all">All Articles</button>
+            <button class="filter-button" data-filter="recent">Recent</button>
+            <button class="filter-button" data-filter="popular">Most Popular</button>
         </div>
 
-        <div class="profile-section">
-            <h2 class="section-title">About</h2>
-            <div id="user-info">
-                <div class="profile-bio" id="profile-bio">No bio available</div>
-            </div>
-        </div>
-
-        <div class="profile-section">
-            <h2 class="section-title">Activity</h2>
-            
-            <div class="content-tabs">
-                <button class="tab-button active" data-tab="posts">Posts</button>
-                <button class="tab-button" data-tab="questions">Questions</button>
-                <button class="tab-button" data-tab="polls">Polls</button>
-            </div>
-            
-            <div id="posts-tab" class="tab-content active">
-                <div id="user-posts" class="posts-container">
-                    <div class="loading">
-                        <div class="loading-spinner"></div>
-                        <p>Loading posts...</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div id="questions-tab" class="tab-content">
-                <div id="user-questions" class="questions-container">
-                    <div class="loading">
-                        <div class="loading-spinner"></div>
-                        <p>Loading questions...</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div id="polls-tab" class="tab-content">
-                <div id="user-polls" class="polls-container">
-                    <div class="loading">
-                        <div class="loading-spinner"></div>
-                        <p>Loading polls...</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="profile-edit-form">
-            <h2 class="section-title">Edit Profile</h2>
-            <div class="form-group">
-                <label for="profile-pic-input">Profile Picture</label>
-                <input type="file" id="profile-pic-input" accept="image/*">
-                <img id="preview-image" class="preview-image" alt="Preview">
-            </div>
-            <div class="form-group">
-                <label for="first-name-input">First Name</label>
-                <input type="text" id="first-name-input" required>
-            </div>
-            <div class="form-group">
-                <label for="last-name-input">Last Name</label>
-                <input type="text" id="last-name-input" required>
-            </div>
-            <div class="form-group">
-                <label for="email-input">Email</label>
-                <input type="email" id="email-input" required>
-            </div>
-            <div class="form-group">
-                <label for="bio-input">Bio</label>
-                <textarea id="bio-input" placeholder="Tell us about yourself..."></textarea>
-            </div>
-            <div class="form-actions">
-                <button id="cancel-profile-btn" class="btn-secondary">Cancel</button>
-                <button id="save-profile-btn" class="btn-primary">Save Changes</button>
-            </div>
+        <div class="articles-grid" id="articlesContainer">
+            <!-- Articles will be dynamically inserted here -->
         </div>
     </div>
 
-    <div id="followers-modal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Followers</h2>
-            <div id="followers-list"></div>
-        </div>
-    </div>
+    <div class="toast" id="toast">Link copied to clipboard!</div>
 
     <script type="module">
         import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
-        import { getDatabase, ref, onValue, update, query, orderByChild, equalTo, get } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-database.js";
-        import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-storage.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+        import { getDatabase, ref, onValue, query, orderByChild } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-database.js";
 
         // Firebase configuration
         const firebaseConfig = {
@@ -486,7 +372,7 @@
             measurementId: "G-DE59771G7Q"
         };
 
-        // Initialize Firebase
+        // Initialize Firebase only if not already initialized
         let app;
         if (!getApps().length) {
             app = initializeApp(firebaseConfig);
@@ -496,649 +382,291 @@
 
         const auth = getAuth(app);
         const database = getDatabase(app);
-        const storage = getStorage(app);
 
         // DOM elements
-        const profilePic = document.getElementById("profile-pic");
-        const profileName = document.getElementById("profile-name");
-        const userEmail = document.getElementById("user-email");
-        const userDate = document.getElementById("user-date");
-        const profileBio = document.getElementById("profile-bio");
-        const editProfileBtn = document.getElementById("edit-profile-btn");
-        const profileEditForm = document.getElementById("profile-edit-form");
-        const profilePicInput = document.getElementById("profile-pic-input");
-        const previewImage = document.getElementById("preview-image");
-        const firstNameInput = document.getElementById("first-name-input");
-        const lastNameInput = document.getElementById("last-name-input");
-        const emailInput = document.getElementById("email-input");
-        const bioInput = document.getElementById("bio-input");
-        const saveProfileBtn = document.getElementById("save-profile-btn");
-        const cancelProfileBtn = document.getElementById("cancel-profile-btn");
-        const signOutBtn = document.getElementById("signOutBtn");
-        const postCount = document.getElementById("post-count");
-        const questionCount = document.getElementById("question-count");
-        const followerCount = document.getElementById("follower-count");
-        const pollCount = document.getElementById("poll-count");
-        const followBtn = document.getElementById("follow-btn");
-        const followingBtn = document.getElementById("following-btn");
-        const followersBtn = document.getElementById("followers-btn");
-        const followersCount = document.getElementById("followers-count");
-        const followersModal = document.getElementById("followers-modal");
-        const closeModal = document.querySelector(".close");
-        const followersList = document.getElementById("followers-list");
-        const userPostsContainer = document.getElementById("user-posts");
-        const userQuestionsContainer = document.getElementById("user-questions");
-        const userPollsContainer = document.getElementById("user-polls");
-        const tabButtons = document.querySelectorAll(".tab-button");
-        const tabContents = document.querySelectorAll(".tab-content");
+        const articlesContainer = document.getElementById("articlesContainer");
+        const profilePicture = document.getElementById("profilePicture");
+        const userInfo = document.getElementById("user-info");
+        const filterButtons = document.querySelectorAll(".filter-button");
+        const toast = document.getElementById("toast");
 
-        // Get UID from URL
-        const urlParams = new URLSearchParams(window.location.search);
-        let profileUid = urlParams.get("uid");
+        // Format timestamp
+        function formatTime(timestamp) {
+            if (!timestamp) return "Unknown time";
 
-        // Format date
-        function formatDate(timestamp) {
-            if (!timestamp) return "Unknown date";
-            const date = new Date(timestamp);
-            return date.toLocaleDateString('en-US', { 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric' 
+            // Convert to number if it's a string
+            const timeValue = typeof timestamp === 'string' ? parseInt(timestamp) : timestamp;
+
+            const now = Date.now();
+            const diff = now - timeValue;
+            const seconds = Math.floor(diff / 1000);
+            const minutes = Math.floor(seconds / 60);
+            const hours = Math.floor(minutes / 60);
+            const days = Math.floor(hours / 24);
+
+            if (seconds < 60) return "Just now";
+            if (minutes < 60) return `${minutes}m ago`;
+            if (hours < 24) return `${hours}h ago`;
+            if (days < 7) return `${days}d ago`;
+
+            // For older dates, show actual date
+            const date = new Date(timeValue);
+            return date.toLocaleDateString();
+        }
+
+        // Truncate content for preview
+        function truncateContent(content, maxLength = 100) {
+            if (!content) return '';
+            if (content.length <= maxLength) return content;
+            return content.substring(0, maxLength) + "...";
+        }
+
+        // Show toast message
+        function showToast(message) {
+            toast.textContent = message;
+            toast.style.display = 'block';
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+        }
+
+        // Copy URL to clipboard
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast("Link copied to clipboard!");
+            }).catch(() => {
+                // Fallback for older browsers
+                const textArea = document.createElement("textarea");
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand("copy");
+                document.body.removeChild(textArea);
+                showToast("Link copied to clipboard!");
             });
         }
 
-        // Count user posts
-        async function countUserPosts(uid) {
-            try {
-                const postsRef = ref(database, 'posts');
-                const postsQuery = query(postsRef, orderByChild('uid'), equalTo(uid));
-                const snapshot = await get(postsQuery);
-                return snapshot.exists() ? Object.keys(snapshot.val()).length : 0;
-            } catch (error) {
-                console.error("Error counting posts:", error);
-                return 0;
-            }
+        // Generate share URL for an article
+        function generateShareUrl(articleId) {
+            // Get the current page URL without parameters
+            const baseUrl = window.location.href.split('?')[0];
+            // Replace the current page with your article viewer page
+            return baseUrl.replace('articles.html', 'article.html') + `?id=${articleId}`;
         }
 
-        // Count user questions
-        async function countUserQuestions(uid) {
-            try {
-                const questionsRef = ref(database, 'questions');
-                const questionsQuery = query(questionsRef, orderByChild('uid'), equalTo(uid));
-                const snapshot = await get(questionsQuery);
-                return snapshot.exists() ? Object.keys(snapshot.val()).length : 0;
-            } catch (error) {
-                console.error("Error counting questions:", error);
-                return 0;
-            }
-        }
-
-        // Count user polls
-        async function countUserPolls(uid) {
-            try {
-                const pollsRef = ref(database, 'polls');
-                const pollsQuery = query(pollsRef, orderByChild('uid'), equalTo(uid));
-                const snapshot = await get(pollsQuery);
-                return snapshot.exists() ? Object.keys(snapshot.val()).length : 0;
-            } catch (error) {
-                console.error("Error counting polls:", error);
-                return 0;
-            }
-        }
-
-        // Count user followers
-        async function countUserFollowers(uid) {
-            try {
-                const followersRef = ref(database, `users/${uid}/followers`);
-                const snapshot = await get(followersRef);
-                return snapshot.exists() ? Object.keys(snapshot.val()).length : 0;
-            } catch (error) {
-                console.error("Error counting followers:", error);
-                return 0;
-            }
-        }
-
-        // Check if current user is following target user
-        async function checkIfFollowing(currentUid, targetUid) {
-            if (currentUid === targetUid) return false;
-            const followRef = ref(database, `users/${targetUid}/followers/${currentUid}`);
-            const snapshot = await get(followRef);
-            return snapshot.exists();
-        }
-
-        // Toggle follow status
-        async function toggleFollow(currentUid, targetUid) {
-            const followRef = ref(database, `users/${targetUid}/followers/${currentUid}`);
-            const isFollowing = await checkIfFollowing(currentUid, targetUid);
+        // Share article on social media
+        function shareArticle(platform, articleId, title) {
+            const url = generateShareUrl(articleId);
+            const encodedUrl = encodeURIComponent(url);
+            const encodedTitle = encodeURIComponent(title || 'Check out this article');
             
-            if (isFollowing) {
-                await update(followRef, null);
-                return false;
-            } else {
-                await update(followRef, true);
-                return true;
-            }
-        }
-
-        // Update follow button UI
-        function updateFollowButton(isFollowing) {
-            if (isFollowing) {
-                followBtn.style.display = "none";
-                followingBtn.style.display = "inline-block";
-            } else {
-                followBtn.style.display = "inline-block";
-                followingBtn.style.display = "none";
-            }
-        }
-
-        // Load followers list
-        async function loadFollowers(uid) {
-            try {
-                followersList.innerHTML = '<div class="loading"><div class="loading-spinner"></div><p>Loading followers...</p></div>';
-                
-                const followersRef = ref(database, `users/${uid}/followers`);
-                const snapshot = await get(followersRef);
-                
-                followersList.innerHTML = "";
-                
-                if (snapshot.exists()) {
-                    const followerIds = Object.keys(snapshot.val());
-                    
-                    for (const followerId of followerIds) {
-                        const userRef = ref(database, `users/${followerId}`);
-                        const userSnapshot = await get(userRef);
-                        
-                        if (userSnapshot.exists()) {
-                            const user = userSnapshot.val();
-                            const followerItem = document.createElement("div");
-                            followerItem.className = "follower-item";
-                            
-                            followerItem.innerHTML = `
-                                <img src="${user.profilePicture || 'https://via.placeholder.com/40'}" 
-                                     class="follower-avatar" alt="${user.firstName}">
-                                <span class="follower-name">${user.firstName} ${user.lastName}</span>
-                            `;
-                            
-                            followersList.appendChild(followerItem);
-                        }
-                    }
-                } else {
-                    followersList.innerHTML = "<p>No followers yet</p>";
-                }
-            } catch (error) {
-                console.error("Error loading followers:", error);
-                followersList.innerHTML = "<p>Error loading followers</p>";
-            }
-        }
-
-        // Load user posts
-async function loadUserPosts(uid) {
-  try {
-    const postsRef = ref(database, 'posts');
-    const postsQuery = query(postsRef, orderByChild('uid'), equalTo(uid));
-    const snapshot = await get(postsQuery);
-    
-    userPostsContainer.innerHTML = ''; // Clear previous content
-    
-    if (snapshot.exists()) {
-      const posts = snapshot.val();
-      Object.entries(posts).forEach(([postId, post]) => {
-        createPostCard(postId, post);
-      });
-    } else {
-      showNoPostsMessage();
-    }
-  } catch (error) {
-    console.error("Error loading posts:", error);
-    showPostError(error, uid);
-  }
-}
-
-// Add these helper functions
-function showNoPostsMessage() {
-  userPostsContainer.innerHTML = `
-        <div class="no-posts">
-            <p>No posts found</p>
-            <button onclick="window.location.reload()">Refresh</button>
-        </div>
-    `;
-}
-
-function showPostError(error, uid) {
-  userPostsContainer.innerHTML = `
-        <div class="post-error">
-            <p>Failed to load posts: ${error.message}</p>
-            <button onclick="loadUserPosts('${uid}')">Try Again</button>
-            <button onclick="debugPosts('${uid}')">Debug</button>
-        </div>
-    `;
-}
-
-// Debugging function
-async function debugPosts(uid) {
-  console.group("Post Debugging");
-  console.log("Debugging posts for user:", uid);
-  
-  try {
-    // 1. Check database connection
-    const connectedRef = ref(database, '.info/connected');
-    onValue(connectedRef, (snap) => {
-      console.log("Database connected:", snap.val());
-    }, { onlyOnce: true });
-    
-    // 2. Verify the query path
-    const postsQuery = query(ref(database, 'posts'), orderByChild('uid'), equalTo(uid));
-    console.log("Query path:", postsQuery.toString());
-    
-    // 3. Check if posts exist at all
-    const allPosts = await get(ref(database, 'posts'));
-    if (!allPosts.exists()) {
-      console.log("No posts exist in the database");
-      return;
-    }
-    
-    // 4. Check if any posts match our user
-    const userPosts = await get(postsQuery);
-    if (!userPosts.exists()) {
-      console.log("No posts found for user:", uid);
-      console.log("All posts in database:", allPosts.val());
-      return;
-    }
-    
-    console.log("Posts found for user:", userPosts.val());
-  } catch (error) {
-    console.error("Debugging error:", error);
-  } finally {
-    console.groupEnd();
-  }
-}
-
-// Helper functions
-function displayPosts(posts) {
-  const container = document.getElementById('user-posts');
-  container.innerHTML = '';
-  
-  posts.forEach(post => {
-    const postElement = createPostElement(post);
-    container.appendChild(postElement);
-  });
-}
-
-function createPostElement(post) {
-  const postDiv = document.createElement('div');
-  postDiv.className = 'post-card';
-  postDiv.innerHTML = `
-        <h3>${post.title || 'Untitled Post'}</h3>
-        <p class="post-date">${formatDate(post.createdAt)}</p>
-        ${post.imageUrl ? `<img src="${post.imageUrl}" class="post-image">` : ''}
-        <p class="post-content">${post.content || ''}</p>
-        <div class="post-stats">
-            <span>${post.likes ? Object.keys(post.likes).length : 0} likes</span>
-        </div>
-    `;
- return postDiv;
-}
-
-
-        // Create post card
-        function createPostCard(postId, post) {
-            const postCard = document.createElement("div");
-            postCard.className = "post-card";
+            let shareUrl;
             
-            postCard.innerHTML = `
-                ${post.imageUrl ? `<img src="${post.imageUrl}" class="post-image" alt="Post image">` : ''}
-                <div class="post-content">
-                    <h3 class="post-title">${post.title || 'Untitled Post'}</h3>
-                    <p class="post-text">${post.content || ''}</p>
-                    <div class="content-meta">
-                        <span>${formatDate(post.createdAt)}</span>
-                        <span>${post.likes ? Object.keys(post.likes).length : 0} likes</span>
+            switch(platform) {
+                case 'facebook':
+                    shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`;
+                    break;
+                case 'twitter':
+                    shareUrl = `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`;
+                    break;
+                case 'linkedin':
+                    shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`;
+                    break;
+                case 'whatsapp':
+                    shareUrl = `https://api.whatsapp.com/send?text=${encodedTitle} ${encodedUrl}`;
+                    break;
+                case 'telegram':
+                    shareUrl = `https://t.me/share/url?url=${encodedUrl}&text=${encodedTitle}`;
+                    break;
+                default:
+                    return;
+            }
+            
+            if (shareUrl) {
+                window.open(shareUrl, '_blank', 'width=600,height=400');
+            }
+        }
+
+        // Display articles
+        function displayArticles(articles, filter = 'all') {
+            articlesContainer.innerHTML = "";
+
+            if (articles.length === 0) {
+                articlesContainer.innerHTML = `
+                    <div class="no-articles">
+                        <i class="fas fa-newspaper"></i>
+                        <h3>No articles found</h3>
+                        <p>There are no articles to display at the moment.</p>
                     </div>
-                    <a href="post.html?id=${postId}" class="view-link">View Post</a>
-                </div>
-            `;
-            
-            userPostsContainer.appendChild(postCard);
-        }
-
-        // Load user questions
-        async function loadUserQuestions(uid) {
-            try {
-                userQuestionsContainer.innerHTML = '<div class="loading"><div class="loading-spinner"></div><p>Loading questions...</p></div>';
-                
-                const questionsRef = ref(database, 'questions');
-                const questionsQuery = query(questionsRef, orderByChild('uid'), equalTo(uid));
-                const snapshot = await get(questionsQuery);
-                
-                userQuestionsContainer.innerHTML = "";
-                
-                if (snapshot.exists()) {
-                    const questions = snapshot.val();
-                    Object.entries(questions).forEach(([questionId, question]) => {
-                        createQuestionCard(questionId, question);
-                    });
-                } else {
-                    userQuestionsContainer.innerHTML = '<div class="no-content">This user has no questions yet</div>';
-                }
-            } catch (error) {
-                console.error("Error loading questions:", error);
-                userQuestionsContainer.innerHTML = '<div class="no-content">Error loading questions</div>';
+                `;
+                return;
             }
-        }
 
-        // Create question card
-        function createQuestionCard(questionId, question) {
-            const questionCard = document.createElement("div");
-            questionCard.className = "question-card";
+            // Apply filters
+            let filteredArticles = [...articles];
             
-            questionCard.innerHTML = `
-                <h3 class="question-title">${question.title || 'Untitled Question'}</h3>
-                <p class="question-text">${question.content || ''}</p>
-                <div class="content-meta">
-                    <span>${formatDate(question.createdAt)}</span>
-                    <span>${question.answers ? Object.keys(question.answers).length : 0} answers</span>
-                </div>
-                <a href="question.html?id=${questionId}" class="view-link">View Question</a>
-            `;
-            
-            userQuestionsContainer.appendChild(questionCard);
-        }
-
-        // Load user polls
-        async function loadUserPolls(uid) {
-            try {
-                userPollsContainer.innerHTML = '<div class="loading"><div class="loading-spinner"></div><p>Loading polls...</p></div>';
-                
-                const pollsRef = ref(database, 'polls');
-                const pollsQuery = query(pollsRef, orderByChild('uid'), equalTo(uid));
-                const snapshot = await get(pollsQuery);
-                
-                userPollsContainer.innerHTML = "";
-                
-                if (snapshot.exists()) {
-                    const polls = snapshot.val();
-                    Object.entries(polls).forEach(([pollId, poll]) => {
-                        createPollCard(pollId, poll);
-                    });
-                } else {
-                    userPollsContainer.innerHTML = '<div class="no-content">This user has no polls yet</div>';
-                }
-            } catch (error) {
-                console.error("Error loading polls:", error);
-                userPollsContainer.innerHTML = '<div class="no-content">Error loading polls</div>';
+            if (filter === 'recent') {
+                // Show articles from the last 7 days
+                const oneWeekAgo = Date.now() - (7 * 24 * 60 * 60 * 1000);
+                filteredArticles = articles.filter(article => 
+                    article.timestamp && article.timestamp > oneWeekAgo
+                );
+            } else if (filter === 'popular') {
+                // Sort by view count (most viewed first)
+                filteredArticles.sort((a, b) => {
+                    const aViews = a.views ? Object.keys(a.views).length : 0;
+                    const bViews = b.views ? Object.keys(b.views).length : 0;
+                    return bViews - aViews;
+                });
             }
-        }
 
-        // Create poll card
-        function createPollCard(pollId, poll) {
-            const pollCard = document.createElement("div");
-            pollCard.className = "poll-card";
-            
-            // Calculate total votes
-            let totalVotes = 0;
-            const optionsWithVotes = poll.options ? poll.options.map(option => {
-                const votes = option.votes ? Object.keys(option.votes).length : 0;
-                totalVotes += votes;
-                return { ...option, votes };
-            }) : [];
-            
-            pollCard.innerHTML = `
-                <h3 class="poll-title">${poll.question || 'Untitled Poll'}</h3>
-                <p class="poll-question">${poll.description || ''}</p>
-                <div class="content-meta">
-                    <span>${formatDate(poll.createdAt)}</span>
-                    <span>${totalVotes} votes</span>
-                </div>
-                <div class="poll-options">
-                    ${optionsWithVotes.map(option => `
-                        <div class="poll-option">
-                            <div>${option.text}</div>
-                            <div class="poll-stats">
-                                <span>${option.votes} votes</span>
-                                <span>${totalVotes > 0 ? Math.round((option.votes / totalVotes) * 100) : 0}%</span>
+            filteredArticles.forEach((article) => {
+                // Count views, likes, and comments
+                const viewCount = article.views ? Object.keys(article.views).length : 0;
+                const likeCount = article.likes ? Object.keys(article.likes).length : 0;
+                const commentCount = article.comments ? Object.keys(article.comments).length : 0;
+
+                const articleUrl = generateShareUrl(article.id);
+
+                const articleHTML = `
+                    <div class="article-card" data-category="${article.category || 'general'}">
+                        <img src="${article.fileURL || 'https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/IMG-20250912-WA0101.jpg?alt=media&token=66a018e2-c3e1-4d25-9028-d911a5050150'}" 
+                             alt="${article.title || 'Article Image'}" class="article-image">
+                        <div class="article-content">
+                            <span class="category-badge">${article.category || "General"}</span>
+                            <h3 class="article-title">${article.title || "Untitled"}</h3>
+                            <p class="article-snippet">${truncateContent(article.content || "")}</p>
+                            
+                            <div class="article-meta">
+                                <span class="timestamp">${formatTime(article.timestamp)}</span>
+                                <span class="author">By ${article.author || "Anonymous"}</span>
                             </div>
-                            <div class="poll-bar">
-                                <div class="poll-fill" style="width: ${totalVotes > 0 ? (option.votes / totalVotes) * 100 : 0}%"></div>
+                            
+                            <div class="article-stats">
+                                <div class="stat">
+                                    <i class="fas fa-eye"></i> ${viewCount}
+                                </div>
+                                <div class="stat">
+                                    <i class="fas fa-thumbs-up"></i> ${likeCount}
+                                </div>
+                                <div class="stat">
+                                    <i class="fas fa-comment"></i> ${commentCount}
+                                </div>
+                            </div>
+                            
+                            <div class="share-section">
+                                <div class="share-title">Share this article:</div>
+                                <div class="share-options">
+                                    <div class="share-option facebook" data-platform="facebook" data-article="${article.id}" data-title="${article.title}">
+                                        <i class="fab fa-facebook-f"></i> Facebook
+                                    </div>
+                                    <div class="share-option twitter" data-platform="twitter" data-article="${article.id}" data-title="${article.title}">
+                                        <i class="fab fa-twitter"></i> Twitter
+                                    </div>
+                                    <div class="share-option linkedin" data-platform="linkedin" data-article="${article.id}" data-title="${article.title}">
+                                        <i class="fab fa-linkedin-in"></i> LinkedIn
+                                    </div>
+                                    <div class="share-option whatsapp" data-platform="whatsapp" data-article="${article.id}" data-title="${article.title}">
+                                        <i class="fab fa-whatsapp"></i> WhatsApp
+                                    </div>
+                                    <div class="share-option telegram" data-platform="telegram" data-article="${article.id}" data-title="${article.title}">
+                                        <i class="fab fa-telegram-plane"></i> Telegram
+                                    </div>
+                                </div>
+                                <div class="share-url">
+                                    <input type="text" value="${articleUrl}" readonly id="url-${article.id}">
+                                    <button class="copy-url" data-url="${articleUrl}">Copy</button>
+                                </div>
                             </div>
                         </div>
-                    `).join('')}
-                </div>
-                <a href="poll.html?id=${pollId}" class="view-link">View Poll</a>
-            `;
-            
-            userPollsContainer.appendChild(pollCard);
-        }
-
-        // Load profile data
-        async function loadProfile(uid, currentUserUid) {
-            try {
-                const userRef = ref(database, `users/${uid}`);
-                const snapshot = await get(userRef);
-                
-                if (snapshot.exists()) {
-                    const user = snapshot.val();
-                    
-                    // Update profile picture
-                    if (user.profilePicture) {
-                        profilePic.src = user.profilePicture;
-                    } else {
-                        profilePic.src = "https://via.placeholder.com/120";
-                    }
-                    
-                    // Update name and email
-                    const displayName = `${user.firstName || ""} ${user.lastName || ""}`.trim();
-                    profileName.textContent = displayName || "Anonymous";
-                    userEmail.textContent = user.email || "Anonymous";
-                    
-                    // Format and display join date
-                    userDate.textContent = `Joined: ${formatDate(user.createdAt)}`;
-                    
-                    // Update bio
-                    profileBio.textContent = user.bio || "No bio available";
-                    
-                    // Update follow button if viewing another user's profile
-                    if (uid !== currentUserUid) {
-                        const isFollowing = await checkIfFollowing(currentUserUid, uid);
-                        updateFollowButton(isFollowing);
-                        followBtn.style.display = isFollowing ? "none" : "inline-block";
-                        followingBtn.style.display = isFollowing ? "inline-block" : "none";
-                    }
-                    
-                    // Load all content
-                    loadUserPosts(uid);
-                    loadUserQuestions(uid);
-                    loadUserPolls(uid);
-                    
-                    // Update stats
-                    postCount.textContent = await countUserPosts(uid);
-                    questionCount.textContent = await countUserQuestions(uid);
-                    pollCount.textContent = await countUserPolls(uid);
-                    const followers = await countUserFollowers(uid);
-                    followerCount.textContent = followers;
-                    followersCount.textContent = followers;
-                    
-                } else {
-                    alert("User not found.");
-                    window.location.href = "users.html";
-                }
-            } catch (error) {
-                console.error("Error loading profile:", error);
-                alert("Failed to load profile.");
-                window.location.href = "users.html";
-            }
-        }
-
-        // Preview image before upload
-        profilePicInput.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    previewImage.src = event.target.result;
-                    previewImage.style.display = 'block';
-                }
-                reader.readAsDataURL(file);
-            }
-        });
-
-        // Tab switching
-        tabButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                tabButtons.forEach(btn => btn.classList.remove('active'));
-                tabContents.forEach(content => content.classList.remove('active'));
-                
-                button.classList.add('active');
-                const tabId = button.getAttribute('data-tab');
-                document.getElementById(`${tabId}-tab`).classList.add('active');
+                    </div>
+                `;
+                articlesContainer.innerHTML += articleHTML;
             });
-        });
 
-        // Modal handling
-        followersBtn.addEventListener('click', () => {
-            followersModal.style.display = 'block';
-            loadFollowers(profileUid);
-        });
+            // Add event listeners for share buttons
+            document.querySelectorAll('.share-option').forEach(option => {
+                option.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const platform = option.dataset.platform;
+                    const articleId = option.dataset.article;
+                    const title = option.dataset.title;
+                    shareArticle(platform, articleId, title);
+                });
+            });
 
-        closeModal.addEventListener('click', () => {
-            followersModal.style.display = 'none';
-        });
+            // Add event listeners for copy buttons
+            document.querySelectorAll('.copy-url').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const url = button.dataset.url;
+                    copyToClipboard(url);
+                });
+            });
 
-        window.addEventListener('click', (event) => {
-            if (event.target === followersModal) {
-                followersModal.style.display = 'none';
-            }
-        });
+            // Add click event to article cards to view full article
+            document.querySelectorAll('.article-card').forEach(card => {
+                card.addEventListener('click', (e) => {
+                    // Don't trigger if clicking on share elements
+                    if (e.target.closest('.share-option') || e.target.closest('.copy-url') || e.target.closest('input')) {
+                        return;
+                    }
+                    
+                    const articleId = card.querySelector('.share-option').dataset.article;
+                    window.location.href = `article.html?id=${articleId}`;
+                });
+            });
+        }
 
-        // Follow button handling
-        followBtn.addEventListener('click', async () => {
-            const currentUser = auth.currentUser;
-            if (currentUser && profileUid) {
-                const nowFollowing = await toggleFollow(currentUser.uid, profileUid);
-                updateFollowButton(nowFollowing);
-                
-                // Update followers count
-                const count = await countUserFollowers(profileUid);
-                followerCount.textContent = count;
-                followersCount.textContent = count;
-            }
-        });
+        // Fetch and display news articles from Firebase
+        function fetchNews(filter = 'all') {
+            const newsRef = ref(database, "news");
+            const newsQuery = query(newsRef, orderByChild("timestamp"));
 
-        followingBtn.addEventListener('click', async () => {
-            const currentUser = auth.currentUser;
-            if (currentUser && profileUid) {
-                const nowFollowing = await toggleFollow(currentUser.uid, profileUid);
-                updateFollowButton(nowFollowing);
-                
-                // Update followers count
-                const count = await countUserFollowers(profileUid);
-                followerCount.textContent = count;
-                followersCount.textContent = count;
-            }
-        });
+            onValue(newsQuery, (snapshot) => {
+                const articles = [];
 
-        // Initialize the app
+                snapshot.forEach((childSnapshot) => {
+                    const article = childSnapshot.val();
+                    article.id = childSnapshot.key;
+                    articles.push(article);
+                });
+
+                // Sort articles by timestamp (newest first)
+                articles.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+
+                displayArticles(articles, filter);
+            }, (error) => {
+                console.error("Error fetching news:", error);
+                articlesContainer.innerHTML = `
+                    <div class="no-articles">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h3>Error loading articles</h3>
+                        <p>Please try again later.</p>
+                    </div>
+                `;
+            });
+        }
+
+        // Wait for DOM to load
         document.addEventListener("DOMContentLoaded", () => {
             // Auth state listener
-            onAuthStateChanged(auth, async (currentUser) => {
-                if (!currentUser) {
-                    alert("Please sign in to view profiles.");
-                    window.location.href = "https://undefined-flare.github.io/BF/blue flare sign in.html";
-                    return;
+            onAuthStateChanged(auth, (user) => {
+                if (user) {
+                    if (profilePicture) profilePicture.src = user.photoURL || "https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/1758334341084.jpg?alt=media&token=af2bb626-f7c8-44db-be34-e4cbaf00914d";
+                    if (userInfo) userInfo.innerText = user.email || "Anonymous";
                 }
-
-                // If no UID in URL, show current user's profile
-                if (!profileUid) {
-                    profileUid = currentUser.uid;
-                    window.history.replaceState({}, document.title, `${window.location.pathname}?uid=${profileUid}`);
-                }
-
-                // Load the profile
-                loadProfile(profileUid, currentUser.uid);
-
-                // Show edit button only if viewing own profile
-                if (profileUid === currentUser.uid) {
-                    editProfileBtn.style.display = "inline-block";
-                }
-            });
-
-            // Sign out button
-            signOutBtn.addEventListener("click", () => {
-                signOut(auth)
-                    .then(() => {
-                        window.location.href = "https://undefined-flare.github.io/BF/blue flare sign in.html";
-                    })
-                    .catch((err) => {
-                        console.error("Sign out error:", err);
-                        alert("Failed to sign out.");
-                    });
-            });
-
-            // Edit profile button
-            editProfileBtn.addEventListener("click", () => {
-                profileEditForm.style.display = "block";
-                editProfileBtn.style.display = "none";
                 
-                // Populate form with current values
-                const userRef = ref(database, `users/${profileUid}`);
-                onValue(userRef, (snapshot) => {
-                    if (snapshot.exists()) {
-                        const user = snapshot.val();
-                        firstNameInput.value = user.firstName || "";
-                        lastNameInput.value = user.lastName || "";
-                        emailInput.value = user.email || "";
-                        bioInput.value = user.bio || "";
-                    }
-                }, { onlyOnce: true });
+                fetchNews();
             });
 
-            // Save profile changes
-            saveProfileBtn.addEventListener("click", async () => {
-                const updates = {
-                    firstName: firstNameInput.value.trim(),
-                    lastName: lastNameInput.value.trim(),
-                    email: emailInput.value.trim(),
-                    bio: bioInput.value.trim()
-                };
-
-                if (!updates.firstName || !updates.lastName || !updates.email) {
-                    alert("Please fill in all required fields");
-                    return;
-                }
-
-                try {
-                    if (profilePicInput.files[0]) {
-                        const file = profilePicInput.files[0];
-                        const reference = storageRef(storage, `profile-pictures/${profileUid}`);
-                        await uploadBytes(reference, file);
-                        const downloadURL = await getDownloadURL(reference);
-                        updates.profilePicture = downloadURL;
-                    }
-
-                    await update(ref(database, `users/${profileUid}`), updates);
-                    
-                    if (updates.profilePicture) {
-                        profilePic.src = updates.profilePicture;
-                    }
-                    profileName.textContent = `${updates.firstName} ${updates.lastName}`;
-                    userEmail.textContent = updates.email;
-                    profileBio.textContent = updates.bio || "No bio available";
-                    
-                    profileEditForm.style.display = "none";
-                    editProfileBtn.style.display = "inline-block";
-                    
-                    alert("Profile updated successfully");
-                } catch (err) {
-                    console.error("Error updating profile:", err);
-                    alert("Failed to update profile");
-                }
-            });
-
-            // Cancel profile edit
-            cancelProfileBtn.addEventListener("click", () => {
-                profileEditForm.style.display = "none";
-                editProfileBtn.style.display = "inline-block";
-                previewImage.style.display = "none";
-                profilePicInput.value = "";
+            // Filter buttons functionality
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    fetchNews(button.dataset.filter);
+                });
             });
         });
     </script>
