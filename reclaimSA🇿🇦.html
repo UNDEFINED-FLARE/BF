@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>reclaimSA 🇿🇦</title>
+    <link rel="icon" type="image/png" href="https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/favicon-16x16.png?alt=media&token=ae9b9eff-fcd0-499b-a0fc-2e28666fa67d" sizes="16x16">
                 <link rel="icon" 
       href="https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/1758334341084.jpg?alt=media&token=af2bb626-f7c8-44db-be34-e4cbaf00914d" 
       type="image/png"
@@ -16,7 +17,35 @@
         
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-
+.loading {
+            text-align: center;
+            padding: 40px;
+            color: #7f8c8d;
+            font-size: 18px;
+        }
+        
+        .error-message {
+            text-align: center;
+            padding: 40px;
+            color: #e74c3c;
+            font-size: 18px;
+        }
+        
+        @media (max-width: 768px) {
+            #newsContainer {
+                grid-template-columns: 1fr;
+            }
+            
+            .full-article-content {
+                margin: 60px auto 20px;
+                padding: 10px;
+            }
+            
+            .full-article-title {
+                font-size: 24px;
+            }
+        }
+        
         body {
             background-color: #f5f7fa;
             color: #333;
@@ -475,12 +504,17 @@
 
             </div>
     <div class="container">
+                        <div class="loading">
+                    <i class="fas fa-spinner fa-spin"></i> 🇿🇦please wait..
+                </div>
         <a href="#" class="back-button" id="backButton">
 
         </a>
 
         <div class="article-container" id="articleContainer">
-            <!-- Article content will be dynamically inserted here -->
+                        <div class="loading">
+                    <i class="fas fa-spinner fa-spin"></i> Loading questions...
+                </div>
         </div>
     </div>
 
