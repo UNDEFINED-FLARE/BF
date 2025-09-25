@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>reclaimSA 🇿🇦</title>
+                <link rel="icon" 
+      href="https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/1758334341084.jpg?alt=media&token=af2bb626-f7c8-44db-be34-e4cbaf00914d" 
+      type="image/png"
+    >
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-right: 10px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .profile-picture {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+
+        .article-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .article-header {
+            padding: 30px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .category-badge {
+            display: inline-block;
+            background: #6a11cb;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .article-title {
+            font-size: 32px;
+            margin-bottom: 15px;
+            color: #2c3e50;
+            line-height: 1.3;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+
+        .author-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .author-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+        }
+
+        .article-image {
+            width: 100%;
+            max-height: 500px;
+            object-fit: cover;
+        }
+
+        .article-body {
+            padding: 30px;
+            font-size: 18px;
+            line-height: 1.8;
+        }
+
+        .article-body p {
+            margin-bottom: 20px;
+        }
+
+        .hashtag {
+            color: #6a11cb;
+            font-weight: 600;
+        }
+
+        .article-body a {
+            color: #2575fc;
+            text-decoration: none;
+        }
+
+        .article-body a:hover {
+            text-decoration: underline;
+        }
+
+        .article-stats {
+            display: flex;
+            gap: 20px;
+            padding: 20px 30px;
+            border-top: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+            background: #f8f9fa;
+        }
+
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #7f8c8d;
+        }
+
+        .article-interactions {
+            padding: 20px 30px;
+            display: flex;
+            gap: 15px;
+        }
+
+        .interaction-button {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 30px;
+            background: #f1f3f4;
+            color: #5f6368;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .interaction-button:hover {
+            background: #e8eaed;
+            transform: translateY(-2px);
+        }
+
+        .interaction-button.liked {
+            background: #e8f4fd;
+            color: #1da1f2;
+        }
+
+        .share-button {
+            background: #e1f5fe;
+            color: #0288d1;
+        }
+
+        .share-button:hover {
+            background: #b3e5fc;
+        }
+
+        .comments-section {
+            padding: 30px;
+            border-top: 1px solid #eee;
+        }
+
+        .comments-title {
+            font-size: 22px;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        .comment-form {
+            margin-bottom: 30px;
+        }
+
+        .comment-input {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            resize: vertical;
+            min-height: 100px;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .comment-submit {
+            background: #6a11cb;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .comment-submit:hover {
+            background: #5a0db3;
+        }
+
+        .comment-item {
+            display: flex;
+            gap: 15px;
+            padding: 20px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .comment-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #6a11cb;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .comment-content {
+            flex: 1;
+        }
+
+        .comment-author {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #2c3e50;
+        }
+
+        .comment-text {
+            margin-bottom: 5px;
+        }
+
+        .comment-time {
+            font-size: 12px;
+            color: #7f8c8d;
+        }
+
+        .no-comments {
+            text-align: center;
+            padding: 30px;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+
+        .share-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .share-modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .share-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .share-modal-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #7f8c8d;
+        }
+
+        .share-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .share-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            padding: 15px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .share-option:hover {
+            background: #f9f9f9;
+            transform: translateY(-3px);
+        }
+
+        .share-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: white;
+        }
+
+        .facebook {
+            background: #3b5998;
+        }
+
+        .twitter {
+            background: #1da1f2;
+        }
+
+        .linkedin {
+            background: #0077b5;
+        }
+
+        .whatsapp {
+            background: #25d366;
+        }
+
+        .telegram {
+            background: #0088cc;
+        }
+
+        .link {
+            background: #6a11cb;
+        }
+
+        .share-option span {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .share-url {
+            display: flex;
+            margin-bottom: 20px;
+        }
+
+        .share-url input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px 0 0 8px;
+            font-size: 14px;
+        }
+
+        .copy-url {
+            background: #6a11cb;
+            color: white;
+            border: none;
+            padding: 0 20px;
+            border-radius: 0 8px 8px 0;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .copy-url:hover {
+            background: #5a0db3;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #6a11cb;
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 20px;
+            transition: color 0.3s;
+        }
+
+        .back-button:hover {
+            color: #5a0db3;
+        }
+
+        @media (max-width: 768px) {
+            .article-title {
+                font-size: 24px;
+            }
+            
+            .article-body {
+                padding: 20px;
+                font-size: 16px;
+            }
+            
+            .share-options {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .article-stats {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+                    <div class="hdrPage">
+
+
+                <img src="https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/1758334341084.jpg?alt=media&token=af2bb626-f7c8-44db-be34-e4cbaf00914d" alt="" class="schoolProfile" style="float:left;border:none;width:55px;height:55px;" />
+                <br>
+                <p class="logo" style="color:RGB(100, 149, 237);letter-spacing: none;">
+                    Reclaim<b style="color:peru">•SA</b>
+                </p>
+
+
+            </div>
+    <div class="container">
+        <a href="#" class="back-button" id="backButton">
+
+        </a>
+
+        <div class="article-container" id="articleContainer">
+            <!-- Article content will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <div class="share-modal" id="shareModal">
+        <div class="share-modal-content">
+            <div class="share-modal-header">
+                <h3 class="share-modal-title">Share Article</h3>
+                <button class="close-modal" id="closeModal">&times;</button>
+            </div>
+            <div class="share-options">
+                <div class="share-option" data-platform="facebook">
+                    <div class="share-icon facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </div>
+                    <span>Facebook</span>
+                </div>
+                <div class="share-option" data-platform="twitter">
+                    <div class="share-icon twitter">
+                        <i class="fab fa-twitter"></i>
+                    </div>
+                    <span>Twitter</span>
+                </div>
+                <div class="share-option" data-platform="linkedin">
+                    <div class="share-icon linkedin">
+                        <i class="fab fa-linkedin-in"></i>
+                    </div>
+                    <span>LinkedIn</span>
+                </div>
+                <div class="share-option" data-platform="whatsapp">
+                    <div class="share-icon whatsapp">
+                        <i class="fab fa-whatsapp"></i>
+                    </div>
+                    <span>WhatsApp</span>
+                </div>
+                <div class="share-option" data-platform="telegram">
+                    <div class="share-icon telegram">
+                        <i class="fab fa-telegram-plane"></i>
+                    </div>
+                    <span>Telegram</span>
+                </div>
+                <div class="share-option" data-platform="link">
+                    <div class="share-icon link">
+                        <i class="fas fa-link"></i>
+                    </div>
+                    <span>Copy Link</span>
+                </div>
+            </div>
+            <div class="share-url">
+                <input type="text" id="shareUrl" readonly>
+                <button class="copy-url" id="copyUrl">Copy</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+        import { getDatabase, ref, push, onValue, runTransaction, query, orderByChild, set, get } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-database.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBSMvHpZ0_VkqWjJ94UMa6vqEhFiqrsIWM",
+            authDomain: "rare-5f47e.firebaseapp.com",
+            projectId: "rare-5f47e",
+            storageBucket: "rare-5f47e.appspot.com",
+            messagingSenderId: "811727087812",
+            appId: "1:811727087812:web:d362e68abf6c26acf24191",
+            measurementId: "G-DE59771G7Q"
+        };
+
+        // Initialize Firebase only if not already initialized
+        let app;
+        if (!getApps().length) {
+            app = initializeApp(firebaseConfig);
+        } else {
+            app = getApp();
+        }
+
+        const auth = getAuth(app);
+        const database = getDatabase(app);
+
+        // DOM elements
+        const articleContainer = document.getElementById("articleContainer");
+        const profilePicture = document.getElementById("profilePicture");
+        const userInfo = document.getElementById("userInfo");
+        const backButton = document.getElementById("backButton");
+        const shareModal = document.getElementById("shareModal");
+        const closeModal = document.getElementById("closeModal");
+        const shareUrl = document.getElementById("shareUrl");
+        const copyUrl = document.getElementById("copyUrl");
+        const shareOptions = document.querySelectorAll(".share-option");
+
+        // Get article ID from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const articleId = urlParams.get('id');
+
+        // Format timestamp
+        function formatTime(timestamp) {
+            if (!timestamp) return "Unknown time";
+
+            // Convert to number if it's a string
+            const timeValue = typeof timestamp === 'string' ? parseInt(timestamp) : timestamp;
+
+            const now = Date.now();
+            const diff = now - timeValue;
+            const seconds = Math.floor(diff / 1000);
+            const minutes = Math.floor(seconds / 60);
+            const hours = Math.floor(minutes / 60);
+            const days = Math.floor(hours / 24);
+
+            if (seconds < 60) return "Just now";
+            if (minutes < 60) return `${minutes}m ago`;
+            if (hours < 24) return `${hours}h ago`;
+            if (days < 7) return `${days}d ago`;
+
+            // For older dates, show actual date
+            const date = new Date(timeValue);
+            return date.toLocaleDateString();
+        }
+
+        // Function to detect and format links and hashtags
+        function formatContent(content) {
+            if (!content) return '';
+
+            // Convert URLs to clickable links
+            let formattedContent = content.replace(
+                /(https?:\/\/[^\s]+)/g, 
+                '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>'
+            );
+
+            // Convert hashtags to styled spans
+            formattedContent = formattedContent.replace(
+                /#(\w+)/g, 
+                '<span class="hashtag">#$1</span>'
+            );
+
+            return formattedContent;
+        }
+
+        // Track article view
+        function trackArticleView(articleId) {
+            const user = auth.currentUser;
+            if (!user) return;
+
+            const viewRef = ref(database, `news/${articleId}/views/${user.uid}`);
+
+            // Record view with timestamp
+            set(viewRef, Date.now()).catch((error) => {
+                console.error("Error tracking view:", error);
+            });
+        }
+
+        // Show full article
+        function showFullArticle(articleId, article) {
+            // Track view
+            trackArticleView(articleId);
+
+            // Count views
+            const viewCount = article.views ? Object.keys(article.views).length : 0;
+            const likeCount = article.likes ? Object.keys(article.likes).length : 0;
+            const commentCount = article.comments ? Object.keys(article.comments).length : 0;
+
+            // Set the page title to the article title
+            document.title = `${article.title || "Article"} - News Portal`;
+
+            // Set the share URL
+            const currentUrl = window.location.href.split('?')[0] + `?id=${articleId}`;
+            shareUrl.value = currentUrl;
+
+            // Render article content
+            articleContainer.innerHTML = `
+                ${article.fileURL ? `<img src="${article.fileURL}" alt="${article.title}" class="article-image">` : ''}
+                <div class="article-header">
+                    <span class="category-badge">${article.category || "General"}</span>
+                    <h1 class="article-title">${article.title || "Untitled"}</h1>
+                    <div class="article-meta">
+                        <span class="timestamp">${formatTime(article.timestamp)}</span>
+                        <div class="author-info">
+                            <img src="${article.authorPhoto || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'}" alt="${article.author}" class="author-avatar">
+                            <span class="author">By ${article.author || "Anonymous"}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="article-body">
+                    <p>${formatContent(article.content || "")}</p>
+                </div>
+                <div class="article-stats">
+                    <div class="stat">
+                        <i class="fas fa-eye"></i> ${viewCount} views
+                    </div>
+                    <div class="stat">
+                        <i class="fas fa-thumbs-up"></i> ${likeCount} likes
+                    </div>
+                    <div class="stat">
+                        <i class="fas fa-comment"></i> ${commentCount} comments
+                    </div>
+                </div>
+                <div class="article-interactions">
+                    <button class="interaction-button like-button ${article.likes && article.likes[auth.currentUser?.uid] ? 'liked' : ''}" data-article="${articleId}" aria-label="Like article">
+                        <i class="fas fa-thumbs-up"></i> Like
+                    </button>
+                    <button class="interaction-button share-button" id="shareButton" aria-label="Share article">
+                        <i class="fas fa-share-alt"></i> Share
+                    </button>
+                </div>
+                <div class="comments-section">
+                    <h3 class="comments-title">Comments</h3>
+                    ${auth.currentUser ? `
+                        <div class="comment-form">
+                            <textarea class="comment-input" placeholder="Write a comment..." aria-label="Comment input"></textarea>
+                            <button class="comment-submit" data-article="${articleId}">Post Comment</button>
+                        </div>
+                    ` : `
+                        <div class="comment-login-prompt">
+                            <p>Please <a href="https://undefined-flare.github.io/BF/blue flare sign in.html">sign in</a> to leave a comment.</p>
+                        </div>
+                    `}
+                    <div class="comments-list">
+                        ${commentCount > 0 ? 
+                            Object.entries(article.comments || {})
+                                .sort(([,a], [,b]) => (b.timestamp || 0) - (a.timestamp || 0))
+                                .map(([id, comment]) => `
+                                    <div class="comment-item">
+                                        <div class="comment-avatar">${(comment.author || "A").charAt(0).toUpperCase()}</div>
+                                        <div class="comment-content">
+                                            <div class="comment-author">${comment.author || "Anonymous"}</div>
+                                            <div class="comment-text">${comment.text}</div>
+                                            <div class="comment-time">${formatTime(comment.timestamp)}</div>
+                                        </div>
+                                    </div>
+                                `).join("")
+                            : '<div class="no-comments">No comments yet. Be the first to comment!</div>'
+                        }
+                    </div>
+                </div>
+            `;
+
+            // Add event listeners for interactions
+            const likeButton = articleContainer.querySelector('.like-button');
+            if (likeButton) {
+                likeButton.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const user = auth.currentUser;
+
+                    if (!user) {
+                        alert("Please sign in to like articles");
+                        return;
+                    }
+
+                    const likesRef = ref(database, `news/${articleId}/likes/${user.uid}`);
+                    runTransaction(likesRef, (currentValue) => {
+                        return currentValue ? null : true;
+                    }).then((result) => {
+                        if (result.committed) {
+                            // Refresh the article to update counts
+                            const articleRef = ref(database, `news/${articleId}`);
+                            onValue(articleRef, (snapshot) => {
+                                const updatedArticle = snapshot.val();
+                                showFullArticle(articleId, updatedArticle);
+                            });
+                        }
+                    }).catch((error) => {
+                        console.error("Error updating like:", error);
+                    });
+                });
+            }
+
+            const commentSubmit = articleContainer.querySelector('.comment-submit');
+            if (commentSubmit) {
+                commentSubmit.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const commentInput = articleContainer.querySelector('.comment-input');
+                    const commentText = commentInput.value.trim();
+
+                    if (!commentText) {
+                        alert("Please enter a comment");
+                        return;
+                    }
+
+                    submitComment(articleId, commentText);
+                });
+            }
+
+            // Share button functionality
+            const shareButton = document.getElementById('shareButton');
+            if (shareButton) {
+                shareButton.addEventListener('click', () => {
+                    shareModal.style.display = 'flex';
+                });
+            }
+        }
+
+        // Submit a comment
+        function submitComment(articleId, commentText) {
+            const user = auth.currentUser;
+            if (!user) {
+                alert("Please sign in to comment");
+                return;
+            }
+
+            const commentsRef = ref(database, `news/${articleId}/comments`);
+            const newComment = {
+                text: commentText,
+                author: user.email || user.displayName || "Anonymous",
+                timestamp: Date.now()
+            };
+
+            push(commentsRef, newComment).then(() => {
+                // Clear the input
+                const commentInput = articleContainer.querySelector('.comment-input');
+                if (commentInput) commentInput.value = "";
+
+                // Refresh the article to show the new comment
+                const articleRef = ref(database, `news/${articleId}`);
+                onValue(articleRef, (snapshot) => {
+                    const updatedArticle = snapshot.val();
+                    showFullArticle(articleId, updatedArticle);
+                });
+            }).catch((error) => {
+                console.error("Error posting comment:", error);
+                alert("Failed to post comment. Please try again.");
+            });
+        }
+
+        // Load article when page loads
+        document.addEventListener("DOMContentLoaded", () => {
+            // Auth state listener
+            onAuthStateChanged(auth, (user) => {
+                if (user) {
+                    if (profilePicture) profilePicture.src = user.photoURL || "https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/1758334341084.jpg?alt=media&token=af2bb626-f7c8-44db-be34-e4cbaf00914d";
+                    if (userInfo) userInfo.innerText = user.email || "Anonymous";
+                }
+
+                // Load the article if ID is provided
+                if (articleId) {
+                    const articleRef = ref(database, `news/${articleId}`);
+                    onValue(articleRef, (snapshot) => {
+                        const article = snapshot.val();
+                        if (article) {
+                            showFullArticle(articleId, article);
+                        } else {
+                            articleContainer.innerHTML = `
+                                <div class="error-message">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    <p>Article not found</p>
+                                </div>
+                            `;
+                        }
+                    }, (error) => {
+                        console.error("Error fetching article:", error);
+                        articleContainer.innerHTML = `
+                            <div class="error-message">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <p>Error loading article. Please try again.</p>
+                            </div>
+                        `;
+                    });
+                } else {
+                    articleContainer.innerHTML = `
+                        <div class="error-message">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <p>No article ID provided</p>
+                        </div>
+                    `;
+                }
+            });
+
+            // Back button functionality
+            backButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.location.href = 'index.html'; // Change to your main news page URL
+            });
+
+            // Share modal functionality
+            closeModal.addEventListener('click', () => {
+                shareModal.style.display = 'none';
+            });
+
+            // Close modal when clicking outside
+            shareModal.addEventListener('click', (e) => {
+                if (e.target === shareModal) {
+                    shareModal.style.display = 'none';
+                }
+            });
+
+            // Copy URL functionality
+            copyUrl.addEventListener('click', () => {
+                shareUrl.select();
+                document.execCommand('copy');
+                copyUrl.textContent = 'Copied!';
+                setTimeout(() => {
+                    copyUrl.textContent = 'Copy';
+                }, 2000);
+            });
+
+            // Share options functionality
+            shareOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    const platform = option.dataset.platform;
+                    const url = encodeURIComponent(shareUrl.value);
+                    const title = encodeURIComponent(document.querySelector('.article-title').textContent || 'Check out this article');
+                    
+                    let shareUrlString = '';
+                    
+                    switch(platform) {
+                        case 'facebook':
+                            shareUrlString = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+                            break;
+                        case 'twitter':
+                            shareUrlString = `https://twitter.com/intent/tweet?url=${url}&text=${title}`;
+                            break;
+                        case 'linkedin':
+                            shareUrlString = `https://www.linkedin.com/sharing/share-offsite/?url=${url}`;
+                            break;
+                        case 'whatsapp':
+                            shareUrlString = `https://api.whatsapp.com/send?text=${title} ${url}`;
+                            break;
+                        case 'telegram':
+                            shareUrlString = `https://t.me/share/url?url=${url}&text=${title}`;
+                            break;
+                        case 'link':
+                            // Already handled by copy button
+                            return;
+                    }
+                    
+                    if (shareUrlString) {
+                        window.open(shareUrlString, '_blank', 'width=600,height=400');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
