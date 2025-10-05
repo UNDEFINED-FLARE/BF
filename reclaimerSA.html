@@ -8,7 +8,7 @@
       href="https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/1758334341084.jpg?alt=media&token=af2bb626-f7c8-44db-be34-e4cbaf00914d" 
       type="image/png"
     >
-      <link rel="stylesheet" href="reclaimer.css" title="" type="" />
+      <link rel="stylesheet" href="blueflare.css" title="" type="" />
       <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-database.js"></script>
 
   <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-auth.js"></script>
@@ -18,41 +18,41 @@
         * {
             margin: 0;
             padding: 0;
-            
+
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
+
         body {
             background-color: #f5f5f5;
             color:black;
             line-height: 1.6;
         }
-        
+
 
         nav {
-            
-            
-            
-            
+
+
+
+
             display: flex;
             justify-content: space-between;
             align-items: center;
             max-widt: 1200px;
             margin: 0 auto;
         }
-        
+
         .logo {
             font-size: 1.5rem;
             font-weight: bold;
             display: flex;
             align-items: center;
         }
-        
+
         .logo-icon {
             margin-right: 10px;
             font-size: 1.8rem;
         }
-        
+
         .nav-links {
             border-radius:10px;
 font-size: 9px;
@@ -77,11 +77,11 @@ font-size: 9px;
             display: flex;
             list-style: none;
         }
-        
+
         .nav-links li {
             margin-left: 1.5rem;
         }
-        
+
         .nav-links a {
             color: black;
             text-decoration: none;
@@ -91,17 +91,17 @@ font-size: 9px;
             border-radius: 4px;
             transition: background-color 0.3s;
         }
-        
+
         .nav-links a:hover, .nav-links a.active {
             background-color: rgba(255, 255, 255, 0.2);
         }
-        
+
         .container {
             width:100%;
             margi-top:5px;
             padding: 0;
         }
-        
+
         .page {
             margin:0;
             padding:0;
@@ -109,16 +109,16 @@ font-size: 9px;
             display: none;
             animation: fadeIn 0.5s ease;
         }
-        
+
         .page.active {
             display: block;
         }
-        
+
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
         }
-        
+
         .hero {
             background: url('https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/IMG-20250912-WA0101.jpg?alt=media&token=66a018e2-c3e1-4d25-9028-d911a5050150');
             background-size: cover;
@@ -130,26 +130,26 @@ font-size: 9px;
             color: white;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
-        
+
         .hero h1 {
             font-size: 2.5rem;
             margin-bottom: 1rem;
             color: #;
         }
-        
+
         .hero p {
             font-size: 1.2rem;
             max-width: 800px;
             margin: 0 auto;
         }
-        
+
         .content-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 1.5rem;
             margin-top: 2rem;
         }
-        
+
         .card {
             background: white;
             width:100%;
@@ -158,11 +158,11 @@ font-size: 9px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s;
         }
-        
+
         .card:hover {
             transform: translateY(-5px);
         }
-        
+
         .card-img {
             height: 200px;
             background: linear-gradient(45deg, #, #FFB81C);
@@ -172,22 +172,22 @@ font-size: 9px;
             color: white;
             font-size: 3rem;
         }
-        
+
         .card-content {
             padding: 1.5rem;
         }
-        
+
         .card h3 {
             margin-bottom: 0.5rem;
             color: #;
         }
-        
+
         .timeline {
             position: relative;
             max-width: 800px;
             margin: 2rem auto;
         }
-        
+
         .timeline::after {
             content: '';
             position: absolute;
@@ -198,14 +198,14 @@ font-size: 9px;
             left: 50%;
             margin-left: -3px;
         }
-        
+
         .timeline-item {
             padding: 10px 40px;
             position: relative;
             width: 50%;
             box-sizing: border-box;
         }
-        
+
         .timeline-item::after {
             content: '';
             position: absolute;
@@ -218,26 +218,26 @@ font-size: 9px;
             right: -12px;
             z-index: 1;
         }
-        
+
         .left {
             left: 0;
         }
-        
+
         .right {
             left: 50%;
         }
-        
+
         .right::after {
             left: -12px;
         }
-        
+
         .timeline-content {
             padding: 1rem;
             background-color: white;
             border-radius: 6px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
-        
+
         footer {
             background: linear-gradient(135deg, # 0%, #000000 50%, #FFB81C 100%);
             color: white;
@@ -253,51 +253,51 @@ font-size: 9px;
         @media (max-width: 900px) {
             .nav-links {
                 display: noe;
-        
-            
-        
-                
-        
-        
+
+
+
+
+
+
             }
-            
+
             .nav-links.active {
                 display: flex;
             }
-            
+
             .nav-links li {
                 margin: 0.rem 0;
             }
-            
+
             .menu-btn {
                 display: block;
                 font-size: 1.5rem;
-                
+
             }
-            
+
             .timeline::after {
                 left: 31px;
             }
-            
+
             .timeline-item {
                 width: 100%;
                 padding-left: 70px;
                 padding-right: 25px;
             }
-            
+
             .timeline-item::after {
                 left: 22px;
             }
-            
+
             .left, .right {
                 left: 0;
             }
         }
 
-    
+
         i{
             color:royalblue;
-            
+
         }
         a{
             color:grey;
@@ -308,23 +308,23 @@ font-size: 9px;
 
 
                     <div class="hdrPage">
-                
-                
+
+
                 <img src="https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/1758334341084.jpg?alt=media&token=af2bb626-f7c8-44db-be34-e4cbaf00914d" alt="" class="schoolProfile" style="float:left;border:none;width:55px;height:55px;" />
                 <br>
                 <p class="logo" style="color:RGB(100, 149, 237);letter-spacing: none;">
                     Reclaim<b style="color:peru">•SA</b>
                 </p>
-                
-                
+
+
             </div>
 <body>
-    
 
 
 
 
-    
+
+
           <div class="pageName" style="color:RGB(65, 105, 225);">
             <div class="logo">
 
@@ -350,11 +350,11 @@ font-size: 9px;
               </div>
 
             </div>
-            
+
     </div>
 
             <div class="user-info" style="display:noe">
-                
+
 
             </div>
     <div class="container">
@@ -372,7 +372,7 @@ Through community action, accountability monitoring, and the strategic mobilisat
 
 The movement is independent and funded by the contributions of its members.
             </div>
-            
+
             <div class="content-grid">
                 <div class="card">
 
@@ -381,7 +381,7 @@ We are reclaiming SA!
 Our power does not lie in a ballot box alone. It lies in our hands, our skills, and our unwavering commitment to each other. #ReclaimSA is a citizen-powered platform turning frustration into focused action. We channel our collective energy into tangible projects that rebuild our communities and hold power to account.
                     </div>
                 </div>
-                
+
                 <div class="card">
                     <div class="card-img">🔥</div>
                     <div class="card-content">
@@ -389,7 +389,7 @@ Our power does not lie in a ballot box alone. It lies in our hands, our skills, 
                         <p>The 1976 student protests that began in Soweto and spread across South Africa, becoming a pivotal moment in the anti-apartheid struggle.</p>
                     </div>
                 </div>
-                
+
                 <div class="card">
                     <div class="card-img">✊</div>
                     <div class="card-content">
@@ -403,29 +403,29 @@ Our power does not lie in a ballot box alone. It lies in our hands, our skills, 
         <!-- Q/Ay Page -->
         <section id="Q/Ay" class="page">
     <div class="container">
-    
+
         <div class="tabs">
             <div class="tab active" onclick="showTab('questions')">Questions</div>
             <div class="tab" onclick="showTab('qa')">Q&A</div>
             <div class="tab" onclick="showTab('polls')">Polls</div>
         </div>
-        
+
         <div id="questions-tab" class="tab-content">
             <div class="post-form">
                 <h2 class="form-title">Ask a Question</h2>
                 <div class="form-group">
-                    <textarea id="question-text" placeholder="What would you like to ask?" rows="4"></textarea>
+                    <textarea id="question-text" placeholder="showcase you political movement 🇿🇦 on this platform, and let your voice get heard 🇿🇦🤞🏿" rows="4"></textarea>
                 </div>
                 <button onclick="submitQuestion()">Post Question</button>
             </div>
-            
+
             <div class="questions-list" id="questions-list">
                 <div class="loading">
                     <i class="fas fa-spinner fa-spin"></i> Loading questions...
                 </div>
             </div>
         </div>
-        
+
         <div id="qa-tab" class="tab-content">
             <div class="questions-list" id="qa-list">
                 <div class="loading">
@@ -433,7 +433,7 @@ Our power does not lie in a ballot box alone. It lies in our hands, our skills, 
                 </div>
             </div>
         </div>
-        
+
         <div id="polls-tab" class="tab-content">
             <div class="post-form">
                 <h2 class="form-title">Create a Poll</h2>
@@ -448,7 +448,7 @@ Our power does not lie in a ballot box alone. It lies in our hands, our skills, 
                 </div>
                 <button onclick="submitPoll()">Create Poll</button>
             </div>
-            
+
             <div class="questions-list" id="polls-list">
                 <div class="loading">
                     <i class="fas fa-spinner fa-spin"></i> Loading polls...
@@ -462,7 +462,7 @@ Our power does not lie in a ballot box alone. It lies in our hands, our skills, 
         <section id="leaders" class="page active" >
     <div class="container">
 
-        
+
         <div id="newsFormContainer" style="display: none;">
             <h2 class="form-title">Publish New Article</h2>
             <form id="newsForm">
@@ -493,15 +493,45 @@ Our power does not lie in a ballot box alone. It lies in our hands, our skills, 
                 <button type="submit">Publish Article</button>
             </form>
         </div>
-        
-        <h2>Latest News</h2>
-        <div id="newsContainer">
+
+    <div class="container">
+
+        <main>
+            <div class="loading" id="loadingIndicator">
+                <div class="loading-spinner"></div>
+                <p>...</p>
+            </div>
+            
+            <div class="horizontal-scroll" id="newssContainer" style="display: none;">
+                <!-- newss will be loaded here from Firebase -->
+            </div>
+            
+            <div class="empty-state" id="emptyState" style="display: none;">
+                <i class="fas fa-newspaper"></i>
+                <h3>No newss Found</h3>
+                <p>There are no newss in the database yet.</p>
+            </div>
+            
+            <div class="controls" id="controls" style="display: none;">
+                <button class="btn" id="refreshBtn">
+                    <i class="fas fa-sync-alt"></i> Refresh newss
+                </button>
+                <button class="btn btn-outline" id="scrollLeftBtn">
+                    <i class="fas fa-chevron-left"></i> Scroll Left
+                </button>
+                <button class="btn btn-outline" id="scrollRightBtn">
+                    Scroll Right <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </main>
+    </div>
+     <div id="newsContainer">
             <div class="loading">
                 <i class="fas fa-spinner fa-spin"></i> Loading articles...
             </div>
         </div>
     </div>
-    
+
     <!-- Full Article View -->
     <div id="articleFullView">
         <button class="article-back-button" id="articleBackButton">
@@ -526,34 +556,109 @@ Our power does not lie in a ballot box alone. It lies in our hands, our skills, 
      <button class="nav-button">
             <i class="fas fa-newspaper"></i>
 <a href="#leaders" class="nav-link active">
-            
+
                 news
             </a>
         </button>
         <button class="nav-button ">
             <i class="fas fa-fire"></i>
 <a href="#Q/Ay" class="nav-link active">
-            
+
                 q/p
             </a>
         </button>
-        
+
         <button class="nav-button" style="position: relative;">
             <i class="fa fa-video"></i>
 <a href="#home" class="nav-link active">    
                 About
             </a>
-            
+
         </button>
     </nav>
-    
+
 </footer>
 </html>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-    <script>
-        // Firebase configuration
+    
+    <!-- Add this CSS for the popup -->
+<style>
+#login-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.popup-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+}
+
+.popup-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1.5rem;
+}
+
+.popup-btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.login-btn {
+    background: #007bff;
+    color: white;
+}
+
+.login-btn:hover {
+    background: #0056b3;
+}
+
+.guest-btn {
+    background: #6c757d;
+    color: white;
+}
+
+.guest-btn:hover {
+    background: #545b62;
+}
+
+.hidden {
+    display: none !important;
+}
+</style>
+
+<!-- Add this HTML for the popup -->
+<div id="login-popup" class="hidden">
+    <div class="popup-content">
+        <h2>Welcome!</h2>
+        <p>Please sign in to access all features or continue as a guest.</p>
+        <div class="popup-buttons">
+            <button id="signin-btn" class="popup-btn login-btn">Sign In</button>
+            <button id="guest-btn" class="popup-btn guest-btn">Continue as Guest</button>
+        </div>
+    </div>
+</div>
+
+<script>
         const firebaseConfig = {
             apiKey: "AIzaSyBSMvHpZ0_VkqWjJ94UMa6vqEhFiqrsIWM",
             authDomain: "rare-5f47e.firebaseapp.com",
@@ -567,21 +672,81 @@ Our power does not lie in a ballot box alone. It lies in our hands, our skills, 
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
+// Modified auth state handler
+auth.onAuthStateChanged(user => {
+    // Check if user has previously made a choice (signed in or guest)
+    const userChoice = localStorage.getItem('userChoice');
+    
+    if (user) {
+        // User is signed in
+        document.getElementById('profilePicture').src = user.photoURL || 'https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/original-aef3771cc124ac9ca3be8c4e0ee71ff5.jpg?alt=media&token=83ef4409-f010-49d1-9809-832febab42d6';
+        document.getElementById('user-info').textContent = user.email || 'Guest User';
+        loadQuestions();
+        loadPolls();
+        
+        // Hide popup if it's visible
+        document.getElementById('login-popup').classList.add('hidden');
+        
+    } else if (userChoice === 'guest') {
+        // User previously chose to continue as guest
+        document.getElementById('profilePicture').src = 'https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/original-aef3771cc124ac9ca3be8c4e0ee71ff5.jpg?alt=media&token=83ef4409-f010-49d1-9809-832febab42d6';
+        document.getElementById('user-info').textContent = 'Guest User';
+        loadArticles
+        loadQuestions();
+        loadPolls();
+        
+    } else {
+        // No user and no previous choice - show popup
+        document.getElementById('login-popup').classList.remove('hidden');
+    }
+});
+
+// Event listeners for popup buttons
+document.getElementById('signin-btn').addEventListener('click', function() {
+    // Redirect to sign in page
+    window.location.href = 'reclaimer sign in.html';
+});
+
+document.getElementById('guest-btn').addEventListener('click',
+
+function() {
+    // Set guest choice in localStorage
+    localStorage.setItem('userChoice', 'guest');
+    
+    // Hide popup
+    document.getElementById('login-popup').classList.add('hidden');
+    
+    // Update UI for guest
+    document.getElementById('profilePicture').src = 'https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/original-aef3771cc124ac9ca3be8c4e0ee71ff5.jpg?alt=media&token=83ef4409-f010-49d1-9809-832febab42d6';
+    document.getElementById('user-info').textContent = 'Guest User';
+    
+    // Load content for guest
+    loadQuestions();
+    loadPolls();
+});
+
+// Optional: Add a sign out function that clears the guest choice
+function signOut() {
+    auth.signOut().then(() => {
+        // Clear the guest choice so popup shows again next time
+        localStorage.removeItem('userChoice');
+    });
+}
+
+// Optional: If you want to let guests sign in later, add this:
+function showLoginPopup() {
+    document.getElementById('login-popup').classList.remove('hidden');
+}
+</script>
+    
+
+
+    <script>
+        // Firebase configuration
+
         const database = firebase.database();
 
         // Auth state listener
-        auth.onAuthStateChanged(user => {
-            if (user) {
-                // User is signed in
-                document.getElementById('profilePicture').src = user.photoURL || 'https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/original-aef3771cc124ac9ca3be8c4e0ee71ff5.jpg?alt=media&token=83ef4409-f010-49d1-9809-832febab42d6';
-                document.getElementById('user-info').textContent = user.email || user.email;
-                loadQuestions();
-                loadPolls();
-            } else {
-                // No user signed in
-                window.location.href = 'reclaimer sign in.html'; // Redirect to login page
-            }
-        });
 
         // Tab navigation
         function showTab(tabName) {
@@ -948,7 +1113,7 @@ Our power does not lie in a ballot box alone. It lies in our hands, our skills, 
                     document.getElementById('poll-option2').value = '';
                     document.getElementById('poll-option3').value = '';
                     document.getElementById('poll-option4').value = '';
-                    
+
                     alert('Poll created successfully!');
                 })
                 .catch(error => {
@@ -982,7 +1147,7 @@ Our power does not lie in a ballot box alone. It lies in our hands, our skills, 
             if (!user) return;
 
             const userReactionRef = database.ref(`${path}/${itemId}/reactions/${user.uid}`);
-            
+
             // Check if user already has a reaction
             userReactionRef.once('value').then(snapshot => {
                 if (snapshot.exists() && snapshot.val() === reactionType) {
@@ -997,13 +1162,13 @@ Our power does not lie in a ballot box alone. It lies in our hands, our skills, 
 
         function generateReactionSummary(reactions) {
             if (!reactions) return '';
-            
+
             // Count each reaction type
             const reactionCounts = {};
             Object.values(reactions).forEach(reaction => {
                 reactionCounts[reaction] = (reactionCounts[reaction] || 0) + 1;
             });
-            
+
             // Create summary HTML
             let summaryHTML = '<div class="reaction-summary">';
             for (const [reaction, count] of Object.entries(reactionCounts)) {
@@ -1011,7 +1176,7 @@ Our power does not lie in a ballot box alone. It lies in our hands, our skills, 
                 summaryHTML += `<span class="reaction-item">${emoji} ${count}</span>`;
             }
             summaryHTML += '</div>';
-            
+
             return summaryHTML;
         }
 
@@ -1024,17 +1189,17 @@ Our power does not lie in a ballot box alone. It lies in our hands, our skills, 
                 'sad': '😢',
                 'angry': '😠'
             };
-            
+
             return emojiMap[reactionType] || '👍';
         }
 
         // Helper function
         function formatTime(timestamp) {
             if (!timestamp) return "Unknown time";
-            
+
             // Convert to number if it's a string
             const timeValue = typeof timestamp === 'string' ? parseInt(timestamp) : timestamp;
-            
+
             const now = Date.now();
             const diff = now - timeValue;
             const seconds = Math.floor(diff / 1000);
@@ -1046,7 +1211,7 @@ Our power does not lie in a ballot box alone. It lies in our hands, our skills, 
             if (minutes < 60) return `${minutes} min ago`;
             if (hours < 24) return `${hours} hr ago`;
             if (days < 7) return `${days} day${days > 1 ? 's' : ''} ago`;
-            
+
             // For older dates, show actual date
             const date = new Date(timeValue);
             return date.toLocaleDateString();
@@ -1064,19 +1229,19 @@ Our power does not lie in a ballot box alone. It lies in our hands, our skills, 
             const pages = document.querySelectorAll('.page');
             const menuBtn = document.querySelector('.menu-btn');
             const navLinksContainer = document.querySelector('.nav-links');
-            
+
             // Handle navigation clicks
             navLinks.forEach(link => {
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
-                    
+
                     // Get the target page ID
                     const targetId = this.getAttribute('href').substring(1);
-                    
+
                     // Update active navigation link
                     navLinks.forEach(navLink => navLink.classList.remove('active'));
                     this.classList.add('active');
-                    
+
                     // Show the target page and hide others
                     pages.forEach(page => {
                         page.classList.remove('active');
@@ -1084,20 +1249,20 @@ Our power does not lie in a ballot box alone. It lies in our hands, our skills, 
                             page.classList.add('active');
                         }
                     });
-                    
+
                     // Close mobile menu if open
                     navLinksContainer.classList.remove('active');
-                    
+
                     // Scroll to top
                     window.scrollTo(0, 0);
                 });
             });
-            
+
             // Mobile menu toggle
             menuBtn.addEventListener('click', function() {
                 navLinksContainer.classList.toggle('active');
             });
-            
+
             // Close mobile menu when clicking outside
             document.addEventListener('click', function(e) {
                 if (!e.target.closest('nav')) {
@@ -1155,19 +1320,19 @@ Our power does not lie in a ballot box alone. It lies in our hands, our skills, 
         // Function to detect and format links and hashtags
         function formatContent(content) {
             if (!content) return '';
-            
+
             // Convert URLs to clickable links
             let formattedContent = content.replace(
                 /(https?:\/\/[^\s]+)/g, 
                 '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>'
             );
-            
+
             // Convert hashtags to styled spans
             formattedContent = formattedContent.replace(
                 /#(\w+)/g, 
                 '<span class="hashtag">#$1</span>'
             );
-            
+
             return formattedContent;
         }
 
@@ -1177,7 +1342,7 @@ Our power does not lie in a ballot box alone. It lies in our hands, our skills, 
             onAuthStateChanged(auth, (user) => {
                 if (!user) {
                     alert("Please sign in: You will be redirected to the sign-in page");
-             
+
              window.location.href = "#";
                 } else {
                     if (profilePicture) profilePicture.src = user.photoURL || "https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/1758334341084.jpg?alt=media&token=af2bb626-f7c8-44db-be34-e4cbaf00914d";
@@ -1255,10 +1420,10 @@ Our power does not lie in a ballot box alone. It lies in our hands, our skills, 
         // Format timestamp
         function formatTime(timestamp) {
             if (!timestamp) return "Unknown time";
-            
+
             // Convert to number if it's a string
             const timeValue = typeof timestamp === 'string' ? parseInt(timestamp) : timestamp;
-            
+
             const now = Date.now();
             const diff = now - timeValue;
             const seconds = Math.floor(diff / 1000);
@@ -1270,7 +1435,7 @@ Our power does not lie in a ballot box alone. It lies in our hands, our skills, 
             if (minutes < 60) return `${minutes}m ago`;
             if (hours < 24) return `${hours}h ago`;
             if (days < 7) return `${days}d ago`;
-            
+
             // For older dates, show actual date
             const date = new Date(timeValue);
             return date.toLocaleDateString();
@@ -1287,9 +1452,9 @@ Our power does not lie in a ballot box alone. It lies in our hands, our skills, 
         function trackArticleView(articleId) {
             const user = auth.currentUser;
             if (!user) return;
-            
+
             const viewRef = ref(database, `news/${articleId}/views/${user.uid}`);
-            
+
             // Record view with timestamp
             set(viewRef, Date.now()).catch((error) => {
                 console.error("Error tracking view:", error);
@@ -1300,12 +1465,12 @@ Our power does not lie in a ballot box alone. It lies in our hands, our skills, 
         function showFullArticle(articleId, article) {
             // Track view
             trackArticleView(articleId);
-            
+
             // Count views
             const viewCount = article.views ? Object.keys(article.views).length : 0;
             const likeCount = article.likes ? Object.keys(article.likes).length : 0;
             const commentCount = article.comments ? Object.keys(article.comments).length : 0;
-            
+
             // Render article content
             articleContent.innerHTML = `
                 ${article.fileURL ? `<img src="${article.fileURL}" alt="${article.title}" class="full-article-image">` : ''}
@@ -1370,19 +1535,19 @@ Our power does not lie in a ballot box alone. It lies in our hands, our skills, 
                     </div>
                 </div>
             `;
-            
+
             // Add event listeners for interactions
             const likeButton = articleContent.querySelector('.like-button');
             if (likeButton) {
                 likeButton.addEventListener('click', (e) => {
                     e.stopPropagation();
                     const user = auth.currentUser;
-                    
+
                     if (!user) {
                         alert("Please sign in to like articles");
                         return;
                     }
-                    
+
                     const likesRef = ref(database, `news/${articleId}/likes/${user.uid}`);
                     runTransaction(likesRef, (currentValue) => {
                         return currentValue ? null : true;
@@ -1400,23 +1565,23 @@ Our power does not lie in a ballot box alone. It lies in our hands, our skills, 
                     });
                 });
             }
-            
+
             const commentSubmit = articleContent.querySelector('.comment-submit');
             if (commentSubmit) {
                 commentSubmit.addEventListener('click', (e) => {
                     e.stopPropagation();
                     const commentInput = articleContent.querySelector('.comment-input');
                     const commentText = commentInput.value.trim();
-                    
+
                     if (!commentText) {
                         alert("Please enter a comment");
                         return;
                     }
-                    
+
                     submitComment(articleId, commentText);
                 });
             }
-            
+
             // Show full article view
             newsContainer.style.display = "none";
             articleFullView.style.display = "block";
@@ -1429,7 +1594,7 @@ Our power does not lie in a ballot box alone. It lies in our hands, our skills, 
                 alert("Please sign in to comment");
                 return;
             }
-            
+
             const commentsRef = ref(database, `news/${articleId}/comments`);
             const newComment = {
                 text: commentText,
@@ -1441,7 +1606,7 @@ Our power does not lie in a ballot box alone. It lies in our hands, our skills, 
                 // Clear the input
                 const commentInput = articleContent.querySelector('.comment-input');
                 if (commentInput) commentInput.value = "";
-                
+
                 // Refresh the article to show the new comment
                 const articleRef = ref(database, `news/${articleId}`);
                 onValue(articleRef, (snapshot) => {
@@ -1457,7 +1622,7 @@ Our power does not lie in a ballot box alone. It lies in our hands, our skills, 
         // Fetch and display news articles from Firebase
         function fetchNews() {
             if (!newsContainer) return;
-            
+
             const newsRef = ref(database, "news");
             const newsQuery = query(newsRef, orderByChild("timestamp"));
 
@@ -1489,7 +1654,7 @@ Our power does not lie in a ballot box alone. It lies in our hands, our skills, 
                     const viewCount = article.views ? Object.keys(article.views).length : 0;
                     const likeCount = article.likes ? Object.keys(article.likes).length : 0;
                     const commentCount = article.comments ? Object.keys(article.comments).length : 0;
-                    
+
                     const articleHTML = `
                         <article data-id="${article.id}">
                             <div class="article-preview">
@@ -1516,7 +1681,7 @@ Our power does not lie in a ballot box alone. It lies in our hands, our skills, 
                     `;
                     newsContainer.innerHTML += articleHTML;
                 });
-                
+
                 // Add click event to articles
                 const articleElements = newsContainer.querySelectorAll("article");
                 articleElements.forEach((articleElement) => {
@@ -1539,4 +1704,225 @@ Our power does not lie in a ballot box alone. It lies in our hands, our skills, 
             });
         }
     </script>
+    
+        <script type="module">
+        // Firebase configuration
 
+        // Firebase configuration
+
+
+        // Initialize Firebase
+
+
+        // DOM elements
+        const newssContainer = document.getElementById('newssContainer');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const emptyState = document.getElementById('emptyState');
+        const controls = document.getElementById('controls');
+        const refreshBtn = document.getElementById('refreshBtn');
+        const scrollLeftBtn = document.getElementById('scrollLeftBtn');
+        const scrollRightBtn = document.getElementById('scrollRightBtn');
+
+        // Format timestamp
+        function formatTime(timestamp) {
+            if (!timestamp) return "Unknown time";
+
+            // Convert to number if it's a string
+            const timeValue = typeof timestamp === 'string' ? parseInt(timestamp) : timestamp;
+
+            const now = Date.now();
+            const diff = now - timeValue;
+            const seconds = Math.floor(diff / 1000);
+            const minutes = Math.floor(seconds / 60);
+            const hours = Math.floor(minutes / 60);
+            const days = Math.floor(hours / 24);
+
+            if (seconds < 60) return "Just now";
+            if (minutes < 60) return `${minutes}m ago`;
+            if (hours < 24) return `${hours}h ago`;
+            if (days < 7) return `${days}d ago`;
+
+            // For older dates, show actual date
+            const date = new Date(timeValue);
+            return date.toLocaleDateString();
+        }
+
+        // Truncate content for preview
+        function truncateContent(content, maxLength = 100) {
+            if (!content) return 'No content available';
+            if (content.length <= maxLength) return content;
+            return content.substring(0, maxLength) + "...";
+        }
+
+        // Show toast message
+        function showToast(message, isError = false) {
+            // Create toast element if it doesn't exist
+            let toast = document.getElementById('toast');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'toast';
+                toast.style.cssText = `
+                    position: fixed;
+                    bottom: 20px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    background: ${isError ? '#e74c3c' : '#2c3e50'};
+                    color: white;
+                    padding: 12px 24px;
+                    border-radius: 30px;
+                    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+                    z-index: 1000;
+                    opacity: 0;
+                    transition: opacity 0.3s;
+                `;
+                document.body.appendChild(toast);
+            }
+            
+            toast.textContent = message;
+            toast.style.opacity = '1';
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+            }, 3000);
+        }
+
+        // Display newss from Firebase
+        function displaynewss(newss) {
+            newssContainer.innerHTML = '';
+            
+            if (newss.length === 0) {
+                emptyState.style.display = 'block';
+                newssContainer.style.display = 'none';
+                controls.style.display = 'flex';
+                return;
+            }
+            
+            emptyState.style.display = 'none';
+            newssContainer.style.display = 'flex';
+            controls.style.display = 'flex';
+            
+            newss.forEach((news) => {
+                // Count views, likes, and comments if they exist
+                const viewCount = news.views ? Object.keys(news.views).length : 0;
+                const likeCount = news.likes ? Object.keys(news.likes).length : 0;
+                const commentCount = news.comments ? Object.keys(news.comments).length : 0;
+
+                const newsHTML = `
+                    <div class="news-card" data-id="${news.id}">
+                        <img src="${news.fileURL || 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80'}" 
+                             alt="${news.title || 'news Image'}" class="card-image">
+                        <div class="card-content">
+                            <span class="category">${news.category || "General"}</span>
+                            <h3 class="card-title">${news.title || "Untitled news"}</h3>
+                            <p class="card-excerpt">${truncateContent(news.content || news.description || "")}</p>
+                            
+                            <div class="card-meta">
+                                <div class="author">
+                                    <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(news.author || 'Anonymous')}&background=3498db&color=fff" 
+                                         alt="${news.author || 'Anonymous'}" class="author-img">
+                                    <span>${news.author || "Anonymous"}</span>
+                                </div>
+                                <div class="stats">
+                                    <div class="stat">
+                                        <i class="fas fa-eye"></i> ${viewCount}
+                                    </div>
+                                    <div class="stat">
+                                        <i class="fas fa-thumbs-up"></i> ${likeCount}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                newssContainer.innerHTML += newsHTML;
+            });
+
+            // Add click event to news cards
+            document.querySelectorAll('.news-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const newsId = card.dataset.id;
+                    showToast(`Opening news: ${newsId}`);
+                    // In a real app, you would navigate to the news page
+                     window.location.href = `https://undefined-flare.github.io/BF/reclaimSA🇿🇦.html?id=${newsId}`;
+                });
+            });
+        }
+
+        // Fetch newss from Firebase
+        function fetchnewss() {
+            loadingIndicator.style.display = 'block';
+            newssContainer.style.display = 'none';
+            emptyState.style.display = 'none';
+            controls.style.display = 'none';
+            
+            const newsRef = database.ref('news');
+            
+            newsRef.once('value')
+                .then((snapshot) => {
+                    loadingIndicator.style.display = 'none';
+                    
+                    const newss = [];
+                    snapshot.forEach((childSnapshot) => {
+                        const news = childSnapshot.val();
+                        news.id = childSnapshot.key;
+                        newss.push(news);
+                    });
+                    
+                    // Sort newss by timestamp (newest first)
+                    newss.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+                    
+                    displaynewss(newss);
+                    showToast(`Loaded ${newss.length} newss from Firebase`);
+                })
+                .catch((error) => {
+                    loadingIndicator.style.display = 'none';
+                    console.error("Error fetching newss:", error);
+                    showToast("Error loading newss from database", true);
+                    
+                    // Show empty state with error message
+                    emptyState.innerHTML = `
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h3>Error Loading newss</h3>
+                        <p>Could not connect to the database. Please try again later.</p>
+                    `;
+                    emptyState.style.display = 'block';
+                    controls.style.display = 'flex';
+                });
+        }
+
+        // Scroll functions
+        function scrollLeft() {
+            newssContainer.scrollBy({
+                left: -400,
+                behavior: 'smooth'
+            });
+        }
+
+        function scrollRight() {
+            newssContainer.scrollBy({
+                left: 400,
+                behavior: 'smooth'
+            });
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', () => {
+            // Fetch newss from Firebase
+            fetchnewss();
+            
+            // Add event listeners
+            refreshBtn.addEventListener('click', fetchnewss);
+            scrollLeftBtn.addEventListener('click', scrollLeft);
+            scrollRightBtn.addEventListener('click', scrollRight);
+            
+            // Set up real-time updates (optional)
+            // Uncomment if you want newss to update in real-time
+            /*
+            const newsRef = database.ref('news');
+            newsRef.on('child_added', (data) => {
+                console.log('New news added:', data.val());
+                // You could refresh the list or add the new news dynamically
+            });
+            */
+        });
+    </script>
