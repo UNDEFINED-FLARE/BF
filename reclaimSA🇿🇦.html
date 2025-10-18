@@ -605,54 +605,64 @@
     const urlParams = new URLSearchParams(window.location.search);
     const articleId = urlParams.get('id');
 
-    // Function to update page metadata and favicon
+    // Function to update page metadata for sharing
     function updatePageMetadata(article) {
         const title = article.title || "Article";
         const imageUrl = article.fileURL;
+        const description = article.content ? article.content.substring(0, 160) + (article.content.length > 160 ? '...' : '') : 'Read this interesting article on our news portal';
+        const currentUrl = window.location.href.split('?')[0] + `?id=${articleId}`;
         
         // Update page title
         document.title = `${title} - News Portal`;
         
-        // Update meta tags for social sharing and SEO
-        updateMetaTag('og:title', title);
-        updateMetaTag('twitter:title', title);
+        // Essential Open Graph meta tags
+        updateMetaTag('og:title', title, 'property');
+        updateMetaTag('og:description', description, 'property');
+        updateMetaTag('og:url', currentUrl, 'property');
+        updateMetaTag('og:type', 'article', 'property');
+        updateMetaTag('og:site_name', 'News Portal', 'property');
         
-        // Update description if available
-        if (article.content) {
-            const description = article.content.substring(0, 160) + (article.content.length > 160 ? '...' : '');
-            updateMetaTag('description', description);
-            updateMetaTag('og:description', description);
-            updateMetaTag('twitter:description', description);
-        }
+        // Twitter Card meta tags
+        updateMetaTag('twitter:card', 'summary_large_image', 'name');
+        updateMetaTag('twitter:title', title, 'name');
+        updateMetaTag('twitter:description', description, 'name');
+        updateMetaTag('twitter:url', currentUrl, 'name');
         
         // Update image meta tags if available
         if (imageUrl) {
-            updateMetaTag('og:image', imageUrl);
-            updateMetaTag('twitter:image', imageUrl);
-            updateMetaTag('twitter:card', 'summary_large_image');
+            updateMetaTag('og:image', imageUrl, 'property');
+            updateMetaTag('og:image:width', '1200', 'property');
+            updateMetaTag('og:image:height', '630', 'property');
+            updateMetaTag('og:image:alt', title, 'property');
+            updateMetaTag('twitter:image', imageUrl, 'name');
+            updateMetaTag('twitter:image:alt', title, 'name');
             
             // Update favicon with article image
             updateFavicon(imageUrl);
+        } else {
+            // Set a default image if no article image
+            const defaultImage = 'https://via.placeholder.com/1200x630/007bff/ffffff?text=News+Article';
+            updateMetaTag('og:image', defaultImage, 'property');
+            updateMetaTag('twitter:image', defaultImage, 'name');
         }
         
-        // Update URL meta tags
-        const currentUrl = window.location.href;
-        updateMetaTag('og:url', currentUrl);
-        updateMetaTag('twitter:url', currentUrl);
+        // Standard meta tags
+        updateMetaTag('description', description, 'name');
+        updateMetaTag('keywords', `${article.category || 'news'}, article, blog`, 'name');
+        
+        // Update share URL in modal
+        if (shareUrl) {
+            shareUrl.value = currentUrl;
+        }
     }
 
     // Helper function to update or create meta tags
-    function updateMetaTag(property, content) {
-        let metaTag = document.querySelector(`meta[property="${property}"]`) || 
-                     document.querySelector(`meta[name="${property}"]`);
+    function updateMetaTag(property, content, attribute = 'property') {
+        let metaTag = document.querySelector(`meta[${attribute}="${property}"]`);
         
         if (!metaTag) {
             metaTag = document.createElement('meta');
-            if (property.startsWith('og:')) {
-                metaTag.setAttribute('property', property);
-            } else {
-                metaTag.setAttribute('name', property);
-            }
+            metaTag.setAttribute(attribute, property);
             document.head.appendChild(metaTag);
         }
         
@@ -661,33 +671,26 @@
 
     // Function to update favicon with article image
     function updateFavicon(imageUrl) {
-        // Create a canvas to resize the image for favicon
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
         const img = new Image();
         
         img.crossOrigin = 'anonymous';
         img.onload = function() {
-            // Set canvas size to standard favicon size
             canvas.width = 32;
             canvas.height = 32;
-            
-            // Draw and resize image on canvas
             ctx.drawImage(img, 0, 0, 32, 32);
             
-            // Create new favicon link
             const favicon = document.querySelector("link[rel*='icon']") || document.createElement('link');
             favicon.rel = 'icon';
             favicon.href = canvas.toDataURL('image/png');
             
-            // Remove existing favicons and add new one
             document.querySelectorAll("link[rel*='icon']").forEach(link => link.remove());
             document.head.appendChild(favicon);
         };
         
         img.onerror = function() {
             console.warn('Failed to load image for favicon:', imageUrl);
-            // Keep default favicon if image fails to load
         };
         
         img.src = imageUrl;
@@ -697,9 +700,7 @@
     function formatTime(timestamp) {
         if (!timestamp) return "Unknown time";
 
-        // Convert to number if it's a string
         const timeValue = typeof timestamp === 'string' ? parseInt(timestamp) : timestamp;
-
         const now = Date.now();
         const diff = now - timeValue;
         const seconds = Math.floor(diff / 1000);
@@ -712,7 +713,6 @@
         if (hours < 24) return `${hours}h ago`;
         if (days < 7) return `${days}d ago`;
 
-        // For older dates, show actual date
         const date = new Date(timeValue);
         return date.toLocaleDateString();
     }
@@ -721,13 +721,11 @@
     function formatContent(content) {
         if (!content) return '';
 
-        // Convert URLs to clickable links
         let formattedContent = content.replace(
             /(https?:\/\/[^\s]+)/g, 
             '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>'
         );
 
-        // Convert hashtags to styled spans
         formattedContent = formattedContent.replace(
             /#(\w+)/g, 
             '<span class="hashtag">#$1</span>'
@@ -742,8 +740,6 @@
         if (!user) return;
 
         const viewRef = ref(database, `news/${articleId}/views/${user.uid}`);
-
-        // Record view with timestamp
         set(viewRef, Date.now()).catch((error) => {
             console.error("Error tracking view:", error);
         });
@@ -751,7 +747,7 @@
 
     // Show full article
     function showFullArticle(articleId, article) {
-        // Update page metadata and favicon
+        // Update page metadata for sharing
         updatePageMetadata(article);
         
         // Track view
@@ -761,10 +757,6 @@
         const viewCount = article.views ? Object.keys(article.views).length : 0;
         const likeCount = article.likes ? Object.keys(article.likes).length : 0;
         const commentCount = article.comments ? Object.keys(article.comments).length : 0;
-
-        // Set the share URL
-        const currentUrl = window.location.href.split('?')[0] + `?id=${articleId}`;
-        shareUrl.value = currentUrl;
 
         // Render article content
         articleContainer.innerHTML = `
@@ -851,7 +843,6 @@
                     return currentValue ? null : true;
                 }).then((result) => {
                     if (result.committed) {
-                        // Refresh the article to update counts
                         const articleRef = ref(database, `news/${articleId}`);
                         onValue(articleRef, (snapshot) => {
                             const updatedArticle = snapshot.val();
@@ -905,11 +896,9 @@
         };
 
         push(commentsRef, newComment).then(() => {
-            // Clear the input
             const commentInput = articleContainer.querySelector('.comment-input');
             if (commentInput) commentInput.value = "";
 
-            // Refresh the article to show the new comment
             const articleRef = ref(database, `news/${articleId}`);
             onValue(articleRef, (snapshot) => {
                 const updatedArticle = snapshot.val();
@@ -967,7 +956,7 @@
         // Back button functionality
         backButton.addEventListener('click', (e) => {
             e.preventDefault();
-            window.location.href = 'index.html'; // Change to your main news page URL
+            window.location.href = 'index.html';
         });
 
         // Share modal functionality
@@ -975,7 +964,6 @@
             shareModal.style.display = 'none';
         });
 
-        // Close modal when clicking outside
         shareModal.addEventListener('click', (e) => {
             if (e.target === shareModal) {
                 shareModal.style.display = 'none';
@@ -1018,7 +1006,6 @@
                         shareUrlString = `https://t.me/share/url?url=${url}&text=${title}`;
                         break;
                     case 'link':
-                        // Already handled by copy button
                         return;
                 }
                 
@@ -1028,6 +1015,5 @@
             });
         });
     });
-</script>
-</body>
+</script></body>
 </html>
