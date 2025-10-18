@@ -567,383 +567,471 @@
         </div>
     </div>
 
-    <script type="module">
-        import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
-        import { getDatabase, ref, push, onValue, runTransaction, query, orderByChild, set, get } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-database.js";
+<script type="module">
+    import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+    import { getDatabase, ref, push, onValue, runTransaction, query, orderByChild, set, get } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-database.js";
 
-        // Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyBSMvHpZ0_VkqWjJ94UMa6vqEhFiqrsIWM",
-            authDomain: "rare-5f47e.firebaseapp.com",
-            projectId: "rare-5f47e",
-            storageBucket: "rare-5f47e.appspot.com",
-            messagingSenderId: "811727087812",
-            appId: "1:811727087812:web:d362e68abf6c26acf24191",
-            measurementId: "G-DE59771G7Q"
+    // Firebase configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyBSMvHpZ0_VkqWjJ94UMa6vqEhFiqrsIWM",
+        authDomain: "rare-5f47e.firebaseapp.com",
+        projectId: "rare-5f47e",
+        storageBucket: "rare-5f47e.appspot.com",
+        messagingSenderId: "811727087812",
+        appId: "1:811727087812:web:d362e68abf6c26acf24191",
+        measurementId: "G-DE59771G7Q"
+    };
+
+    // Initialize Firebase only if not already initialized
+    let app;
+    if (!getApps().length) {
+        app = initializeApp(firebaseConfig);
+    } else {
+        app = getApp();
+    }
+
+    const auth = getAuth(app);
+    const database = getDatabase(app);
+
+    // DOM elements
+    const articleContainer = document.getElementById("articleContainer");
+    const profilePicture = document.getElementById("profilePicture");
+    const userInfo = document.getElementById("userInfo");
+    const backButton = document.getElementById("backButton");
+    const shareModal = document.getElementById("shareModal");
+    const closeModal = document.getElementById("closeModal");
+    const shareUrl = document.getElementById("shareUrl");
+    const copyUrl = document.getElementById("copyUrl");
+    const shareOptions = document.querySelectorAll(".share-option");
+
+    // Get article ID from URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const articleId = urlParams.get('id');
+
+    // Function to update page metadata and favicon
+    function updatePageMetadata(article) {
+        const title = article.title || "Article";
+        const imageUrl = article.fileURL;
+        
+        // Update page title
+        document.title = `${title} - News Portal`;
+        
+        // Update meta tags for social sharing and SEO
+        updateMetaTag('og:title', title);
+        updateMetaTag('twitter:title', title);
+        
+        // Update description if available
+        if (article.content) {
+            const description = article.content.substring(0, 160) + (article.content.length > 160 ? '...' : '');
+            updateMetaTag('description', description);
+            updateMetaTag('og:description', description);
+            updateMetaTag('twitter:description', description);
+        }
+        
+        // Update image meta tags if available
+        if (imageUrl) {
+            updateMetaTag('og:image', imageUrl);
+            updateMetaTag('twitter:image', imageUrl);
+            updateMetaTag('twitter:card', 'summary_large_image');
+            
+            // Update favicon with article image
+            updateFavicon(imageUrl);
+        }
+        
+        // Update URL meta tags
+        const currentUrl = window.location.href;
+        updateMetaTag('og:url', currentUrl);
+        updateMetaTag('twitter:url', currentUrl);
+    }
+
+    // Helper function to update or create meta tags
+    function updateMetaTag(property, content) {
+        let metaTag = document.querySelector(`meta[property="${property}"]`) || 
+                     document.querySelector(`meta[name="${property}"]`);
+        
+        if (!metaTag) {
+            metaTag = document.createElement('meta');
+            if (property.startsWith('og:')) {
+                metaTag.setAttribute('property', property);
+            } else {
+                metaTag.setAttribute('name', property);
+            }
+            document.head.appendChild(metaTag);
+        }
+        
+        metaTag.setAttribute('content', content);
+    }
+
+    // Function to update favicon with article image
+    function updateFavicon(imageUrl) {
+        // Create a canvas to resize the image for favicon
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        const img = new Image();
+        
+        img.crossOrigin = 'anonymous';
+        img.onload = function() {
+            // Set canvas size to standard favicon size
+            canvas.width = 32;
+            canvas.height = 32;
+            
+            // Draw and resize image on canvas
+            ctx.drawImage(img, 0, 0, 32, 32);
+            
+            // Create new favicon link
+            const favicon = document.querySelector("link[rel*='icon']") || document.createElement('link');
+            favicon.rel = 'icon';
+            favicon.href = canvas.toDataURL('image/png');
+            
+            // Remove existing favicons and add new one
+            document.querySelectorAll("link[rel*='icon']").forEach(link => link.remove());
+            document.head.appendChild(favicon);
         };
+        
+        img.onerror = function() {
+            console.warn('Failed to load image for favicon:', imageUrl);
+            // Keep default favicon if image fails to load
+        };
+        
+        img.src = imageUrl;
+    }
 
-        // Initialize Firebase only if not already initialized
-        let app;
-        if (!getApps().length) {
-            app = initializeApp(firebaseConfig);
-        } else {
-            app = getApp();
-        }
+    // Format timestamp
+    function formatTime(timestamp) {
+        if (!timestamp) return "Unknown time";
 
-        const auth = getAuth(app);
-        const database = getDatabase(app);
+        // Convert to number if it's a string
+        const timeValue = typeof timestamp === 'string' ? parseInt(timestamp) : timestamp;
 
-        // DOM elements
-        const articleContainer = document.getElementById("articleContainer");
-        const profilePicture = document.getElementById("profilePicture");
-        const userInfo = document.getElementById("userInfo");
-        const backButton = document.getElementById("backButton");
-        const shareModal = document.getElementById("shareModal");
-        const closeModal = document.getElementById("closeModal");
-        const shareUrl = document.getElementById("shareUrl");
-        const copyUrl = document.getElementById("copyUrl");
-        const shareOptions = document.querySelectorAll(".share-option");
+        const now = Date.now();
+        const diff = now - timeValue;
+        const seconds = Math.floor(diff / 1000);
+        const minutes = Math.floor(seconds / 60);
+        const hours = Math.floor(minutes / 60);
+        const days = Math.floor(hours / 24);
 
-        // Get article ID from URL parameters
-        const urlParams = new URLSearchParams(window.location.search);
-        const articleId = urlParams.get('id');
+        if (seconds < 60) return "Just now";
+        if (minutes < 60) return `${minutes}m ago`;
+        if (hours < 24) return `${hours}h ago`;
+        if (days < 7) return `${days}d ago`;
 
-        // Format timestamp
-        function formatTime(timestamp) {
-            if (!timestamp) return "Unknown time";
+        // For older dates, show actual date
+        const date = new Date(timeValue);
+        return date.toLocaleDateString();
+    }
 
-            // Convert to number if it's a string
-            const timeValue = typeof timestamp === 'string' ? parseInt(timestamp) : timestamp;
+    // Function to detect and format links and hashtags
+    function formatContent(content) {
+        if (!content) return '';
 
-            const now = Date.now();
-            const diff = now - timeValue;
-            const seconds = Math.floor(diff / 1000);
-            const minutes = Math.floor(seconds / 60);
-            const hours = Math.floor(minutes / 60);
-            const days = Math.floor(hours / 24);
+        // Convert URLs to clickable links
+        let formattedContent = content.replace(
+            /(https?:\/\/[^\s]+)/g, 
+            '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>'
+        );
 
-            if (seconds < 60) return "Just now";
-            if (minutes < 60) return `${minutes}m ago`;
-            if (hours < 24) return `${hours}h ago`;
-            if (days < 7) return `${days}d ago`;
+        // Convert hashtags to styled spans
+        formattedContent = formattedContent.replace(
+            /#(\w+)/g, 
+            '<span class="hashtag">#$1</span>'
+        );
 
-            // For older dates, show actual date
-            const date = new Date(timeValue);
-            return date.toLocaleDateString();
-        }
+        return formattedContent;
+    }
 
-        // Function to detect and format links and hashtags
-        function formatContent(content) {
-            if (!content) return '';
+    // Track article view
+    function trackArticleView(articleId) {
+        const user = auth.currentUser;
+        if (!user) return;
 
-            // Convert URLs to clickable links
-            let formattedContent = content.replace(
-                /(https?:\/\/[^\s]+)/g, 
-                '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>'
-            );
+        const viewRef = ref(database, `news/${articleId}/views/${user.uid}`);
 
-            // Convert hashtags to styled spans
-            formattedContent = formattedContent.replace(
-                /#(\w+)/g, 
-                '<span class="hashtag">#$1</span>'
-            );
+        // Record view with timestamp
+        set(viewRef, Date.now()).catch((error) => {
+            console.error("Error tracking view:", error);
+        });
+    }
 
-            return formattedContent;
-        }
+    // Show full article
+    function showFullArticle(articleId, article) {
+        // Update page metadata and favicon
+        updatePageMetadata(article);
+        
+        // Track view
+        trackArticleView(articleId);
 
-        // Track article view
-        function trackArticleView(articleId) {
-            const user = auth.currentUser;
-            if (!user) return;
+        // Count views
+        const viewCount = article.views ? Object.keys(article.views).length : 0;
+        const likeCount = article.likes ? Object.keys(article.likes).length : 0;
+        const commentCount = article.comments ? Object.keys(article.comments).length : 0;
 
-            const viewRef = ref(database, `news/${articleId}/views/${user.uid}`);
+        // Set the share URL
+        const currentUrl = window.location.href.split('?')[0] + `?id=${articleId}`;
+        shareUrl.value = currentUrl;
 
-            // Record view with timestamp
-            set(viewRef, Date.now()).catch((error) => {
-                console.error("Error tracking view:", error);
-            });
-        }
-
-        // Show full article
-        function showFullArticle(articleId, article) {
-            // Track view
-            trackArticleView(articleId);
-
-            // Count views
-            const viewCount = article.views ? Object.keys(article.views).length : 0;
-            const likeCount = article.likes ? Object.keys(article.likes).length : 0;
-            const commentCount = article.comments ? Object.keys(article.comments).length : 0;
-
-            // Set the page title to the article title
-            document.title = `${article.title || "Article"} - News Portal`;
-
-            // Set the share URL
-            const currentUrl = window.location.href.split('?')[0] + `?id=${articleId}`;
-            shareUrl.value = currentUrl;
-
-            // Render article content
-            articleContainer.innerHTML = `
-                ${article.fileURL ? `<img src="${article.fileURL}" alt="${article.title}" class="article-image">` : ''}
-                <div class="article-header">
-                    <span class="category-badge">${article.category || "General"}</span>
-                    <h1 class="article-title">${article.title || "Untitled"}</h1>
-                    <div class="article-meta">
-                        <span class="timestamp">${formatTime(article.timestamp)}</span>
-                        <div class="author-info">
-                            <img src="${article.authorPhoto || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'}" alt="${article.author}" class="author-avatar">
-                            <span class="author">By ${article.author || "Anonymous"}</span>
-                        </div>
+        // Render article content
+        articleContainer.innerHTML = `
+            ${article.fileURL ? `<img src="${article.fileURL}" alt="${article.title}" class="article-image">` : ''}
+            <div class="article-header">
+                <span class="category-badge">${article.category || "General"}</span>
+                <h1 class="article-title">${article.title || "Untitled"}</h1>
+                <div class="article-meta">
+                    <span class="timestamp">${formatTime(article.timestamp)}</span>
+                    <div class="author-info">
+                        <img src="${article.authorPhoto || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'}" alt="${article.author}" class="author-avatar">
+                        <span class="author">By ${article.author || "Anonymous"}</span>
                     </div>
                 </div>
-                <div class="article-body">
-                    <p>${formatContent(article.content || "")}</p>
+            </div>
+            <div class="article-body">
+                <p>${formatContent(article.content || "")}</p>
+            </div>
+            <div class="article-stats">
+                <div class="stat">
+                    <i class="fas fa-eye"></i> ${viewCount} views
                 </div>
-                <div class="article-stats">
-                    <div class="stat">
-                        <i class="fas fa-eye"></i> ${viewCount} views
-                    </div>
-                    <div class="stat">
-                        <i class="fas fa-thumbs-up"></i> ${likeCount} likes
-                    </div>
-                    <div class="stat">
-                        <i class="fas fa-comment"></i> ${commentCount} comments
-                    </div>
+                <div class="stat">
+                    <i class="fas fa-thumbs-up"></i> ${likeCount} likes
                 </div>
-                <div class="article-interactions">
-                    <button class="interaction-button like-button ${article.likes && article.likes[auth.currentUser?.uid] ? 'liked' : ''}" data-article="${articleId}" aria-label="Like article">
-                        <i class="fas fa-thumbs-up"></i> Like
-                    </button>
-                    <button class="interaction-button share-button" id="shareButton" aria-label="Share article">
-                        <i class="fas fa-share-alt"></i> Share
-                    </button>
+                <div class="stat">
+                    <i class="fas fa-comment"></i> ${commentCount} comments
                 </div>
-                <div class="comments-section">
-                    <h3 class="comments-title">Comments</h3>
-                    ${auth.currentUser ? `
-                        <div class="comment-form">
-                            <textarea class="comment-input" placeholder="Write a comment..." aria-label="Comment input"></textarea>
-                            <button class="comment-submit" data-article="${articleId}">Post Comment</button>
-                        </div>
-                    ` : `
-                        <div class="comment-login-prompt">
-                            <p>Please <a href="https://undefined-flare.github.io/BF/blue flare sign in.html">sign in</a> to leave a comment.</p>
-                        </div>
-                    `}
-                    <div class="comments-list">
-                        ${commentCount > 0 ? 
-                            Object.entries(article.comments || {})
-                                .sort(([,a], [,b]) => (b.timestamp || 0) - (a.timestamp || 0))
-                                .map(([id, comment]) => `
-                                    <div class="comment-item">
-                                        <div class="comment-avatar">${(comment.author || "A").charAt(0).toUpperCase()}</div>
-                                        <div class="comment-content">
-                                            <div class="comment-author">${comment.author || "Anonymous"}</div>
-                                            <div class="comment-text">${comment.text}</div>
-                                            <div class="comment-time">${formatTime(comment.timestamp)}</div>
-                                        </div>
+            </div>
+            <div class="article-interactions">
+                <button class="interaction-button like-button ${article.likes && article.likes[auth.currentUser?.uid] ? 'liked' : ''}" data-article="${articleId}" aria-label="Like article">
+                    <i class="fas fa-thumbs-up"></i> Like
+                </button>
+                <button class="interaction-button share-button" id="shareButton" aria-label="Share article">
+                    <i class="fas fa-share-alt"></i> Share
+                </button>
+            </div>
+            <div class="comments-section">
+                <h3 class="comments-title">Comments</h3>
+                ${auth.currentUser ? `
+                    <div class="comment-form">
+                        <textarea class="comment-input" placeholder="Write a comment..." aria-label="Comment input"></textarea>
+                        <button class="comment-submit" data-article="${articleId}">Post Comment</button>
+                    </div>
+                ` : `
+                    <div class="comment-login-prompt">
+                        <p>Please <a href="https://undefined-flare.github.io/BF/blue flare sign in.html">sign in</a> to leave a comment.</p>
+                    </div>
+                `}
+                <div class="comments-list">
+                    ${commentCount > 0 ? 
+                        Object.entries(article.comments || {})
+                            .sort(([,a], [,b]) => (b.timestamp || 0) - (a.timestamp || 0))
+                            .map(([id, comment]) => `
+                                <div class="comment-item">
+                                    <div class="comment-avatar">${(comment.author || "A").charAt(0).toUpperCase()}</div>
+                                    <div class="comment-content">
+                                        <div class="comment-author">${comment.author || "Anonymous"}</div>
+                                        <div class="comment-text">${comment.text}</div>
+                                        <div class="comment-time">${formatTime(comment.timestamp)}</div>
                                     </div>
-                                `).join("")
-                            : '<div class="no-comments">No comments yet. Be the first to comment!</div>'
-                        }
-                    </div>
+                                </div>
+                            `).join("")
+                        : '<div class="no-comments">No comments yet. Be the first to comment!</div>'
+                    }
                 </div>
-            `;
+            </div>
+        `;
 
-            // Add event listeners for interactions
-            const likeButton = articleContainer.querySelector('.like-button');
-            if (likeButton) {
-                likeButton.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    const user = auth.currentUser;
+        // Add event listeners for interactions
+        const likeButton = articleContainer.querySelector('.like-button');
+        if (likeButton) {
+            likeButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const user = auth.currentUser;
 
-                    if (!user) {
-                        alert("Please sign in to like articles");
-                        return;
-                    }
-
-                    const likesRef = ref(database, `news/${articleId}/likes/${user.uid}`);
-                    runTransaction(likesRef, (currentValue) => {
-                        return currentValue ? null : true;
-                    }).then((result) => {
-                        if (result.committed) {
-                            // Refresh the article to update counts
-                            const articleRef = ref(database, `news/${articleId}`);
-                            onValue(articleRef, (snapshot) => {
-                                const updatedArticle = snapshot.val();
-                                showFullArticle(articleId, updatedArticle);
-                            });
-                        }
-                    }).catch((error) => {
-                        console.error("Error updating like:", error);
-                    });
-                });
-            }
-
-            const commentSubmit = articleContainer.querySelector('.comment-submit');
-            if (commentSubmit) {
-                commentSubmit.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    const commentInput = articleContainer.querySelector('.comment-input');
-                    const commentText = commentInput.value.trim();
-
-                    if (!commentText) {
-                        alert("Please enter a comment");
-                        return;
-                    }
-
-                    submitComment(articleId, commentText);
-                });
-            }
-
-            // Share button functionality
-            const shareButton = document.getElementById('shareButton');
-            if (shareButton) {
-                shareButton.addEventListener('click', () => {
-                    shareModal.style.display = 'flex';
-                });
-            }
-        }
-
-        // Submit a comment
-        function submitComment(articleId, commentText) {
-            const user = auth.currentUser;
-            if (!user) {
-                alert("Please sign in to comment");
-                return;
-            }
-
-            const commentsRef = ref(database, `news/${articleId}/comments`);
-            const newComment = {
-                text: commentText,
-                author: user.email || user.displayName || "Anonymous",
-                timestamp: Date.now()
-            };
-
-            push(commentsRef, newComment).then(() => {
-                // Clear the input
-                const commentInput = articleContainer.querySelector('.comment-input');
-                if (commentInput) commentInput.value = "";
-
-                // Refresh the article to show the new comment
-                const articleRef = ref(database, `news/${articleId}`);
-                onValue(articleRef, (snapshot) => {
-                    const updatedArticle = snapshot.val();
-                    showFullArticle(articleId, updatedArticle);
-                });
-            }).catch((error) => {
-                console.error("Error posting comment:", error);
-                alert("Failed to post comment. Please try again.");
-            });
-        }
-
-        // Load article when page loads
-        document.addEventListener("DOMContentLoaded", () => {
-            // Auth state listener
-            onAuthStateChanged(auth, (user) => {
-                if (user) {
-                    if (profilePicture) profilePicture.src = user.photoURL || "https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/1758334341084.jpg?alt=media&token=af2bb626-f7c8-44db-be34-e4cbaf00914d";
-                    if (userInfo) userInfo.innerText = user.email || "Anonymous";
+                if (!user) {
+                    alert("Please sign in to like articles");
+                    return;
                 }
 
-                // Load the article if ID is provided
-                if (articleId) {
-                    const articleRef = ref(database, `news/${articleId}`);
-                    onValue(articleRef, (snapshot) => {
-                        const article = snapshot.val();
-                        if (article) {
-                            showFullArticle(articleId, article);
-                        } else {
-                            articleContainer.innerHTML = `
-                                <div class="error-message">
-                                    <i class="fas fa-exclamation-triangle"></i>
-                                    <p>Article not found</p>
-                                </div>
-                            `;
-                        }
-                    }, (error) => {
-                        console.error("Error fetching article:", error);
+                const likesRef = ref(database, `news/${articleId}/likes/${user.uid}`);
+                runTransaction(likesRef, (currentValue) => {
+                    return currentValue ? null : true;
+                }).then((result) => {
+                    if (result.committed) {
+                        // Refresh the article to update counts
+                        const articleRef = ref(database, `news/${articleId}`);
+                        onValue(articleRef, (snapshot) => {
+                            const updatedArticle = snapshot.val();
+                            showFullArticle(articleId, updatedArticle);
+                        });
+                    }
+                }).catch((error) => {
+                    console.error("Error updating like:", error);
+                });
+            });
+        }
+
+        const commentSubmit = articleContainer.querySelector('.comment-submit');
+        if (commentSubmit) {
+            commentSubmit.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const commentInput = articleContainer.querySelector('.comment-input');
+                const commentText = commentInput.value.trim();
+
+                if (!commentText) {
+                    alert("Please enter a comment");
+                    return;
+                }
+
+                submitComment(articleId, commentText);
+            });
+        }
+
+        // Share button functionality
+        const shareButton = document.getElementById('shareButton');
+        if (shareButton) {
+            shareButton.addEventListener('click', () => {
+                shareModal.style.display = 'flex';
+            });
+        }
+    }
+
+    // Submit a comment
+    function submitComment(articleId, commentText) {
+        const user = auth.currentUser;
+        if (!user) {
+            alert("Please sign in to comment");
+            return;
+        }
+
+        const commentsRef = ref(database, `news/${articleId}/comments`);
+        const newComment = {
+            text: commentText,
+            author: user.email || user.displayName || "Anonymous",
+            timestamp: Date.now()
+        };
+
+        push(commentsRef, newComment).then(() => {
+            // Clear the input
+            const commentInput = articleContainer.querySelector('.comment-input');
+            if (commentInput) commentInput.value = "";
+
+            // Refresh the article to show the new comment
+            const articleRef = ref(database, `news/${articleId}`);
+            onValue(articleRef, (snapshot) => {
+                const updatedArticle = snapshot.val();
+                showFullArticle(articleId, updatedArticle);
+            });
+        }).catch((error) => {
+            console.error("Error posting comment:", error);
+            alert("Failed to post comment. Please try again.");
+        });
+    }
+
+    // Load article when page loads
+    document.addEventListener("DOMContentLoaded", () => {
+        // Auth state listener
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                if (profilePicture) profilePicture.src = user.photoURL || "https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/1758334341084.jpg?alt=media&token=af2bb626-f7c8-44db-be34-e4cbaf00914d";
+                if (userInfo) userInfo.innerText = user.email || "Anonymous";
+            }
+
+            // Load the article if ID is provided
+            if (articleId) {
+                const articleRef = ref(database, `news/${articleId}`);
+                onValue(articleRef, (snapshot) => {
+                    const article = snapshot.val();
+                    if (article) {
+                        showFullArticle(articleId, article);
+                    } else {
                         articleContainer.innerHTML = `
                             <div class="error-message">
                                 <i class="fas fa-exclamation-triangle"></i>
-                                <p>Error loading article. Please try again.</p>
+                                <p>Article not found</p>
                             </div>
                         `;
-                    });
-                } else {
+                    }
+                }, (error) => {
+                    console.error("Error fetching article:", error);
                     articleContainer.innerHTML = `
                         <div class="error-message">
                             <i class="fas fa-exclamation-triangle"></i>
-                            <p>No article ID provided</p>
+                            <p>Error loading article. Please try again.</p>
                         </div>
                     `;
-                }
-            });
-
-            // Back button functionality
-            backButton.addEventListener('click', (e) => {
-                e.preventDefault();
-                window.location.href = 'index.html'; // Change to your main news page URL
-            });
-
-            // Share modal functionality
-            closeModal.addEventListener('click', () => {
-                shareModal.style.display = 'none';
-            });
-
-            // Close modal when clicking outside
-            shareModal.addEventListener('click', (e) => {
-                if (e.target === shareModal) {
-                    shareModal.style.display = 'none';
-                }
-            });
-
-            // Copy URL functionality
-            copyUrl.addEventListener('click', () => {
-                shareUrl.select();
-                document.execCommand('copy');
-                copyUrl.textContent = 'Copied!';
-                setTimeout(() => {
-                    copyUrl.textContent = 'Copy';
-                }, 2000);
-            });
-
-            // Share options functionality
-            shareOptions.forEach(option => {
-                option.addEventListener('click', () => {
-                    const platform = option.dataset.platform;
-                    const url = encodeURIComponent(shareUrl.value);
-                    const title = encodeURIComponent(document.querySelector('.article-title').textContent || 'Check out this article');
-                    
-                    let shareUrlString = '';
-                    
-                    switch(platform) {
-                        case 'facebook':
-                            shareUrlString = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
-                            break;
-                        case 'twitter':
-                            shareUrlString = `https://twitter.com/intent/tweet?url=${url}&text=${title}`;
-                            break;
-                        case 'linkedin':
-                            shareUrlString = `https://www.linkedin.com/sharing/share-offsite/?url=${url}`;
-                            break;
-                        case 'whatsapp':
-                            shareUrlString = `https://api.whatsapp.com/send?text=${title} ${url}`;
-                            break;
-                        case 'telegram':
-                            shareUrlString = `https://t.me/share/url?url=${url}&text=${title}`;
-                            break;
-                        case 'link':
-                            // Already handled by copy button
-                            return;
-                    }
-                    
-                    if (shareUrlString) {
-                        window.open(shareUrlString, '_blank', 'width=600,height=400');
-                    }
                 });
+            } else {
+                articleContainer.innerHTML = `
+                    <div class="error-message">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <p>No article ID provided</p>
+                    </div>
+                `;
+            }
+        });
+
+        // Back button functionality
+        backButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = 'index.html'; // Change to your main news page URL
+        });
+
+        // Share modal functionality
+        closeModal.addEventListener('click', () => {
+            shareModal.style.display = 'none';
+        });
+
+        // Close modal when clicking outside
+        shareModal.addEventListener('click', (e) => {
+            if (e.target === shareModal) {
+                shareModal.style.display = 'none';
+            }
+        });
+
+        // Copy URL functionality
+        copyUrl.addEventListener('click', () => {
+            shareUrl.select();
+            document.execCommand('copy');
+            copyUrl.textContent = 'Copied!';
+            setTimeout(() => {
+                copyUrl.textContent = 'Copy';
+            }, 2000);
+        });
+
+        // Share options functionality
+        shareOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                const platform = option.dataset.platform;
+                const url = encodeURIComponent(shareUrl.value);
+                const title = encodeURIComponent(document.querySelector('.article-title').textContent || 'Check out this article');
+                
+                let shareUrlString = '';
+                
+                switch(platform) {
+                    case 'facebook':
+                        shareUrlString = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+                        break;
+                    case 'twitter':
+                        shareUrlString = `https://twitter.com/intent/tweet?url=${url}&text=${title}`;
+                        break;
+                    case 'linkedin':
+                        shareUrlString = `https://www.linkedin.com/sharing/share-offsite/?url=${url}`;
+                        break;
+                    case 'whatsapp':
+                        shareUrlString = `https://api.whatsapp.com/send?text=${title} ${url}`;
+                        break;
+                    case 'telegram':
+                        shareUrlString = `https://t.me/share/url?url=${url}&text=${title}`;
+                        break;
+                    case 'link':
+                        // Already handled by copy button
+                        return;
+                }
+                
+                if (shareUrlString) {
+                    window.open(shareUrlString, '_blank', 'width=600,height=400');
+                }
             });
         });
-    </script>
+    });
+</script>
 </body>
 </html>
