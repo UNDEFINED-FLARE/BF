@@ -1,0 +1,2061 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhisperNet - Secret Social Platform</title>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+    
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+     .hdrPage {
+         overflow: hidden;
+         color: peru;
+         font-weight: 700;
+         letter-spacing: 5px;
+         width: 100%;
+         height: 65px;
+         
+         box-shadow: 0px 0px 8px #B4B4BE;
+         
+         
+     }
+         .pageName {
+        overflow: hidden;
+        color: peru;
+        font-weight: 700;
+        letter-spacing: 5px;
+        width: 100%;
+        height: 50px;
+        box-shadow: 0px 0px 8px #B4B4BE;
+        display: flex;
+        justify-content: center;
+        align-items: center
+    }
+    body {
+        background: #f0f2f5;
+        color: #1c1e21;
+        min-height: 100vh;
+        padding: 0;
+        overflow-x: hidden;
+    }
+
+    .app-container {
+        display: flex;
+        width: 100%;
+        min-height: 100vh;
+    }
+
+    /* Sidebar Styles */
+    .sidebar {
+        width: 280px;
+        background: #ffffff;
+        border-right: 1px solid #dddfe2;
+        padding: 16px 0;
+        height: 100vh;
+        position: fixed;
+        overflow-y: auto;
+        z-index: 100;
+    }
+
+    .logo {
+        padding: 0 16px 16px;
+        border-bottom: 1px solid #dddfe2;
+        margin-bottom: 16px;
+    }
+
+    .logo h1 {
+        font-size: 1.4rem;
+        color: #1877f2;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 0;
+    }
+
+    .nav-menu {
+        list-style: none;
+        padding: 0 8px;
+    }
+
+    .nav-item {
+        padding: 10px 12px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        cursor: pointer;
+        transition: all 0.3s;
+        border-radius: 8px;
+        margin: 2px 0;
+        font-size: 15px;
+    }
+
+    .nav-item:hover, .nav-item.active {
+        background: #f0f2f5;
+        color: #1877f2;
+    }
+
+    .nav-item i {
+        width: 20px;
+        text-align: center;
+        color: #65676b;
+        font-size: 1.2rem;
+    }
+
+    .nav-item.active i,
+    .nav-item:hover i {
+        color: #1877f2;
+    }
+
+    /* Main Content */
+    .main-content {
+        flex: 1;
+        margin-left: 280px;
+        padding: 16px;
+        width: calc(100% - 280px);
+        min-height: 100vh;
+    }
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+        padding: 8px 0;
+        position: sticky;
+        top: 0;
+        background: #f0f2f5;
+        z-index: 99;
+    }
+
+    .search-bar {
+        flex: 1;
+        max-width: 500px;
+        position: relative;
+        margin-right: 16px;
+    }
+
+    .search-bar input {
+        width: 100%;
+        padding: 10px 15px 10px 40px;
+        border-radius: 20px;
+        border: none;
+        background: #f0f2f5;
+        color: #1c1e21;
+        font-size: 15px;
+        height: 40px;
+    }
+
+    .search-bar i {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #65676b;
+    }
+
+    .user-menu {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-shrink: 0;
+    }
+
+    .user-avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: #1877f2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+    /* Feed Styles - Single Column Layout */
+    .feed {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        max-width: 680px;
+        margin: 0 auto;
+        width: 100%;
+    }
+
+    .post-form, .confession-card, .enemy-card, .chat-window {
+        background: #ffffff;
+        border-radius: 8px;
+        padding: 16px;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        border: 1px solid #dddfe2;
+        width: 100%;
+    }
+
+    .post-form h3, .confession-card h3, .enemy-card h3 {
+        margin-bottom: 16px;
+        color: #1c1e21;
+        font-size: 18px;
+        font-weight: 600;
+    }
+
+    .post-form textarea {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 8px;
+        resize: vertical;
+        min-height: 80px;
+        max-height: 300px;
+        font-size: 15px;
+        margin-bottom: 12px;
+        background: #f0f2f5;
+        color: #1c1e21;
+        font-family: inherit;
+        line-height: 1.4;
+    }
+
+    .post-form textarea:focus {
+        outline: none;
+        background: #e4e6eb;
+    }
+
+    .post-options {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 12px;
+        padding-top: 12px;
+        border-top: 1px solid #dddfe2;
+        flex-wrap: wrap;
+    }
+
+    .post-option {
+        flex: 1;
+        min-width: 80px;
+        padding: 8px;
+        background: transparent;
+        border-radius: 6px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s;
+        border: none;
+        color: #65676b;
+        font-weight: 500;
+        font-size: 14px;
+    }
+
+    .post-option:hover {
+        background: #f0f2f5;
+    }
+
+    .post-option i {
+        margin-right: 6px;
+        color: #65676b;
+    }
+
+    .file-input {
+        display: none;
+    }
+
+    .preview-container {
+        margin-top: 12px;
+        text-align: center;
+        width: 100%;
+    }
+
+    #imagePreview {
+        max-width: 100%;
+        max-height: 400px;
+        border-radius: 8px;
+        display: none;
+        object-fit: contain;
+    }
+
+    .audio-preview-container {
+        background: #f0f2f5;
+        padding: 12px;
+        border-radius: 8px;
+        margin-top: 8px;
+        display: none;
+        width: 100%;
+    }
+
+    .submit-btn {
+        background: #1877f2;
+        color: white;
+        border: none;
+        padding: 10px 24px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 15px;
+        font-weight: 600;
+        transition: all 0.3s;
+        display: block;
+        margin: 16px auto 0;
+        width: 100%;
+        height: 40px;
+    }
+
+    .submit-btn:hover {
+        background: #166fe5;
+    }
+
+    .submit-btn:disabled {
+        background: #e4e6eb;
+        cursor: not-allowed;
+        color: #bcc0c4;
+    }
+
+    /* Confession Card */
+    .confession-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 12px;
+    }
+
+    .confession-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #1877f2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 600;
+        margin-right: 10px;
+        font-size: 14px;
+        flex-shrink: 0;
+    }
+
+    .confession-user {
+        font-weight: 600;
+        margin-right: 8px;
+        color: #050505;
+        font-size: 15px;
+    }
+
+    .confession-time {
+        color: #65676b;
+        font-size: 13px;
+    }
+
+    .confession-content {
+        margin-bottom: 12px;
+        line-height: 1.4;
+        color: #050505;
+        font-size: 15px;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        width: 100%;
+    }
+
+    .confession-content a {
+        color: #1877f2;
+        text-decoration: none;
+    }
+
+    .confession-content a:hover {
+        text-decoration: underline;
+    }
+
+    .confession-image {
+        max-width: 100%;
+        max-height: 500px;
+        border-radius: 8px;
+        margin-bottom: 12px;
+        object-fit: contain;
+        width: 100%;
+    }
+
+    .confession-audio {
+        width: 100%;
+        margin-bottom: 12px;
+        border-radius: 8px;
+    }
+
+    .confession-actions {
+        display: flex;
+        gap: 4px;
+        border-top: 1px solid #dddfe2;
+        border-bottom: 1px solid #dddfe2;
+        padding: 6px 0;
+        margin-bottom: 12px;
+    }
+
+    .confession-action {
+        flex: 1;
+        text-align: center;
+        padding: 6px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.2s;
+        color: #65676b;
+        font-weight: 500;
+        font-size: 14px;
+        min-width: 0;
+    }
+
+    .confession-action:hover {
+        background: #f0f2f5;
+    }
+
+    .confession-action i {
+        margin-right: 6px;
+        color: #65676b;
+    }
+
+    .confession-action.liked {
+        color: #1877f2;
+    }
+
+    .confession-action.liked i {
+        color: #1877f2;
+    }
+
+    .confession-comments {
+        margin-top: 12px;
+        width: 100%;
+    }
+
+    .comment {
+        display: flex;
+        margin-bottom: 8px;
+        width: 100%;
+    }
+
+    .comment-avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: #e4e6eb;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #65676b;
+        font-size: 12px;
+        margin-right: 8px;
+        flex-shrink: 0;
+    }
+
+    .comment-content {
+        flex: 1;
+        background: #f0f2f5;
+        padding: 8px 12px;
+        border-radius: 18px;
+        font-size: 14px;
+        min-width: 0;
+        word-wrap: break-word;
+    }
+
+    .comment-input {
+        display: flex;
+        margin-top: 8px;
+        gap: 8px;
+        width: 100%;
+    }
+
+    .comment-input input {
+        flex: 1;
+        padding: 8px 12px;
+        border: none;
+        border-radius: 18px;
+        background: #f0f2f5;
+        color: #1c1e21;
+        font-size: 14px;
+        min-width: 0;
+    }
+
+    .comment-input input:focus {
+        outline: none;
+        background: #e4e6eb;
+    }
+
+    .comment-input button {
+        padding: 8px 16px;
+        background: #1877f2;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+        flex-shrink: 0;
+    }
+
+    /* Enemy Exposure Styles */
+    .enemy-form textarea {
+        min-height: 100px;
+    }
+
+    .enemy-warning {
+        background: #ffe6e6;
+        color: #d93025;
+        padding: 12px;
+        border-radius: 6px;
+        margin-bottom: 12px;
+        text-align: center;
+        font-size: 14px;
+        border-left: 4px solid #d93025;
+        width: 100%;
+    }
+
+    /* Chat Styles */
+    .chat-window {
+        height: 500px;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .chat-header {
+        padding-bottom: 12px;
+        border-bottom: 1px solid #dddfe2;
+        margin-bottom: 12px;
+    }
+
+    .chat-messages {
+        flex: 1;
+        overflow-y: auto;
+        margin-bottom: 12px;
+        padding: 8px;
+        width: 100%;
+    }
+
+    .message {
+        margin-bottom: 12px;
+        display: flex;
+        width: 100%;
+    }
+
+    .message.own {
+        justify-content: flex-end;
+    }
+
+    .message-bubble {
+        max-width: 70%;
+        padding: 8px 12px;
+        border-radius: 18px;
+        background: #f0f2f5;
+        font-size: 14px;
+        word-wrap: break-word;
+    }
+
+    .message.own .message-bubble {
+        background: #1877f2;
+        color: white;
+    }
+
+    .message-sender {
+        font-weight: 600;
+        margin-bottom: 4px;
+        font-size: 12px;
+        color: #65676b;
+    }
+
+    .message.own .message-sender {
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    .message-time {
+        font-size: 11px;
+        color: #65676b;
+        text-align: right;
+        margin-top: 4px;
+    }
+
+    .message.own .message-time {
+        color: rgba(255, 255, 255, 0.7);
+    }
+
+    .chat-input {
+        display: flex;
+        gap: 8px;
+        width: 100%;
+    }
+
+    .chat-input input {
+        flex: 1;
+        padding: 12px;
+        border: 1px solid #dddfe2;
+        border-radius: 20px;
+        background: #f0f2f5;
+        color: #1c1e21;
+        font-size: 14px;
+        min-width: 0;
+    }
+
+    .chat-input input:focus {
+        outline: none;
+        border-color: #1877f2;
+        background: white;
+    }
+
+    .chat-input button {
+        padding: 12px 20px;
+        background: #1877f2;
+        color: white;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+        font-weight: 500;
+        flex-shrink: 0;
+    }
+
+    /* Full Page View */
+    .full-view {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        z-index: 1000;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+
+    .full-view-content {
+        background: #ffffff;
+        border-radius: 8px;
+        max-width: 600px;
+        width: 100%;
+        max-height: 90vh;
+        overflow-y: auto;
+        padding: 20px;
+        position: relative;
+    }
+
+    .close-full-view {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: none;
+        border: none;
+        color: #65676b;
+        font-size: 1.5rem;
+        cursor: pointer;
+        padding: 4px;
+        border-radius: 50%;
+    }
+
+    .close-full-view:hover {
+        background: #f0f2f5;
+    }
+
+    /* Progress Container */
+    .progress-container {
+        background: #f0f2f5;
+        border-radius: 8px;
+        padding: 12px;
+        margin-bottom: 12px;
+        display: none;
+        width: 100%;
+    }
+
+    progress {
+        width: 100%;
+        height: 4px;
+        border-radius: 2px;
+        overflow: hidden;
+        border: none;
+    }
+
+    progress::-webkit-progress-bar {
+        background-color: #e4e6eb;
+        border-radius: 2px;
+    }
+
+    progress::-webkit-progress-value {
+        background: #1877f2;
+        border-radius: 2px;
+    }
+
+    #progressText {
+        display: block;
+        margin-top: 6px;
+        font-weight: 500;
+        color: #65676b;
+        text-align: center;
+        font-size: 13px;
+    }
+
+    /* Loading and Empty States */
+    .loading {
+        text-align: center;
+        padding: 20px;
+        color: #65676b;
+        width: 100%;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 40px 20px;
+        color: #65676b;
+        width: 100%;
+    }
+
+    .empty-state img {
+        width: 80px;
+        margin-bottom: 15px;
+        opacity: 0.5;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1200px) {
+        .sidebar {
+            width: 240px;
+        }
+        
+        .main-content {
+            margin-left: 240px;
+            width: calc(100% - 240px);
+        }
+        
+        .feed {
+            max-width: 600px;
+        }
+    }
+
+    @media (max-width: 900px) {
+        .sidebar {
+            width: 200px;
+        }
+        
+        .main-content {
+            margin-left: 200px;
+            width: calc(100% - 200px);
+            padding: 12px;
+        }
+        
+        .feed {
+            max-width: 100%;
+        }
+        
+        .nav-item {
+            padding: 8px 10px;
+            font-size: 14px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .sidebar {
+            width: 70px;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .sidebar.mobile-open {
+            transform: translateX(0);
+        }
+        
+        .main-content {
+            margin-left: 0;
+            width: 100%;
+            padding: 8px;
+        }
+        
+        .sidebar .nav-text {
+            display: none;
+        }
+        
+        .logo h1 span {
+            display: none;
+        }
+        
+        .header {
+            padding: 8px 0;
+        }
+        
+        .search-bar {
+            margin-right: 8px;
+        }
+        
+        .user-menu {
+            gap: 8px;
+        }
+        
+        .mobile-menu-toggle {
+            display: block;
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            color: #65676b;
+            cursor: pointer;
+            padding: 8px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .main-content {
+            padding: 4px;
+        }
+        
+        .post-form, .confession-card, .enemy-card, .chat-window {
+            padding: 12px;
+            margin-bottom: 12px;
+            border-radius: 6px;
+        }
+        
+        .post-options {
+            gap: 4px;
+        }
+        
+        .post-option {
+            min-width: 70px;
+            font-size: 13px;
+            padding: 6px;
+        }
+        
+        .confession-actions {
+            gap: 2px;
+        }
+        
+        .confession-action {
+            font-size: 13px;
+            padding: 4px;
+        }
+        
+        .submit-btn {
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+    }
+
+    /* Facebook-like scrollbar */
+    ::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: #f0f2f5;
+        border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #bcc0c4;
+        border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: #8a8d91;
+    }
+
+    /* Ensure all content fits within viewport */
+    html, body {
+        overflow-x: hidden;
+        width: 100%;
+    }
+
+    * {
+        max-width: 100%;
+    }
+
+    img, video, audio {
+        max-width: 100%;
+        height: auto;
+    }
+
+    /* Mobile menu toggle button */
+    .mobile-menu-toggle {
+        display: none;
+    
+        top: 16px;
+        left: 0;
+        z-index: 101;
+        background: #1877f2;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    @media (max-width: 768px) {
+        .mobile-menu-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    }
+</style>
+
+<!-- Add mobile menu toggle button to HTML -->
+
+</head>
+
+                    <div class="hdrPage">
+
+
+                <img src="https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/1758334341084.jpg?alt=media&token=af2bb626-f7c8-44db-be34-e4cbaf00914d" alt="" class="schoolProfile" style="float:left;border:none;width:55px;height:55px;" />
+                <br>
+                <p class="logo" style="color:RGB(100, 149, 237);letter-spacing: none;">
+                    Reclaim<b style="color:peru">•SA</b>
+                </p>
+
+
+            </div>
+<body>
+
+
+
+
+
+
+          <div class="pageName" style="color:RGB(65, 105, 225);">
+
+              <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+    <i class="fas fa-bars"></i>
+</button>
+              <p style="color:black;font-weight:700">black market whispers</p>
+
+<script>
+    function toggleMobileMenu() {
+        const sidebar = document.querySelector('.sidebar');
+        sidebar.classList.toggle('mobile-open');
+    }
+</script>
+            <div class="logo">
+
+
+            </div>
+        </div>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <div class="sidebar">
+            <div class="logo">
+                <h1><i class="fas fa-user-secret"></i> <span>WhisperNet</span></h1>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item active" onclick="showSection('feed')">
+                    <i class="fas fa-home"></i>
+                    <span class="nav-text">News Feed</span>
+                </li>
+                <li class="nav-item" onclick="showSection('enemies')">
+                    <i class="fas fa-skull-crossbones"></i>
+                    <span class="nav-text">Enemy Exposure</span>
+                </li>
+                <li class="nav-item" onclick="showSection('chat')">
+                    <i class="fas fa-comments"></i>
+                    <span class="nav-text">Live Chat</span>
+                </li>
+                <li class="nav-item" onclick="showSection('profile')">
+                    <i class="fas fa-user"></i>
+                    <span class="nav-text">My Profile</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Search WhisperNet..." onkeyup="filterContent()">
+                </div>
+                <div class="user-menu">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <span id="username">AnonymousUser</span>
+                </div>
+            </div>
+
+            <!-- News Feed Section -->
+            <div id="feed-section" class="section">
+                <div class="feed">
+                    <div class="left-feed">
+                        <!-- Post Form -->
+                        <div class="post-form">
+                            <h3><i class="fas fa-pencil-alt"></i> Create Post</h3>
+                            <textarea id="postText" placeholder="What's on your mind? Share your thoughts, secrets, or confessions..."></textarea>
+                            
+                            <div class="post-options">
+                                <div class="post-option" onclick="document.getElementById('imageInput').click()">
+                                    <i class="fas fa-image"></i> Photo
+                                </div>
+                                <div class="post-option" onclick="document.getElementById('audioInput').click()">
+                                    <i class="fas fa-file-audio"></i> Audio
+                                </div>
+                            </div>
+                            
+                            <input type="file" id="imageInput" class="file-input" accept="image/*">
+                            <input type="file" id="audioInput" class="file-input" accept="audio/*">
+                            
+                            <div class="preview-container">
+                                <img id="imagePreview" alt="Image Preview">
+                                <div class="audio-preview-container" id="audioPreviewContainer">
+                                    <audio id="audioPreview" controls></audio>
+                                    <p id="audioFileName"></p>
+                                </div>
+                            </div>
+
+                            <div class="progress-container" id="progressContainer">
+                                <progress id="uploadProgress" value="0" max="100"></progress>
+                                <span id="progressText">0%</span>
+                            </div>
+                            
+                            <button class="submit-btn" onclick="createPost()" id="postButton">Post Confession</button>
+                        </div>
+
+                        <!-- Confession Feed -->
+                        <div id="confessions-feed">
+                            <div class="loading">
+                                <i class="fas fa-spinner fa-spin"></i> Loading confessions...
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="right-sidebar">
+                        <!-- Online Users -->
+                        <div class="online-users">
+                            <h3>Online Now</h3>
+                            <ul class="user-list" id="onlineUsers">
+                                <li class="user-item">
+                                    <div class="user-status"></div>
+                                    <div class="user-avatar">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                    <span>Loading...</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Trending Secrets -->
+                        <div class="confession-card">
+                            <h3><i class="fas fa-fire"></i> Trending Hashtags</h3>
+                            <div id="trendingHashtags">
+                                <div class="loading">Loading trends...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Enemy Exposure Section -->
+            <div id="enemies-section" class="section" style="display: none;">
+                <div class="post-form enemy-form">
+                    <h3><i class="fas fa-skull-crossbones"></i> Expose Your Enemy</h3>
+                    <div class="enemy-warning">
+                        <i class="fas fa-exclamation-triangle"></i> Warning: This section is for exposing harmful behavior. Do not use for personal vendettas.
+                    </div>
+                    <textarea id="enemyText" placeholder="Describe what this person did and why they should be exposed..."></textarea>
+                    
+                    <div class="post-options">
+                        <div class="post-option" onclick="document.getElementById('enemyImageInput').click()">
+                            <i class="fas fa-image"></i> Add Evidence
+                        </div>
+                    </div>
+                    
+                    <input type="file" id="enemyImageInput" class="file-input" accept="image/*">
+                    
+                    <div class="preview-container">
+                        <img id="enemyImagePreview" alt="Enemy Evidence Preview">
+                    </div>
+
+                    <div class="progress-container" id="enemyProgressContainer">
+                        <progress id="enemyUploadProgress" value="0" max="100"></progress>
+                        <span id="enemyProgressText">0%</span>
+                    </div>
+                    
+                    <button class="submit-btn" onclick="createEnemyPost()" id="enemyPostButton">Expose Enemy</button>
+                </div>
+
+                <div id="enemies-feed">
+                    <div class="loading">
+                        <i class="fas fa-spinner fa-spin"></i> Loading enemy exposures...
+                    </div>
+                </div>
+            </div>
+
+            <!-- Live Chat Section -->
+            <div id="chat-section" class="section" style="display: none;">
+                <div class="chat-window">
+                    <div class="chat-header">
+                        <h3><i class="fas fa-comments"></i> Live Secret Chat</h3>
+                        <p>Chat anonymously with other users</p>
+                    </div>
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="loading">Loading messages...</div>
+                    </div>
+                    <div class="chat-input">
+                        <input type="text" id="chatInput" placeholder="Type your message...">
+                        <button onclick="sendMessage()"><i class="fas fa-paper-plane"></i> Send</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Section -->
+            <div id="profile-section" class="section" style="display: none;">
+                <div class="confession-card">
+                    <h3><i class="fas fa-user"></i> My Profile</h3>
+                    <div class="confession-header">
+                        <div class="confession-avatar">
+                            <i class="fas fa-user-secret"></i>
+                        </div>
+                        <div>
+                            <div class="confession-user" id="profileUsername">AnonymousUser</div>
+                            <div class="confession-time">Member since <span id="joinDate">Loading...</span></div>
+                        </div>
+                    </div>
+                    <div class="confession-content">
+                        <p>This is your anonymous profile. Your identity is protected.</p>
+                        <p><strong>Your Stats:</strong></p>
+                        <ul>
+                            <li>Confessions Posted: <span id="confessionCount">0</span></li>
+                            <li>Enemy Exposures: <span id="enemyCount">0</span></li>
+                            <li>Comments Made: <span id="commentCount">0</span></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="confession-card">
+                    <h3><i class="fas fa-history"></i> Your Recent Activity</h3>
+                    <div id="userActivity">
+                        <div class="loading">Loading your activity...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Full Page View Modal -->
+    <div class="full-view" id="fullView">
+        <div class="full-view-content">
+            <button class="close-full-view" onclick="closeFullView()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div id="fullViewContent">
+                <!-- Full view content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Firebase configuration - REPLACE WITH YOUR ACTUAL CONFIG
+        const firebaseConfig = {
+            apiKey: "AIzaSyBSMvHpZ0_VkqWjJ94UMa6vqEhFiqrsIWM",
+            authDomain: "rare-5f47e.firebaseapp.com",
+            projectId: "rare-5f47e",
+            storageBucket: "rare-5f47e.appspot.com",
+            messagingSenderId: "811727087812",
+            appId: "1:811727087812:web:d362e68abf6c26acf24191",
+            measurementId: "G-DE59771G7Q"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const storage = firebase.storage();
+        const database = firebase.database();
+        const auth = firebase.auth();
+
+        // Global variables
+        let currentUser = null;
+        let selectedImage = null;
+        let selectedAudio = null;
+        let enemyImage = null;
+        let currentPostId = null;
+
+        // Initialize the app
+        function initApp() {
+            // Sign in anonymously
+            auth.signInAnonymously()
+                .then((userCredential) => {
+                    currentUser = userCredential.user;
+                    console.log("Signed in anonymously:", currentUser.uid);
+                    
+                    // Generate a random username
+                    const randomId = Math.random().toString(36).substring(2, 8);
+                    const username = `AnonymousUser${randomId}`;
+                    document.getElementById('username').textContent = username;
+                    document.getElementById('profileUsername').textContent = username;
+                    
+                    // Set join date
+                    const joinDate = new Date().toLocaleDateString();
+                    document.getElementById('joinDate').textContent = joinDate;
+                    
+                    // Save user info to database
+                    database.ref('users/' + currentUser.uid).set({
+                        username: username,
+                        joined: Date.now(),
+                        lastSeen: Date.now()
+                    });
+                    
+                    // Load all data
+                    loadConfessions();
+                    loadEnemyPosts();
+                    loadChatMessages();
+                    loadOnlineUsers();
+                    loadUserStats();
+                    
+                    // Update user's last seen timestamp every minute
+                    setInterval(() => {
+                        if (currentUser) {
+                            database.ref('users/' + currentUser.uid + '/lastSeen').set(Date.now());
+                        }
+                    }, 60000);
+                })
+                .catch((error) => {
+                    console.error("Authentication error:", error);
+                    alert("Failed to initialize app. Please refresh the page.");
+                });
+        }
+
+        // Navigation
+        function showSection(section) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(sec => {
+                sec.style.display = 'none';
+            });
+            
+            // Show selected section
+            document.getElementById(`${section}-section`).style.display = 'block';
+            
+            // Update active nav item
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+            
+            // Update user's last seen
+            if (currentUser) {
+                database.ref('users/' + currentUser.uid + '/lastSeen').set(Date.now());
+            }
+        }
+
+        // File Upload Preview
+        document.getElementById('imageInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            selectedImage = file;
+            selectedAudio = null;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const preview = document.getElementById('imagePreview');
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+                document.getElementById('audioPreviewContainer').style.display = 'none';
+            };
+            reader.readAsDataURL(file);
+        });
+
+        document.getElementById('audioInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            selectedAudio = file;
+            selectedImage = null;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const preview = document.getElementById('audioPreview');
+                preview.src = e.target.result;
+                document.getElementById('audioPreviewContainer').style.display = 'block';
+                document.getElementById('audioFileName').textContent = file.name;
+                document.getElementById('imagePreview').style.display = 'none';
+            };
+            reader.readAsDataURL(file);
+        });
+
+        document.getElementById('enemyImageInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            enemyImage = file;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const preview = document.getElementById('enemyImagePreview');
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        });
+
+        // Upload file to Firebase Storage
+        async function uploadFile(file, folder) {
+            return new Promise((resolve, reject) => {
+                const timestamp = Date.now();
+                const fileName = `${folder}/${timestamp}_${file.name}`;
+                const storageRef = storage.ref().child(fileName);
+                
+                const metadata = {
+                    contentType: file.type,
+                    customMetadata: {
+                        'uploadedBy': currentUser.uid,
+                        'uploadedAt': timestamp.toString()
+                    }
+                };
+                
+                const uploadTask = storageRef.put(file, metadata);
+                
+                uploadTask.on('state_changed',
+                    (snapshot) => {
+                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        document.getElementById('uploadProgress').value = progress;
+                        document.getElementById('progressText').textContent = `${Math.round(progress)}%`;
+                    },
+                    (error) => {
+                        console.error('Upload error:', error);
+                        reject(error);
+                    },
+                    () => {
+                        uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+                            resolve(downloadURL);
+                        });
+                    }
+                );
+            });
+        }
+
+        // Create a new post
+        async function createPost() {
+            const postText = document.getElementById('postText').value.trim();
+            if (!postText) {
+                alert('Please enter some text for your post');
+                return;
+            }
+
+            // Disable button and show progress
+            document.getElementById('postButton').disabled = true;
+            document.getElementById('progressContainer').style.display = 'block';
+
+            try {
+                let imageUrl = null;
+                let audioUrl = null;
+
+                // Upload image if selected
+                if (selectedImage) {
+                    imageUrl = await uploadFile(selectedImage, 'post-images');
+                }
+
+                // Upload audio if selected
+                if (selectedAudio) {
+                    audioUrl = await uploadFile(selectedAudio, 'post-audio');
+                }
+
+                // Get user info
+                const userSnapshot = await database.ref('users/' + currentUser.uid).once('value');
+                const userData = userSnapshot.val();
+
+                // Create post data
+                const postData = {
+                    text: postText,
+                    author: userData.username,
+                    authorId: currentUser.uid,
+                    timestamp: Date.now(),
+                    imageUrl: imageUrl,
+                    audioUrl: audioUrl,
+                    likes: 0,
+                    comments: 0,
+                    type: 'confession'
+                };
+
+                // Save to database
+                const newPostRef = database.ref('posts').push();
+                await newPostRef.set(postData);
+
+                // Update user stats
+                database.ref('users/' + currentUser.uid + '/postCount').transaction((count) => {
+                    return (count || 0) + 1;
+                });
+
+                // Reset form
+                document.getElementById('postText').value = '';
+                document.getElementById('imagePreview').style.display = 'none';
+                document.getElementById('audioPreviewContainer').style.display = 'none';
+                selectedImage = null;
+                selectedAudio = null;
+                document.getElementById('progressContainer').style.display = 'none';
+                document.getElementById('postButton').disabled = false;
+                
+                alert('Your confession has been posted!');
+            } catch (error) {
+                console.error("Error creating post:", error);
+                alert('Failed to post your confession. Please try again.');
+                document.getElementById('progressContainer').style.display = 'none';
+                document.getElementById('postButton').disabled = false;
+            }
+        }
+
+        // Create enemy exposure post
+        async function createEnemyPost() {
+            const enemyText = document.getElementById('enemyText').value.trim();
+            if (!enemyText) {
+                alert('Please describe what this person did');
+                return;
+            }
+
+            // Disable button and show progress
+            document.getElementById('enemyPostButton').disabled = true;
+            document.getElementById('enemyProgressContainer').style.display = 'block';
+
+            try {
+                let imageUrl = null;
+
+                // Upload image if selected
+                if (enemyImage) {
+                    imageUrl = await uploadFile(enemyImage, 'enemy-evidence');
+                }
+
+                // Get user info
+                const userSnapshot = await database.ref('users/' + currentUser.uid).once('value');
+                const userData = userSnapshot.val();
+
+                // Create enemy post data
+                const enemyData = {
+                    text: enemyText,
+                    author: userData.username,
+                    authorId: currentUser.uid,
+                    timestamp: Date.now(),
+                    imageUrl: imageUrl,
+                    supports: 0,
+                    disputes: 0,
+                    type: 'enemy'
+                };
+
+                // Save to database
+                const newEnemyRef = database.ref('enemyPosts').push();
+                await newEnemyRef.set(enemyData);
+
+                // Update user stats
+                database.ref('users/' + currentUser.uid + '/enemyCount').transaction((count) => {
+                    return (count || 0) + 1;
+                });
+
+                // Reset form
+                document.getElementById('enemyText').value = '';
+                document.getElementById('enemyImagePreview').style.display = 'none';
+                enemyImage = null;
+                document.getElementById('enemyProgressContainer').style.display = 'none';
+                document.getElementById('enemyPostButton').disabled = false;
+                
+                alert('Your enemy exposure has been posted!');
+            } catch (error) {
+                console.error("Error creating enemy post:", error);
+                alert('Failed to post your enemy exposure. Please try again.');
+                document.getElementById('enemyProgressContainer').style.display = 'none';
+                document.getElementById('enemyPostButton').disabled = false;
+            }
+        }
+
+        // Load confessions from Firebase
+        function loadConfessions() {
+            const confessionsFeed = document.getElementById('confessions-feed');
+            
+            database.ref('posts').orderByChild('timestamp').on('value', (snapshot) => {
+                confessionsFeed.innerHTML = '';
+                
+                if (!snapshot.exists()) {
+                    confessionsFeed.innerHTML = `
+                        <div class="empty-state">
+                            <img src="https://cdn-icons-png.flaticon.com/512/4076/4076478.png" alt="No confessions">
+                            <div>No confessions yet. Be the first to share!</div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                const posts = [];
+                snapshot.forEach((postSnapshot) => {
+                    posts.push({
+                        id: postSnapshot.key,
+                        ...postSnapshot.val()
+                    });
+                });
+
+                // Sort by timestamp (newest first)
+                posts.sort((a, b) => b.timestamp - a.timestamp);
+                
+                posts.forEach((post) => {
+                    const postElement = document.createElement('div');
+                    postElement.className = 'confession-card';
+                    postElement.innerHTML = `
+                        <div class="confession-header">
+                            <div class="confession-avatar">
+                                <i class="fas fa-user-secret"></i>
+                            </div>
+                            <div>
+                                <div class="confession-user">${post.author}</div>
+                                <div class="confession-time">${formatTime(post.timestamp)}</div>
+                            </div>
+                        </div>
+                        <div class="confession-content">${post.text}</div>
+                        ${post.imageUrl ? `<img src="${post.imageUrl}" class="confession-image" alt="Post image">` : ''}
+                        ${post.audioUrl ? `<audio controls src="${post.audioUrl}" class="confession-audio"></audio>` : ''}
+                        <div class="confession-actions">
+                            <div class="confession-action" onclick="likePost('${post.id}')">
+                                <i class="fas fa-heart"></i> <span id="likes-${post.id}">${post.likes || 0}</span>
+                            </div>
+                            <div class="confession-action" onclick="toggleComments('${post.id}')">
+                                <i class="fas fa-comment"></i> <span id="comments-${post.id}">${post.comments || 0}</span>
+                            </div>
+                            <div class="confession-action" onclick="openFullView('${post.id}', 'post')">
+                                <i class="fas fa-expand"></i> View Full
+                            </div>
+                        </div>
+                        <div class="confession-comments" id="comments-${post.id}" style="display: none;">
+                            <div class="comment-input">
+                                <input type="text" id="comment-input-${post.id}" placeholder="Write a comment...">
+                                <button onclick="addComment('${post.id}')">Post</button>
+                            </div>
+                            <div id="comment-list-${post.id}"></div>
+                        </div>
+                    `;
+                    confessionsFeed.appendChild(postElement);
+                    
+                    // Load comments for this post
+                    loadComments(post.id);
+                });
+            });
+        }
+
+        // Load enemy posts from Firebase
+        function loadEnemyPosts() {
+            const enemiesFeed = document.getElementById('enemies-feed');
+            
+            database.ref('enemyPosts').orderByChild('timestamp').on('value', (snapshot) => {
+                enemiesFeed.innerHTML = '';
+                
+                if (!snapshot.exists()) {
+                    enemiesFeed.innerHTML = `
+                        <div class="empty-state">
+                            <img src="https://cdn-icons-png.flaticon.com/512/4076/4076478.png" alt="No enemy exposures">
+                            <div>No enemy exposures yet.</div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                const posts = [];
+                snapshot.forEach((postSnapshot) => {
+                    posts.push({
+                        id: postSnapshot.key,
+                        ...postSnapshot.val()
+                    });
+                });
+
+                // Sort by timestamp (newest first)
+                posts.sort((a, b) => b.timestamp - a.timestamp);
+                
+                posts.forEach((post) => {
+                    const postElement = document.createElement('div');
+                    postElement.className = 'enemy-card';
+                    postElement.innerHTML = `
+                        <div class="confession-header">
+                            <div class="confession-avatar">
+                                <i class="fas fa-user-secret"></i>
+                            </div>
+                            <div>
+                                <div class="confession-user">${post.author}</div>
+                                <div class="confession-time">${formatTime(post.timestamp)}</div>
+                            </div>
+                        </div>
+                        <div class="confession-content">${post.text}</div>
+                        ${post.imageUrl ? `<img src="${post.imageUrl}" class="confession-image" alt="Evidence image">` : ''}
+                        <div class="confession-actions">
+                            <div class="confession-action" onclick="supportPost('${post.id}')">
+                                <i class="fas fa-thumbs-up"></i> <span id="supports-${post.id}">${post.supports || 0}</span> Support
+                            </div>
+                            <div class="confession-action" onclick="disputePost('${post.id}')">
+                                <i class="fas fa-thumbs-down"></i> <span id="disputes-${post.id}">${post.disputes || 0}</span> Dispute
+                            </div>
+                            <div class="confession-action" onclick="openFullView('${post.id}', 'enemy')">
+                                <i class="fas fa-expand"></i> View Full
+                            </div>
+                        </div>
+                    `;
+                    enemiesFeed.appendChild(postElement);
+                });
+            });
+        }
+
+        // Load chat messages from Firebase
+        function loadChatMessages() {
+            const chatMessages = document.getElementById('chatMessages');
+            
+            database.ref('chatMessages').orderByChild('timestamp').limitToLast(50).on('value', (snapshot) => {
+                chatMessages.innerHTML = '';
+                
+                if (!snapshot.exists()) {
+                    chatMessages.innerHTML = '<div class="empty-state">No messages yet. Start the conversation!</div>';
+                    return;
+                }
+
+                const messages = [];
+                snapshot.forEach((messageSnapshot) => {
+                    messages.push({
+                        id: messageSnapshot.key,
+                        ...messageSnapshot.val()
+                    });
+                });
+
+                // Sort by timestamp (oldest first for chat)
+                messages.sort((a, b) => a.timestamp - b.timestamp);
+                
+                messages.forEach((message) => {
+                    const messageElement = document.createElement('div');
+                    const isOwn = message.authorId === currentUser.uid;
+                    messageElement.className = `message ${isOwn ? 'own' : ''}`;
+                    messageElement.innerHTML = `
+                        <div class="message-bubble">
+                            <div class="message-sender">${isOwn ? 'You' : message.author}</div>
+                            <div class="message-text">${message.text}</div>
+                            <div class="message-time">${formatTime(message.timestamp)}</div>
+                        </div>
+                    `;
+                    chatMessages.appendChild(messageElement);
+                });
+                
+                // Scroll to bottom
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            });
+        }
+
+        // Load online users
+        function loadOnlineUsers() {
+            const onlineUsersList = document.getElementById('onlineUsers');
+            
+            database.ref('users').orderByChild('lastSeen').on('value', (snapshot) => {
+                onlineUsersList.innerHTML = '';
+                
+                if (!snapshot.exists()) {
+                    onlineUsersList.innerHTML = '<li class="user-item">No users online</li>';
+                    return;
+                }
+
+                const users = [];
+                const fiveMinutesAgo = Date.now() - 5 * 60 * 1000; // 5 minutes ago
+                
+                snapshot.forEach((userSnapshot) => {
+                    const user = userSnapshot.val();
+                    if (user.lastSeen > fiveMinutesAgo && userSnapshot.key !== currentUser.uid) {
+                        users.push(user);
+                    }
+                });
+
+                if (users.length === 0) {
+                    onlineUsersList.innerHTML = '<li class="user-item">No other users online</li>';
+                    return;
+                }
+                
+                users.forEach((user) => {
+                    const userElement = document.createElement('li');
+                    userElement.className = 'user-item';
+                    userElement.innerHTML = `
+                        <div class="user-status"></div>
+                        <div class="user-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <span>${user.username}</span>
+                    `;
+                    onlineUsersList.appendChild(userElement);
+                });
+            });
+        }
+
+        // Load user stats
+        function loadUserStats() {
+            if (!currentUser) return;
+            
+            database.ref('users/' + currentUser.uid).on('value', (snapshot) => {
+                const userData = snapshot.val();
+                if (userData) {
+                    document.getElementById('confessionCount').textContent = userData.postCount || 0;
+                    document.getElementById('enemyCount').textContent = userData.enemyCount || 0;
+                    document.getElementById('commentCount').textContent = userData.commentCount || 0;
+                }
+            });
+            
+            // Load user activity
+            database.ref('posts').orderByChild('authorId').equalTo(currentUser.uid).limitToLast(5).on('value', (snapshot) => {
+                const activityContainer = document.getElementById('userActivity');
+                activityContainer.innerHTML = '';
+                
+                if (!snapshot.exists()) {
+                    activityContainer.innerHTML = '<div class="empty-state">You haven\'t posted anything yet.</div>';
+                    return;
+                }
+                
+                const posts = [];
+                snapshot.forEach((postSnapshot) => {
+                    posts.push({
+                        id: postSnapshot.key,
+                        ...postSnapshot.val()
+                    });
+                });
+                
+                posts.sort((a, b) => b.timestamp - a.timestamp);
+                
+                posts.forEach((post) => {
+                    const activityElement = document.createElement('div');
+                    activityElement.className = 'confession-content';
+                    activityElement.style.padding = '10px';
+                    activityElement.style.borderBottom = '1px solid #393953';
+                    activityElement.innerHTML = `
+                        <div>${post.text.substring(0, 100)}${post.text.length > 100 ? '...' : ''}</div>
+                        <div class="confession-time">${formatTime(post.timestamp)}</div>
+                    `;
+                    activityContainer.appendChild(activityElement);
+                });
+            });
+        }
+
+        // Like a post
+        function likePost(postId) {
+            if (!currentUser) return;
+            
+            database.ref('posts/' + postId + '/likes').transaction((likes) => {
+                return (likes || 0) + 1;
+            });
+        }
+
+        // Support an enemy post
+        function supportPost(postId) {
+            if (!currentUser) return;
+            
+            database.ref('enemyPosts/' + postId + '/supports').transaction((supports) => {
+                return (supports || 0) + 1;
+            });
+        }
+
+        // Dispute an enemy post
+        function disputePost(postId) {
+            if (!currentUser) return;
+            
+            database.ref('enemyPosts/' + postId + '/disputes').transaction((disputes) => {
+                return (disputes || 0) + 1;
+            });
+        }
+
+        // Toggle comments visibility
+        function toggleComments(postId) {
+            const commentsSection = document.getElementById('comments-' + postId);
+            if (commentsSection.style.display === 'none') {
+                commentsSection.style.display = 'block';
+            } else {
+                commentsSection.style.display = 'none';
+            }
+        }
+
+        // Load comments for a post
+        function loadComments(postId) {
+            const commentList = document.getElementById('comment-list-' + postId);
+            
+            database.ref('comments/' + postId).orderByChild('timestamp').on('value', (snapshot) => {
+                commentList.innerHTML = '';
+                
+                if (!snapshot.exists()) {
+                    return;
+                }
+
+                const comments = [];
+                snapshot.forEach((commentSnapshot) => {
+                    comments.push({
+                        id: commentSnapshot.key,
+                        ...commentSnapshot.val()
+                    });
+                });
+
+                // Sort by timestamp (oldest first)
+                comments.sort((a, b) => a.timestamp - b.timestamp);
+                
+                comments.forEach((comment) => {
+                    const commentElement = document.createElement('div');
+                    commentElement.className = 'comment';
+                    commentElement.innerHTML = `
+                        <div class="comment-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="comment-content">
+                            <div><strong>${comment.author}:</strong> ${comment.text}</div>
+                            <div class="confession-time">${formatTime(comment.timestamp)}</div>
+                        </div>
+                    `;
+                    commentList.appendChild(commentElement);
+                });
+            });
+        }
+
+        // Add a comment to a post
+        function addComment(postId) {
+            const commentInput = document.getElementById('comment-input-' + postId);
+            const commentText = commentInput.value.trim();
+            
+            if (!commentText || !currentUser) return;
+            
+            // Get user info
+            database.ref('users/' + currentUser.uid).once('value').then((userSnapshot) => {
+                const userData = userSnapshot.val();
+                
+                // Create comment data
+                const commentData = {
+                    text: commentText,
+                    author: userData.username,
+                    authorId: currentUser.uid,
+                    timestamp: Date.now()
+                };
+                
+                // Save comment
+                database.ref('comments/' + postId).push(commentData);
+                
+                // Update post comment count
+                database.ref('posts/' + postId + '/comments').transaction((count) => {
+                    return (count || 0) + 1;
+                });
+                
+                // Update user comment count
+                database.ref('users/' + currentUser.uid + '/commentCount').transaction((count) => {
+                    return (count || 0) + 1;
+                });
+                
+                // Clear input
+                commentInput.value = '';
+            });
+        }
+
+        // Send a chat message
+        function sendMessage() {
+            const chatInput = document.getElementById('chatInput');
+            const messageText = chatInput.value.trim();
+            
+            if (!messageText || !currentUser) return;
+            
+            // Get user info
+            database.ref('users/' + currentUser.uid).once('value').then((userSnapshot) => {
+                const userData = userSnapshot.val();
+                
+                // Create message data
+                const messageData = {
+                    text: messageText,
+                    author: userData.username,
+                    authorId: currentUser.uid,
+                    timestamp: Date.now()
+                };
+                
+                // Save message
+                database.ref('chatMessages').push(messageData);
+                
+                // Clear input
+                chatInput.value = '';
+            });
+        }
+
+        // Open full view of a post
+        function openFullView(postId, type) {
+            const fullView = document.getElementById('fullView');
+            const fullViewContent = document.getElementById('fullViewContent');
+            
+            // Show loading
+            fullViewContent.innerHTML = '<div class="loading">Loading post...</div>';
+            fullView.style.display = 'flex';
+            
+            // Load post data based on type
+            const ref = type === 'enemy' ? database.ref('enemyPosts/' + postId) : database.ref('posts/' + postId);
+            
+            ref.once('value').then((snapshot) => {
+                const post = snapshot.val();
+                if (!post) {
+                    fullViewContent.innerHTML = '<div class="empty-state">Post not found</div>';
+                    return;
+                }
+                
+                // Render full view content
+                fullViewContent.innerHTML = `
+                    <div class="confession-header">
+                        <div class="confession-avatar">
+                            <i class="fas fa-user-secret"></i>
+                        </div>
+                        <div>
+                            <div class="confession-user">${post.author}</div>
+                            <div class="confession-time">${formatTime(post.timestamp)}</div>
+                        </div>
+                    </div>
+                    <div class="confession-content">
+                        <p>${post.text}</p>
+                    </div>
+                    ${post.imageUrl ? `<img src="${post.imageUrl}" class="confession-image" alt="Post image">` : ''}
+                    ${post.audioUrl ? `<audio controls src="${post.audioUrl}" class="confession-audio"></audio>` : ''}
+                    <div class="confession-actions">
+                        ${type === 'enemy' ? `
+                            <div class="confession-action">
+                                <i class="fas fa-thumbs-up"></i> ${post.supports || 0} Supports
+                            </div>
+                            <div class="confession-action">
+                                <i class="fas fa-thumbs-down"></i> ${post.disputes || 0} Disputes
+                            </div>
+                        ` : `
+                            <div class="confession-action">
+                                <i class="fas fa-heart"></i> ${post.likes || 0} Likes
+                            </div>
+                            <div class="confession-action">
+                                <i class="fas fa-comment"></i> ${post.comments || 0} Comments
+                            </div>
+                        `}
+                    </div>
+                    ${type !== 'enemy' ? `
+                        <div class="confession-comments">
+                            <h4>Comments</h4>
+                            <div id="full-view-comments"></div>
+                            <div class="comment-input">
+                                <input type="text" id="full-view-comment-input" placeholder="Write a comment...">
+                                <button onclick="addCommentToFullView('${postId}')">Post</button>
+                            </div>
+                        </div>
+                    ` : ''}
+                `;
+                
+                // Load comments for regular posts
+                if (type !== 'enemy') {
+                    loadFullViewComments(postId);
+                }
+            });
+        }
+
+        // Load comments for full view
+        function loadFullViewComments(postId) {
+            const commentList = document.getElementById('full-view-comments');
+            
+            database.ref('comments/' + postId).orderByChild('timestamp').on('value', (snapshot) => {
+                commentList.innerHTML = '';
+                
+                if (!snapshot.exists()) {
+                    commentList.innerHTML = '<div class="empty-state">No comments yet</div>';
+                    return;
+                }
+
+                const comments = [];
+                snapshot.forEach((commentSnapshot) => {
+                    comments.push({
+                        id: commentSnapshot.key,
+                        ...commentSnapshot.val()
+                    });
+                });
+
+                // Sort by timestamp (oldest first)
+                comments.sort((a, b) => a.timestamp - b.timestamp);
+                
+                comments.forEach((comment) => {
+                    const commentElement = document.createElement('div');
+                    commentElement.className = 'comment';
+                    commentElement.innerHTML = `
+                        <div class="comment-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="comment-content">
+                            <div><strong>${comment.author}:</strong> ${comment.text}</div>
+                            <div class="confession-time">${formatTime(comment.timestamp)}</div>
+                        </div>
+                    `;
+                    commentList.appendChild(commentElement);
+                });
+            });
+        }
+
+        // Add comment from full view
+        function addCommentToFullView(postId) {
+            const commentInput = document.getElementById('full-view-comment-input');
+            const commentText = commentInput.value.trim();
+            
+            if (!commentText || !currentUser) return;
+            
+            // Get user info
+            database.ref('users/' + currentUser.uid).once('value').then((userSnapshot) => {
+                const userData = userSnapshot.val();
+                
+                // Create comment data
+                const commentData = {
+                    text: commentText,
+                    author: userData.username,
+                    authorId: currentUser.uid,
+                    timestamp: Date.now()
+                };
+                
+                // Save comment
+                database.ref('comments/' + postId).push(commentData);
+                
+                // Update post comment count
+                database.ref('posts/' + postId + '/comments').transaction((count) => {
+                    return (count || 0) + 1;
+                });
+                
+                // Update user comment count
+                database.ref('users/' + currentUser.uid + '/commentCount').transaction((count) => {
+                    return (count || 0) + 1;
+                });
+                
+                // Clear input
+                commentInput.value = '';
+            });
+        }
+
+        // Close full view
+        function closeFullView() {
+            document.getElementById('fullView').style.display = 'none';
+        }
+
+        // Filter content based on search
+        function filterContent() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            // This would be implemented to filter posts based on search term
+            // For simplicity, we're just reloading all content
+            loadConfessions();
+            loadEnemyPosts();
+        }
+
+        // Helper function to format time
+        function formatTime(timestamp) {
+            const date = new Date(timestamp);
+            const now = new Date();
+            const diff = now - date;
+            
+            if (diff < 60000) return 'Just now';
+            if (diff < 3600000) return `${Math.floor(diff / 60000)} minutes ago`;
+            if (diff < 86400000) return `${Math.floor(diff / 3600000)} hours ago`;
+            return `${Math.floor(diff / 86400000)} days ago`;
+        }
+
+        // Allow pressing Enter to send chat messages
+        document.getElementById('chatInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Allow pressing Enter to add comments
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && e.target.id && e.target.id.startsWith('comment-input-')) {
+                const postId = e.target.id.split('comment-input-')[1];
+                addComment(postId);
+            }
+            
+            if (e.key === 'Enter' && e.target.id === 'full-view-comment-input') {
+                const postId = currentPostId;
+                if (postId) {
+                    addCommentToFullView(postId);
+                }
+            }
+        });
+
+        // Initialize the app when the page loads
+        window.onload = initApp;
+    </script>
+</body>
+</html>
