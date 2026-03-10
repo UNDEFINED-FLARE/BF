@@ -8,7 +8,7 @@
       href="https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/1758334341084.jpg?alt=media&token=af2bb626-f7c8-44db-be34-e4cbaf00914d" 
       type="image/png"
     >
-      <link rel="stylesheet" href="reclaimer.css" title="" type="" />
+      <link rel="stylesheet" href="https://undefined-flare.github.io/BF/reclaimer.css" title="" type="" />
       <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-database.js"></script>
 
   <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-auth.js"></script>
@@ -42,7 +42,7 @@
         }
 
         .logo {
-            font-size: 1.5rem;
+            font-size: 1.rem;
             font-weight: bold;
             display: flex;
             align-items: center;
@@ -310,14 +310,43 @@ font-size: 9px;
                     <div class="hdrPage">
 
 
-                <img src="https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/1758334341084.jpg?alt=media&token=af2bb626-f7c8-44db-be34-e4cbaf00914d" alt="" class="schoolProfile" style="float:left;border:none;width:55px;height:55px;" />
+                <img src="https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/original-aef3771cc124ac9ca3be8c4e0ee71ff5.jpg?alt=media&token=83ef4409-f010-49d1-9809-832febab42d6" alt="" class="schoolProfile" style="float:left;border:none;width:55px;height:55px;" />
                 <br>
                 <p class="logo" style="color:RGB(100, 149, 237);letter-spacing: none;">
-                    Reclaim<b style="color:peru">•SA</b>
+                    Ask?<b style="color:peru">•Univen</b>
                 </p>
 
 
             </div>
+                  <div class="pageName" style="color:RGB(65, 105, 225);">
+            <div class="logo">
+
+
+            </div>
+
+            <nav class="nav-links">
+              <div class="nav-item">Home</div>
+              <div class="nav-item">Explore</div>
+              <div class="nav-item">Create</div>
+              <div class="nav-item">Messages</div>
+              <div class="nav-item">Profile</div>
+            </nav>
+
+            <div class="user-actions">
+              <div class="action-icon">
+                <i class="fas fa-search"></i>
+              </div>
+              <div class="action-icon">
+                <i class="fas fa-bell"></i>
+                <div class="notification-badge">3</div>
+              </div>
+              <div class="action-icon">
+                <i class="fas fa-envelope"></i>
+                <div class="notification-badge">5</div>
+              </div>
+              <img id="profilePicture" class="profile-pic" src="https://via.placeholder.com/50" alt alt="User" class="user-avatar">
+            </div>
+    </div>
 <body>
 
 
@@ -501,17 +530,17 @@ Our power does not lie in a ballot box alone. It lies in our hands, our skills, 
                 <div class="loading-spinner"></div>
                 <p>...</p>
             </div>
-            
+
             <div class="horizontal-scroll" id="newssContainer" style="display: none;">
                 <!-- newss will be loaded here from Firebase -->
             </div>
-            
+
             <div class="empty-state" id="emptyState" style="display: none;">
                 <i class="fas fa-newspaper"></i>
                 <h3>No newss Found</h3>
                 <p>There are no newss in the database yet.</p>
             </div>
-            
+
             <div class="controls" id="controls" style="display: none;">
                 <button class="btn" id="refreshBtn">
                     <i class="fas fa-sync-alt"></i> Refresh newss
@@ -582,7 +611,7 @@ Our power does not lie in a ballot box alone. It lies in our hands, our skills, 
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-    
+
     <!-- Add this CSS for the popup -->
 <style>
 #login-popup {
@@ -676,17 +705,17 @@ Our power does not lie in a ballot box alone. It lies in our hands, our skills, 
 auth.onAuthStateChanged(user => {
     // Check if user has previously made a choice (signed in or guest)
     const userChoice = localStorage.getItem('userChoice');
-    
+
     if (user) {
         // User is signed in
         document.getElementById('profilePicture').src = user.photoURL || 'https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/original-aef3771cc124ac9ca3be8c4e0ee71ff5.jpg?alt=media&token=83ef4409-f010-49d1-9809-832febab42d6';
         document.getElementById('user-info').textContent = user.email || 'Guest User';
         loadQuestions();
         loadPolls();
-        
+
         // Hide popup if it's visible
         document.getElementById('login-popup').classList.add('hidden');
-        
+
     } else if (userChoice === 'guest') {
         // User previously chose to continue as guest
         document.getElementById('profilePicture').src = 'https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/original-aef3771cc124ac9ca3be8c4e0ee71ff5.jpg?alt=media&token=83ef4409-f010-49d1-9809-832febab42d6';
@@ -694,7 +723,7 @@ auth.onAuthStateChanged(user => {
         loadArticles
         loadQuestions();
         loadPolls();
-        
+
     } else {
         // No user and no previous choice - show popup
         document.getElementById('login-popup').classList.remove('hidden');
@@ -712,14 +741,14 @@ document.getElementById('guest-btn').addEventListener('click',
 function() {
     // Set guest choice in localStorage
     localStorage.setItem('userChoice', 'guest');
-    
+
     // Hide popup
     document.getElementById('login-popup').classList.add('hidden');
-    
+
     // Update UI for guest
     document.getElementById('profilePicture').src = 'https://firebasestorage.googleapis.com/v0/b/rare-5f47e.appspot.com/o/original-aef3771cc124ac9ca3be8c4e0ee71ff5.jpg?alt=media&token=83ef4409-f010-49d1-9809-832febab42d6';
     document.getElementById('user-info').textContent = 'Guest User';
-    
+
     // Load content for guest
     loadQuestions();
     loadPolls();
@@ -738,7 +767,7 @@ function showLoginPopup() {
     document.getElementById('login-popup').classList.remove('hidden');
 }
 </script>
-    
+
 
 
     <script>
@@ -1704,7 +1733,7 @@ function showLoginPopup() {
             });
         }
     </script>
-    
+
         <script type="module">
         // Firebase configuration
 
@@ -1777,10 +1806,10 @@ function showLoginPopup() {
                 `;
                 document.body.appendChild(toast);
             }
-            
+
             toast.textContent = message;
             toast.style.opacity = '1';
-            
+
             setTimeout(() => {
                 toast.style.opacity = '0';
             }, 3000);
@@ -1789,18 +1818,18 @@ function showLoginPopup() {
         // Display newss from Firebase
         function displaynewss(newss) {
             newssContainer.innerHTML = '';
-            
+
             if (newss.length === 0) {
                 emptyState.style.display = 'block';
                 newssContainer.style.display = 'none';
                 controls.style.display = 'flex';
                 return;
             }
-            
+
             emptyState.style.display = 'none';
             newssContainer.style.display = 'flex';
             controls.style.display = 'flex';
-            
+
             newss.forEach((news) => {
                 // Count views, likes, and comments if they exist
                 const viewCount = news.views ? Object.keys(news.views).length : 0;
@@ -1854,23 +1883,23 @@ function showLoginPopup() {
             newssContainer.style.display = 'none';
             emptyState.style.display = 'none';
             controls.style.display = 'none';
-            
+
             const newsRef = database.ref('news');
-            
+
             newsRef.once('value')
                 .then((snapshot) => {
                     loadingIndicator.style.display = 'none';
-                    
+
                     const newss = [];
                     snapshot.forEach((childSnapshot) => {
                         const news = childSnapshot.val();
                         news.id = childSnapshot.key;
                         newss.push(news);
                     });
-                    
+
                     // Sort newss by timestamp (newest first)
                     newss.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
-                    
+
                     displaynewss(newss);
                     showToast(`Loaded ${newss.length} newss from Firebase`);
                 })
@@ -1878,7 +1907,7 @@ function showLoginPopup() {
                     loadingIndicator.style.display = 'none';
                     console.error("Error fetching newss:", error);
                     showToast("Error loading newss from database", true);
-                    
+
                     // Show empty state with error message
                     emptyState.innerHTML = `
                         <i class="fas fa-exclamation-triangle"></i>
@@ -1909,12 +1938,12 @@ function showLoginPopup() {
         document.addEventListener('DOMContentLoaded', () => {
             // Fetch newss from Firebase
             fetchnewss();
-            
+
             // Add event listeners
             refreshBtn.addEventListener('click', fetchnewss);
             scrollLeftBtn.addEventListener('click', scrollLeft);
             scrollRightBtn.addEventListener('click', scrollRight);
-            
+
             // Set up real-time updates (optional)
             // Uncomment if you want newss to update in real-time
             /*
