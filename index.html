@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>UNIVEN Link</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- AUTH SCREEN -->
+<div id="auth-screen" class="screen active">
+  <div class="auth-bg">
+    <div class="auth-blob b1"></div>
+    <div class="auth-blob b2"></div>
+    <div class="auth-blob b3"></div>
+  </div>
+  <div class="auth-container">
+  <img src="https://timetable.univen.ac.za/images/univen-crest.png" alt="" style="float:left;border:none;width:65px;height:65px;margin-left:10px;"/>
+  <br>
+<p class="logo" style="color:peru;letter-spacing: none;">
+  univen
+</p>    <p class="auth-tagline">Creating future leaders</p>
+
+    <div class="auth-tabs">
+      <button class="auth-tab active" onclick="switchAuthTab('login')">Sign In</button>
+      <button class="auth-tab" onclick="switchAuthTab('register')">Join</button>
+    </div>
+
+    <div id="login-form" class="auth-form">
+      <div class="input-group">
+        <label>Student Email</label>
+        <input type="email" id="login-email" placeholder="studentnumber@mvula.univen.ac.za">
+      </div>
+      <div class="input-group">
+        <label>Password</label>
+        <input type="password" id="login-password" placeholder="••••••••">
+      </div>
+      <button class="btn-primary" onclick="loginUser()">Sign In</button>
+      <button class="btn-ghost" onclick="loginGuest()">Continue as Guest</button>
+    </div>
+
+    <div id="register-form" class="auth-form hidden">
+      <div class="input-group">
+        <label>Full Name</label>
+        <input type="text" id="reg-name" placeholder="e.g. Lesedi Kekana">
+      </div>
+      <div class="input-group">
+        <label>Student Email</label>
+        <input type="email" id="reg-email" placeholder="studentnumber@mvula.univen.ac.za">
+      </div>
+      <div class="input-group">
+        <label>Role</label>
+        <select id="reg-role">
+          <option value="student">Student</option>
+          <option value="faculty">Faculty</option>
+          <option value="staff">Staff</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label>Password</label>
+        <input type="password" id="reg-password" placeholder="Min. 6 characters">
+      </div>
+      <button class="btn-primary" onclick="registerUser()">Create Account</button>
+    </div>
+
+    <p id="auth-error" class="auth-error hidden"></p>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="app-screen" class="screen">
+
+  <!-- TOP HEADER -->
+            <div class="hdrPage">
+
+
+  <img src="https://timetable.univen.ac.za/images/univen-crest.png" alt="" style="float:left;border:none;width:65px;height:65px;margin-left:10px;"/>
+  <br>
+<p class="logo" style="color:peru;letter-spacing: none;">
+  univen
+</p>
+
+
+</div>
+
+      <div class="pageName" style="color:RGB(65, 105, 225);">
+            <div class="logo">
+
+
+            </div>
+
+
+
+            <div class="user-actions">
+              <div class="action-icon" class="icon-btn" onclick="openSearch()">
+                <i class="fas fa-search"></i>
+              </div>
+              <div class="action-icon" onclick="showToast('Notifications coming soon!')"onclick="showToast('Notifications coming soon!')">
+                <i class="fas fa-bell"></i>
+                <div class="notification-badge">•</div>
+              </div>
+
+                    <div class="header-avatar" onclick="goToProfile()">
+        <img id="header-avatar-img" src="" alt="">
+        <span id="header-avatar-initials"></span>
+      </div>
+
+            </div>
+    </div>
+
+<!-- FEED FILTERS -->
+<div class="feed-filters" id="feed-filters">
+  <button class="filter-btn active" data-filter="latest" onclick="setFilter('latest', this)">🔥 Latest</button>
+  <button class="filter-btn" data-filter="smart" onclick="setFilter('smart', this)">⚡ Smart Feed</button>
+  <button class="filter-btn" data-filter="following" onclick="setFilter('following', this)">👥 Following</button>
+</div>
+
+  <!-- SEARCH BAR (hidden by default) -->
+  <div id="search-bar" class="search-bar hidden">
+    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="text" id="search-input" placeholder="Search posts, hashtags, people..." oninput="searchPosts(this.value)">
+    <button onclick="closeSearch()">✕</button>
+  </div>
+
+  <!-- PAGE CONTENT AREA -->
+  <main class="content-area" id="content-area">
+
+    <!-- HOME FEED -->
+    <section id="page-home" class="page active">
+      <div id="posts-container" class="posts-container">
+        <div class="loading-posts">
+          <div class="spinner"></div>
+          <p>Loading feed...</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- NEWS PAGE -->
+    <section id="page-news" class="page">
+      <div class="page-header-inner">
+        <h2>📰 Official Notices</h2>
+        <p>University announcements & events</p>
+      </div>
+      <div id="news-container" class="posts-container"></div>
+    </section>
+
+    <!-- Q&A PAGE -->
+    <section id="page-qa" class="page">
+      <div class="page-header-inner">
+        <h2>❓ Campus Q&A</h2>
+        <p>Ask. Answer. Learn together.</p>
+      </div>
+      <div id="qa-container" class="posts-container"></div>
+    </section>
+
+    <!-- VIDEOS PAGE -->
+    <section id="page-videos" class="page">
+      <div class="page-header-inner">
+        <h2>🎥 Campus Videos</h2>
+        <p>Lectures, events & student showcases</p>
+      </div>
+      <div class="videos-grid" id="videos-grid">
+        <div class="video-card" onclick="showToast('Video player coming soon!')">
+          <div class="video-thumb" style="background:linear-gradient(135deg,#0B1F3A,#0E6B50)">
+            <div class="play-btn">▶</div>
+            <span class="vid-duration">12:34</span>
+          </div>
+          <p>Strategic Planning Webinar 2026</p>
+          <span>Dr. I.C. Mulaudzi · 1.2k views</span>
+        </div>
+        <div class="video-card" onclick="showToast('Video player coming soon!')">
+          <div class="video-thumb" style="background:linear-gradient(135deg,#1a3a5c,#D4A017)">
+            <div class="play-btn">▶</div>
+            <span class="vid-duration">5:21</span>
+          </div>
+          <p>Campus Life Highlights – Semester 1</p>
+          <span>SRC · 843 views</span>
+        </div>
+        <div class="video-card" onclick="showToast('Video player coming soon!')">
+          <div class="video-thumb" style="background:linear-gradient(135deg,#0E6B50,#0B1F3A)">
+            <div class="play-btn">▶</div>
+            <span class="vid-duration">8:05</span>
+          </div>
+          <p>Accounting 101 – Tutorial Session</p>
+          <span>Dept. of Finance · 2.1k views</span>
+        </div>
+        <div class="video-card" onclick="showToast('Video player coming soon!')">
+          <div class="video-thumb" style="background:linear-gradient(135deg,#2d1b4e,#D4A017)">
+            <div class="play-btn">▶</div>
+            <span class="vid-duration">3:47</span>
+          </div>
+          <p>Student Research Showcase 2026</p>
+          <span>UNIVEN Research · 567 views</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- GROUPS PAGE -->
+    <section id="page-groups" class="page">
+      <div class="page-header-inner">
+        <h2>👥 Groups</h2>
+        <p>Study groups, clubs & departments</p>
+      </div>
+      <div class="groups-grid">
+        <div class="group-card" onclick="openGroup('accounting')">
+          <div class="group-icon" style="background:#0B1F3A">📊</div>
+          <div class="group-info">
+            <h4>Accounting 101</h4>
+            <p>342 members · Active</p>
+          </div>
+          <button class="join-btn">Join</button>
+        </div>
+        <div class="group-card" onclick="openGroup('cs')">
+          <div class="group-icon" style="background:#0E6B50">💻</div>
+          <div class="group-info">
+            <h4>CS Study Group</h4>
+            <p>218 members · Active</p>
+          </div>
+          <button class="join-btn joined">Joined</button>
+        </div>
+        <div class="group-card" onclick="openGroup('src')">
+          <div class="group-icon" style="background:#D4A017">🎓</div>
+          <div class="group-info">
+            <h4>SRC – Student Council</h4>
+            <p>1.2k members · Official</p>
+          </div>
+          <button class="join-btn">Join</button>
+        </div>
+        <div class="group-card" onclick="openGroup('research')">
+          <div class="group-icon" style="background:#1a3a5c">🔬</div>
+          <div class="group-info">
+            <h4>Research Hub</h4>
+            <p>87 members · Invite only</p>
+          </div>
+          <button class="join-btn">Request</button>
+        </div>
+        <div class="group-card" onclick="openGroup('residence')">
+          <div class="group-icon" style="background:#2d5a3d">🏠</div>
+          <div class="group-info">
+            <h4>Residence Hall A</h4>
+            <p>156 members · Active</p>
+          </div>
+          <button class="join-btn">Join</button>
+        </div>
+        <div class="group-card" onclick="openGroup('sports')">
+          <div class="group-icon" style="background:#5a1a1a">⚽</div>
+          <div class="group-info">
+            <h4>UNIVEN Sports</h4>
+            <p>523 members · Active</p>
+          </div>
+          <button class="join-btn">Join</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROFILE PAGE -->
+    <section id="page-profile" class="page">
+      <div class="profile-header">
+        <div class="profile-cover"></div>
+        <div class="profile-info">
+          <div class="profile-big-avatar">
+            <img id="profile-avatar-img" src="" alt="">
+            <span id="profile-avatar-initials"></span>
+          </div>
+          <div class="profile-details">
+            <h2 id="profile-name">Loading...</h2>
+            <p id="profile-role" class="profile-role-badge">Student</p>
+            <p id="profile-email" class="profile-email"></p>
+          </div>
+          <div class="profile-stats">
+            <div class="stat"><span id="stat-posts">0</span><label>Posts</label></div>
+            <div class="stat"><span>—</span><label>Followers</label></div>
+            <div class="stat"><span>—</span><label>Following</label></div>
+          </div>
+          <button class="btn-outline-primary" onclick="signOutUser()">Sign Out</button>
+        </div>
+      </div>
+      <div id="profile-posts" class="posts-container" style="padding-top:8px"></div>
+    </section>
+
+  </main>
+
+  <!-- FAB -->
+  <button class="fab" id="fab" onclick="openComposer()">
+    <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+  </button>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" onclick="goToPage('home', this)" data-label="Home">
+      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span>Home</span>
+    </button>
+    <button class="nav-item" onclick="goToPage('news', this)" data-label="News">
+      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/></svg>
+      <span>News</span>
+    </button>
+    <button class="nav-item" onclick="goToPage('qa', this)" data-label="Q&A">
+      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+      <span>Q&A</span>
+    </button>
+    <button class="nav-item" onclick="goToPage('videos', this)" data-label="Videos">
+      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+      <span>Videos</span>
+    </button>
+    <button class="nav-item" onclick="goToPage('groups', this)" data-label="Groups">
+      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <span>Groups</span>
+    </button>
+  </nav>
+</div>
+
+<!-- POST COMPOSER MODAL -->
+<div id="composer-modal" class="modal-overlay hidden">
+  <div class="composer-sheet">
+    <div class="composer-header">
+      <button class="composer-cancel" onclick="closeComposer()">Cancel</button>
+      <h3>Create Post</h3>
+      <button class="composer-post-btn" onclick="submitPost()" id="post-btn" disabled>Post</button>
+    </div>
+
+    <div class="identity-selector">
+      <span>Post as:</span>
+      <div class="identity-toggle">
+        <button class="id-option active" id="id-real" onclick="setIdentity('real')">
+          <div class="id-avatar" id="composer-avatar-preview"></div>
+          <span id="composer-name-preview">You</span>
+        </button>
+        <button class="id-option" id="id-anon" onclick="setIdentity('anon')">
+          <div class="id-avatar anon">👤</div>
+          <span>Anonymous</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="composer-type-row">
+      <label>Category:</label>
+      <select id="post-category">
+        <option value="general">💬 General</option>
+        <option value="question">❓ Question</option>
+        <option value="announcement">📢 Announcement</option>
+        <option value="event">📅 Event</option>
+        <option value="resource">📚 Resource</option>
+      </select>
+    </div>
+
+    <textarea id="post-text" class="composer-textarea" placeholder="What's happening around campus?" maxlength="500" oninput="onComposerInput(this)"></textarea>
+
+    <div id="hashtag-preview" class="hashtag-preview"></div>
+
+    <div class="composer-actions-row">
+      <button class="action-chip" onclick="showToast('Image upload coming soon!')">📷 Image</button>
+      <button class="action-chip" onclick="insertTeamsLink()">🔗 Link</button>
+      <button class="action-chip" onclick="insertPoll()">📊 Poll</button>
+    </div>
+
+    <div id="poll-section" class="poll-section hidden">
+      <input type="text" id="poll-opt1" placeholder="Option 1" class="poll-input">
+      <input type="text" id="poll-opt2" placeholder="Option 2" class="poll-input">
+      <input type="text" id="poll-opt3" placeholder="Option 3 (optional)" class="poll-input">
+    </div>
+
+    <div id="link-section" class="link-section hidden">
+      <input type="url" id="link-url" placeholder="Paste Teams / Meet / Zoom link..." class="poll-input">
+      <input type="text" id="link-title" placeholder="Event title" class="poll-input">
+    </div>
+
+    <div class="composer-footer">
+      <span id="char-count" class="char-count">0 / 500</span>
+    </div>
+  </div>
+</div>
+
+<!-- POST DETAIL MODAL -->
+<div id="post-modal" class="modal-overlay hidden">
+  <div class="post-detail-sheet">
+    <div class="post-detail-header">
+      <button onclick="closePostModal()">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>
+        Back
+      </button>
+      <h3>Post</h3>
+      <div></div>
+    </div>
+    <div id="post-detail-content"></div>
+    <div class="comment-composer">
+      <div class="comment-avatar" id="comment-avatar"></div>
+      <input type="text" id="comment-input" placeholder="Write a reply..." onkeydown="if(event.key==='Enter')submitComment()">
+      <button onclick="submitComment()" class="send-btn">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast" class="toast hidden"></div>
+
+<!-- Firebase SDK - Using correct versions for Realtime Database -->
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
