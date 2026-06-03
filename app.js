@@ -118,7 +118,7 @@ try {
 
 }
 
-function loginGuest() {
+window.addEventListener("load", (event) => {
 // FIXED: Guest login now properly creates a guest user object
 // and enters the app without requiring Firebase authentication
 currentUser = {
@@ -133,7 +133,8 @@ email: 'guest@univen.ac.za'
 };
 // Call enterApp directly to bypass auth requirement
 enterApp(currentUser);
-}
+console.log('guest autom');
+});
 
 function getAuthError(code) {
 const errors = {
