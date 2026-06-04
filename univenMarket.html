@@ -552,19 +552,22 @@ function timeAgo(ts){
 let toast1Timer;
 function toast1(msg, type='', dur=3500){
   const el = $('toast1');
+  if(!el) return;
   el.textContent = msg; el.className = 'toast1 '+(type||'');
   clearTimeout(toast1Timer);
-  toast1Timer = setTimeout(()=>el.className='toast1 hidden', dur);
+  toast1Timer = setTimeout(()=>{ if(el) el.className='toast1 hidden'; }, dur);
 }
 function saveWishlist(){ localStorage.setItem('vm_wishlist', JSON.stringify(wishlist)); updateWishlistBadge(); }
 function saveCart(){ localStorage.setItem('vm_cart', JSON.stringify(cart)); updateCartBadge(); }
 function updateWishlistBadge(){
   const b = $('wishlist-count-badge');
+  if(!b) return;
   if(wishlist.length>0){ b.textContent=wishlist.length; b.classList.remove('hidden'); }
   else b.classList.add('hidden');
 }
 function updateCartBadge(){
   const fab = $('cart-fab'), cnt = $('cart-count');
+  if(!fab || !cnt) return;
   const total = cart.reduce((a,c)=>a+c.qty,0);
   if(total>0){ fab.classList.remove('hidden'); cnt.textContent=total; }
   else fab.classList.add('hidden');
@@ -601,7 +604,9 @@ function filteredListings(){
 function renderListings(){
   const arr = filteredListings();
   const grid = $('cards-grid');
-  $('result-count').textContent = `${arr.length} product${arr.length!==1?'s':''} found`;
+  const resultCount = $('result-count');
+  if(!grid || !resultCount) return;
+  resultCount.textContent = `${arr.length} product${arr.length!==1?'s':''} found`;
   if(arr.length===0){
     grid.innerHTML = `<div class="empty-state"><div class="empty-icon">🛒</div><h3>No products yet</h3><p>Be the first to list in this category!</p><button class="btn-full btn-full-green" style="max-width:240px;margin:0 auto" onclick="openSeller()"><i class="fas fa-plus"></i> Start Selling</button></div>`;
     return;
@@ -636,20 +641,26 @@ function renderListings(){
       </div>
     </div>`;
   }).join('');
-  // card click → detail
   document.querySelectorAll('.card[data-id]').forEach(c=>{
     c.addEventListener('click', ()=>openDetail(c.dataset.id));
   });
 }
 
 function updateStats(){
-  $('stat-products').textContent = allListings.length;
-  db.ref('vendamarket/sellers').once('value', s=>{
-    $('stat-sellers').textContent = s.val() ? Object.keys(s.val()).length : 0;
-  });
-  db.ref('vendamarket/orders').orderByChild('createdAt').startAt(Date.now()-86400000).once('value',s=>{
-    $('stat-orders').textContent = s.val() ? Object.keys(s.val()).length : 0;
-  });
+  const statProducts = $('stat-products');
+  const statSellers = $('stat-sellers');
+  const statOrders = $('stat-orders');
+  if(statProducts) statProducts.textContent = allListings.length;
+  if(statSellers){
+    db.ref('vendamarket/sellers').once('value', s=>{
+      if(statSellers) statSellers.textContent = s.val() ? Object.keys(s.val()).length : 0;
+    });
+  }
+  if(statOrders){
+    db.ref('vendamarket/orders').orderByChild('createdAt').startAt(Date.now()-86400000).once('value', s=>{
+      if(statOrders) statOrders.textContent = s.val() ? Object.keys(s.val()).length : 0;
+    });
+  }
 }
 
 // ======================== WISHLIST ========================
@@ -665,7 +676,9 @@ function openDetail(id){
   const p = allListings.find(l=>l.id===id);
   if(!p) return;
   const liked = wishlist.includes(id);
-  $('detail-content').innerHTML = `
+  const detailContent = $('detail-content');
+  if(!detailContent) return;
+  detailContent.innerHTML = `
     <div class="modal-header" style="margin-bottom:0.5rem">
       <span></span>
       <button class="close-btn" onclick="$('detail-drawer').classList.add('hidden')">&times;</button>
@@ -690,7 +703,8 @@ function openDetail(id){
       <i class="fa${liked?'s':'r'} fa-heart"></i> ${liked?'Remove from Wishlist':'Save to Wishlist'}
     </button>
   `;
-  $('detail-drawer').classList.remove('hidden');
+  const drawer = $('detail-drawer');
+  if(drawer) drawer.classList.remove('hidden');
 }
 
 // ======================== ORDER MODAL ========================
@@ -698,62 +712,83 @@ function openOrder(id){
   const p = allListings.find(l=>l.id===id);
   if(!p) return;
   orderProduct = p; orderQty = 1;
-  $('qty-display').textContent = 1;
+  const qtyDisplay = $('qty-display');
+  if(qtyDisplay) qtyDisplay.textContent = 1;
   updateOrderTotal();
-  $('order-product-preview').innerHTML = `
-    <div class="order-product-card">
-      <div class="order-product-emoji">${catEmoji(p.category)}</div>
-      <div class="order-product-info">
-        <h4>${esc(p.title)}</h4>
-        <div class="price-tag">${formatPrice(p.price)}</div>
-        <div class="shop-tag"><i class="fas fa-store" style="font-size:0.7rem;margin-right:3px"></i>${esc(p.shopName)}</div>
-      </div>
-    </div>`;
-  $('order-modal').classList.remove('hidden');
-  $('buyer-name').focus();
+  const orderPreview = $('order-product-preview');
+  if(orderPreview){
+    orderPreview.innerHTML = `
+      <div class="order-product-card">
+        <div class="order-product-emoji">${catEmoji(p.category)}</div>
+        <div class="order-product-info">
+          <h4>${esc(p.title)}</h4>
+          <div class="price-tag">${formatPrice(p.price)}</div>
+          <div class="shop-tag"><i class="fas fa-store" style="font-size:0.7rem;margin-right:3px"></i>${esc(p.shopName)}</div>
+        </div>
+      </div>`;
+  }
+  const modal = $('order-modal');
+  if(modal) modal.classList.remove('hidden');
+  const buyerName = $('buyer-name');
+  if(buyerName) buyerName.focus();
 }
 function updateOrderTotal(){
   if(!orderProduct) return;
-  $('order-total').textContent = formatPrice(orderProduct.price * orderQty);
+  const orderTotal = $('order-total');
+  if(orderTotal) orderTotal.textContent = formatPrice(orderProduct.price * orderQty);
 }
-$('qty-minus').addEventListener('click',()=>{ if(orderQty>1) orderQty--; $('qty-display').textContent=orderQty; updateOrderTotal(); });
-$('qty-plus').addEventListener('click',()=>{ orderQty++; $('qty-display').textContent=orderQty; updateOrderTotal(); });
-$('close-order-modal').addEventListener('click',()=>$('order-modal').classList.add('hidden'));
 
-$('submit-order-btn').addEventListener('click', async ()=>{
-  if(!orderProduct) return;
-  const name = $('buyer-name').value.trim();
-  const phone = $('buyer-phone').value.trim();
-  const location = $('buyer-location').value.trim();
-  const note = $('order-note').value.trim();
-  if(!name){ toast1('Please enter your name','error'); return; }
-  if(!phone){ toast1('Please enter your phone number','error'); return; }
-  const oid = genId();
-  const order = {
-    orderId:oid, productId:orderProduct.id, productTitle:orderProduct.title,
-    shopId:orderProduct.sellerId, shopName:orderProduct.shopName,
-    sellerWhatsapp:orderProduct.whatsapp, price:orderProduct.price,
-    buyerName:name, buyerPhone:phone, buyerLocation:location,
-    quantity:orderQty, total:orderProduct.price*orderQty,
-    note, status:'pending', createdAt:Date.now()
-  };
-  try {
-    await db.ref('vendamarket/orders/'+oid).set(order);
-    await db.ref(`vendamarket/sellerInbox/${orderProduct.sellerId}/${oid}`).set(order);
-    toast1(`✅ Order #${oid} placed! Seller notified.`, 'success', 5000);
-    localStorage.setItem('last_order_id', oid);
-    $('order-modal').classList.add('hidden');
-    ['buyer-name','buyer-phone','buyer-location','order-note'].forEach(id=>$(id).value='');
-  } catch(e){ toast1('Error placing order. Try again.','error'); console.error(e); }
-});
-
-$('whatsapp-order-btn').addEventListener('click',()=>{
-  if(!orderProduct) return;
-  const name = $('buyer-name').value.trim()||'a student';
-  const wa = orderProduct.whatsapp?.replace(/\D/g,'');
-  if(!wa){ toast1('No WhatsApp number for this seller','error'); return; }
-  const msg = `Hi! I'm ordering *${orderProduct.title}* (×${orderQty}) = *${formatPrice(orderProduct.price*orderQty)}* via Venda Market. My name: ${name}.${$('order-note').value?'\nNote: '+$('order-note').value:''}`;
-  window.open(`https://wa.me/${wa}?text=${encodeURIComponent(msg)}`,'_blank');
+// Safe event binding after DOM ready
+document.addEventListener('DOMContentLoaded', () => {
+  const qtyMinus = $('qty-minus');
+  const qtyPlus = $('qty-plus');
+  if(qtyMinus) qtyMinus.addEventListener('click',()=>{ if(orderQty>1) orderQty--; const qd=$('qty-display'); if(qd) qd.textContent=orderQty; updateOrderTotal(); });
+  if(qtyPlus) qtyPlus.addEventListener('click',()=>{ orderQty++; const qd=$('qty-display'); if(qd) qd.textContent=orderQty; updateOrderTotal(); });
+  
+  const closeOrder = $('close-order-modal');
+  if(closeOrder) closeOrder.addEventListener('click',()=>{ const om=$('order-modal'); if(om) om.classList.add('hidden'); });
+  
+  const submitBtn = $('submit-order-btn');
+  if(submitBtn) submitBtn.addEventListener('click', async ()=>{
+    if(!orderProduct) return;
+    const name = $('buyer-name')?.value.trim() || '';
+    const phone = $('buyer-phone')?.value.trim() || '';
+    const location = $('buyer-location')?.value.trim() || '';
+    const note = $('order-note')?.value.trim() || '';
+    if(!name){ toast1('Please enter your name','error'); return; }
+    if(!phone){ toast1('Please enter your phone number','error'); return; }
+    const oid = genId();
+    const order = {
+      orderId:oid, productId:orderProduct.id, productTitle:orderProduct.title,
+      shopId:orderProduct.sellerId, shopName:orderProduct.shopName,
+      sellerWhatsapp:orderProduct.whatsapp, price:orderProduct.price,
+      buyerName:name, buyerPhone:phone, buyerLocation:location,
+      quantity:orderQty, total:orderProduct.price*orderQty,
+      note, status:'pending', createdAt:Date.now()
+    };
+    try {
+      await db.ref('vendamarket/orders/'+oid).set(order);
+      await db.ref(`vendamarket/sellerInbox/${orderProduct.sellerId}/${oid}`).set(order);
+      toast1(`✅ Order #${oid} placed! Seller notified.`, 'success', 5000);
+      localStorage.setItem('last_order_id', oid);
+      const modal = $('order-modal');
+      if(modal) modal.classList.add('hidden');
+      ['buyer-name','buyer-phone','buyer-location','order-note'].forEach(id=>{
+        const el = $(id);
+        if(el) el.value='';
+      });
+    } catch(e){ toast1('Error placing order. Try again.','error'); console.error(e); }
+  });
+  
+  const waOrderBtn = $('whatsapp-order-btn');
+  if(waOrderBtn) waOrderBtn.addEventListener('click',()=>{
+    if(!orderProduct) return;
+    const name = $('buyer-name')?.value.trim()||'a student';
+    const wa = orderProduct.whatsapp?.replace(/\D/g,'');
+    if(!wa){ toast1('No WhatsApp number for this seller','error'); return; }
+    const msg = `Hi! I'm ordering *${orderProduct.title}* (×${orderQty}) = *${formatPrice(orderProduct.price*orderQty)}* via Venda Market. My name: ${name}.${$('order-note')?.value?'\nNote: '+$('order-note').value:''}`;
+    window.open(`https://wa.me/${wa}?text=${encodeURIComponent(msg)}`,'_blank');
+  });
 });
 
 function waContact(wa, title){
@@ -763,82 +798,105 @@ function waContact(wa, title){
 }
 
 // ======================== TRACK ORDER ========================
-$('track-order-btn').addEventListener('click',()=>$('track-modal').classList.remove('hidden'));
-$('close-track-modal').addEventListener('click',()=>$('track-modal').classList.add('hidden'));
-$('do-track-btn').addEventListener('click', async ()=>{
-  const oid = $('track-input').value.trim().toUpperCase();
-  if(!oid){ toast1('Enter order ID','error'); return; }
-  const snap = await db.ref('vendamarket/orders/'+oid).once('value');
-  const o = snap.val();
-  const statusMap = {
-    pending:{color:'#E65100',bg:'#FFF3E0',icon:'🕐',label:'Pending — Seller reviewing'},
-    confirmed:{color:'#1565C0',bg:'#E3F2FD',icon:'✅',label:'Confirmed — Being prepared'},
-    ready:{color:'#6A1B9A',bg:'#F3E5F5',icon:'📦',label:'Ready — Come collect!'},
-    delivered:{color:'#2E7D32',bg:'#E8F5E9',icon:'🎉',label:'Delivered!'},
-    cancelled:{color:'#C62828',bg:'#FFEBEE',icon:'❌',label:'Cancelled'}
-  };
-  if(!o){
-    $('track-result').innerHTML = `<div style="padding:1rem;background:#FFEBEE;border-radius:var(--r-md);text-align:center"><strong>Order not found.</strong><br>Check your order ID.</div>`;
-    return;
-  }
-  const st = statusMap[o.status]||statusMap.pending;
-  $('track-result').innerHTML = `
-    <div style="background:${st.bg};border-radius:var(--r-md);padding:1.2rem">
-      <div style="font-size:2rem;text-align:center;margin-bottom:0.5rem">${st.icon}</div>
-      <h4 style="text-align:center;color:${st.color};margin-bottom:0.8rem">${st.label}</h4>
-      <div style="font-size:0.85rem;display:grid;gap:0.3rem">
-        <div>📦 <strong>${esc(o.productTitle)}</strong> ×${o.quantity}</div>
-        <div>🏪 ${esc(o.shopName)}</div>
-        <div>💰 ${formatPrice(o.total||o.price*o.quantity)}</div>
-        <div>🕐 ${new Date(o.createdAt).toLocaleString()}</div>
-        ${o.buyerLocation?`<div>📍 ${esc(o.buyerLocation)}</div>`:''}
-      </div>
-    </div>`;
+document.addEventListener('DOMContentLoaded', () => {
+  const trackBtn = $('track-order-btn');
+  if(trackBtn) trackBtn.addEventListener('click',()=>{ const tm=$('track-modal'); if(tm) tm.classList.remove('hidden'); });
+  const closeTrack = $('close-track-modal');
+  if(closeTrack) closeTrack.addEventListener('click',()=>{ const tm=$('track-modal'); if(tm) tm.classList.add('hidden'); });
+  const doTrack = $('do-track-btn');
+  if(doTrack) doTrack.addEventListener('click', async ()=>{
+    const oid = $('track-input')?.value.trim().toUpperCase();
+    if(!oid){ toast1('Enter order ID','error'); return; }
+    const snap = await db.ref('vendamarket/orders/'+oid).once('value');
+    const o = snap.val();
+    const statusMap = {
+      pending:{color:'#E65100',bg:'#FFF3E0',icon:'🕐',label:'Pending — Seller reviewing'},
+      confirmed:{color:'#1565C0',bg:'#E3F2FD',icon:'✅',label:'Confirmed — Being prepared'},
+      ready:{color:'#6A1B9A',bg:'#F3E5F5',icon:'📦',label:'Ready — Come collect!'},
+      delivered:{color:'#2E7D32',bg:'#E8F5E9',icon:'🎉',label:'Delivered!'},
+      cancelled:{color:'#C62828',bg:'#FFEBEE',icon:'❌',label:'Cancelled'}
+    };
+    const trackResult = $('track-result');
+    if(!trackResult) return;
+    if(!o){
+      trackResult.innerHTML = `<div style="padding:1rem;background:#FFEBEE;border-radius:var(--r-md);text-align:center"><strong>Order not found.</strong><br>Check your order ID.</div>`;
+      return;
+    }
+    const st = statusMap[o.status]||statusMap.pending;
+    trackResult.innerHTML = `
+      <div style="background:${st.bg};border-radius:var(--r-md);padding:1.2rem">
+        <div style="font-size:2rem;text-align:center;margin-bottom:0.5rem">${st.icon}</div>
+        <h4 style="text-align:center;color:${st.color};margin-bottom:0.8rem">${st.label}</h4>
+        <div style="font-size:0.85rem;display:grid;gap:0.3rem">
+          <div>📦 <strong>${esc(o.productTitle)}</strong> ×${o.quantity}</div>
+          <div>🏪 ${esc(o.shopName)}</div>
+          <div>💰 ${formatPrice(o.total||o.price*o.quantity)}</div>
+          <div>🕐 ${new Date(o.createdAt).toLocaleString()}</div>
+          ${o.buyerLocation?`<div>📍 ${esc(o.buyerLocation)}</div>`:''}
+        </div>
+      </div>`;
+  });
 });
 
 // ======================== SEARCH / FILTER ========================
-$('search-input').addEventListener('input', e=>{ searchQ=e.target.value; renderListings(); });
-$('search-btn').addEventListener('click', ()=>renderListings());
-$('sort-select').addEventListener('change', e=>{ sortBy=e.target.value; renderListings(); });
-document.querySelectorAll('.cat').forEach(c=>{
-  c.addEventListener('click',()=>{
-    document.querySelectorAll('.cat').forEach(x=>x.classList.remove('active'));
-    c.classList.add('active'); currentCat=c.dataset.cat; renderListings();
+document.addEventListener('DOMContentLoaded', () => {
+  const searchInput = $('search-input');
+  if(searchInput) searchInput.addEventListener('input', e=>{ searchQ=e.target.value; renderListings(); });
+  const searchBtn = $('search-btn');
+  if(searchBtn) searchBtn.addEventListener('click', ()=>renderListings());
+  const sortSelect = $('sort-select');
+  if(sortSelect) sortSelect.addEventListener('change', e=>{ sortBy=e.target.value; renderListings(); });
+  document.querySelectorAll('.cat').forEach(c=>{
+    c.addEventListener('click',()=>{
+      document.querySelectorAll('.cat').forEach(x=>x.classList.remove('active'));
+      c.classList.add('active'); currentCat=c.dataset.cat; renderListings();
+    });
   });
 });
 
 // ======================== WISHLIST VIEW ========================
-$('wishlist-nav-btn').addEventListener('click',()=>{
-  if(wishlist.length===0){ toast1('Your wishlist is empty! Heart a product to save it.'); return; }
-  const prev = currentCat; currentCat='all'; searchQ='';
-  const arr = allListings.filter(l=>wishlist.includes(l.id));
-  const grid=$('cards-grid');
-  $('result-count').textContent=`${arr.length} wishlist item${arr.length!==1?'s':''}`;
-  grid.innerHTML=`<div style="grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;padding:0 0 0.5rem"><h3 style="font-size:1.1rem"><i class="fas fa-heart" style="color:var(--danger)"></i> Your Wishlist</h3><button style="background:none;border:none;font-size:0.85rem;color:var(--muted);cursor:pointer" onclick="renderListings()">← Back to all</button></div>`+arr.map((item,i)=>{
-    return `<div class="card fade-up" style="animation-delay:${i*0.04}s" data-id="${item.id}">
-      <div class="card-img"><span class="cat-emoji">${catEmoji(item.category)}</span><span class="card-badge">${esc(item.category)}</span><button class="wishlist-btn liked" data-wid="${item.id}" onclick="event.stopPropagation();toggleWishlist('${item.id}')"><i class="fas fa-heart"></i></button></div>
-      <div class="card-body"><div class="card-top"><div class="card-title">${esc(item.title)}</div><div class="card-price">${formatPrice(item.price)}</div></div><div class="card-shop"><i class="fas fa-store" style="font-size:0.7rem;color:var(--green)"></i> ${esc(item.shopName)}</div><div class="card-actions"><button class="btn-wa" onclick="event.stopPropagation();waContact('${item.whatsapp}','${esc(item.title)}')"><i class="fab fa-whatsapp"></i></button><button class="btn-order" onclick="event.stopPropagation();openOrder('${item.id}')"><i class="fas fa-bolt"></i> Order</button></div></div>
-    </div>`;
-  }).join('');
-  document.querySelectorAll('.card[data-id]').forEach(c=>c.addEventListener('click',()=>openDetail(c.dataset.id)));
+document.addEventListener('DOMContentLoaded', () => {
+  const wishlistBtn = $('wishlist-nav-btn');
+  if(wishlistBtn) wishlistBtn.addEventListener('click',()=>{
+    if(wishlist.length===0){ toast1('Your wishlist is empty! Heart a product to save it.'); return; }
+    const arr = allListings.filter(l=>wishlist.includes(l.id));
+    const grid = $('cards-grid');
+    const resultCount = $('result-count');
+    if(!grid || !resultCount) return;
+    resultCount.textContent=`${arr.length} wishlist item${arr.length!==1?'s':''}`;
+    grid.innerHTML=`<div style="grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;padding:0 0 0.5rem"><h3 style="font-size:1.1rem"><i class="fas fa-heart" style="color:var(--danger)"></i> Your Wishlist</h3><button style="background:none;border:none;font-size:0.85rem;color:var(--muted);cursor:pointer" onclick="renderListings()">← Back to all</button></div>`+arr.map((item,i)=>{
+      return `<div class="card fade-up" style="animation-delay:${i*0.04}s" data-id="${item.id}">
+        <div class="card-img"><span class="cat-emoji">${catEmoji(item.category)}</span><span class="card-badge">${esc(item.category)}</span><button class="wishlist-btn liked" data-wid="${item.id}" onclick="event.stopPropagation();toggleWishlist('${item.id}')"><i class="fas fa-heart"></i></button></div>
+        <div class="card-body"><div class="card-top"><div class="card-title">${esc(item.title)}</div><div class="card-price">${formatPrice(item.price)}</div></div><div class="card-shop"><i class="fas fa-store" style="font-size:0.7rem;color:var(--green)"></i> ${esc(item.shopName)}</div><div class="card-actions"><button class="btn-wa" onclick="event.stopPropagation();waContact('${item.whatsapp}','${esc(item.title)}')"><i class="fab fa-whatsapp"></i></button><button class="btn-order" onclick="event.stopPropagation();openOrder('${item.id}')"><i class="fas fa-bolt"></i> Order</button></div></div>
+      </div>`;
+    }).join('');
+    document.querySelectorAll('.card[data-id]').forEach(c=>c.addEventListener('click',()=>openDetail(c.dataset.id)));
+  });
 });
 
 // ======================== CART (multi-item) ========================
-$('cart-fab').addEventListener('click',()=>{
-  const drawer=$('cart-drawer');
-  if(drawer.classList.contains('open')){ drawer.classList.remove('open'); return; }
-  renderCart(); drawer.classList.add('open');
+document.addEventListener('DOMContentLoaded', () => {
+  const cartFab = $('cart-fab');
+  if(cartFab) cartFab.addEventListener('click',()=>{
+    const drawer=$('cart-drawer');
+    if(!drawer) return;
+    if(drawer.classList.contains('open')){ drawer.classList.remove('open'); return; }
+    renderCart(); drawer.classList.add('open');
+  });
+  const closeCart = $('close-cart');
+  if(closeCart) closeCart.addEventListener('click',()=>{ const cd=$('cart-drawer'); if(cd) cd.classList.remove('open'); });
 });
-$('close-cart').addEventListener('click',()=>$('cart-drawer').classList.remove('open'));
 function renderCart(){
-  if(cart.length===0){ $('cart-items').innerHTML=`<p style="text-align:center;color:var(--muted);padding:1rem">Cart is empty</p>`; return; }
-  $('cart-items').innerHTML = cart.map(item=>`
+  const cartItems = $('cart-items');
+  if(!cartItems) return;
+  if(cart.length===0){ cartItems.innerHTML=`<p style="text-align:center;color:var(--muted);padding:1rem">Cart is empty</p>`; return; }
+  cartItems.innerHTML = cart.map(item=>`
     <div class="listing-row" style="margin-bottom:0.5rem">
       <div>${catEmoji(item.category)} <strong>${esc(item.title)}</strong><br><small>${formatPrice(item.price)} × ${item.qty} = ${formatPrice(item.price*item.qty)}</small></div>
       <button class="btn-sm btn-danger" onclick="removeFromCart('${item.id}')"><i class="fas fa-trash"></i></button>
     </div>`).join('');
   const total = cart.reduce((a,c)=>a+c.price*c.qty,0);
-  $('cart-items').innerHTML += `<div class="total-line"><span>Cart Total</span><span>${formatPrice(total)}</span></div>`;
+  cartItems.innerHTML += `<div class="total-line"><span>Cart Total</span><span>${formatPrice(total)}</span></div>`;
 }
 function addToCart(id){
   const p = allListings.find(l=>l.id===id); if(!p) return;
@@ -850,19 +908,29 @@ function removeFromCart(id){ cart=cart.filter(c=>c.id!==id); saveCart(); renderC
 
 // ======================== SELLER PORTAL ========================
 function openSeller(){
-  $('marketplace-screen').classList.remove('active');
-  $('seller-screen').classList.add('active');
+  const marketplace = $('marketplace-screen');
+  const sellerScreen = $('seller-screen');
+  if(marketplace) marketplace.classList.remove('active');
+  if(sellerScreen) sellerScreen.classList.add('active');
   if(currentSeller) loadSellerDashboard();
   else renderSellerAuth();
 }
-$('open-seller-btn').addEventListener('click', openSeller);
-$('back-market-btn').addEventListener('click',()=>{
-  $('seller-screen').classList.remove('active');
-  $('marketplace-screen').classList.add('active');
+document.addEventListener('DOMContentLoaded', () => {
+  const openSellerBtn = $('open-seller-btn');
+  if(openSellerBtn) openSellerBtn.addEventListener('click', openSeller);
+  const backBtn = $('back-market-btn');
+  if(backBtn) backBtn.addEventListener('click',()=>{
+    const sellerSc = $('seller-screen');
+    const marketSc = $('marketplace-screen');
+    if(sellerSc) sellerSc.classList.remove('active');
+    if(marketSc) marketSc.classList.add('active');
+  });
 });
 
 function renderSellerAuth(){
-  $('seller-body').innerHTML = `
+  const sellerBody = $('seller-body');
+  if(!sellerBody) return;
+  sellerBody.innerHTML = `
     <div class="auth-wrap fade-up">
       <div class="auth-card">
         <div class="auth-logo">
@@ -904,17 +972,21 @@ function registerForm(){ return `
   <div class="form-group"><label>Password (min 6 chars) *</label><input class="input" id="r-pwd" type="password" placeholder="Password"></div>
   <button class="btn-full btn-full-gold" onclick="doRegister()"><i class="fas fa-rocket"></i> Start Selling Free →</button>`;
 }
-function switchAuthTab(t){
-  $('tab-login').classList.toggle('active',t==='login');
-  $('tab-register').classList.toggle('active',t==='register');
-  $('auth-form-wrap').innerHTML = t==='login'?loginForm():registerForm();
-}
+window.switchAuthTab = function(t){
+  const tabLogin = $('tab-login');
+  const tabRegister = $('tab-register');
+  if(tabLogin) tabLogin.classList.toggle('active',t==='login');
+  if(tabRegister) tabRegister.classList.toggle('active',t==='register');
+  const authWrap = $('auth-form-wrap');
+  if(authWrap) authWrap.innerHTML = t==='login'?loginForm():registerForm();
+};
 
 async function doLogin(){
-  const e=$('l-email').value.trim(), p=$('l-pwd').value;
-  if(!e||!p){ toast1('Fill all fields','error'); return; }
+  const email = $('l-email')?.value.trim();
+  const pwd = $('l-pwd')?.value;
+  if(!email||!pwd){ toast1('Fill all fields','error'); return; }
   try{
-    const cred = await auth.signInWithEmailAndPassword(e,p);
+    const cred = await auth.signInWithEmailAndPassword(email,pwd);
     const snap = await db.ref('vendamarket/sellers/'+cred.user.uid).once('value');
     if(!snap.exists()) throw new Error('No seller profile found.');
     currentSeller=cred.user; currentSellerData=snap.val();
@@ -922,9 +994,9 @@ async function doLogin(){
   } catch(err){ toast1('Login failed: '+err.message,'error'); }
 }
 async function doRegister(){
-  const shop=$('r-shop').value.trim(), owner=$('r-owner').value.trim(),
-    email=$('r-email').value.trim(), wa=$('r-wa').value.trim(),
-    cat=$('r-cat').value, loc=$('r-loc').value.trim(), pwd=$('r-pwd').value;
+  const shop=$('r-shop')?.value.trim(), owner=$('r-owner')?.value.trim(),
+    email=$('r-email')?.value.trim(), wa=$('r-wa')?.value.trim(),
+    cat=$('r-cat')?.value, loc=$('r-loc')?.value.trim(), pwd=$('r-pwd')?.value;
   if(!shop||!owner||!email||!wa||pwd.length<6){ toast1('Fill all required fields (password 6+ chars)','error'); return; }
   try{
     const cred = await auth.createUserWithEmailAndPassword(email,pwd);
@@ -935,17 +1007,17 @@ async function doRegister(){
     loadSellerDashboard();
   } catch(err){ toast1('Registration error: '+err.message,'error'); }
 }
-async function doResetPwd(){
+window.doResetPwd = async function(){
   const e=prompt('Enter your email for password reset:');
   if(!e) return;
   try{ await auth.sendPasswordResetEmail(e); toast1('Reset email sent! Check your inbox.','success'); }
   catch(err){ toast1(err.message,'error'); }
-}
+};
 
-// ======================== SELLER DASHBOARD ========================
 async function loadSellerDashboard(){
   if(!currentSeller) return;
-  $('logout-btn').style.display='flex';
+  const logoutBtn = $('logout-btn');
+  if(logoutBtn) logoutBtn.style.display='flex';
   const uid=currentSeller.uid;
   const [listingsSnap,ordersSnap,inboxSnap] = await Promise.all([
     db.ref('vendamarket/listings').orderByChild('sellerId').equalTo(uid).once('value'),
@@ -957,184 +1029,104 @@ async function loadSellerDashboard(){
   const messages = inboxSnap.val()?Object.values(inboxSnap.val()):[];
   const pendingOrders = myOrders.filter(o=>o.status==='pending').length;
   const revenue = myOrders.filter(o=>o.status==='delivered').reduce((a,c)=>a+(c.total||0),0);
-
-  $('seller-body').innerHTML = `
-<br>
-<br>
-    <div class="seller-content">
-      <div id="tab-overview" class="${activeSellerTab==='overview'?'':'hidden'}">
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:1.5rem">
-          <div class="shop-avatar" style="width:50px;height:50px;font-size:1.4rem">${(currentSellerData.shopName||'?')[0].toUpperCase()}</div>
-          <div>
-            <h2 class="syne" style="font-size:1.3rem">${esc(currentSellerData.shopName)}</h2>
-            <div style="font-size:0.82rem;color:var(--muted)">${esc(currentSellerData.ownerName)} · ${esc(currentSellerData.category)}</div>
-          </div>
-        </div>
-        <div class="stat-cards">
-          <div class="stat-card"><div class="stat-icon">📦</div><div class="stat-num">${myListings.length}</div><div class="stat-label">Products</div></div>
-          <div class="stat-card"><div class="stat-icon">🛒</div><div class="stat-num">${myOrders.length}</div><div class="stat-label">Total Orders</div></div>
-          <div class="stat-card"><div class="stat-icon">⏳</div><div class="stat-num">${pendingOrders}</div><div class="stat-label">Pending</div></div>
-          <div class="stat-card"><div class="stat-icon">💰</div><div class="stat-num" style="font-size:1.2rem">R${revenue.toFixed(0)}</div><div class="stat-label">Delivered Revenue</div></div>
-        </div>
-        ${pendingOrders>0?`<div style="background:#FFF3E0;border-radius:var(--r-md);padding:1rem;display:flex;align-items:center;gap:10px;margin-bottom:1rem"><span style="font-size:1.5rem">⚠️</span><div><strong>${pendingOrders} pending order${pendingOrders>1?'s':''}</strong><br><small style="color:var(--muted)">Respond quickly to keep customers happy</small></div><button class="btn-sm" style="background:var(--green);color:white;margin-left:auto" onclick="setTab('orders')">View →</button></div>`:''}
-        <div style="text-align:center;padding:1.5rem;background:var(--cream);border-radius:var(--r-md)">
-          <p style="font-size:0.85rem;color:var(--muted);margin-bottom:0.8rem">Share your shop link</p>
-          <div style="background:white;border-radius:var(--r-md);padding:0.6rem 1rem;font-size:0.8rem;font-family:monospace;word-break:break-all;margin-bottom:0.8rem;border:1px solid var(--border)">${window.location.href}</div>
-          <button class="btn-sm btn-edit" onclick="navigator.clipboard.writeText(window.location.href);toast1('Link copied!','success')"><i class="fas fa-copy"></i> Copy Link</button>
-        </div>
-      </div>
-      <div id="tab-listings" class="${activeSellerTab==='listings'?'':'hidden'}">
-        <div class="section-header">
-          <h3>Your Products</h3>
-          <button class="btn-full btn-full-green" style="width:auto;padding:0.5rem 1rem;font-size:0.85rem" onclick="showAddListing()"><i class="fas fa-plus"></i> Add Product</button>
-        </div>
-        ${myListings.length===0?`<div class="empty-state"><div class="empty-icon">📦</div><h3>No products yet</h3><p>Add your first product to start selling</p><button class="btn-full btn-full-gold" style="max-width:200px;margin:0 auto" onclick="showAddListing()"><i class="fas fa-plus"></i> Add First Product</button></div>`:''}
-        ${myListings.map(l=>`
-          <div class="listing-row">
-            <div class="listing-info">
-              <h4>${catEmoji(l.category)} ${esc(l.title)}</h4>
-              <p>${formatPrice(l.price)} · ${esc(l.category)} · ${timeAgo(l.createdAt)}</p>
-            </div>
-            <div class="listing-actions">
-              <span class="status-badge ${l.soldOut?'status-sold':'status-active'}">${l.soldOut?'Sold Out':'Active'}</span>
-              <button class="btn-sm btn-edit" onclick="toggleSoldOut('${l.id}',${!!l.soldOut})">${l.soldOut?'Mark Available':'Mark Sold Out'}</button>
-              <button class="btn-sm btn-danger" onclick="deleteListing('${l.id}')"><i class="fas fa-trash"></i></button>
-            </div>
-          </div>`).join('')}
-      </div>
-      <div id="tab-orders" class="${activeSellerTab==='orders'?'':'hidden'}">
-        <h3 style="margin-bottom:1rem">Orders (${myOrders.length})</h3>
-        ${myOrders.length===0?`<div class="empty-state"><div class="empty-icon">📬</div><h3>No orders yet</h3><p>Share your shop to get your first order!</p></div>`:''}
-        ${myOrders.sort((a,b)=>b.createdAt-a.createdAt).map(o=>`
-          <div class="order-row">
-            <div class="order-top">
-              <div>
-                <strong>${esc(o.productTitle)}</strong> ×${o.quantity}
-                <span class="status-badge status-${o.status}" style="margin-left:6px">${o.status}</span>
-              </div>
-              <strong>${formatPrice(o.total||o.price*o.quantity)}</strong>
-            </div>
-            <div class="order-meta">👤 ${esc(o.buyerName)} · 📞 ${o.buyerPhone||'—'} ${o.buyerLocation?'· 📍 '+esc(o.buyerLocation):''}</div>
-            ${o.note?`<div class="order-meta">📝 ${esc(o.note)}</div>`:''}
-            <div class="order-meta" style="margin-bottom:0.5rem">🕐 ${new Date(o.createdAt).toLocaleString()} · #${o.orderId}</div>
-            <div style="display:flex;gap:0.5rem;flex-wrap:wrap;align-items:center">
-              <select class="order-status-select" onchange="updateOrderStatus('${o.orderId}',this.value)">
-                ${['pending','confirmed','ready','delivered','cancelled'].map(s=>`<option ${o.status===s?'selected':''}>${s}</option>`).join('')}
-              </select>
-              ${o.buyerPhone?`<a href="https://wa.me/${o.buyerPhone.replace(/\D/g,'')}?text=${encodeURIComponent('Hi '+o.buyerName+'! Your order ('+o.productTitle+') status: '+o.status+'. From '+currentSellerData.shopName+' via Venda Market.')}" target="_blank"><button class="btn-sm btn-wa"><i class="fab fa-whatsapp"></i> Notify</button></a>`:''}
-            </div>
-          </div>`).join('')}
-      </div>
-      <div id="tab-messages" class="${activeSellerTab==='messages'?'':'hidden'}">
-        <h3 style="margin-bottom:1rem">Buyer Messages (${messages.length})</h3>
-        ${messages.length===0?`<div class="empty-state"><div class="empty-icon">💬</div><h3>No messages yet</h3><p>Orders placed will appear here</p></div>`:''}
-        ${messages.sort((a,b)=>b.createdAt-a.createdAt).map(m=>`
-          <div class="listing-row">
-            <div>
-              <strong>${esc(m.buyerName)}</strong> — ${esc(m.productTitle)}<br>
-              <small style="color:var(--muted)">Qty: ${m.quantity} · ${formatPrice(m.total||m.price*m.quantity)} · ${timeAgo(m.createdAt)}</small>
-              ${m.note?`<br><small style="color:var(--muted)">📝 ${esc(m.note)}</small>`:''}
-            </div>
-            ${m.buyerPhone?`<a href="https://wa.me/${m.buyerPhone.replace(/\D/g,'')}?text=${encodeURIComponent('Hi '+m.buyerName+'! Thanks for your order on Venda Market.')}" target="_blank"><button class="btn-sm" style="background:var(--wa);color:white"><i class="fab fa-whatsapp"></i> Reply</button></a>`:''}
-          </div>`).join('')}
-      </div>
-    </div>`;
+  const sellerBody = $('seller-body');
+  if(!sellerBody) return;
+  sellerBody.innerHTML = `
+<div class="seller-content">
+  <div id="tab-overview" class="${activeSellerTab==='overview'?'':'hidden'}">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:1.5rem">
+      <div class="shop-avatar" style="width:50px;height:50px;font-size:1.4rem">${(currentSellerData.shopName||'?')[0].toUpperCase()}</div>
+      <div><h2 class="syne" style="font-size:1.3rem">${esc(currentSellerData.shopName)}</h2><div style="font-size:0.82rem;color:var(--muted)">${esc(currentSellerData.ownerName)} · ${esc(currentSellerData.category)}</div></div>
+    </div>
+    <div class="stat-cards"><div class="stat-card"><div class="stat-icon">📦</div><div class="stat-num">${myListings.length}</div><div class="stat-label">Products</div></div><div class="stat-card"><div class="stat-icon">🛒</div><div class="stat-num">${myOrders.length}</div><div class="stat-label">Total Orders</div></div><div class="stat-card"><div class="stat-icon">⏳</div><div class="stat-num">${pendingOrders}</div><div class="stat-label">Pending</div></div><div class="stat-card"><div class="stat-icon">💰</div><div class="stat-num" style="font-size:1.2rem">R${revenue.toFixed(0)}</div><div class="stat-label">Delivered Revenue</div></div></div>
+    ${pendingOrders>0?`<div style="background:#FFF3E0;border-radius:var(--r-md);padding:1rem;display:flex;align-items:center;gap:10px;margin-bottom:1rem"><span style="font-size:1.5rem">⚠️</span><div><strong>${pendingOrders} pending order${pendingOrders>1?'s':''}</strong><br><small style="color:var(--muted)">Respond quickly to keep customers happy</small></div><button class="btn-sm" style="background:var(--green);color:white;margin-left:auto" onclick="setTab('orders')">View →</button></div>`:''}
+  </div>
+  <div id="tab-listings" class="${activeSellerTab==='listings'?'':'hidden'}"><div class="section-header"><h3>Your Products</h3><button class="btn-full btn-full-green" style="width:auto;padding:0.5rem 1rem;font-size:0.85rem" onclick="showAddListing()"><i class="fas fa-plus"></i> Add Product</button></div>${myListings.length===0?`<div class="empty-state"><div class="empty-icon">📦</div><h3>No products yet</h3><p>Add your first product to start selling</p><button class="btn-full btn-full-gold" style="max-width:200px;margin:0 auto" onclick="showAddListing()"><i class="fas fa-plus"></i> Add First Product</button></div>`:myListings.map(l=>`<div class="listing-row"><div class="listing-info"><h4>${catEmoji(l.category)} ${esc(l.title)}</h4><p>${formatPrice(l.price)} · ${esc(l.category)} · ${timeAgo(l.createdAt)}</p></div><div class="listing-actions"><span class="status-badge ${l.soldOut?'status-sold':'status-active'}">${l.soldOut?'Sold Out':'Active'}</span><button class="btn-sm btn-edit" onclick="toggleSoldOut('${l.id}',${!!l.soldOut})">${l.soldOut?'Mark Available':'Mark Sold Out'}</button><button class="btn-sm btn-danger" onclick="deleteListing('${l.id}')"><i class="fas fa-trash"></i></button></div></div>`).join('')}</div>
+  <div id="tab-orders" class="${activeSellerTab==='orders'?'':'hidden'}"><h3 style="margin-bottom:1rem">Orders (${myOrders.length})</h3>${myOrders.length===0?`<div class="empty-state"><div class="empty-icon">📬</div><h3>No orders yet</h3><p>Share your shop to get your first order!</p></div>`:myOrders.sort((a,b)=>b.createdAt-a.createdAt).map(o=>`<div class="order-row"><div class="order-top"><div><strong>${esc(o.productTitle)}</strong> ×${o.quantity}<span class="status-badge status-${o.status}" style="margin-left:6px">${o.status}</span></div><strong>${formatPrice(o.total||o.price*o.quantity)}</strong></div><div class="order-meta">👤 ${esc(o.buyerName)} · 📞 ${o.buyerPhone||'—'} ${o.buyerLocation?'· 📍 '+esc(o.buyerLocation):''}</div>${o.note?`<div class="order-meta">📝 ${esc(o.note)}</div>`:''}<div class="order-meta" style="margin-bottom:0.5rem">🕐 ${new Date(o.createdAt).toLocaleString()} · #${o.orderId}</div><div style="display:flex;gap:0.5rem;flex-wrap:wrap;align-items:center"><select class="order-status-select" onchange="updateOrderStatus('${o.orderId}',this.value)">${['pending','confirmed','ready','delivered','cancelled'].map(s=>`<option ${o.status===s?'selected':''}>${s}</option>`).join('')}</select>${o.buyerPhone?`<a href="https://wa.me/${o.buyerPhone.replace(/\D/g,'')}?text=${encodeURIComponent('Hi '+o.buyerName+'! Your order ('+o.productTitle+') status: '+o.status+'. From '+currentSellerData.shopName+' via Venda Market.')}" target="_blank"><button class="btn-sm btn-wa"><i class="fab fa-whatsapp"></i> Notify</button></a>`:''}</div></div>`).join('')}</div>
+  <div id="tab-messages" class="${activeSellerTab==='messages'?'':'hidden'}"><h3 style="margin-bottom:1rem">Buyer Messages (${messages.length})</h3>${messages.length===0?`<div class="empty-state"><div class="empty-icon">💬</div><h3>No messages yet</h3><p>Orders placed will appear here</p></div>`:messages.sort((a,b)=>b.createdAt-a.createdAt).map(m=>`<div class="listing-row"><div><strong>${esc(m.buyerName)}</strong> — ${esc(m.productTitle)}<br><small style="color:var(--muted)">Qty: ${m.quantity} · ${formatPrice(m.total||m.price*m.quantity)} · ${timeAgo(m.createdAt)}</small>${m.note?`<br><small style="color:var(--muted)">📝 ${esc(m.note)}</small>`:''}</div>${m.buyerPhone?`<a href="https://wa.me/${m.buyerPhone.replace(/\D/g,'')}?text=${encodeURIComponent('Hi '+m.buyerName+'! Thanks for your order on Venda Market.')}" target="_blank"><button class="btn-sm" style="background:var(--wa);color:white"><i class="fab fa-whatsapp"></i> Reply</button></a>`:''}</div>`).join('')}</div>
+</div>`;
 }
-
-function setTab(t){
+window.setTab = function(t){
   activeSellerTab=t;
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-  event.target.closest('.tab-btn').classList.add('active');
+  if(event && event.target) event.target.closest('.tab-btn')?.classList.add('active');
   ['overview','listings','orders','messages'].forEach(x=>{
     const el=document.getElementById('tab-'+x);
     if(el) el.classList.toggle('hidden',x!==t);
   });
-}
-
-async function updateOrderStatus(oid, status){
+};
+window.updateOrderStatus = async function(oid, status){
   await db.ref('vendamarket/orders/'+oid+'/status').set(status);
   toast1(`Order updated: ${status}`,'success');
-}
-
-async function deleteListing(id){
+};
+window.deleteListing = async function(id){
   if(!confirm('Delete this listing? This cannot be undone.')) return;
   await db.ref('vendamarket/listings/'+id).remove();
   toast1('Listing deleted');
   loadSellerDashboard();
   loadListings();
-}
-
-async function toggleSoldOut(id, current){
+};
+window.toggleSoldOut = async function(id, current){
   await db.ref('vendamarket/listings/'+id+'/soldOut').set(!current);
   toast1(!current?'Marked as sold out':'Marked as available','success');
   loadSellerDashboard();
   loadListings();
-}
-
-function showAddListing(){
+};
+window.showAddListing = function(){
   const modal = document.createElement('div');
   modal.className = 'modal-overlay';
-  modal.innerHTML = `<div class="modal-box">
-    <span class="modal-handle"></span>
-    <div class="modal-header"><h3><i class="fas fa-plus"></i> Add Product</h3><button class="close-btn" onclick="this.closest('.modal-overlay').remove()">&times;</button></div>
-    <div class="form-group"><label>Product Name *</label><input class="input" id="nl-title" placeholder="e.g. Pap & Vleis Combo"></div>
-    <div class="input-row">
-      <div class="form-group"><label>Price (R) *</label><input class="input" id="nl-price" type="number" step="0.01" placeholder="35.00"></div>
-      <div class="form-group"><label>Category</label><select class="select" id="nl-cat"><option>Food</option><option>Clothing</option><option>Printing</option><option>Beauty</option><option>Services</option><option>Electronics</option><option>Stationery</option><option>Groceries</option></select></div>
-    </div>
-    <div class="form-group"><label>Description</label><textarea class="textarea" id="nl-desc" placeholder="Describe your product…"></textarea></div>
-    <div class="form-group"><label>Stock Available (0 = unlimited)</label><input class="input" id="nl-stock" type="number" placeholder="0" value="0"></div>
-    <button class="btn-full btn-full-green" onclick="submitListing(this)"><i class="fas fa-rocket"></i> Publish Listing</button>
-  </div>`;
+  modal.innerHTML = `<div class="modal-box"><div class="modal-header"><h3><i class="fas fa-plus"></i> Add Product</h3><button class="close-btn" onclick="this.closest('.modal-overlay').remove()">&times;</button></div><div class="form-group"><label>Product Name *</label><input class="input" id="nl-title" placeholder="e.g. Pap & Vleis Combo"></div><div class="input-row"><div class="form-group"><label>Price (R) *</label><input class="input" id="nl-price" type="number" step="0.01" placeholder="35.00"></div><div class="form-group"><label>Category</label><select class="select" id="nl-cat"><option>Food</option><option>Clothing</option><option>Printing</option><option>Beauty</option><option>Services</option><option>Electronics</option><option>Stationery</option><option>Groceries</option></select></div></div><div class="form-group"><label>Description</label><textarea class="textarea" id="nl-desc" placeholder="Describe your product…"></textarea></div><div class="form-group"><label>Stock Available (0 = unlimited)</label><input class="input" id="nl-stock" type="number" placeholder="0" value="0"></div><button class="btn-full btn-full-green" onclick="submitListing(this)"><i class="fas fa-rocket"></i> Publish Listing</button></div>`;
   document.body.appendChild(modal);
   modal.addEventListener('click', e=>{ if(e.target===modal) modal.remove(); });
-  document.getElementById('nl-title').focus();
-}
-
-async function submitListing(btn){
-  const title=$('nl-title').value.trim(), price=parseFloat($('nl-price').value),
-    cat=$('nl-cat').value, desc=$('nl-desc').value.trim(), stock=parseInt($('nl-stock').value)||0;
+  setTimeout(()=>{ const inp=$('nl-title'); if(inp) inp.focus(); },50);
+};
+window.submitListing = async function(btn){
+  const title=$('nl-title')?.value.trim(), price=parseFloat($('nl-price')?.value);
+  const cat=$('nl-cat')?.value, desc=$('nl-desc')?.value.trim(), stock=parseInt($('nl-stock')?.value)||0;
   if(!title||!price){ toast1('Title and price required','error'); return; }
   btn.disabled=true; btn.textContent='Publishing…';
-  const listing={
-    sellerId:currentSeller.uid, shopName:currentSellerData.shopName,
-    whatsapp:currentSellerData.whatsapp, title, price, category:cat,
-    description:desc, stock, status:'active', soldOut:false,
-    createdAt:Date.now(), rating:0, reviewCount:0
-  };
+  const listing={ sellerId:currentSeller.uid, shopName:currentSellerData.shopName, whatsapp:currentSellerData.whatsapp, title, price, category:cat, description:desc, stock, status:'active', soldOut:false, createdAt:Date.now(), rating:0, reviewCount:0 };
   await db.ref('vendamarket/listings').push(listing);
-  btn.closest('.modal-overlay').remove();
+  btn.closest('.modal-overlay')?.remove();
   toast1('🎉 Listing is live!','success');
   loadSellerDashboard();
   loadListings();
-}
+};
 
 // ======================== AUTH OBSERVER ========================
 auth.onAuthStateChanged(async user=>{
   if(user){
     const snap=await db.ref('vendamarket/sellers/'+user.uid).once('value');
-    if(snap.exists()){ currentSeller=user; currentSellerData=snap.val(); $('logout-btn').style.display='flex'; }
-  } else { currentSeller=null; currentSellerData=null; $('logout-btn').style.display='none'; }
+    if(snap.exists()){ currentSeller=user; currentSellerData=snap.val(); const logoutBtn=$('logout-btn'); if(logoutBtn) logoutBtn.style.display='flex'; }
+  } else { currentSeller=null; currentSellerData=null; const logoutBtn=$('logout-btn'); if(logoutBtn) logoutBtn.style.display='none'; }
 });
-$('logout-btn').addEventListener('click', async ()=>{
-  await auth.signOut();
-  currentSeller=null; currentSellerData=null;
-  toast1('Logged out');
-  $('seller-screen').classList.remove('active');
-  $('marketplace-screen').classList.add('active');
+document.addEventListener('DOMContentLoaded',()=>{
+  const logoutBtn=$('logout-btn');
+  if(logoutBtn) logoutBtn.addEventListener('click', async ()=>{
+    await auth.signOut();
+    currentSeller=null; currentSellerData=null;
+    toast1('Logged out');
+    const sellerSc=$('seller-screen'), marketSc=$('marketplace-screen');
+    if(sellerSc) sellerSc.classList.remove('active');
+    if(marketSc) marketSc.classList.add('active');
+  });
 });
 
 // ======================== DETAIL DRAWER CLOSE ========================
-$('detail-drawer').addEventListener('click', e=>{ if(e.target===$('detail-drawer')) $('detail-drawer').classList.add('hidden'); });
-$('order-modal').addEventListener('click', e=>{ if(e.target===$('order-modal')) $('order-modal').classList.add('hidden'); });
-$('track-modal').addEventListener('click', e=>{ if(e.target===$('track-modal')) $('track-modal').classList.add('hidden'); });
+document.addEventListener('DOMContentLoaded',()=>{
+  const detailDrawer=$('detail-drawer');
+  if(detailDrawer) detailDrawer.addEventListener('click', e=>{ if(e.target===detailDrawer) detailDrawer.classList.add('hidden'); });
+  const orderModal=$('order-modal');
+  if(orderModal) orderModal.addEventListener('click', e=>{ if(e.target===orderModal) orderModal.classList.add('hidden'); });
+  const trackModal=$('track-modal');
+  if(trackModal) trackModal.addEventListener('click', e=>{ if(e.target===trackModal) trackModal.classList.add('hidden'); });
+});
 
 // ======================== INIT ========================
 updateWishlistBadge();
 updateCartBadge();
 loadListings();
 
-// Demo seed if empty
 setTimeout(async ()=>{
   const snap=await db.ref('vendamarket/listings').once('value');
   if(!snap.exists()){
@@ -1149,4 +1141,5 @@ setTimeout(async ()=>{
     for(const d of demos) await db.ref('vendamarket/listings').push(d);
     loadListings();
   }
-}, 1200);</script>
+}, 1200);
+</script>
