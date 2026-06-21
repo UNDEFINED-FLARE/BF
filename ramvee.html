@@ -2,18 +2,22 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+<meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Ramvee's Fresh · WhatsApp Store</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
   <link rel="icon" href="https://i.ibb.co/YBmf408h/file-00000000815c71f4a1050089e98e3d5b.png" type="image/png">
-  <link rel="stylesheet" href="syle.css">
+  <link rel="stylesheet" href="style.css">
   <style>
     /* === reset & base === */
-    :root{--green:#5E0503;--green-light:#e8f5ee;--gold:#D4A017;--gold-light:#fdf6e3;--danger:#e53e3e;--wa:#25D366;--wa-dark:#128C7E;--border:#e8eaf0;--muted:#7a8394;--surface:#f8f9fc;--card:#ffffff;--text:#1a1d2e;--text-soft:#4a5068;--r-sm:8px;--r-md:14px;--r-lg:20px;--r-xl:28px;--shadow-sm:0 1px 4px rgba(0,0,0,.06);--shadow-md:0 4px 20px rgba(0,0,0,.08);--shadow-lg:0 8px 40px rgba(0,0,0,.12);}
+    :root{--green:#5E0503;--green-light:#e8f5ee;--gold:#D4A017;--gold-light:#fdf6e3;--danger:#e53e3e;--wa:#42445A;--wa-dark:#128C7E;--border:#e8eaf0;--muted:#7a8394;--surface:#f8f9fc;--card:#ffffff;--text:#1a1d2e;--text-soft:#4a5068;--r-sm:8px;--r-md:14px;--r-lg:20px;--r-xl:28px;--shadow-sm:0 1px 4px rgba(0,0,0,.06);--shadow-md:0 4px 20px rgba(0,0,0,.08);--shadow-lg:0 8px 40px rgba(0,0,0,.12);}
     *{margin:0;padding:0;}
     body{margin:0 auto;background:#fff;padding-bottom:80px;}
     .pageNme{position:sticky;top:0;z-index:100;background:rgba(255,255,255,0.92);backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:space-between;padding:0.65rem 1rem;border-bottom:1px solid var(--border);box-shadow:var(--shadow-sm);}
+    .hero-logo{display:flex;align-items:center;gap:10px;margin-bottom:1rem;}
+.hero-logo img{width:38px;height:38px;border-radius:8px;background:#fff;padding:3px;}
+.hero-logo span{font-family:'Sora',sans-serif;font-size:1.15rem;font-weight:700;color:#fff;letter-spacing:-0.3px;}
+.hero-logo small{display:block;font-size:0.7rem;color:rgba(255,255,255,.6);font-weight:400;letter-spacing:.5px;}
     .pageName h2{font-family:'Sora',sans-serif;font-size:1.05rem;font-weight:700;color:var(--text);}
     .screen{display:none;}.screen.active{display:block;}
     .cards-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.9rem;padding:1rem;}
@@ -34,7 +38,10 @@
     .card-rating{font-size:0.7rem;color:var(--muted);margin-bottom:5px;}
     .card-desc{font-size:0.72rem;color:var(--text-soft);line-height:1.5;margin-bottom:8px;}
     .card-actions{display:flex;gap:6px;}
-    .btn-wa{width:34px;height:34px;border-radius:10px;border:none;cursor:pointer;background:var(--wa);color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.9rem;transition:background .2s;flex-shrink:0;}
+    .btn-wa{padding-right:7%;
+      font-weight:500;
+      color:white;
+    ;height:34px;border-radius:10px;border:none;cursor:pointer;background:var(--wa);display:flex;align-items:center;justify-content:center;font-size:11px;transition:background .2s;flex-shrink:0;}
     .btn-wa:hover{background:var(--wa-dark);}
     .btn-order{flex:1;height:34px;border-radius:10px;border:none;cursor:pointer;background:var(--green);color:#fff;font-size:0.75rem;font-weight:600;font-family:'DM Sans',sans-serif;display:flex;align-items:center;justify-content:center;gap:4px;transition:background .2s; display: none;}
     .btn-order:hover{background:#155c37;}
@@ -81,7 +88,9 @@
     .search-input-wrap{flex:1;display:flex;align-items:center;gap:8px;}
     .search-input-wrap i{color:var(--muted);}
     .search-input-wrap input{border:none;background:transparent;padding:0.6rem 0;font-size:0.9rem;width:100%;outline:none;}
-    .btn-search{background:var(--green);border:none;border-radius:40px;padding:0.4rem 1rem;color:#fff;font-weight:600;cursor:pointer;}
+    .btn-search{background:var(--green);border:none;border-radius:40px;padding:0.4rem 1rem;color:#fff;font-weight:600;cursor:pointer;
+      
+    }
     .cats{display:flex;gap:6px;padding:0.6rem 0;overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
     .cats::-webkit-scrollbar{display:none;}
     .cat{background:var(--surface);padding:0.3rem 0.9rem;border-radius:40px;font-size:0.75rem;font-weight:500;white-space:nowrap;border:1px solid transparent;transition:all .2s;cursor:pointer;}
@@ -119,16 +128,17 @@ padding-bottom:60%;
 
 <!-- ===== MAIN MARKETPLACE SCREEN ===== -->
 <div id="marketplace-screen" class="screen active">
+  
   <div class="pageName">
     <div style="display:flex;align-items:center;gap:8px;margin-left:5%;">
-      <img src="https://i.ibb.co/YBmf408h/file-00000000815c71f4a1050089e98e3d5b.png" style="width:37px;height:37px;border-radius:6px;" alt="">
+      <img src="https://wqtquxcjqfrayowbioya.supabase.co/storage/v1/object/public/Univen/file_000000000e347243b7528a4a7f4bdf2a.png" style="width:37px;height:37px;border-radius:6px;" alt="">
       <div><div style="font-family:'Sora',sans-serif;font-size:0.95rem;font-weight:700;line-height:1.1;">Ramvee's <span style="color:var(--green)">Fresh</span></div><div style="font-size:0.62rem;color:var(--muted);letter-spacing:.4px;">UNIVEN CAMPUS</div></div>
     </div>
 
   </div>
 
     <section class="hero">
-     
+
     </section>
   
   <!-- search & filter -->
@@ -174,7 +184,7 @@ const DEMO_PRODUCTS = [
     price: 50,
     category: 'Food',
     description: 'Delicious chicken served with pap and sides.',
-    rating: 4.8,
+    
     reviewCount: 32,
     images: ['https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTwpKY1tXO_A0sj2W2Y44QfhpTOLx-cZ7v_G_gSG4756bHQQb4Dqu4B3hG9&s=10'],
     createdAt: Date.now()
@@ -189,7 +199,7 @@ const DEMO_PRODUCTS = [
     price: 70,
     category: 'Food',
     description: 'Half plate chicken meal with pap.',
-    rating: 4.7,
+    
     reviewCount: 21,
     images: ['https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTwpKY1tXO_A0sj2W2Y44QfhpTOLx-cZ7v_G_gSG4756bHQQb4Dqu4B3hG9&s=10'],
     createdAt: Date.now()
@@ -204,7 +214,7 @@ const DEMO_PRODUCTS = [
     price: 90,
     category: 'Food',
     description: 'Full chicken plate for a hearty meal.',
-    rating: 4.9,
+    
     reviewCount: 44,
     images: ['https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTwpKY1tXO_A0sj2W2Y44QfhpTOLx-cZ7v_G_gSG4756bHQQb4Dqu4B3hG9&s=10'],
     createdAt: Date.now()
@@ -219,7 +229,7 @@ const DEMO_PRODUCTS = [
     price: 60,
     category: 'Food',
     description: 'Traditional tripe cooked with rich spices.',
-    rating: 4.6,
+    
     reviewCount: 18,
     images: ['https://i.ytimg.com/vi/137cIwVf4ko/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLCMutywUpd-i8JFPTSnrEXMUyB_9A'],
     createdAt: Date.now()
@@ -234,7 +244,7 @@ const DEMO_PRODUCTS = [
     price: 80,
     category: 'Food',
     description: 'Full plate of tender tripe and pap.',
-    rating: 4.8,
+    
     reviewCount: 29,
     images: ['https://i.ytimg.com/vi/137cIwVf4ko/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLCMutywUpd-i8JFPTSnrEXMUyB_9A'],
     createdAt: Date.now()
@@ -249,7 +259,7 @@ const DEMO_PRODUCTS = [
     price: 50,
     category: 'Food',
     description: 'Grilled wors served with pap.',
-    rating: 4.7,
+    
     reviewCount: 17,
     images: ['https://i.ibb.co/LDnLWS0N/images-8.jpg'],
     createdAt: Date.now()
@@ -264,7 +274,7 @@ const DEMO_PRODUCTS = [
     price: 100,
     category: 'Food',
     description: 'A tasty combination of wors and steak.',
-    rating: 4.9,
+    
     reviewCount: 41,
     images: ['https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSaP0goY9LYvnLmSAVznUGnPAwIQ5H3zIITk6CEzUUl2w&s=10'],
     createdAt: Date.now()
@@ -279,7 +289,7 @@ const DEMO_PRODUCTS = [
     price: 90,
     category: 'Food',
     description: 'Chicken and wors combo meal.',
-    rating: 4.8,
+    
     reviewCount: 26,
     images: ['https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSaP0goY9LYvnLmSAVznUGnPAwIQ5H3zIITk6CEzUUl2w&s=10'],
     createdAt: Date.now()
@@ -294,7 +304,7 @@ const DEMO_PRODUCTS = [
     price: 100,
     category: 'Food',
     description: 'Chicken and tripe combo served with pap.',
-    rating: 4.8,
+    
     reviewCount: 34,
     images: ['https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRVTWLX3F31RYjZv4xVg2zyP2vsQZvNeUjCgwNA28_6g&s'],
     createdAt: Date.now()
@@ -309,7 +319,7 @@ const DEMO_PRODUCTS = [
     price: 60,
     category: 'Food',
     description: 'Tender beef steak with pap.',
-    rating: 4.7,
+    
     reviewCount: 15,
     images: ['https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTB28yT-H3ZtHMzatefx-hbjDbNE8SXTkvw0eVdoiCA6s89gP7xj1puMt4w&s=10https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRVTWLX3F31RYjZv4xVg2zyP2vsQZvNeUjCgwNA28_6g&shttps://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRVTWLX3F31RYjZv4xVg2zyP2vsQZvNeUjCgwNA28_6g&s'],
     createdAt: Date.now()
@@ -324,7 +334,7 @@ const DEMO_PRODUCTS = [
     price: 80,
     category: 'Food',
     description: 'Large beef steak meal for big appetites.',
-    rating: 4.9,
+    
     reviewCount: 27,
     images: ['https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTB28yT-H3ZtHMzatefx-hbjDbNE8SXTkvw0eVdoiCA6s89gP7xj1puMt4w&s=10'],
     createdAt: Date.now()
@@ -387,7 +397,7 @@ function renderListings(){
         <div class="card-rating"><span>${stars}</span>${item.reviewCount?`<span style="color:var(--muted)"> (${item.reviewCount})</span>`:''}</div>
         <p class="card-desc">${esc((item.description||'').substring(0,70))}${(item.description||'').length>70?'…':''}</p>
         <div class="card-actions">
-          <button class="btn-wa" onclick="event.stopPropagation();waContact('${item.whatsapp}','${esc(item.title)}','${esc(item.shopName)}')"><i class="fab fa-whatsapp"></i></button>
+          <button class="btn-wa" onclick="event.stopPropagation();waContact('${item.whatsapp}','${esc(item.title)}','${esc(item.shopName)}')"><i class="fab fa-whatsapp" style="color:peru;padding:5px;";></i> Order on WhatsApp</button>
           <button class="btn-order" onclick="event.stopPropagation();openOrder('${item.id}')"><i class="fab fa-whatsapp"></i> Order</button>
         </div>
       </div>
@@ -537,7 +547,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 // ===== INIT =====
 updateWishlistBadge();
 renderListings();
-toast1('🍔 Ramvee\'s Fresh – Order via WhatsApp!','success',3000);
+
 </script>
 </body>
 </html>
