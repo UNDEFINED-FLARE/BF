@@ -1,0 +1,1711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>UNIVEN Attendance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+/* ===================================================================
+   DESIGN TOKENS
+=================================================================== */
+:root{
+  --green:#006633;
+  --green-dark:#014525;
+  --green-mid:#0a7a41;
+  --green-light:#e7f3ec;
+  --gold:#c9a227;
+  --gold-light:#faf4e2;
+  --bg:#f4f7f5;
+  --surface:#ffffff;
+  --surface-2:#fbfcfb;
+  --text:#12211a;
+  --text-soft:#5c6b63;
+  --text-faint:#94a39c;
+  --border:#e5ece8;
+  --danger:#e0464b;
+  --danger-light:#fdecec;
+  --success:#1fae6b;
+  --success-light:#e7f8ef;
+  --warn:#b8860b;
+  --warn-light:#fbf2df;
+  --r-xs:8px;--r-sm:12px;--r-md:16px;--r-lg:22px;--r-xl:30px;--r-pill:999px;
+  --shadow-sm:0 2px 8px rgba(18,33,26,.05);
+  --shadow-md:0 8px 24px rgba(18,33,26,.09);
+  --shadow-lg:0 18px 48px rgba(18,33,26,.16);
+  --glass-bg:rgba(255,255,255,.62);
+  --glass-border:rgba(255,255,255,.55);
+  --nav-h:78px;
+}
+[data-theme="dark"]{
+  --bg:#0b1410;
+  --surface:#131f19;
+  --surface-2:#0f1b15;
+  --text:#eef5f1;
+  --text-soft:#a3b5ac;
+  --text-faint:#6d8177;
+  --border:#20342a;
+  --green-light:#123322;
+  --gold-light:#2b2716;
+  --danger-light:#331515;
+  --success-light:#0f2c1e;
+  --warn-light:#2c2410;
+  --glass-bg:rgba(19,31,25,.62);
+  --glass-border:rgba(255,255,255,.08);
+  --shadow-sm:0 2px 8px rgba(0,0,0,.25);
+  --shadow-md:0 8px 24px rgba(0,0,0,.35);
+  --shadow-lg:0 18px 48px rgba(0,0,0,.5);
+}
+
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html{font-size:15px;}
+body{
+  font-family:'Inter',sans-serif;
+  background:#dfe6e2;
+  color:var(--text);
+  min-height:100vh;
+}
+[data-theme="dark"] body{background:#050a07;}
+h1,h2,h3,h4,.poppins{font-family:'Poppins',sans-serif;}
+button,input,select,textarea{font-family:inherit;}
+a{color:inherit;text-decoration:none;}
+::-webkit-scrollbar{width:0;height:0;}
+
+/* ===================================================================
+   PHONE FRAME
+=================================================================== */
+.frame{
+  max-width:430px;
+  margin:0 auto;
+  min-height:100vh;
+  background:var(--bg);
+  position:relative;
+  overflow-x:hidden;
+  transition:background .3s ease;
+}
+@media (min-width:460px){
+  body{padding:18px 0;}
+  .frame{min-height:calc(100vh - 36px);border-radius:36px;box-shadow:0 30px 80px rgba(0,0,0,.35);overflow:hidden;}
+}
+
+.screen{display:none;min-height:100%;}
+.screen.active{display:block;animation:screenIn .32s cubic-bezier(.2,.8,.3,1);}
+@keyframes screenIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* ===================================================================
+   SPLASH
+=================================================================== */
+#splash-screen{
+  position:relative;
+  min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:radial-gradient(circle at 30% 20%, var(--green-mid), var(--green-dark) 60%, #012c19 100%);
+  color:#fff;overflow:hidden;
+}
+#splash-screen::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(circle at 85% 15%, rgba(201,162,39,.35), transparent 40%),
+    radial-gradient(circle at 10% 90%, rgba(255,255,255,.08), transparent 45%);
+}
+.splash-crest{
+  width:92px;height:92px;border-radius:24px;background:#fff;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 12px 32px rgba(0,0,0,.3);margin-bottom:18px;
+  animation:crestPop .7s cubic-bezier(.2,1.4,.4,1) both;
+  position:relative;z-index:1;
+}
+.splash-crest img{width:64px;height:64px;object-fit:contain;}
+@keyframes crestPop{0%{transform:scale(.4);opacity:0}70%{transform:scale(1.08)}100%{transform:scale(1);opacity:1}}
+.splash-title{font-family:'Poppins',sans-serif;font-weight:800;font-size:1.6rem;letter-spacing:.5px;position:relative;z-index:1;animation:fadeUp .6s .15s both;}
+.splash-title span{color:var(--gold);}
+.splash-sub{font-size:.82rem;opacity:.8;margin-top:6px;letter-spacing:1.5px;text-transform:uppercase;position:relative;z-index:1;animation:fadeUp .6s .25s both;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.splash-loader{
+  margin-top:40px;width:120px;height:4px;border-radius:4px;background:rgba(255,255,255,.2);
+  overflow:hidden;position:relative;z-index:1;
+}
+.splash-loader::after{
+  content:'';position:absolute;left:-40%;top:0;height:100%;width:40%;border-radius:4px;
+  background:linear-gradient(90deg,var(--gold),#fff);
+  animation:loaderSlide 1.1s ease-in-out infinite;
+}
+@keyframes loaderSlide{0%{left:-40%}100%{left:100%}}
+
+/* ===================================================================
+   TOP BARS / HEADERS
+=================================================================== */
+.topbar{
+  position:sticky;top:0;z-index:50;
+  background:var(--glass-bg);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);
+  padding:14px 18px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.topbar h2{font-size:1.02rem;font-weight:700;display:flex;align-items:center;gap:8px;}
+.icon-btn{
+  width:38px;height:38px;border-radius:var(--r-pill);border:1px solid var(--border);
+  background:var(--surface);display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:var(--text-soft);transition:all .18s ease;font-size:.92rem;
+}
+.icon-btn:hover{border-color:var(--green);color:var(--green);}
+.icon-btn:active{transform:scale(.92);}
+
+.page-pad{padding:18px 18px 24px;}
+
+/* ===================================================================
+   GENERIC AUTH / ROLE SELECT
+=================================================================== */
+.auth-screen{min-height:100vh;background:var(--bg);display:flex;flex-direction:column;}
+.auth-hero{
+  background:linear-gradient(160deg,var(--green) 0%,var(--green-dark) 100%);
+  padding:52px 24px 34px;color:#fff;position:relative;overflow:hidden;border-radius:0 0 32px 32px;
+}
+.auth-hero::after{
+  content:'';position:absolute;right:-30px;top:-30px;width:150px;height:150px;border-radius:50%;
+  background:rgba(201,162,39,.22);
+}
+.auth-hero .crest-sm{width:46px;height:46px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;margin-bottom:14px;box-shadow:var(--shadow-md);}
+.auth-hero .crest-sm img{width:32px;height:32px;object-fit:contain;}
+.auth-hero h1{font-size:1.5rem;font-weight:800;position:relative;z-index:1;}
+.auth-hero p{font-size:.85rem;opacity:.85;margin-top:4px;position:relative;z-index:1;}
+
+.role-cards{padding:22px 20px;display:flex;flex-direction:column;gap:14px;flex:1;}
+.role-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);
+  padding:20px;display:flex;align-items:center;gap:16px;cursor:pointer;
+  box-shadow:var(--shadow-sm);transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;
+}
+.role-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);border-color:var(--green);}
+.role-card .r-icon{
+  width:52px;height:52px;border-radius:var(--r-md);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:1.4rem;color:#fff;
+}
+.role-card.student .r-icon{background:linear-gradient(135deg,var(--green-mid),var(--green));}
+.role-card.lecturer .r-icon{background:linear-gradient(135deg,var(--gold),#a9821c);}
+.role-card h3{font-size:1rem;font-weight:700;margin-bottom:2px;}
+.role-card p{font-size:.78rem;color:var(--text-soft);}
+.role-card .chevron{margin-left:auto;color:var(--text-faint);}
+
+.form-card{background:var(--surface);border-radius:var(--r-lg);padding:24px 20px;box-shadow:var(--shadow-sm);border:1px solid var(--border);margin:18px 20px;}
+.field{margin-bottom:14px;}
+.field label{display:block;font-size:.76rem;font-weight:600;color:var(--text-soft);margin-bottom:6px;letter-spacing:.2px;}
+.field .input-wrap{position:relative;}
+.field .input-wrap i{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text-faint);font-size:.85rem;}
+.input{
+  width:100%;height:46px;border-radius:var(--r-sm);border:1.5px solid var(--border);
+  background:var(--surface-2);padding:0 14px 0 38px;font-size:.9rem;color:var(--text);
+  outline:none;transition:border-color .18s ease,background .18s ease;
+}
+.input:focus{border-color:var(--green);background:var(--surface);}
+.input.no-icon{padding-left:14px;}
+.select{
+  width:100%;height:46px;border-radius:var(--r-sm);border:1.5px solid var(--border);
+  background:var(--surface-2);padding:0 14px;font-size:.9rem;color:var(--text);outline:none;cursor:pointer;
+}
+.select:focus{border-color:var(--green);}
+
+.btn{
+  width:100%;height:48px;border-radius:var(--r-sm);border:none;cursor:pointer;
+  font-size:.9rem;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;
+  transition:transform .15s ease,box-shadow .15s ease,opacity .15s ease;font-family:'Inter',sans-serif;
+}
+.btn:active{transform:scale(.98);}
+.btn:disabled{opacity:.55;cursor:not-allowed;}
+.btn-primary{background:linear-gradient(135deg,var(--green-mid),var(--green-dark));color:#fff;box-shadow:0 10px 24px rgba(0,102,51,.28);}
+.btn-gold{background:linear-gradient(135deg,var(--gold),#a9821c);color:#fff;box-shadow:0 10px 24px rgba(201,162,39,.28);}
+.btn-ghost{background:var(--surface-2);color:var(--text);border:1.5px solid var(--border);}
+.btn-danger{background:var(--danger-light);color:var(--danger);}
+.btn-sm{height:38px;font-size:.8rem;border-radius:var(--r-xs);}
+
+.divider-text{text-align:center;color:var(--text-faint);font-size:.78rem;margin:16px 0;position:relative;}
+.divider-text::before,.divider-text::after{content:'';position:absolute;top:50%;width:38%;height:1px;background:var(--border);}
+.divider-text::before{left:0;}.divider-text::after{right:0;}
+
+.link-row{text-align:center;font-size:.8rem;color:var(--text-soft);margin-top:14px;}
+.link-row b{color:var(--green);cursor:pointer;}
+
+/* ===================================================================
+   STATUS / TOAST
+=================================================================== */
+.status-msg{
+  margin-top:14px;padding:11px 14px;border-radius:var(--r-sm);font-size:.82rem;font-weight:600;display:none;
+  align-items:center;gap:8px;
+}
+.status-msg.show{display:flex;}
+.status-msg.success{background:var(--success-light);color:var(--success);}
+.status-msg.error{background:var(--danger-light);color:var(--danger);}
+.status-msg.info{background:var(--green-light);color:var(--green);}
+
+#toast{
+  position:fixed;bottom:110px;left:50%;transform:translateX(-50%) translateY(20px);
+  background:var(--text);color:#fff;padding:12px 20px;border-radius:var(--r-pill);
+  font-size:.82rem;font-weight:600;z-index:999;box-shadow:var(--shadow-lg);
+  opacity:0;pointer-events:none;transition:all .3s cubic-bezier(.2,.8,.3,1);
+  display:flex;align-items:center;gap:8px;max-width:88%;
+}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+#toast.success{background:var(--success);}
+#toast.error{background:var(--danger);}
+
+/* ===================================================================
+   BOTTOM NAV
+=================================================================== */
+.bottom-nav{
+  position:fixed;bottom:0;left:0;right:0;max-width:430px;margin:0 auto;
+  height:var(--nav-h);background:var(--glass-bg);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  border-top:1px solid var(--border);display:flex;z-index:80;
+  padding-bottom:14px;
+}
+.nav-item{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+  color:var(--text-faint);cursor:pointer;font-size:.66rem;font-weight:600;position:relative;
+  transition:color .2s ease;
+}
+.nav-item i{font-size:1.05rem;transition:transform .2s ease;}
+.nav-item.active{color:var(--green);}
+.nav-item.active i{transform:translateY(-2px);}
+.nav-item .nav-dot{position:absolute;top:2px;right:26%;width:7px;height:7px;border-radius:50%;background:var(--danger);display:none;}
+.nav-item .nav-dot.show{display:block;}
+.nav-fab{
+  width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--green-mid),var(--green-dark));
+  display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.2rem;
+  margin-top:-26px;box-shadow:0 10px 24px rgba(0,102,51,.4);border:4px solid var(--bg);
+}
+
+/* ===================================================================
+   STUDENT HOME
+=================================================================== */
+.greet-card{
+  margin:14px 18px 0;padding:20px;border-radius:var(--r-lg);color:#fff;position:relative;overflow:hidden;
+  background:linear-gradient(150deg,var(--green) 0%,var(--green-dark) 100%);
+}
+.greet-card::after{content:'';position:absolute;right:-40px;bottom:-40px;width:140px;height:140px;border-radius:50%;background:rgba(201,162,39,.18);}
+.greet-card .hi{font-size:.78rem;opacity:.8;}
+.greet-card h2{font-size:1.15rem;font-weight:700;margin-top:2px;}
+.greet-ring-row{display:flex;align-items:center;gap:16px;margin-top:16px;position:relative;z-index:1;}
+.ring{width:64px;height:64px;border-radius:50%;position:relative;flex-shrink:0;}
+.ring svg{transform:rotate(-90deg);}
+.ring .ring-label{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:.82rem;font-weight:800;font-family:'Poppins',sans-serif;}
+.greet-stats{display:flex;gap:18px;font-size:.74rem;opacity:.9;}
+.greet-stats b{display:block;font-family:'Poppins',sans-serif;font-size:1rem;}
+
+.section-title{display:flex;align-items:center;justify-content:space-between;margin:20px 18px 10px;}
+.section-title h3{font-size:.95rem;font-weight:700;}
+.section-title .see-all{font-size:.76rem;color:var(--green);font-weight:600;cursor:pointer;}
+
+.hscroll{display:flex;gap:12px;overflow-x:auto;padding:0 18px 4px;scroll-snap-type:x mandatory;}
+.class-card{
+  scroll-snap-align:start;min-width:220px;background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-md);padding:14px;box-shadow:var(--shadow-sm);
+}
+.class-card .tag{display:inline-block;font-size:.66rem;font-weight:700;padding:3px 9px;border-radius:var(--r-pill);background:var(--green-light);color:var(--green);margin-bottom:8px;}
+.class-card .tag.now{background:var(--warn-light);color:var(--warn);}
+.class-card h4{font-size:.88rem;font-weight:700;margin-bottom:2px;}
+.class-card .meta{font-size:.72rem;color:var(--text-soft);display:flex;align-items:center;gap:5px;margin-top:3px;}
+
+.announce-card{
+  margin:0 18px 12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);
+  padding:14px;display:flex;gap:12px;box-shadow:var(--shadow-sm);
+}
+.announce-card .a-icon{width:38px;height:38px;border-radius:var(--r-xs);background:var(--gold-light);color:var(--gold);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.announce-card h4{font-size:.85rem;font-weight:700;margin-bottom:2px;}
+.announce-card p{font-size:.76rem;color:var(--text-soft);line-height:1.4;}
+.announce-card .time{font-size:.68rem;color:var(--text-faint);margin-top:4px;display:block;}
+
+.quick-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:0 18px;}
+.qa-btn{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);
+  padding:14px 6px;text-align:center;cursor:pointer;transition:transform .15s ease;box-shadow:var(--shadow-sm);
+}
+.qa-btn:active{transform:scale(.94);}
+.qa-btn i{font-size:1.15rem;color:var(--green);margin-bottom:6px;}
+.qa-btn span{display:block;font-size:.66rem;font-weight:600;color:var(--text-soft);}
+
+/* ===================================================================
+   SCAN SCREEN
+=================================================================== */
+.scan-wrap{background:#0b1410;min-height:100vh;color:#fff;position:relative;}
+.scan-wrap .topbar{background:rgba(11,20,16,.7);border-color:rgba(255,255,255,.08);}
+.scan-wrap .topbar h2{color:#fff;}
+.scan-wrap .icon-btn{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.15);color:#fff;}
+#reader{width:100%;}
+.camera-stage{
+  position:relative;width:100%;aspect-ratio:3/4;background:#000;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+}
+.scan-frame{
+  position:absolute;width:70%;aspect-ratio:1/1;
+}
+.scan-frame .corner{position:absolute;width:32px;height:32px;border:3px solid var(--gold);}
+.scan-frame .c1{top:0;left:0;border-right:none;border-bottom:none;border-radius:10px 0 0 0;}
+.scan-frame .c2{top:0;right:0;border-left:none;border-bottom:none;border-radius:0 10px 0 0;}
+.scan-frame .c3{bottom:0;left:0;border-right:none;border-top:none;border-radius:0 0 0 10px;}
+.scan-frame .c4{bottom:0;right:0;border-left:none;border-top:none;border-radius:0 0 10px 0;}
+.scan-line{
+  position:absolute;left:4%;right:4%;height:2px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  animation:scanMove 2.1s ease-in-out infinite;box-shadow:0 0 12px 1px rgba(201,162,39,.7);
+}
+@keyframes scanMove{0%{top:4%}50%{top:96%}100%{top:4%}}
+.scan-hint{text-align:center;padding:20px;font-size:.85rem;color:rgba(255,255,255,.75);}
+.scan-manual{margin:0 20px;}
+.scan-result-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:400;display:flex;align-items:center;justify-content:center;
+  backdrop-filter:blur(3px);
+}
+.scan-result-overlay.hidden{display:none;}
+.result-card{
+  background:var(--surface);border-radius:var(--r-xl);padding:32px 26px;text-align:center;width:86%;max-width:340px;
+  box-shadow:var(--shadow-lg);animation:resultPop .35s cubic-bezier(.2,1.3,.4,1);
+}
+@keyframes resultPop{from{transform:scale(.75);opacity:0}to{transform:scale(1);opacity:1}}
+.result-icon{width:76px;height:76px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto 16px;}
+.result-icon.ok{background:var(--success-light);color:var(--success);}
+.result-icon.warn{background:var(--warn-light);color:var(--warn);}
+.result-icon.fail{background:var(--danger-light);color:var(--danger);}
+.result-card h3{font-size:1.1rem;font-weight:800;margin-bottom:6px;}
+.result-card p{font-size:.85rem;color:var(--text-soft);line-height:1.5;margin-bottom:20px;}
+
+/* ===================================================================
+   HISTORY
+=================================================================== */
+.filter-chips{display:flex;gap:8px;padding:14px 18px 4px;overflow-x:auto;}
+.chip{
+  padding:7px 14px;border-radius:var(--r-pill);font-size:.76rem;font-weight:600;white-space:nowrap;
+  background:var(--surface);border:1.5px solid var(--border);color:var(--text-soft);cursor:pointer;transition:all .18s ease;
+}
+.chip.active{background:var(--green);color:#fff;border-color:var(--green);}
+
+.history-item{
+  margin:0 18px 12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);
+  padding:14px;display:flex;gap:12px;box-shadow:var(--shadow-sm);
+}
+.history-item .h-date{
+  width:46px;flex-shrink:0;text-align:center;background:var(--green-light);border-radius:var(--r-xs);padding:6px 2px;
+}
+.history-item .h-date .d{font-family:'Poppins',sans-serif;font-weight:800;font-size:1.05rem;color:var(--green);line-height:1;}
+.history-item .h-date .m{font-size:.62rem;color:var(--green);text-transform:uppercase;letter-spacing:.4px;}
+.history-item h4{font-size:.88rem;font-weight:700;}
+.history-item .meta{font-size:.73rem;color:var(--text-soft);margin-top:2px;line-height:1.5;}
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:.68rem;font-weight:700;padding:3px 10px;border-radius:var(--r-pill);margin-top:6px;}
+.badge.present{background:var(--success-light);color:var(--success);}
+.badge.absent{background:var(--danger-light);color:var(--danger);}
+.badge.late{background:var(--warn-light);color:var(--warn);}
+
+/* ===================================================================
+   NOTIFICATIONS
+=================================================================== */
+.notif-item{
+  margin:0 18px 10px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);
+  padding:14px;display:flex;gap:12px;box-shadow:var(--shadow-sm);position:relative;
+}
+.notif-item.unread::before{content:'';position:absolute;left:6px;top:20px;width:7px;height:7px;border-radius:50%;background:var(--gold);}
+.notif-item .n-icon{width:38px;height:38px;border-radius:50%;background:var(--green-light);color:var(--green);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+
+/* ===================================================================
+   PROFILE
+=================================================================== */
+.profile-hero{
+  background:linear-gradient(150deg,var(--green),var(--green-dark));color:#fff;padding:28px 20px 60px;
+  text-align:center;border-radius:0 0 30px 30px;position:relative;
+}
+.avatar{
+  width:82px;height:82px;border-radius:50%;background:var(--gold);color:#fff;font-family:'Poppins',sans-serif;
+  font-weight:800;font-size:1.7rem;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;
+  border:4px solid rgba(255,255,255,.3);
+}
+.profile-hero h2{font-size:1.1rem;font-weight:700;}
+.profile-hero p{font-size:.78rem;opacity:.8;margin-top:2px;}
+.profile-stats{
+  display:flex;gap:10px;margin:-38px 18px 0;position:relative;z-index:2;
+}
+.pstat{flex:1;background:var(--surface);border-radius:var(--r-md);padding:14px 6px;text-align:center;box-shadow:var(--shadow-md);}
+.pstat b{display:block;font-family:'Poppins',sans-serif;font-size:1.15rem;color:var(--green);}
+.pstat span{font-size:.65rem;color:var(--text-soft);}
+
+.settings-list{margin:20px 18px;background:var(--surface);border-radius:var(--r-md);border:1px solid var(--border);overflow:hidden;}
+.settings-row{
+  display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--border);cursor:pointer;
+}
+.settings-row:last-child{border-bottom:none;}
+.settings-row i{width:20px;color:var(--text-soft);}
+.settings-row span{flex:1;font-size:.86rem;font-weight:500;}
+.settings-row .chev{color:var(--text-faint);}
+.toggle{width:42px;height:24px;border-radius:var(--r-pill);background:var(--border);position:relative;cursor:pointer;transition:background .2s ease;flex-shrink:0;}
+.toggle.on{background:var(--green);}
+.toggle .knob{position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform .2s ease;box-shadow:0 1px 4px rgba(0,0,0,.3);}
+.toggle.on .knob{transform:translateX(18px);}
+
+/* ===================================================================
+   LECTURER DASHBOARD
+=================================================================== */
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 18px;}
+.stat-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:16px;box-shadow:var(--shadow-sm);position:relative;overflow:hidden;}
+.stat-box .s-icon{width:34px;height:34px;border-radius:var(--r-xs);display:flex;align-items:center;justify-content:center;margin-bottom:10px;font-size:.9rem;}
+.stat-box b{display:block;font-family:'Poppins',sans-serif;font-size:1.35rem;}
+.stat-box span{font-size:.72rem;color:var(--text-soft);}
+
+.chart-card{margin:14px 18px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:16px;box-shadow:var(--shadow-sm);}
+.chart-card h4{font-size:.88rem;font-weight:700;margin-bottom:12px;}
+.chart-card canvas{max-height:170px;}
+
+.session-row{
+  margin:0 18px 10px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);
+  padding:14px;box-shadow:var(--shadow-sm);cursor:pointer;transition:border-color .15s ease;
+}
+.session-row:hover{border-color:var(--green);}
+.session-row .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;}
+.session-row h4{font-size:.88rem;font-weight:700;}
+.session-row .meta{font-size:.73rem;color:var(--text-soft);}
+.session-status{font-size:.65rem;font-weight:700;padding:3px 9px;border-radius:var(--r-pill);}
+.session-status.live{background:var(--success-light);color:var(--success);}
+.session-status.ended{background:var(--border);color:var(--text-soft);}
+
+/* ===================================================================
+   CREATE SESSION
+=================================================================== */
+.expire-select{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.expire-opt{
+  text-align:center;padding:10px 4px;border-radius:var(--r-sm);border:1.5px solid var(--border);
+  font-size:.78rem;font-weight:700;cursor:pointer;color:var(--text-soft);background:var(--surface-2);
+}
+.expire-opt.active{background:var(--green);color:#fff;border-color:var(--green);}
+
+.qr-panel{
+  margin:18px 20px;background:var(--surface);border-radius:var(--r-lg);border:1px solid var(--border);
+  padding:24px;text-align:center;box-shadow:var(--shadow-md);
+}
+#qrcode-box{display:inline-block;padding:14px;background:#fff;border-radius:var(--r-md);box-shadow:var(--shadow-sm);}
+.qr-timer{
+  margin-top:16px;font-family:'Poppins',sans-serif;font-size:1.6rem;font-weight:800;color:var(--green);
+}
+.qr-timer.expiring{color:var(--danger);animation:pulse 1s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.qr-meta{font-size:.78rem;color:var(--text-soft);margin-top:6px;}
+
+/* ===================================================================
+   STUDENT LIST (lecturer)
+=================================================================== */
+.search-bar{margin:14px 18px;display:flex;gap:8px;}
+.search-bar .input-wrap{flex:1;position:relative;}
+.stud-row{
+  margin:0 18px 10px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);
+  padding:12px 14px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow-sm);
+}
+.stud-avatar{width:38px;height:38px;border-radius:50%;background:var(--green-light);color:var(--green);font-weight:700;font-size:.8rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Poppins',sans-serif;}
+.stud-row h4{font-size:.85rem;font-weight:700;}
+.stud-row .meta{font-size:.72rem;color:var(--text-soft);}
+
+/* ===================================================================
+   SKELETON / EMPTY
+=================================================================== */
+.skel{background:linear-gradient(90deg,var(--border) 25%,var(--surface-2) 50%,var(--border) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;border-radius:8px;}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.empty{text-align:center;padding:50px 24px;}
+.empty i{font-size:2.6rem;color:var(--text-faint);margin-bottom:12px;}
+.empty h4{font-size:.95rem;font-weight:700;margin-bottom:4px;}
+.empty p{font-size:.8rem;color:var(--text-soft);}
+
+.hidden{display:none!important;}
+.spin{animation:spinRot 1s linear infinite;}
+@keyframes spinRot{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div class="frame" id="frame">
+
+  <!-- ================= SPLASH ================= -->
+  <div id="splash-screen" class="screen active">
+    <div class="splash-crest"><img src="https://timetable.univen.ac.za/images/univen-crest.png" alt="" onerror="this.style.display='none';this.parentElement.innerHTML='<span style=font-size:1.6rem;color:%23006633;font-weight:800>UV</span>'"></div>
+    <div class="splash-title">UNIVEN <span>Attendance</span></div>
+    <div class="splash-sub">Smart Campus Check-in</div>
+    <div class="splash-loader"></div>
+  </div>
+
+  <!-- ================= ROLE SELECT ================= -->
+  <div id="role-screen" class="screen auth-screen">
+    <div class="auth-hero">
+      <div class="crest-sm"><img src="https://timetable.univen.ac.za/images/univen-crest.png" alt="" style="width:32px;height:32px;object-fit:contain;" onerror="this.parentElement.innerHTML='UV'"></div>
+      <h1>Welcome 👋</h1>
+      <p>Sign in to continue to UNIVEN Attendance</p>
+    </div>
+    <div class="role-cards">
+      <div class="role-card student" onclick="nav('student-login-screen')">
+        <div class="r-icon"><i class="fas fa-graduation-cap"></i></div>
+        <div><h3>I'm a Student</h3><p>Check in to class &amp; track attendance</p></div>
+        <i class="fas fa-chevron-right chevron"></i>
+      </div>
+      <div class="role-card lecturer" onclick="nav('lecturer-login-screen')">
+        <div class="r-icon"><i class="fas fa-chalkboard-teacher"></i></div>
+        <div><h3>I'm a Lecturer</h3><p>Create sessions &amp; monitor attendance</p></div>
+        <i class="fas fa-chevron-right chevron"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= STUDENT LOGIN ================= -->
+  <div id="student-login-screen" class="screen auth-screen">
+    <div class="topbar" style="background:transparent;border:none;">
+      <button class="icon-btn" onclick="nav('role-screen')"><i class="fas fa-arrow-left"></i></button>
+      <h2>Student Login</h2><span style="width:38px;"></span>
+    </div>
+    <div class="form-card">
+      <div class="field">
+        <label>Student Number</label>
+        <div class="input-wrap"><i class="fas fa-id-card"></i><input class="input" id="su-number" placeholder="e.g. 21012345" inputmode="numeric"></div>
+      </div>
+      <div class="field">
+        <label>Full Name</label>
+        <div class="input-wrap"><i class="fas fa-user"></i><input class="input" id="su-name" placeholder="e.g. Rendani Mulaudzi"></div>
+      </div>
+      <button class="btn btn-primary" id="student-login-btn"><i class="fas fa-arrow-right-to-bracket"></i> Continue</button>
+      <div class="status-msg" id="student-login-status"></div>
+      <p style="font-size:.72rem;color:var(--text-faint);text-align:center;margin-top:14px;line-height:1.5;">You'll stay signed in on this device — no need to log in every session.</p>
+    </div>
+  </div>
+
+  <!-- ================= LECTURER LOGIN ================= -->
+  <div id="lecturer-login-screen" class="screen auth-screen">
+    <div class="topbar" style="background:transparent;border:none;">
+      <button class="icon-btn" onclick="nav('role-screen')"><i class="fas fa-arrow-left"></i></button>
+      <h2>Lecturer Login</h2><span style="width:38px;"></span>
+    </div>
+    <div class="form-card">
+      <div style="display:flex;background:var(--surface-2);border-radius:var(--r-sm);padding:4px;margin-bottom:16px;">
+        <button class="btn btn-sm" id="lec-tab-login" style="flex:1;background:var(--green);color:#fff;" onclick="lecSwitchTab('login')">Log In</button>
+        <button class="btn btn-sm btn-ghost" id="lec-tab-register" style="flex:1;border:none;background:transparent;" onclick="lecSwitchTab('register')">Register</button>
+      </div>
+      <div id="lec-auth-form"></div>
+      <div class="status-msg" id="lecturer-login-status"></div>
+    </div>
+  </div>
+
+  <!-- ================= STUDENT HOME ================= -->
+  <div id="student-home-screen" class="screen">
+    <div class="topbar">
+      <h2><i class="fas fa-house" style="color:var(--green);"></i> Home</h2>
+      <button class="icon-btn" onclick="goNotifications()"><i class="fas fa-bell"></i></button>
+    </div>
+    <div class="greet-card">
+      <div class="hi" id="home-greeting">Good day,</div>
+      <h2 id="home-student-name">Student</h2>
+      <div class="greet-ring-row">
+        <div class="ring" id="home-ring">
+          <svg width="64" height="64"><circle cx="32" cy="32" r="27" stroke="rgba(255,255,255,.25)" stroke-width="6" fill="none"/><circle id="home-ring-fg" cx="32" cy="32" r="27" stroke="var(--gold)" stroke-width="6" fill="none" stroke-linecap="round" stroke-dasharray="170" stroke-dashoffset="170"/></svg>
+          <div class="ring-label" id="home-ring-label">—</div>
+        </div>
+        <div class="greet-stats">
+          <div><b id="home-attended">0</b>Attended</div>
+          <div><b id="home-total">0</b>Total sessions</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title"><h3>Today's Classes</h3><span class="see-all" onclick="nav('history-screen')">History →</span></div>
+    <div class="hscroll" id="today-classes"><div class="skel" style="width:220px;height:90px;flex-shrink:0;"></div></div>
+
+    <div class="section-title"><h3>Quick Actions</h3></div>
+    <div class="quick-actions">
+      <div class="qa-btn" onclick="nav('scan-screen')"><i class="fas fa-qrcode"></i><span>Scan QR</span></div>
+      <div class="qa-btn" onclick="nav('history-screen')"><i class="fas fa-clock-rotate-left"></i><span>History</span></div>
+      <div class="qa-btn" onclick="goNotifications()"><i class="fas fa-bell"></i><span>Alerts</span></div>
+      <div class="qa-btn" onclick="nav('profile-screen')"><i class="fas fa-user"></i><span>Profile</span></div>
+    </div>
+
+    <div class="section-title"><h3>Announcements</h3></div>
+    <div id="home-announcements"><div class="skel" style="height:60px;margin:0 18px 12px;"></div></div>
+    <div style="height:100px;"></div>
+  </div>
+
+  <!-- ================= SCAN ================= -->
+  <div id="scan-screen" class="screen scan-wrap">
+    <div class="topbar">
+      <button class="icon-btn" onclick="stopScanAndGo('student-home-screen')"><i class="fas fa-arrow-left"></i></button>
+      <h2>Scan to Check In</h2><span style="width:38px;"></span>
+    </div>
+    <div class="camera-stage">
+      <div id="reader"></div>
+      <div class="scan-frame" id="scan-frame-overlay">
+        <div class="corner c1"></div><div class="corner c2"></div><div class="corner c3"></div><div class="corner c4"></div>
+        <div class="scan-line"></div>
+      </div>
+    </div>
+    <p class="scan-hint">Point your camera at the lecturer's QR code</p>
+    <div class="scan-manual">
+      <div class="divider-text">or enter session code</div>
+      <div style="display:flex;gap:8px;">
+        <input class="input no-icon" id="manual-session-id" placeholder="Session ID" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.2);color:#fff;">
+        <button class="btn btn-gold" style="width:auto;padding:0 18px;" id="manual-lookup-btn"><i class="fas fa-magnifying-glass"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scan result overlay -->
+  <div class="scan-result-overlay hidden" id="scan-result-overlay">
+    <div class="result-card" id="scan-result-card"></div>
+  </div>
+
+  <!-- ================= HISTORY ================= -->
+  <div id="history-screen" class="screen">
+    <div class="topbar"><h2><i class="fas fa-clock-rotate-left" style="color:var(--green);"></i> Attendance History</h2><span style="width:38px;"></span></div>
+    <div class="filter-chips">
+      <div class="chip active" data-filter="all" onclick="setHistoryFilter('all',this)">All</div>
+      <div class="chip" data-filter="present" onclick="setHistoryFilter('present',this)">Present</div>
+      <div class="chip" data-filter="absent" onclick="setHistoryFilter('absent',this)">Absent</div>
+    </div>
+    <div id="history-list" style="margin-top:8px;">
+      <div class="skel" style="height:80px;margin:0 18px 12px;"></div>
+      <div class="skel" style="height:80px;margin:0 18px 12px;"></div>
+    </div>
+    <div style="height:100px;"></div>
+  </div>
+
+  <!-- ================= NOTIFICATIONS ================= -->
+  <div id="notifications-screen" class="screen">
+    <div class="topbar"><h2><i class="fas fa-bell" style="color:var(--green);"></i> Notifications</h2><span style="width:38px;"></span></div>
+    <div id="notif-list" style="margin-top:10px;">
+      <div class="skel" style="height:64px;margin:0 18px 10px;"></div>
+    </div>
+    <div style="height:100px;"></div>
+  </div>
+
+  <!-- ================= PROFILE (student) ================= -->
+  <div id="profile-screen" class="screen">
+    <div class="profile-hero">
+      <div class="avatar" id="profile-avatar">?</div>
+      <h2 id="profile-name">—</h2>
+      <p id="profile-sub">Student</p>
+    </div>
+    <div class="profile-stats">
+      <div class="pstat"><b id="pstat-pct">—</b><span>Attendance</span></div>
+      <div class="pstat"><b id="pstat-attended">0</b><span>Attended</span></div>
+      <div class="pstat"><b id="pstat-total">0</b><span>Sessions</span></div>
+    </div>
+    <div class="settings-list">
+      <div class="settings-row"><i class="fas fa-moon"></i><span>Dark Mode</span><div class="toggle" id="dark-toggle" onclick="toggleDark()"><div class="knob"></div></div></div>
+      <div class="settings-row"><i class="fas fa-bell"></i><span>Notifications</span><div class="toggle on"><div class="knob"></div></div></div>
+      <div class="settings-row"><i class="fas fa-circle-question"></i><span>Help &amp; Support</span><i class="fas fa-chevron-right chev"></i></div>
+      <div class="settings-row"><i class="fas fa-shield-halved"></i><span>Privacy Policy</span><i class="fas fa-chevron-right chev"></i></div>
+    </div>
+    <div style="margin:20px 18px;">
+      <button class="btn btn-danger" onclick="studentLogout()"><i class="fas fa-arrow-right-from-bracket"></i> Log Out</button>
+    </div>
+    <div style="height:100px;"></div>
+  </div>
+
+  <!-- ================= LECTURER PROFILE ================= -->
+  <div id="lecturer-profile-screen" class="screen">
+    <div class="profile-hero">
+      <div class="avatar" id="lec-profile-avatar">?</div>
+      <h2 id="lec-profile-name">—</h2>
+      <p id="lec-profile-sub">Lecturer</p>
+    </div>
+    <div class="profile-stats">
+      <div class="pstat"><b id="lstat-sessions">0</b><span>Sessions</span></div>
+      <div class="pstat"><b id="lstat-checkins">0</b><span>Check-ins</span></div>
+      <div class="pstat"><b id="lstat-avg">—</b><span>Avg Turnout</span></div>
+    </div>
+    <div class="settings-list">
+      <div class="settings-row"><i class="fas fa-moon"></i><span>Dark Mode</span><div class="toggle" id="dark-toggle-lec" onclick="toggleDark()"><div class="knob"></div></div></div>
+      <div class="settings-row"><i class="fas fa-circle-question"></i><span>Help &amp; Support</span><i class="fas fa-chevron-right chev"></i></div>
+    </div>
+    <div style="margin:20px 18px;">
+      <button class="btn btn-danger" onclick="lecturerLogout()"><i class="fas fa-arrow-right-from-bracket"></i> Log Out</button>
+    </div>
+    <div style="height:100px;"></div>
+  </div>
+
+  <!-- ================= LECTURER DASHBOARD ================= -->
+  <div id="lecturer-dashboard-screen" class="screen">
+    <div class="topbar">
+      <h2><i class="fas fa-chart-pie" style="color:var(--green);"></i> Dashboard</h2>
+      <button class="icon-btn" onclick="nav('lecturer-profile-screen')"><i class="fas fa-user"></i></button>
+    </div>
+    <div class="stat-grid">
+      <div class="stat-box"><div class="s-icon" style="background:var(--green-light);color:var(--green);"><i class="fas fa-bolt"></i></div><b id="dash-active">0</b><span>Active Sessions</span></div>
+      <div class="stat-box"><div class="s-icon" style="background:var(--gold-light);color:var(--gold);"><i class="fas fa-users"></i></div><b id="dash-today">0</b><span>Check-ins Today</span></div>
+      <div class="stat-box"><div class="s-icon" style="background:var(--success-light);color:var(--success);"><i class="fas fa-layer-group"></i></div><b id="dash-total-sessions">0</b><span>Total Sessions</span></div>
+      <div class="stat-box"><div class="s-icon" style="background:var(--warn-light);color:var(--warn);"><i class="fas fa-percent"></i></div><b id="dash-avg-turnout">—</b><span>Avg Turnout</span></div>
+    </div>
+    <div class="chart-card"><h4>Attendance — Last 7 Sessions</h4><canvas id="trend-chart"></canvas></div>
+    <div class="section-title"><h3>Recent Sessions</h3><span class="see-all" onclick="nav('create-session-screen')">+ New</span></div>
+    <div id="dash-session-list"><div class="skel" style="height:70px;margin:0 18px 10px;"></div></div>
+    <div style="height:100px;"></div>
+  </div>
+
+  <!-- ================= CREATE SESSION ================= -->
+  <div id="create-session-screen" class="screen">
+    <div class="topbar"><button class="icon-btn" onclick="nav('lecturer-dashboard-screen')"><i class="fas fa-arrow-left"></i></button><h2>New Session</h2><span style="width:38px;"></span></div>
+    <div class="form-card">
+      <div class="field"><label>Module Code</label><div class="input-wrap"><i class="fas fa-book"></i><input class="input" id="cs-module" placeholder="e.g. CSC301"></div></div>
+      <div class="field"><label>Venue</label>
+        <select class="select" id="cs-venue">
+          <option value="">-- Select Venue --</option>
+          <optgroup label="Main Buildings"><option>Auditorium</option><option>Block A</option><option>Block B</option><option>Block C</option><option>Block D</option><option>Block E</option></optgroup>
+          <optgroup label="Other"><option>Library</option><option>Computer Lab 1</option><option>Computer Lab 2</option><option>Health Sciences Lecture Hall 1</option></optgroup>
+        </select>
+      </div>
+      <div class="field"><label>Date &amp; Time</label><input class="input no-icon" type="datetime-local" id="cs-time"></div>
+      <div class="field">
+        <label>QR Code Expires In</label>
+        <div class="expire-select">
+          <div class="expire-opt" data-min="5" onclick="setExpireOpt(this,5)">5 min</div>
+          <div class="expire-opt active" data-min="10" onclick="setExpireOpt(this,10)">10 min</div>
+          <div class="expire-opt" data-min="20" onclick="setExpireOpt(this,20)">20 min</div>
+          <div class="expire-opt" data-min="45" onclick="setExpireOpt(this,45)">45 min</div>
+        </div>
+      </div>
+      <button class="btn btn-primary" id="generate-qr-btn" style="margin-top:6px;"><i class="fas fa-qrcode"></i> Generate QR &amp; Start</button>
+      <div class="status-msg" id="create-session-status"></div>
+    </div>
+
+    <div class="qr-panel hidden" id="qr-panel">
+      <div id="qrcode-box"></div>
+      <div class="qr-timer" id="qr-timer">10:00</div>
+      <div class="qr-meta" id="qr-meta"></div>
+      <div style="display:flex;gap:10px;margin-top:18px;">
+        <button class="btn btn-ghost btn-sm" id="download-qr-btn"><i class="fas fa-download"></i> Save PNG</button>
+        <button class="btn btn-ghost btn-sm" onclick="nav('lecturer-dashboard-screen')"><i class="fas fa-check"></i> Done</button>
+      </div>
+    </div>
+    <div style="height:60px;"></div>
+  </div>
+
+  <!-- ================= STUDENT LIST (lecturer) ================= -->
+  <div id="student-list-screen" class="screen">
+    <div class="topbar"><button class="icon-btn" onclick="nav('lecturer-dashboard-screen')"><i class="fas fa-arrow-left"></i></button><h2 id="stud-list-title">Students</h2><button class="icon-btn" id="export-csv-btn"><i class="fas fa-file-export"></i></button></div>
+    <div class="search-bar">
+      <div class="input-wrap"><i class="fas fa-magnifying-glass" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text-faint);font-size:.8rem;"></i><input class="input" id="stud-search" placeholder="Search student number or name…"></div>
+    </div>
+    <div class="filter-chips" style="padding-top:0;">
+      <div class="chip active" data-f="all" onclick="setStudFilter('all',this)">All</div>
+      <div class="chip" data-f="present" onclick="setStudFilter('present',this)">Present</div>
+      <div class="chip" data-f="absent" onclick="setStudFilter('absent',this)">Absent</div>
+    </div>
+    <div id="stud-list-body" style="margin-top:8px;">
+      <div class="empty"><i class="fas fa-layer-group"></i><h4>Select a session</h4><p>Open a session from the dashboard to see its student list.</p></div>
+    </div>
+    <div style="height:60px;"></div>
+  </div>
+
+  <!-- ================= BOTTOM NAVS ================= -->
+  <div class="bottom-nav hidden" id="student-nav">
+    <div class="nav-item" data-screen="student-home-screen" onclick="navBottom('student-home-screen',this,'student')"><i class="fas fa-house"></i>Home</div>
+    <div class="nav-item" data-screen="history-screen" onclick="navBottom('history-screen',this,'student')"><i class="fas fa-clock-rotate-left"></i>History</div>
+    <div class="nav-fab" onclick="nav('scan-screen')"><i class="fas fa-qrcode"></i></div>
+    <div class="nav-item" data-screen="notifications-screen" onclick="navBottom('notifications-screen',this,'student')"><i class="fas fa-bell"></i>Alerts<span class="nav-dot" id="notif-dot"></span></div>
+    <div class="nav-item" data-screen="profile-screen" onclick="navBottom('profile-screen',this,'student')"><i class="fas fa-user"></i>Profile</div>
+  </div>
+
+  <div class="bottom-nav hidden" id="lecturer-nav">
+    <div class="nav-item" data-screen="lecturer-dashboard-screen" onclick="navBottom('lecturer-dashboard-screen',this,'lecturer')"><i class="fas fa-chart-pie"></i>Dashboard</div>
+    <div class="nav-item" data-screen="create-session-screen" onclick="navBottom('create-session-screen',this,'lecturer')"><i class="fas fa-qrcode"></i>Create</div>
+    <div class="nav-item" data-screen="student-list-screen" onclick="navBottom('student-list-screen',this,'lecturer')"><i class="fas fa-users"></i>Students</div>
+    <div class="nav-item" data-screen="lecturer-profile-screen" onclick="navBottom('lecturer-profile-screen',this,'lecturer')"><i class="fas fa-user"></i>Profile</div>
+  </div>
+
+  <div id="toast"></div>
+</div>
+
+<!-- ===================== SCRIPTS ===================== -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<script>
+/* =====================================================================
+   UNIVEN ATTENDANCE — APP LOGIC
+   Firebase Realtime Database + Auth (compat SDK v9.23.0)
+   ===================================================================== */
+
+/* ---------------------------------------------------------------------
+   1. FIREBASE CONFIG — replace with your project's config
+      (Firebase Console → Project Settings → General → Your apps)
+--------------------------------------------------------------------- */
+const firebaseConfig = {
+  
+    apiKey: "AIzaSyC9z5TmK1aJUulrEIscwe9MZ5qcusJMOpc",
+    authDomain: "blueflare-47c29.firebaseapp.com",
+    projectId: "blueflare-47c29",
+    storageBucket: "blueflare-47c29.firebasestorage.app",
+    messagingSenderId: "348839866641",
+    appId: "1:348839866641:web:64fb433419c80c15dddcb0"
+};
+
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.database();
+
+/* ---------------------------------------------------------------------
+   2. GEOFENCE CONFIG — optional GPS verification
+      Off-site check-ins are NOT blocked, just marked "absent" so the
+      lecturer's dashboard can flag them. See attemptCheckIn() below.
+--------------------------------------------------------------------- */
+const GEOFENCE_CONFIG = {
+  ENFORCE_GEOFENCE: true,
+  ALLOWED_RADIUS_METERS: 500,
+  VENUES: {
+    "Auditorium": { lat: -22.976760, lng: 30.443308 }
+    // Add more venues here as you get real coordinates, e.g.:
+    // "Block A": { lat: -22.9770, lng: 30.4440 },
+  }
+};
+
+/* ---------------------------------------------------------------------
+   3. STATE
+--------------------------------------------------------------------- */
+let currentRole = null;       // 'student' | 'lecturer'
+let studentProfile = null;    // { uid, studentNumber, name }
+let lecturerProfile = null;   // { uid, name, email }
+let lecMode = 'login';        // lecturer auth form tab
+
+let historyFilter = 'all';
+let studFilter = 'all';
+let studSearchQ = '';
+let activeDashSession = null; // session id currently open in student-list-screen
+let studListUnsub = null;
+let dashSessionsUnsub = null;
+let homeAttendanceUnsub = null;
+
+let qrTimerInterval = null;
+let qrObj = null;
+let currentSessionId = null;
+let currentSessionExpiresAt = null;
+let expireMinutes = 10;
+
+let html5QrScanner = null;
+let capturedGps = null;
+let trendChartInstance = null;
+
+/* ---------------------------------------------------------------------
+   4. HELPERS
+--------------------------------------------------------------------- */
+const $ = id => document.getElementById(id);
+
+function esc(s){
+  if(s===undefined||s===null) return '';
+  return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
+function initials(name){
+  if(!name) return '?';
+  const parts = name.trim().split(/\s+/);
+  return ((parts[0]?.[0]||'') + (parts[1]?.[0]||'')).toUpperCase() || name[0].toUpperCase();
+}
+
+let toastTimer;
+function toast(msg, type=''){
+  const el = $('toast');
+  el.textContent = msg;
+  el.className = type ? `show ${type}` : 'show';
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>{ el.className = ''; }, 3200);
+}
+
+function setStatus(el, msg, type){
+  if(!el) return;
+  el.textContent = msg;
+  el.className = 'status-msg' + (msg ? ' show '+type : '');
+}
+
+function haversineMeters(lat1, lng1, lat2, lng2){
+  const R = 6371000;
+  const toRad = d => d * Math.PI / 180;
+  const dLat = toRad(lat2-lat1), dLng = toRad(lng2-lng1);
+  const a = Math.sin(dLat/2)**2 + Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLng/2)**2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+
+function getGpsPosition(){
+  return new Promise((resolve,reject)=>{
+    if(!navigator.geolocation){ reject(new Error('Geolocation not supported')); return; }
+    navigator.geolocation.getCurrentPosition(
+      pos => resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude, accuracy: pos.coords.accuracy }),
+      err => reject(new Error(err.message)),
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+    );
+  });
+}
+
+function fmtTime(ts){
+  if(!ts) return '—';
+  return new Date(ts).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+}
+function fmtDateShort(ts){
+  const d = new Date(ts);
+  return { day: d.getDate(), mon: d.toLocaleString('en',{month:'short'}).toUpperCase() };
+}
+
+/* ---------------------------------------------------------------------
+   5. NAVIGATION
+--------------------------------------------------------------------- */
+function nav(screenId){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  const el = $(screenId);
+  if(el) el.classList.add('active');
+  window.scrollTo(0,0);
+  const frame = $('frame'); if(frame) frame.scrollTop = 0;
+
+  // Show/hide bottom navs
+  const studentScreens = ['student-home-screen','history-screen','notifications-screen','profile-screen'];
+  const lecturerScreens = ['lecturer-dashboard-screen','create-session-screen','student-list-screen','lecturer-profile-screen'];
+  $('student-nav').classList.toggle('hidden', !studentScreens.includes(screenId));
+  $('lecturer-nav').classList.toggle('hidden', !lecturerScreens.includes(screenId));
+
+  if(screenId === 'scan-screen') startScanner();
+  else stopScanner();
+}
+
+function navBottom(screenId, el, role){
+  nav(screenId);
+  const navEl = role === 'student' ? $('student-nav') : $('lecturer-nav');
+  navEl.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  el.classList.add('active');
+
+  if(screenId === 'student-home-screen') renderStudentHome();
+  if(screenId === 'history-screen') renderHistory();
+  if(screenId === 'notifications-screen') renderNotifications();
+  if(screenId === 'profile-screen') renderStudentProfile();
+  if(screenId === 'lecturer-dashboard-screen') renderLecturerDashboard();
+  if(screenId === 'lecturer-profile-screen') renderLecturerProfile();
+}
+
+function goNotifications(){
+  nav('notifications-screen');
+  $('student-nav').classList.remove('hidden');
+  $('student-nav').querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active', n.dataset.screen==='notifications-screen'));
+  renderNotifications();
+}
+
+/* ---------------------------------------------------------------------
+   6. DARK MODE
+--------------------------------------------------------------------- */
+function toggleDark(){
+  const isDark = document.body.getAttribute('data-theme') === 'dark';
+  document.body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  document.querySelectorAll('#dark-toggle, #dark-toggle-lec').forEach(t=>t.classList.toggle('on', !isDark));
+}
+
+/* ---------------------------------------------------------------------
+   7. SPLASH → ROLE SCREEN
+--------------------------------------------------------------------- */
+setTimeout(()=>{
+  if(!currentRole) nav('role-screen');
+}, 1800);
+
+/* ---------------------------------------------------------------------
+   8. STUDENT LOGIN (Firebase Anonymous Auth + profile in RTDB)
+      Anonymous auth persists across reloads (Firebase's own storage,
+      not localStorage/sessionStorage), which is what gives us
+      "log in once" behaviour without a password for students.
+--------------------------------------------------------------------- */
+$('student-login-btn').addEventListener('click', async ()=>{
+  const studentNumber = $('su-number').value.trim();
+  const name = $('su-name').value.trim();
+  const statusEl = $('student-login-status');
+
+  if(!studentNumber || !name){
+    setStatus(statusEl, 'Please enter your student number and name.', 'error');
+    return;
+  }
+
+  $('student-login-btn').disabled = true;
+  setStatus(statusEl, 'Signing you in…', 'info');
+
+  try{
+    let user = auth.currentUser;
+    if(!user){
+      const cred = await auth.signInAnonymously();
+      user = cred.user;
+    }
+    const profile = { studentNumber, name, createdAt: Date.now() };
+    await db.ref('students/'+user.uid).update(profile);
+    studentProfile = { uid: user.uid, ...profile };
+    currentRole = 'student';
+    setStatus(statusEl, '', '');
+    nav('student-home-screen');
+    navBottom('student-home-screen', document.querySelector('#student-nav .nav-item[data-screen="student-home-screen"]'), 'student');
+  }catch(err){
+    console.error(err);
+    setStatus(statusEl, 'Could not sign in: ' + err.message, 'error');
+  }finally{
+    $('student-login-btn').disabled = false;
+  }
+});
+
+function studentLogout(){
+  auth.signOut();
+  studentProfile = null;
+  currentRole = null;
+  nav('role-screen');
+}
+
+/* ---------------------------------------------------------------------
+   9. LECTURER LOGIN / REGISTER (Firebase email+password Auth)
+--------------------------------------------------------------------- */
+function lecLoginForm(){
+  return `
+    <div class="field"><label>Email</label><div class="input-wrap"><i class="fas fa-envelope"></i><input class="input" id="lec-email" type="email" placeholder="you@univen.ac.za"></div></div>
+    <div class="field"><label>Password</label><div class="input-wrap"><i class="fas fa-lock"></i><input class="input" id="lec-pwd" type="password" placeholder="••••••••"></div></div>
+    <button class="btn btn-primary" id="lec-login-submit"><i class="fas fa-arrow-right-to-bracket"></i> Log In</button>
+  `;
+}
+function lecRegisterForm(){
+  return `
+    <div class="field"><label>Full Name</label><div class="input-wrap"><i class="fas fa-user"></i><input class="input" id="lec-r-name" placeholder="Dr. T. Mulaudzi"></div></div>
+    <div class="field"><label>Email</label><div class="input-wrap"><i class="fas fa-envelope"></i><input class="input" id="lec-r-email" type="email" placeholder="you@univen.ac.za"></div></div>
+    <div class="field"><label>Password (min 6 chars)</label><div class="input-wrap"><i class="fas fa-lock"></i><input class="input" id="lec-r-pwd" type="password" placeholder="••••••••"></div></div>
+    <button class="btn btn-gold" id="lec-register-submit"><i class="fas fa-user-plus"></i> Create Account</button>
+  `;
+}
+function lecSwitchTab(mode){
+  lecMode = mode;
+  const lb = $('lec-tab-login'), rb = $('lec-tab-register');
+  if(mode==='login'){
+    lb.style.background='var(--green)'; lb.style.color='#fff';
+    rb.style.background='transparent'; rb.style.color='var(--text)';
+    $('lec-auth-form').innerHTML = lecLoginForm();
+    $('lec-login-submit').addEventListener('click', doLecturerLogin);
+  }else{
+    rb.style.background='var(--green)'; rb.style.color='#fff';
+    lb.style.background='transparent'; lb.style.color='var(--text)';
+    $('lec-auth-form').innerHTML = lecRegisterForm();
+    $('lec-register-submit').addEventListener('click', doLecturerRegister);
+  }
+}
+lecSwitchTab('login'); // initial render
+
+async function doLecturerLogin(){
+  const email = $('lec-email').value.trim();
+  const pwd = $('lec-pwd').value;
+  const statusEl = $('lecturer-login-status');
+  if(!email || !pwd){ setStatus(statusEl,'Please enter email and password.','error'); return; }
+  setStatus(statusEl, 'Signing in…', 'info');
+  try{
+    const cred = await auth.signInWithEmailAndPassword(email, pwd);
+    const snap = await db.ref('lecturers/'+cred.user.uid).once('value');
+    lecturerProfile = { uid: cred.user.uid, ...(snap.val()||{ name: email, email }) };
+    currentRole = 'lecturer';
+    setStatus(statusEl,'','');
+    nav('lecturer-dashboard-screen');
+    navBottom('lecturer-dashboard-screen', document.querySelector('#lecturer-nav .nav-item[data-screen="lecturer-dashboard-screen"]'), 'lecturer');
+  }catch(err){
+    setStatus(statusEl, friendlyAuthError(err), 'error');
+  }
+}
+async function doLecturerRegister(){
+  const name = $('lec-r-name').value.trim();
+  const email = $('lec-r-email').value.trim();
+  const pwd = $('lec-r-pwd').value;
+  const statusEl = $('lecturer-login-status');
+  if(!name || !email || !pwd || pwd.length<6){ setStatus(statusEl,'Fill all fields (password 6+ chars).','error'); return; }
+  setStatus(statusEl, 'Creating your account…', 'info');
+  try{
+    const cred = await auth.createUserWithEmailAndPassword(email, pwd);
+    const profile = { name, email, createdAt: Date.now() };
+    await db.ref('lecturers/'+cred.user.uid).set(profile);
+    lecturerProfile = { uid: cred.user.uid, ...profile };
+    currentRole = 'lecturer';
+    setStatus(statusEl,'','');
+    toast('Welcome, '+name+'!','success');
+    nav('lecturer-dashboard-screen');
+    navBottom('lecturer-dashboard-screen', document.querySelector('#lecturer-nav .nav-item[data-screen="lecturer-dashboard-screen"]'), 'lecturer');
+  }catch(err){
+    setStatus(statusEl, friendlyAuthError(err), 'error');
+  }
+}
+function friendlyAuthError(err){
+  switch(err.code){
+    case 'auth/invalid-email': return 'That email address looks invalid.';
+    case 'auth/user-not-found': return 'No account found with that email.';
+    case 'auth/wrong-password': return 'Incorrect password.';
+    case 'auth/email-already-in-use': return 'An account with that email already exists.';
+    case 'auth/weak-password': return 'Password should be at least 6 characters.';
+    default: return err.message || 'Something went wrong.';
+  }
+}
+function lecturerLogout(){
+  auth.signOut();
+  lecturerProfile = null;
+  currentRole = null;
+  nav('role-screen');
+}
+
+/* ---------------------------------------------------------------------
+   10. STUDENT HOME
+--------------------------------------------------------------------- */
+async function renderStudentHome(){
+  if(!studentProfile) return;
+  const hour = new Date().getHours();
+  $('home-greeting').textContent = hour<12 ? 'Good morning,' : hour<17 ? 'Good afternoon,' : 'Good evening,';
+  $('home-student-name').textContent = studentProfile.name;
+
+  // Pull this student's session history to compute attendance % and today's classes
+  const snap = await db.ref('sessions').orderByChild('createdAt').limitToLast(80).once('value');
+  const data = snap.val() || {};
+  const all = Object.keys(data).map(id=>({id, ...data[id]}));
+
+  let attended = 0, total = 0;
+  const todayStr = new Date().toDateString();
+  const todays = [];
+
+  all.forEach(s=>{
+    const rec = (s.attendanceRecords||{})[studentProfile.studentNumber];
+    // Count as "total" only sessions this student actually has a record for (their own history)
+    if(rec){ total++; if(rec.status==='present') attended++; }
+    if(s.sessionTime && new Date(s.sessionTime).toDateString() === todayStr){
+      todays.push({...s, myRecord: rec});
+    }
+  });
+
+  const pct = total>0 ? Math.round((attended/total)*100) : 0;
+  $('home-attended').textContent = attended;
+  $('home-total').textContent = total;
+  $('home-ring-label').textContent = total>0 ? pct+'%' : '—';
+  const circumference = 170;
+  $('home-ring-fg').style.strokeDashoffset = total>0 ? circumference - (circumference*pct/100) : circumference;
+
+  // Today's classes
+  const container = $('today-classes');
+  if(todays.length===0){
+    container.innerHTML = `<div class="empty" style="padding:24px 10px;"><i class="fas fa-mug-hot"></i><h4>No classes today</h4><p style="font-size:.72rem;">Enjoy the break!</p></div>`;
+  }else{
+    container.innerHTML = todays.map(s=>{
+      const checkedIn = !!s.myRecord;
+      return `<div class="class-card">
+        <span class="tag ${checkedIn?'':'now'}">${checkedIn ? 'Checked in' : 'Not yet'}</span>
+        <h4>${esc(s.moduleCode||'Module')}</h4>
+        <div class="meta"><i class="fas fa-location-dot"></i> ${esc(s.venue||'')}</div>
+        <div class="meta"><i class="fas fa-clock"></i> ${fmtTime(s.sessionTime)}</div>
+      </div>`;
+    }).join('');
+  }
+
+  // Announcements (from notifications node, audience student/all)
+  const nSnap = await db.ref('notifications').orderByChild('createdAt').limitToLast(3).once('value');
+  const nData = nSnap.val() || {};
+  const notifs = Object.values(nData).filter(n => !n.audience || n.audience==='all' || n.audience==='student');
+  const annEl = $('home-announcements');
+  if(notifs.length===0){
+    annEl.innerHTML = `<div class="empty" style="padding:24px 10px;"><i class="fas fa-comment-slash"></i><h4>No announcements</h4></div>`;
+  }else{
+    annEl.innerHTML = notifs.sort((a,b)=>b.createdAt-a.createdAt).map(n=>`
+      <div class="announce-card">
+        <div class="a-icon"><i class="fas fa-megaphone"></i></div>
+        <div><h4>${esc(n.title)}</h4><p>${esc(n.body)}</p><span class="time">${new Date(n.createdAt).toLocaleDateString()}</span></div>
+      </div>`).join('');
+  }
+}
+
+/* ---------------------------------------------------------------------
+   11. QR SCANNER + CHECK-IN
+--------------------------------------------------------------------- */
+function startScanner(){
+  if(html5QrScanner) return;
+  html5QrScanner = new Html5Qrcode('reader');
+  html5QrScanner.start(
+    { facingMode:'environment' },
+    { fps: 10, qrbox: { width: 230, height: 230 } },
+    onScanSuccess,
+    ()=>{}
+  ).catch(err=>{
+    console.error(err);
+    toast('Camera access denied or unavailable', 'error');
+  });
+}
+function stopScanner(){
+  if(html5QrScanner){
+    html5QrScanner.stop().then(()=>html5QrScanner.clear()).catch(()=>{});
+    html5QrScanner = null;
+  }
+}
+function stopScanAndGo(screenId){ stopScanner(); nav(screenId); }
+
+let scanLocked = false;
+async function onScanSuccess(decodedText){
+  if(scanLocked) return;
+  scanLocked = true;
+  stopScanner();
+  await attemptCheckIn(decodedText);
+  setTimeout(()=>{ scanLocked = false; }, 800);
+}
+
+$('manual-lookup-btn').addEventListener('click', ()=>{
+  const id = $('manual-session-id').value.trim();
+  if(!id){ toast('Enter a session ID','error'); return; }
+  attemptCheckIn(id);
+});
+
+async function attemptCheckIn(sessionId){
+  if(!studentProfile){ toast('Please log in first','error'); return; }
+  try{
+    const snap = await db.ref('sessions/'+sessionId).once('value');
+    if(!snap.exists()){
+      showScanResult('fail','Session Not Found','This QR code doesn\'t match an active session. Ask your lecturer for a fresh one.');
+      return;
+    }
+    const session = snap.val();
+
+    if(session.expiresAt && Date.now() > session.expiresAt){
+      showScanResult('fail','QR Code Expired','This session\'s check-in window has closed.');
+      return;
+    }
+
+    const existing = (session.attendanceRecords||{})[studentProfile.studentNumber];
+    if(existing){
+      showScanResult('warn','Already Checked In','You already checked in for '+(session.moduleCode||'this session')+'.');
+      return;
+    }
+
+    // GPS + geofence
+    let attendanceStatus = 'present';
+    let distanceNote = null;
+    try{ capturedGps = await getGpsPosition(); }catch(e){ capturedGps = null; }
+
+    if(GEOFENCE_CONFIG.ENFORCE_GEOFENCE){
+      const venueCoords = GEOFENCE_CONFIG.VENUES[session.venue];
+      if(venueCoords && capturedGps){
+        const dist = haversineMeters(capturedGps.lat, capturedGps.lng, venueCoords.lat, venueCoords.lng);
+        if(dist > GEOFENCE_CONFIG.ALLOWED_RADIUS_METERS){ attendanceStatus='absent'; distanceNote=Math.round(dist); }
+      }else if(venueCoords && !capturedGps){
+        attendanceStatus = 'absent';
+      }
+    }
+
+    const recRef = db.ref(`sessions/${sessionId}/attendanceRecords/${studentProfile.studentNumber}`);
+    const result = await recRef.transaction(current=>{
+      if(current !== null) return; // abort — someone else's request beat us here
+      return {
+        name: studentProfile.name,
+        uid: studentProfile.uid,
+        timestamp: Date.now(),
+        gps: capturedGps || null,
+        status: attendanceStatus
+      };
+    });
+
+    if(!result.committed){
+      showScanResult('warn','Already Checked In','You already checked in for this session.');
+      return;
+    }
+
+    if(attendanceStatus === 'absent'){
+      showScanResult('warn','Recorded — Marked Absent',
+        'You appear to be' + (distanceNote?' '+distanceNote+'m':'') + ' outside ' + (session.venue||'the venue') + '. Contact your lecturer if this seems wrong.');
+    }else{
+      showScanResult('ok','Checked In!', 'You\'re marked present for '+(session.moduleCode||'this session')+' at '+(session.venue||'')+'.');
+    }
+  }catch(err){
+    console.error(err);
+    showScanResult('fail','Something Went Wrong', err.message);
+  }
+}
+
+function showScanResult(type, title, msg){
+  const icon = type==='ok' ? 'fa-circle-check' : type==='warn' ? 'fa-triangle-exclamation' : 'fa-circle-xmark';
+  $('scan-result-card').innerHTML = `
+    <div class="result-icon ${type}"><i class="fas ${icon}"></i></div>
+    <h3>${esc(title)}</h3>
+    <p>${esc(msg)}</p>
+    <button class="btn btn-primary" onclick="closeScanResult()">Done</button>
+  `;
+  $('scan-result-overlay').classList.remove('hidden');
+}
+function closeScanResult(){
+  $('scan-result-overlay').classList.add('hidden');
+  $('manual-session-id').value = '';
+  stopScanAndGo('student-home-screen');
+  navBottom('student-home-screen', document.querySelector('#student-nav .nav-item[data-screen="student-home-screen"]'), 'student');
+}
+
+/* ---------------------------------------------------------------------
+   12. HISTORY (student)
+--------------------------------------------------------------------- */
+function setHistoryFilter(f, el){
+  historyFilter = f;
+  document.querySelectorAll('#history-screen .chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  renderHistory();
+}
+
+async function renderHistory(){
+  if(!studentProfile) return;
+  const listEl = $('history-list');
+  const snap = await db.ref('sessions').orderByChild('createdAt').limitToLast(100).once('value');
+  const data = snap.val() || {};
+  let rows = Object.values(data)
+    .map(s=>({ session: s, record: (s.attendanceRecords||{})[studentProfile.studentNumber] }))
+    .filter(r=>r.record);
+
+  if(historyFilter !== 'all') rows = rows.filter(r=>r.record.status === historyFilter);
+  rows.sort((a,b)=> (b.record.timestamp||0) - (a.record.timestamp||0));
+
+  if(rows.length===0){
+    listEl.innerHTML = `<div class="empty"><i class="fas fa-inbox"></i><h4>No records yet</h4><p>Your attendance history will show up here.</p></div>`;
+    return;
+  }
+
+  listEl.innerHTML = rows.map(r=>{
+    const d = fmtDateShort(r.record.timestamp);
+    const status = r.record.status === 'present' ? 'present' : 'absent';
+    const label = status === 'present' ? 'Present' : 'Absent (off-site)';
+    const icon = status === 'present' ? 'fa-check' : 'fa-xmark';
+    return `<div class="history-item">
+      <div class="h-date"><div class="d">${d.day}</div><div class="m">${d.mon}</div></div>
+      <div style="flex:1;">
+        <h4>${esc(r.session.moduleCode||'Module')}</h4>
+        <div class="meta"><i class="fas fa-location-dot"></i> ${esc(r.session.venue||'')} · ${fmtTime(r.record.timestamp)}</div>
+        <div class="meta">Lecturer: ${esc(r.session.lecturerName||'—')}</div>
+        <span class="badge ${status}"><i class="fas ${icon}"></i> ${label}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ---------------------------------------------------------------------
+   13. NOTIFICATIONS
+--------------------------------------------------------------------- */
+async function renderNotifications(){
+  const listEl = $('notif-list');
+  const snap = await db.ref('notifications').orderByChild('createdAt').limitToLast(30).once('value');
+  const data = snap.val() || {};
+  const items = Object.values(data).sort((a,b)=>b.createdAt-a.createdAt);
+  $('notif-dot').classList.remove('show');
+
+  if(items.length===0){
+    listEl.innerHTML = `<div class="empty"><i class="fas fa-bell-slash"></i><h4>No notifications</h4><p>You're all caught up.</p></div>`;
+    return;
+  }
+  listEl.innerHTML = items.map(n=>`
+    <div class="notif-item">
+      <div class="n-icon"><i class="fas fa-megaphone"></i></div>
+      <div><h4 style="font-size:.85rem;font-weight:700;">${esc(n.title)}</h4>
+      <p style="font-size:.78rem;color:var(--text-soft);margin-top:2px;">${esc(n.body)}</p>
+      <span style="font-size:.68rem;color:var(--text-faint);">${new Date(n.createdAt).toLocaleString()}</span></div>
+    </div>`).join('');
+}
+
+/* ---------------------------------------------------------------------
+   14. STUDENT PROFILE
+--------------------------------------------------------------------- */
+async function renderStudentProfile(){
+  if(!studentProfile) return;
+  $('profile-avatar').textContent = initials(studentProfile.name);
+  $('profile-name').textContent = studentProfile.name;
+  $('profile-sub').textContent = 'Student #'+studentProfile.studentNumber;
+
+  const snap = await db.ref('sessions').orderByChild('createdAt').limitToLast(200).once('value');
+  const data = snap.val() || {};
+  let attended=0, total=0;
+  Object.values(data).forEach(s=>{
+    const rec = (s.attendanceRecords||{})[studentProfile.studentNumber];
+    if(rec){ total++; if(rec.status==='present') attended++; }
+  });
+  const pct = total>0 ? Math.round((attended/total)*100) : 0;
+  $('pstat-pct').textContent = total>0 ? pct+'%' : '—';
+  $('pstat-attended').textContent = attended;
+  $('pstat-total').textContent = total;
+}
+
+/* ---------------------------------------------------------------------
+   15. LECTURER DASHBOARD
+--------------------------------------------------------------------- */
+async function renderLecturerDashboard(){
+  if(!lecturerProfile) return;
+  if(dashSessionsUnsub) dashSessionsUnsub.off && dashSessionsUnsub.off();
+
+  const ref = db.ref('sessions').orderByChild('lecturerId').equalTo(lecturerProfile.uid);
+  dashSessionsUnsub = ref;
+  ref.on('value', snap=>{
+    const data = snap.val() || {};
+    const sessions = Object.keys(data).map(id=>({id, ...data[id]})).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+
+    const now = Date.now();
+    const active = sessions.filter(s=>s.expiresAt && s.expiresAt > now).length;
+    const todayStr = new Date().toDateString();
+    let todayCheckins = 0;
+    let turnoutSum = 0, turnoutCount = 0;
+
+    sessions.forEach(s=>{
+      const count = Object.keys(s.attendanceRecords||{}).length;
+      if(s.createdAt && new Date(s.createdAt).toDateString()===todayStr) todayCheckins += count;
+      if(count>0){ turnoutSum += count; turnoutCount++; }
+    });
+
+    $('dash-active').textContent = active;
+    $('dash-today').textContent = todayCheckins;
+    $('dash-total-sessions').textContent = sessions.length;
+    $('dash-avg-turnout').textContent = turnoutCount>0 ? Math.round(turnoutSum/turnoutCount) : '—';
+
+    renderTrendChart(sessions.slice(0,7).reverse());
+    renderDashSessionList(sessions.slice(0,15));
+  });
+}
+
+function renderDashSessionList(sessions){
+  const el = $('dash-session-list');
+  if(sessions.length===0){
+    el.innerHTML = `<div class="empty"><i class="fas fa-qrcode"></i><h4>No sessions yet</h4><p>Create your first session to get started.</p></div>`;
+    return;
+  }
+  const now = Date.now();
+  el.innerHTML = sessions.map(s=>{
+    const live = s.expiresAt && s.expiresAt > now;
+    const count = Object.keys(s.attendanceRecords||{}).length;
+    return `<div class="session-row" onclick="openStudentList('${s.id}','${esc(s.moduleCode||'')}')">
+      <div class="top"><h4>${esc(s.moduleCode||'Module')}</h4><span class="session-status ${live?'live':'ended'}">${live?'● Live':'Ended'}</span></div>
+      <div class="meta"><i class="fas fa-location-dot"></i> ${esc(s.venue||'')} · ${fmtTime(s.sessionTime)} · ${count} checked in</div>
+    </div>`;
+  }).join('');
+}
+
+function renderTrendChart(sessions){
+  const ctx = document.getElementById('trend-chart');
+  if(!ctx) return;
+  const labels = sessions.map(s=>s.moduleCode || '—');
+  const values = sessions.map(s=>Object.keys(s.attendanceRecords||{}).length);
+
+  if(trendChartInstance) trendChartInstance.destroy();
+  trendChartInstance = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels.length ? labels : ['—'],
+      datasets: [{
+        data: values.length ? values : [0],
+        backgroundColor: '#0a7a41',
+        borderRadius: 8,
+        maxBarThickness: 28
+      }]
+    },
+    options: {
+      responsive:true,
+      plugins:{ legend:{ display:false } },
+      scales:{
+        y:{ beginAtZero:true, ticks:{ precision:0 }, grid:{ color:'rgba(0,0,0,.05)' } },
+        x:{ grid:{ display:false } }
+      }
+    }
+  });
+}
+
+async function renderLecturerProfile(){
+  if(!lecturerProfile) return;
+  $('lec-profile-avatar').textContent = initials(lecturerProfile.name);
+  $('lec-profile-name').textContent = lecturerProfile.name;
+  $('lec-profile-sub').textContent = lecturerProfile.email || '';
+
+  const snap = await db.ref('sessions').orderByChild('lecturerId').equalTo(lecturerProfile.uid).once('value');
+  const data = snap.val() || {};
+  const sessions = Object.values(data);
+  let checkins = 0, turnoutSum=0, turnoutCount=0;
+  sessions.forEach(s=>{
+    const c = Object.keys(s.attendanceRecords||{}).length;
+    checkins += c;
+    if(c>0){ turnoutSum+=c; turnoutCount++; }
+  });
+  $('lstat-sessions').textContent = sessions.length;
+  $('lstat-checkins').textContent = checkins;
+  $('lstat-avg').textContent = turnoutCount>0 ? Math.round(turnoutSum/turnoutCount) : '—';
+}
+
+/* ---------------------------------------------------------------------
+   16. CREATE SESSION + QR
+--------------------------------------------------------------------- */
+function setExpireOpt(el, minutes){
+  document.querySelectorAll('.expire-opt').forEach(o=>o.classList.remove('active'));
+  el.classList.add('active');
+  expireMinutes = minutes;
+}
+
+$('generate-qr-btn').addEventListener('click', async ()=>{
+  const moduleCode = $('cs-module').value.trim();
+  const venue = $('cs-venue').value;
+  const sessionTimeRaw = $('cs-time').value;
+  const statusEl = $('create-session-status');
+
+  if(!moduleCode || !venue || !sessionTimeRaw){
+    setStatus(statusEl, 'Please fill in module, venue and date/time.', 'error');
+    return;
+  }
+  $('generate-qr-btn').disabled = true;
+  setStatus(statusEl, 'Creating session…', 'info');
+
+  try{
+    const sessionTime = new Date(sessionTimeRaw).getTime();
+    const now = Date.now();
+    const expiresAt = now + expireMinutes*60000;
+    const newRef = db.ref('sessions').push();
+    await newRef.set({
+      moduleCode, venue,
+      sessionTime, createdAt: now, expiresAt,
+      lecturerId: lecturerProfile.uid,
+      lecturerName: lecturerProfile.name,
+      attendanceRecords: {}
+    });
+    currentSessionId = newRef.key;
+    currentSessionExpiresAt = expiresAt;
+
+    renderQr(currentSessionId, moduleCode, venue);
+    startQrCountdown(expiresAt);
+    setStatus(statusEl, 'Session live! Students can scan now.', 'success');
+  }catch(err){
+    console.error(err);
+    setStatus(statusEl, 'Could not create session: '+err.message, 'error');
+  }finally{
+    $('generate-qr-btn').disabled = false;
+  }
+});
+
+function renderQr(sessionId, moduleCode, venue){
+  $('qrcode-box').innerHTML = '';
+  qrObj = new QRCode($('qrcode-box'), {
+    text: sessionId, width: 200, height: 200,
+    colorDark: '#12211a', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.H
+  });
+  $('qr-meta').innerHTML = `<strong>${esc(moduleCode)}</strong> · ${esc(venue)}<br>Session ID: <code>${sessionId}</code>`;
+  $('qr-panel').classList.remove('hidden');
+}
+
+function startQrCountdown(expiresAt){
+  clearInterval(qrTimerInterval);
+  const timerEl = $('qr-timer');
+  function tick(){
+    const remaining = expiresAt - Date.now();
+    if(remaining <= 0){
+      timerEl.textContent = 'Expired';
+      timerEl.classList.add('expiring');
+      clearInterval(qrTimerInterval);
+      return;
+    }
+    const mins = Math.floor(remaining/60000);
+    const secs = Math.floor((remaining%60000)/1000);
+    timerEl.textContent = `${mins}:${secs.toString().padStart(2,'0')}`;
+    if(remaining < 60000) timerEl.classList.add('expiring'); else timerEl.classList.remove('expiring');
+  }
+  tick();
+  qrTimerInterval = setInterval(tick, 1000);
+}
+
+$('download-qr-btn').addEventListener('click', ()=>{
+  const canvas = document.querySelector('#qrcode-box canvas');
+  if(!canvas) return;
+  const link = document.createElement('a');
+  link.download = 'session-qr-'+(currentSessionId||'code')+'.png';
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+});
+
+/* ---------------------------------------------------------------------
+   17. STUDENT LIST (lecturer view of a specific session)
+--------------------------------------------------------------------- */
+function openStudentList(sessionId, moduleCode){
+  activeDashSession = sessionId;
+  $('stud-list-title').textContent = moduleCode || 'Students';
+  nav('student-list-screen');
+  $('lecturer-nav').classList.remove('hidden');
+  $('lecturer-nav').querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active', n.dataset.screen==='student-list-screen'));
+  watchStudentList(sessionId);
+}
+
+function watchStudentList(sessionId){
+  if(studListUnsub) studListUnsub.off();
+  const ref = db.ref('sessions/'+sessionId);
+  studListUnsub = ref;
+  ref.on('value', snap=>{
+    const session = snap.val();
+    if(!session){ $('stud-list-body').innerHTML = `<div class="empty"><i class="fas fa-triangle-exclamation"></i><h4>Session not found</h4></div>`; return; }
+    renderStudList(session);
+  });
+}
+
+function renderStudList(session){
+  let rows = Object.entries(session.attendanceRecords||{}).map(([studentNumber, rec])=>({studentNumber, ...rec}));
+  if(studFilter !== 'all') rows = rows.filter(r=>r.status === studFilter);
+  if(studSearchQ.trim()){
+    const q = studSearchQ.toLowerCase();
+    rows = rows.filter(r=> r.studentNumber.toLowerCase().includes(q) || (r.name||'').toLowerCase().includes(q));
+  }
+  rows.sort((a,b)=>(b.timestamp||0)-(a.timestamp||0));
+
+  const el = $('stud-list-body');
+  if(rows.length===0){
+    el.innerHTML = `<div class="empty"><i class="fas fa-user-slash"></i><h4>No students yet</h4><p>Check back once students start scanning.</p></div>`;
+    return;
+  }
+  el.innerHTML = rows.map(r=>{
+    const isAbsent = r.status === 'absent';
+    return `<div class="stud-row">
+      <div class="stud-avatar">${initials(r.name)}</div>
+      <div style="flex:1;"><h4>${esc(r.name)}</h4><div class="meta">#${esc(r.studentNumber)} · ${fmtTime(r.timestamp)}</div></div>
+      <span class="badge ${isAbsent?'absent':'present'}" style="margin-top:0;">${isAbsent?'Absent':'Present'}</span>
+    </div>`;
+  }).join('');
+}
+
+function setStudFilter(f, el){
+  studFilter = f;
+  document.querySelectorAll('#student-list-screen .chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  if(activeDashSession) db.ref('sessions/'+activeDashSession).once('value').then(s=>renderStudList(s.val()||{}));
+}
+$('stud-search').addEventListener('input', e=>{
+  studSearchQ = e.target.value;
+  if(activeDashSession) db.ref('sessions/'+activeDashSession).once('value').then(s=>renderStudList(s.val()||{}));
+});
+
+$('export-csv-btn').addEventListener('click', async ()=>{
+  if(!activeDashSession){ toast('Open a session first','error'); return; }
+  const snap = await db.ref('sessions/'+activeDashSession).once('value');
+  const session = snap.val();
+  if(!session){ toast('Session not found','error'); return; }
+  const rows = Object.entries(session.attendanceRecords||{}).map(([num,r])=>[num, r.name, r.status, new Date(r.timestamp).toLocaleString()]);
+  let csv = 'Student Number,Name,Status,Timestamp\n';
+  rows.forEach(r=>{ csv += r.map(v=>`"${(v||'').toString().replace(/"/g,'""')}"`).join(',') + '\n'; });
+  const blob = new Blob([csv], {type:'text/csv'});
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url; link.download = (session.moduleCode||'session')+'-attendance.csv';
+  link.click();
+  URL.revokeObjectURL(url);
+  toast('CSV exported','success');
+});
+
+/* ---------------------------------------------------------------------
+   18. AUTH STATE OBSERVER (keeps students/lecturers signed in)
+--------------------------------------------------------------------- */
+auth.onAuthStateChanged(async user=>{
+  if(!user) return;
+  if(currentRole) return; // already routed this session
+
+  // Try lecturer profile first (has email/password), fall back to student
+  if(!user.isAnonymous){
+    const snap = await db.ref('lecturers/'+user.uid).once('value');
+    if(snap.exists()){
+      lecturerProfile = { uid: user.uid, ...snap.val() };
+      currentRole = 'lecturer';
+      setTimeout(()=>{
+        nav('lecturer-dashboard-screen');
+        navBottom('lecturer-dashboard-screen', document.querySelector('#lecturer-nav .nav-item[data-screen="lecturer-dashboard-screen"]'), 'lecturer');
+      }, 1900);
+    }
+  }else{
+    const snap = await db.ref('students/'+user.uid).once('value');
+    if(snap.exists()){
+      studentProfile = { uid: user.uid, ...snap.val() };
+      currentRole = 'student';
+      setTimeout(()=>{
+        nav('student-home-screen');
+        navBottom('student-home-screen', document.querySelector('#student-nav .nav-item[data-screen="student-home-screen"]'), 'student');
+      }, 1900);
+    }
+  }
+});
+
+</script>
+</body>
+</html>
