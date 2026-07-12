@@ -3,8 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>UNIVEN Attendance</title>
+<title>UNIVEN Attend</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="icon" href="https://www.univen.ac.za/wp-content/uploads/2026/02/logo.png" type="image/png">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
@@ -12,12 +13,12 @@
    DESIGN TOKENS
 =================================================================== */
 :root{
-  --green:#006633;
-  --green-dark:#014525;
-  --green-mid:#0a7a41;
-  --green-light:#e7f3ec;
-  --gold:#c9a227;
-  --gold-light:#faf4e2;
+  --green:#0b1f3a;
+  --green-dark:#071328;
+  --green-mid:#12305c;
+  --green-light:#eef1f7;
+  --gold:#e0932c;
+  --gold-light:#fdf1e2;
   --bg:#f4f7f5;
   --surface:#ffffff;
   --surface-2:#fbfcfb;
@@ -40,8 +41,8 @@
   --nav-h:78px;
 }
 [data-theme="dark"]{
-  --bg:#0b1410;
-  --surface:#131f19;
+  --bg:black;
+  --surface:black;
   --surface-2:#0f1b15;
   --text:#eef5f1;
   --text-soft:#a3b5ac;
@@ -92,6 +93,7 @@ a{color:inherit;text-decoration:none;}
 
 .screen{display:none;min-height:100%;}
 .screen.active{display:block;animation:screenIn .32s cubic-bezier(.2,.8,.3,1);}
+.screen:not(.active){display:none!important;}
 @keyframes screenIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 
 /* ===================================================================
@@ -101,14 +103,14 @@ a{color:inherit;text-decoration:none;}
   position:relative;
   min-height:100vh;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  background:radial-gradient(circle at 30% 20%, var(--green-mid), var(--green-dark) 60%, #012c19 100%);
+  background:white;
+  background-image:url("https://i.ibb.co/fYQtc6Gk/122e8e91-764c-4747-a6ae-2f7127ec53d8.png");
   color:#fff;overflow:hidden;
+  background-size:100%;
 }
 #splash-screen::before{
   content:'';position:absolute;inset:0;
-  background:
-    radial-gradient(circle at 85% 15%, rgba(201,162,39,.35), transparent 40%),
-    radial-gradient(circle at 10% 90%, rgba(255,255,255,.08), transparent 45%);
+  
 }
 .splash-crest{
   width:92px;height:92px;border-radius:24px;background:#fff;
@@ -149,6 +151,7 @@ a{color:inherit;text-decoration:none;}
   width:38px;height:38px;border-radius:var(--r-pill);border:1px solid var(--border);
   background:var(--surface);display:flex;align-items:center;justify-content:center;
   cursor:pointer;color:var(--text-soft);transition:all .18s ease;font-size:.92rem;
+  color:#FA6632 ;
 }
 .icon-btn:hover{border-color:var(--green);color:var(--green);}
 .icon-btn:active{transform:scale(.92);}
@@ -158,10 +161,14 @@ a{color:inherit;text-decoration:none;}
 /* ===================================================================
    GENERIC AUTH / ROLE SELECT
 =================================================================== */
-.auth-screen{min-height:100vh;background:var(--bg);display:flex;flex-direction:column;}
+.auth-screen{min-height:100vh;background:var(--bg);display:flex;flex-direction:column;
+  
+}
 .auth-hero{
   background:linear-gradient(160deg,var(--green) 0%,var(--green-dark) 100%);
-  padding:52px 24px 34px;color:#fff;position:relative;overflow:hidden;border-radius:0 0 32px 32px;
+  padding:52px 24px 100px;color:#fff;position:relative;overflow:hidden;
+  background-image:url("https://i.ibb.co/QZC2JH3/file-00000000e9d471f4af794bc4c0b448a5.png"); 
+  background-size:100%;
 }
 .auth-hero::after{
   content:'';position:absolute;right:-30px;top:-30px;width:150px;height:150px;border-radius:50%;
@@ -201,6 +208,7 @@ a{color:inherit;text-decoration:none;}
 }
 .input:focus{border-color:var(--green);background:var(--surface);}
 .input.no-icon{padding-left:14px;}
+textarea.input{height:auto;padding-top:10px;}
 .select{
   width:100%;height:46px;border-radius:var(--r-sm);border:1.5px solid var(--border);
   background:var(--surface-2);padding:0 14px;font-size:.9rem;color:var(--text);outline:none;cursor:pointer;
@@ -226,6 +234,16 @@ a{color:inherit;text-decoration:none;}
 
 .link-row{text-align:center;font-size:.8rem;color:var(--text-soft);margin-top:14px;}
 .link-row b{color:var(--green);cursor:pointer;}
+
+.tab-switch{display:flex;background:var(--surface-2);border-radius:var(--r-sm);padding:4px;margin-bottom:18px;gap:4px;}
+.tab-switch button{flex:1;border:none;background:transparent;padding:10px;border-radius:9px;font-size:.84rem;font-weight:700;color:var(--text-soft);cursor:pointer;transition:all .18s ease;}
+.tab-switch button.active{background:var(--green);color:#fff;}
+
+.confirm-chip{
+  margin-top:10px;display:flex;align-items:center;gap:8px;background:var(--success-light);color:var(--success);
+  border-radius:var(--r-sm);padding:10px 12px;font-size:.8rem;font-weight:700;
+}
+.confirm-chip.warn{background:var(--warn-light);color:var(--warn);}
 
 /* ===================================================================
    STATUS / TOAST
@@ -279,8 +297,12 @@ a{color:inherit;text-decoration:none;}
    STUDENT HOME
 =================================================================== */
 .greet-card{
-  margin:14px 18px 0;padding:20px;border-radius:var(--r-lg);color:#fff;position:relative;overflow:hidden;
+  margin:14px 18px 0;padding:20px;
+padding-bottom:50px;
+  border-radius:var(--r-lg);color:#fff;position:relative;overflow:hidden;
   background:linear-gradient(150deg,var(--green) 0%,var(--green-dark) 100%);
+  background-image:url("https://i.ibb.co/QZC2JH3/file-00000000e9d471f4af794bc4c0b448a5.png");
+  background-size:100%;
 }
 .greet-card::after{content:'';position:absolute;right:-40px;bottom:-40px;width:140px;height:140px;border-radius:50%;background:rgba(201,162,39,.18);}
 .greet-card .hi{font-size:.78rem;opacity:.8;}
@@ -291,6 +313,11 @@ a{color:inherit;text-decoration:none;}
 .ring .ring-label{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:.82rem;font-weight:800;font-family:'Poppins',sans-serif;}
 .greet-stats{display:flex;gap:18px;font-size:.74rem;opacity:.9;}
 .greet-stats b{display:block;font-family:'Poppins',sans-serif;font-size:1rem;}
+
+.pwd-nudge{
+  margin:14px 18px 0;background:var(--warn-light);color:var(--warn);border-radius:var(--r-md);
+  padding:12px 14px;font-size:.8rem;font-weight:700;display:flex;align-items:center;gap:10px;cursor:pointer;
+}
 
 .section-title{display:flex;align-items:center;justify-content:space-between;margin:20px 18px 10px;}
 .section-title h3{font-size:.95rem;font-weight:700;}
@@ -327,7 +354,7 @@ a{color:inherit;text-decoration:none;}
 /* ===================================================================
    SCAN SCREEN
 =================================================================== */
-.scan-wrap{background:#0b1410;min-height:100vh;color:#fff;position:relative;}
+.scan-wrap{background:#080d16;min-height:100vh;color:#fff;position:relative;}
 .scan-wrap .topbar{background:rgba(11,20,16,.7);border-color:rgba(255,255,255,.08);}
 .scan-wrap .topbar h2{color:#fff;}
 .scan-wrap .icon-btn{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.15);color:#fff;}
@@ -351,6 +378,11 @@ a{color:inherit;text-decoration:none;}
 }
 @keyframes scanMove{0%{top:4%}50%{top:96%}100%{top:4%}}
 .scan-hint{text-align:center;padding:20px;font-size:.85rem;color:rgba(255,255,255,.75);}
+.scan-step-pill{
+  display:inline-flex;margin:14px auto 0;padding:5px 14px;border-radius:var(--r-pill);
+  background:rgba(224,147,44,.18);color:var(--gold);font-size:.7rem;font-weight:700;
+}
+.scan-step-row{text-align:center;}
 .scan-manual{margin:0 20px;}
 .scan-result-overlay{
   position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:400;display:flex;align-items:center;justify-content:center;
@@ -409,7 +441,10 @@ a{color:inherit;text-decoration:none;}
    PROFILE
 =================================================================== */
 .profile-hero{
-  background:linear-gradient(150deg,var(--green),var(--green-dark));color:#fff;padding:28px 20px 60px;
+ 
+  background-image:url("https://i.ibb.co/QZC2JH3/file-00000000e9d471f4af794bc4c0b448a5.png"); 
+  background-size:100%;
+  padding-bottom:50px;
   text-align:center;border-radius:0 0 30px 30px;position:relative;
 }
 .avatar{
@@ -417,8 +452,8 @@ a{color:inherit;text-decoration:none;}
   font-weight:800;font-size:1.7rem;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;
   border:4px solid rgba(255,255,255,.3);
 }
-.profile-hero h2{font-size:1.1rem;font-weight:700;}
-.profile-hero p{font-size:.78rem;opacity:.8;margin-top:2px;}
+.profile-hero h2{font-size:1.1rem;font-weight:700;color:#4169E1 ;}
+.profile-hero p{font-size:.78rem;opacity:.8;margin-top:2px;color:#4169E1;}
 .profile-stats{
   display:flex;gap:10px;margin:-38px 18px 0;position:relative;z-index:2;
 }
@@ -487,6 +522,14 @@ a{color:inherit;text-decoration:none;}
 .qr-meta{font-size:.78rem;color:var(--text-soft);margin-top:6px;}
 
 /* ===================================================================
+   ACTIVE CLASSES (student)
+=================================================================== */
+.empty{text-align:center;padding:50px 24px;}
+.empty i{font-size:2.6rem;color:var(--text-faint);margin-bottom:12px;}
+.empty h4{font-size:.95rem;font-weight:700;margin-bottom:4px;}
+.empty p{font-size:.8rem;color:var(--text-soft);}
+
+/* ===================================================================
    STUDENT LIST (lecturer)
 =================================================================== */
 .search-bar{margin:14px 18px;display:flex;gap:8px;}
@@ -500,14 +543,10 @@ a{color:inherit;text-decoration:none;}
 .stud-row .meta{font-size:.72rem;color:var(--text-soft);}
 
 /* ===================================================================
-   SKELETON / EMPTY
+   SKELETON
 =================================================================== */
 .skel{background:linear-gradient(90deg,var(--border) 25%,var(--surface-2) 50%,var(--border) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;border-radius:8px;}
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
-.empty{text-align:center;padding:50px 24px;}
-.empty i{font-size:2.6rem;color:var(--text-faint);margin-bottom:12px;}
-.empty h4{font-size:.95rem;font-weight:700;margin-bottom:4px;}
-.empty p{font-size:.8rem;color:var(--text-soft);}
 
 .hidden{display:none!important;}
 .spin{animation:spinRot 1s linear infinite;}
@@ -519,21 +558,19 @@ a{color:inherit;text-decoration:none;}
 
   <!-- ================= SPLASH ================= -->
   <div id="splash-screen" class="screen active">
-    <div class="splash-crest"><img src="https://timetable.univen.ac.za/images/univen-crest.png" alt="" onerror="this.style.display='none';this.parentElement.innerHTML='<span style=font-size:1.6rem;color:%23006633;font-weight:800>UV</span>'"></div>
-    <div class="splash-title">UNIVEN <span>Attendance</span></div>
-    <div class="splash-sub">Smart Campus Check-in</div>
-    <div class="splash-loader"></div>
+    <div class="splash-crest"><img src="https://www.univen.ac.za/wp-content/uploads/2026/02/logo.png" alt="" onerror="this.style.display='none';this.parentElement.innerHTML='<span style=font-size:1.6rem;color:%230b1f3a;font-weight:800>UV</span>'"></div>
+
   </div>
+
 
   <!-- ================= ROLE SELECT ================= -->
   <div id="role-screen" class="screen auth-screen">
     <div class="auth-hero">
-      <div class="crest-sm"><img src="https://timetable.univen.ac.za/images/univen-crest.png" alt="" style="width:32px;height:32px;object-fit:contain;" onerror="this.parentElement.innerHTML='UV'"></div>
-      <h1>Welcome 👋</h1>
-      <p>Sign in to continue to UNIVEN Attendance</p>
+      <div class="crest-sm"><img src="https://www.univen.ac.za/wp-content/uploads/2026/02/logo.png" alt="" style="width:32px;height:32px;object-fit:contain;" onerror="this.parentElement.innerHTML='UV'"></div>
+
     </div>
     <div class="role-cards">
-      <div class="role-card student" onclick="nav('student-login-screen')">
+      <div class="role-card student" onclick="nav('student-auth-screen');studentAuthTab('login')">
         <div class="r-icon"><i class="fas fa-graduation-cap"></i></div>
         <div><h3>I'm a Student</h3><p>Check in to class &amp; track attendance</p></div>
         <i class="fas fa-chevron-right chevron"></i>
@@ -546,24 +583,55 @@ a{color:inherit;text-decoration:none;}
     </div>
   </div>
 
-  <!-- ================= STUDENT LOGIN ================= -->
-  <div id="student-login-screen" class="screen auth-screen">
+  <!-- ================= STUDENT AUTH (login + register) ================= -->
+  <div id="student-auth-screen" class="screen auth-screen">
     <div class="topbar" style="background:transparent;border:none;">
       <button class="icon-btn" onclick="nav('role-screen')"><i class="fas fa-arrow-left"></i></button>
-      <h2>Student Login</h2><span style="width:38px;"></span>
+      <h2>Student Account</h2><span style="width:38px;"></span>
     </div>
     <div class="form-card">
-      <div class="field">
-        <label>Student Number</label>
-        <div class="input-wrap"><i class="fas fa-id-card"></i><input class="input" id="su-number" placeholder="e.g. 21012345" inputmode="numeric"></div>
+      <div class="tab-switch">
+        <button id="stu-tab-login" class="active" onclick="studentAuthTab('login')">Log In</button>
+        <button id="stu-tab-register" onclick="studentAuthTab('register')">Register</button>
       </div>
-      <div class="field">
-        <label>Full Name</label>
-        <div class="input-wrap"><i class="fas fa-user"></i><input class="input" id="su-name" placeholder="e.g. Rendani Mulaudzi"></div>
+
+      <!-- LOGIN -->
+      <div id="stu-login-form">
+        <div class="field"><label>Student Number or Email</label><div class="input-wrap"><i class="fas fa-id-card"></i><input class="input" id="stu-login-id" placeholder="e.g. 21012345 or you@students.univen.ac.za"></div></div>
+        <div class="field"><label>Password</label><div class="input-wrap"><i class="fas fa-lock"></i><input class="input" id="stu-login-pwd" type="password" placeholder="••••••••"></div></div>
+        <button class="btn btn-primary" id="stu-login-btn"><i class="fas fa-arrow-right-to-bracket"></i> Log In</button>
       </div>
-      <button class="btn btn-primary" id="student-login-btn"><i class="fas fa-arrow-right-to-bracket"></i> Continue</button>
-      <div class="status-msg" id="student-login-status"></div>
-      <p style="font-size:.72rem;color:var(--text-faint);text-align:center;margin-top:14px;line-height:1.5;">You'll stay signed in on this device — no need to log in every session.</p>
+
+      <!-- REGISTER -->
+      <div id="stu-register-form" class="hidden">
+        <div class="field">
+          <label>Step 1 — Verify Your Student Card</label>
+          <button class="btn btn-ghost" type="button" id="reg-scan-card-btn"><i class="fas fa-id-card"></i> Scan Student Card Barcode</button>
+          <div id="reg-card-chip" class="confirm-chip hidden"><i class="fas fa-check-circle"></i> <span id="reg-card-value"></span></div>
+        </div>
+        <div class="field"><label>Student Number</label><div class="input-wrap"><i class="fas fa-hashtag"></i><input class="input" id="reg-number" placeholder="e.g. 21012345"></div></div>
+        <div class="field"><label>Full Name</label><div class="input-wrap"><i class="fas fa-user"></i><input class="input" id="reg-name" placeholder="e.g. Rendani Mulaudzi"></div></div>
+        <div class="field"><label>Email Address</label><div class="input-wrap"><i class="fas fa-envelope"></i><input class="input" id="reg-email" type="email" placeholder="you@students.univen.ac.za"></div></div>
+        <button class="btn btn-gold" id="reg-submit-btn"><i class="fas fa-user-plus"></i> Create Account</button>
+        <p style="font-size:.72rem;color:var(--text-faint);text-align:center;margin-top:12px;line-height:1.5;">Your card barcode becomes your temporary password — you'll be asked to set a new one right after your first login.</p>
+      </div>
+
+      <div class="status-msg" id="stu-auth-status"></div>
+    </div>
+  </div>
+
+  <!-- ================= CHANGE PASSWORD ================= -->
+  <div id="change-password-screen" class="screen auth-screen">
+    <div class="topbar" style="background:transparent;border:none;">
+      <span style="width:38px;"></span><h2>Set a New Password</h2>
+      <button class="icon-btn" id="cp-skip-btn" title="Skip for now"><i class="fas fa-xmark"></i></button>
+    </div>
+    <div class="form-card">
+      <p style="font-size:.82rem;color:var(--text-soft);margin-bottom:16px;line-height:1.5;">You're currently signed in with the temporary password from your student card. Choose a new one to secure your account.</p>
+      <div class="field"><label>New Password</label><div class="input-wrap"><i class="fas fa-lock"></i><input class="input" id="cp-new" type="password" placeholder="At least 6 characters"></div></div>
+      <div class="field"><label>Confirm New Password</label><div class="input-wrap"><i class="fas fa-lock"></i><input class="input" id="cp-confirm" type="password" placeholder="Repeat password"></div></div>
+      <button class="btn btn-primary" id="cp-submit-btn"><i class="fas fa-shield-halved"></i> Save Password</button>
+      <div class="status-msg" id="cp-status"></div>
     </div>
   </div>
 
@@ -574,9 +642,9 @@ a{color:inherit;text-decoration:none;}
       <h2>Lecturer Login</h2><span style="width:38px;"></span>
     </div>
     <div class="form-card">
-      <div style="display:flex;background:var(--surface-2);border-radius:var(--r-sm);padding:4px;margin-bottom:16px;">
-        <button class="btn btn-sm" id="lec-tab-login" style="flex:1;background:var(--green);color:#fff;" onclick="lecSwitchTab('login')">Log In</button>
-        <button class="btn btn-sm btn-ghost" id="lec-tab-register" style="flex:1;border:none;background:transparent;" onclick="lecSwitchTab('register')">Register</button>
+      <div class="tab-switch">
+        <button id="lec-tab-login" class="active" onclick="lecSwitchTab('login')">Log In</button>
+        <button id="lec-tab-register" onclick="lecSwitchTab('register')">Register</button>
       </div>
       <div id="lec-auth-form"></div>
       <div class="status-msg" id="lecturer-login-status"></div>
@@ -586,45 +654,64 @@ a{color:inherit;text-decoration:none;}
   <!-- ================= STUDENT HOME ================= -->
   <div id="student-home-screen" class="screen">
     <div class="topbar">
-      <h2><i class="fas fa-house" style="color:var(--green);"></i> Home</h2>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <img src="https://www.univen.ac.za/wp-content/uploads/2026/02/logo.png" style="width:30px;height:30px;border-radius:6px;" alt="">
+      <div>
+        <div style="font-family:'Sora',sans-serif;font-size:0.95rem;font-weight:700;line-height:1.1;">UNIVEN <span style="color:var(--green)">Attend</span></div>
+        <div style="font-size:0.62rem;color:var(--muted);letter-spacing:.4px;">Digital Attendance Register</div>
+      </div>
+    </div>
       <button class="icon-btn" onclick="goNotifications()"><i class="fas fa-bell"></i></button>
     </div>
+    <div class="pwd-nudge hidden" id="pwd-nudge-banner" onclick="nav('change-password-screen')">
+      <i class="fas fa-triangle-exclamation"></i> You're using a temporary password — tap to set a new one.
+    </div>
+    <div style="margin:20px;">
+              <div class="hi" id="home-greeting"style="color:#4169E1" >Good day,</div>
+      <h2 id="home-student-name"style="color:#4169E1;">Student</h2>
+ </div>
     <div class="greet-card">
-      <div class="hi" id="home-greeting">Good day,</div>
-      <h2 id="home-student-name">Student</h2>
+
       <div class="greet-ring-row">
         <div class="ring" id="home-ring">
-          <svg width="64" height="64"><circle cx="32" cy="32" r="27" stroke="rgba(255,255,255,.25)" stroke-width="6" fill="none"/><circle id="home-ring-fg" cx="32" cy="32" r="27" stroke="var(--gold)" stroke-width="6" fill="none" stroke-linecap="round" stroke-dasharray="170" stroke-dashoffset="170"/></svg>
-          <div class="ring-label" id="home-ring-label">—</div>
+          <svg width="64" height="64"><circle cx="32" cy="32" r="27" stroke="rgba(250,102,50)" stroke-width="6" fill="none"/><circle id="home-ring-fg" cx="32" cy="32" r="27" stroke="var(--gold)" stroke-width="6" fill="none" stroke-linecap="round" stroke-dasharray="170" stroke-dashoffset="170"/></svg>
+          <div class="ring-label" id="home-ring-label" style="color:#4169E1;">—</div>
         </div>
         <div class="greet-stats">
-          <div><b id="home-attended">0</b>Attended</div>
-          <div><b id="home-total">0</b>Total sessions</div>
+          <div style="color:#4169E1;"><b id="home-attended" style="color:#4169E1;">0</b>Attended</div>
+          <div style="color:#4169E1;"style="color:#4169E1;"><b id="home-total" style="color:#4169E1;">0</b>Total sessions</div>
         </div>
       </div>
     </div>
 
-    <div class="section-title"><h3>Today's Classes</h3><span class="see-all" onclick="nav('history-screen')">History →</span></div>
+    <div class="section-title" style="color:#4169E1;"><h3>Today's Classes</h3><span class="see-all" onclick="nav('active-classes-screen');renderActiveClasses()" style="color:#021945;">Active classes →</span></div>
     <div class="hscroll" id="today-classes"><div class="skel" style="width:220px;height:90px;flex-shrink:0;"></div></div>
 
     <div class="section-title"><h3>Quick Actions</h3></div>
     <div class="quick-actions">
-      <div class="qa-btn" onclick="nav('scan-screen')"><i class="fas fa-qrcode"></i><span>Scan QR</span></div>
-      <div class="qa-btn" onclick="nav('history-screen')"><i class="fas fa-clock-rotate-left"></i><span>History</span></div>
-      <div class="qa-btn" onclick="goNotifications()"><i class="fas fa-bell"></i><span>Alerts</span></div>
-      <div class="qa-btn" onclick="nav('profile-screen')"><i class="fas fa-user"></i><span>Profile</span></div>
+      <div class="qa-btn" onclick="openSessionScan()" style="color:#4169E1"><i class="fas fa-qrcode" style="color:#4169E1"></i><span style="color:#4169E1">Scan QR</span></div>
+      <div class="qa-btn" onclick="nav('active-classes-screen');renderActiveClasses()"><i class="fas fa-layer-group"style="color:#FA6632"></i><span style="color:#FA6632">Classes</span></div>
+      <div class="qa-btn" onclick="nav('history-screen')"><i class="fas fa-clock-rotate-left" style="color:#4169E1"></i><span style="color:#4169E1">History</span></div>
+      <div class="qa-btn" onclick="nav('profile-screen')"><i class="fas fa-user" style="color:#FA6632"></i><span style="color:#FA6632">Profile</span></div>
     </div>
-
     <div class="section-title"><h3>Announcements</h3></div>
     <div id="home-announcements"><div class="skel" style="height:60px;margin:0 18px 12px;"></div></div>
     <div style="height:100px;"></div>
+  </div>
+
+  <!-- ================= ACTIVE CLASSES (student) ================= -->
+  <div id="active-classes-screen" class="screen">
+    <div class="topbar"><button class="icon-btn" onclick="nav('student-home-screen')"><i class="fas fa-arrow-left"></i></button><h2>Active Classes</h2><span style="width:38px;"></span></div>
+    <p style="font-size:.8rem;color:var(--text-soft);padding:14px 18px 0;">Select your class instead of scanning a QR code — you'll still need to verify your card and location.</p>
+    <div id="active-classes-list" style="margin-top:10px;"><div class="skel" style="height:70px;margin:0 18px 10px;"></div></div>
+    <div style="height:60px;"></div>
   </div>
 
   <!-- ================= SCAN ================= -->
   <div id="scan-screen" class="screen scan-wrap">
     <div class="topbar">
       <button class="icon-btn" onclick="stopScanAndGo('student-home-screen')"><i class="fas fa-arrow-left"></i></button>
-      <h2>Scan to Check In</h2><span style="width:38px;"></span>
+      <h2 id="scan-title-text">Scan</h2><span style="width:38px;"></span>
     </div>
     <div class="camera-stage">
       <div id="reader"></div>
@@ -633,9 +720,10 @@ a{color:inherit;text-decoration:none;}
         <div class="scan-line"></div>
       </div>
     </div>
-    <p class="scan-hint">Point your camera at the lecturer's QR code</p>
-    <div class="scan-manual">
-      <div class="divider-text">or enter session code</div>
+    <div class="scan-step-row"><span class="scan-step-pill" id="scan-step-pill">Step 1</span></div>
+    <p class="scan-hint" id="scan-hint-text">Point your camera at the code</p>
+    <div class="scan-manual" id="scan-manual-wrap">
+      <div class="divider-text" id="scan-manual-label">or enter session code</div>
       <div style="display:flex;gap:8px;">
         <input class="input no-icon" id="manual-session-id" placeholder="Session ID" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.2);color:#fff;">
         <button class="btn btn-gold" style="width:auto;padding:0 18px;" id="manual-lookup-btn"><i class="fas fa-magnifying-glass"></i></button>
@@ -654,7 +742,6 @@ a{color:inherit;text-decoration:none;}
     <div class="filter-chips">
       <div class="chip active" data-filter="all" onclick="setHistoryFilter('all',this)">All</div>
       <div class="chip" data-filter="present" onclick="setHistoryFilter('present',this)">Present</div>
-      <div class="chip" data-filter="absent" onclick="setHistoryFilter('absent',this)">Absent</div>
     </div>
     <div id="history-list" style="margin-top:8px;">
       <div class="skel" style="height:80px;margin:0 18px 12px;"></div>
@@ -685,15 +772,28 @@ a{color:inherit;text-decoration:none;}
       <div class="pstat"><b id="pstat-total">0</b><span>Sessions</span></div>
     </div>
     <div class="settings-list">
+      <div class="settings-row" onclick="openEditProfile()"><i class="fas fa-user-pen"></i><span>Edit Profile</span><i class="fas fa-chevron-right chev"></i></div>
+      <div class="settings-row" onclick="nav('change-password-screen')"><i class="fas fa-key"></i><span>Change Password</span><i class="fas fa-chevron-right chev"></i></div>
       <div class="settings-row"><i class="fas fa-moon"></i><span>Dark Mode</span><div class="toggle" id="dark-toggle" onclick="toggleDark()"><div class="knob"></div></div></div>
-      <div class="settings-row"><i class="fas fa-bell"></i><span>Notifications</span><div class="toggle on"><div class="knob"></div></div></div>
       <div class="settings-row"><i class="fas fa-circle-question"></i><span>Help &amp; Support</span><i class="fas fa-chevron-right chev"></i></div>
-      <div class="settings-row"><i class="fas fa-shield-halved"></i><span>Privacy Policy</span><i class="fas fa-chevron-right chev"></i></div>
     </div>
     <div style="margin:20px 18px;">
       <button class="btn btn-danger" onclick="studentLogout()"><i class="fas fa-arrow-right-from-bracket"></i> Log Out</button>
     </div>
     <div style="height:100px;"></div>
+  </div>
+
+  <!-- ================= EDIT PROFILE (student) ================= -->
+  <div id="edit-profile-screen" class="screen">
+    <div class="topbar"><button class="icon-btn" onclick="nav('profile-screen')"><i class="fas fa-arrow-left"></i></button><h2>Edit Profile</h2><span style="width:38px;"></span></div>
+    <div class="form-card">
+      <div class="field"><label>Full Name</label><div class="input-wrap"><i class="fas fa-user"></i><input class="input" id="ep-name"></div></div>
+      <div class="field"><label>Email Address</label><div class="input-wrap"><i class="fas fa-envelope"></i><input class="input" id="ep-email" type="email"></div></div>
+      <div class="field"><label>Student Number <span style="font-weight:400;color:var(--text-faint);">(fixed)</span></label><div class="input-wrap"><i class="fas fa-hashtag"></i><input class="input" id="ep-number" disabled style="opacity:.6;"></div></div>
+      <div class="field"><label>Card Barcode <span style="font-weight:400;color:var(--text-faint);">(fixed)</span></label><div class="input-wrap"><i class="fas fa-id-card"></i><input class="input" id="ep-card" disabled style="opacity:.6;"></div></div>
+      <button class="btn btn-primary" id="ep-save-btn"><i class="fas fa-floppy-disk"></i> Save Changes</button>
+      <div class="status-msg" id="ep-status"></div>
+    </div>
   </div>
 
   <!-- ================= LECTURER PROFILE ================= -->
@@ -721,8 +821,17 @@ a{color:inherit;text-decoration:none;}
   <!-- ================= LECTURER DASHBOARD ================= -->
   <div id="lecturer-dashboard-screen" class="screen">
     <div class="topbar">
-      <h2><i class="fas fa-chart-pie" style="color:var(--green);"></i> Dashboard</h2>
-      <button class="icon-btn" onclick="nav('lecturer-profile-screen')"><i class="fas fa-user"></i></button>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <img src="https://www.univen.ac.za/wp-content/uploads/2026/02/logo.png" style="width:30px;height:30px;border-radius:6px;" alt="">
+      <div>
+        <div style="font-family:'Sora',sans-serif;font-size:0.95rem;font-weight:700;line-height:1.1;">UNIVEN <span style="color:var(--green)">Attend</span></div>
+        <div style="font-size:0.62rem;color:var(--muted);letter-spacing:.4px;">Digital Attendance Register</div>
+      </div>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button class="icon-btn" onclick="nav('post-update-screen');renderPostUpdateScreen()" ><i class="fas fa-bullhorn" style="color:#021945;"></i></button>
+        <button class="icon-btn" onclick="nav('lecturer-profile-screen')"><i class="fas fa-user"></i></button>
+      </div>
     </div>
     <div class="stat-grid">
       <div class="stat-box"><div class="s-icon" style="background:var(--green-light);color:var(--green);"><i class="fas fa-bolt"></i></div><b id="dash-active">0</b><span>Active Sessions</span></div>
@@ -741,14 +850,16 @@ a{color:inherit;text-decoration:none;}
     <div class="topbar"><button class="icon-btn" onclick="nav('lecturer-dashboard-screen')"><i class="fas fa-arrow-left"></i></button><h2>New Session</h2><span style="width:38px;"></span></div>
     <div class="form-card">
       <div class="field"><label>Module Code</label><div class="input-wrap"><i class="fas fa-book"></i><input class="input" id="cs-module" placeholder="e.g. CSC301"></div></div>
-      <div class="field"><label>Venue</label>
-        <select class="select" id="cs-venue">
-          <option value="">-- Select Venue --</option>
-          <optgroup label="Main Buildings"><option>Auditorium</option><option>Block A</option><option>Block B</option><option>Block C</option><option>Block D</option><option>Block E</option></optgroup>
-          <optgroup label="Other"><option>Library</option><option>Computer Lab 1</option><option>Computer Lab 2</option><option>Health Sciences Lecture Hall 1</option></optgroup>
-        </select>
-      </div>
+      <div class="field"><label>Venue Name</label><div class="input-wrap"><i class="fas fa-location-dot"></i><input class="input" id="cs-venue" placeholder="e.g. Auditorium"></div></div>
       <div class="field"><label>Date &amp; Time</label><input class="input no-icon" type="datetime-local" id="cs-time"></div>
+
+      <div class="field">
+        <label>Class Location (required for GPS check)</label>
+        <button class="btn btn-ghost" type="button" id="cs-capture-location-btn"><i class="fas fa-location-crosshairs"></i> Use My Current Location</button>
+        <div id="cs-location-chip" class="confirm-chip hidden"><i class="fas fa-check-circle"></i> <span id="cs-location-text"></span></div>
+      </div>
+      <div class="field"><label>Attendance Radius (metres)</label><div class="input-wrap"><i class="fas fa-ruler"></i><input class="input" type="number" id="cs-radius" value="50" min="10" max="1000"></div></div>
+
       <div class="field">
         <label>QR Code Expires In</label>
         <div class="expire-select">
@@ -763,13 +874,28 @@ a{color:inherit;text-decoration:none;}
     </div>
 
     <div class="qr-panel hidden" id="qr-panel">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+        <div style="text-align:left;">
+          <h4 id="qr-module-title" style="font-size:1rem;font-weight:800;"></h4>
+          <div style="font-size:.78rem;color:var(--text-soft);" id="qr-venue-line"></div>
+        </div>
+        <span class="session-status live"><i class="fas fa-circle" style="font-size:.5rem;"></i> LIVE</span>
+      </div>
       <div id="qrcode-box"></div>
       <div class="qr-timer" id="qr-timer">10:00</div>
-      <div class="qr-meta" id="qr-meta"></div>
-      <div style="display:flex;gap:10px;margin-top:18px;">
-        <button class="btn btn-ghost btn-sm" id="download-qr-btn"><i class="fas fa-download"></i> Save PNG</button>
-        <button class="btn btn-ghost btn-sm" onclick="nav('lecturer-dashboard-screen')"><i class="fas fa-check"></i> Done</button>
+      <div class="qr-meta">Students scan this QR code to mark their attendance</div>
+
+      <div style="display:flex;align-items:center;gap:8px;background:var(--surface-2);border:1.5px solid var(--border);border-radius:var(--r-sm);padding:10px 12px;margin-top:16px;">
+        <span style="font-size:.72rem;color:var(--text-faint);">Session ID</span>
+        <code id="qr-session-id-text" style="flex:1;text-align:left;font-size:.82rem;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></code>
+        <button class="icon-btn" id="copy-session-id-btn" style="width:32px;height:32px;"><i class="fas fa-copy"></i></button>
       </div>
+
+      <div style="display:flex;gap:10px;margin-top:16px;">
+        <button class="btn btn-gold btn-sm" id="share-session-btn"><i class="fas fa-share-nodes"></i> Share Session</button>
+        <button class="btn btn-ghost btn-sm" id="download-qr-btn"><i class="fas fa-download"></i> Save PNG</button>
+      </div>
+      <button class="btn btn-danger btn-sm" id="end-session-btn" style="margin-top:10px;"><i class="fas fa-stop"></i> Close Session</button>
     </div>
     <div style="height:60px;"></div>
   </div>
@@ -780,22 +906,41 @@ a{color:inherit;text-decoration:none;}
     <div class="search-bar">
       <div class="input-wrap"><i class="fas fa-magnifying-glass" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text-faint);font-size:.8rem;"></i><input class="input" id="stud-search" placeholder="Search student number or name…"></div>
     </div>
-    <div class="filter-chips" style="padding-top:0;">
-      <div class="chip active" data-f="all" onclick="setStudFilter('all',this)">All</div>
-      <div class="chip" data-f="present" onclick="setStudFilter('present',this)">Present</div>
-      <div class="chip" data-f="absent" onclick="setStudFilter('absent',this)">Absent</div>
-    </div>
     <div id="stud-list-body" style="margin-top:8px;">
       <div class="empty"><i class="fas fa-layer-group"></i><h4>Select a session</h4><p>Open a session from the dashboard to see its student list.</p></div>
     </div>
     <div style="height:60px;"></div>
   </div>
 
+  <!-- ================= POST UPDATE (lecturer / admin) ================= -->
+  <div id="post-update-screen" class="screen">
+    <div class="topbar"><button class="icon-btn" onclick="nav('lecturer-dashboard-screen')"><i class="fas fa-arrow-left"></i></button><h2>Post an Update</h2><span style="width:38px;"></span></div>
+    <div class="form-card">
+      <div id="admin-badge-row" class="hidden" style="display:flex;align-items:center;gap:8px;background:var(--gold-light);color:var(--gold);border-radius:var(--r-sm);padding:10px 12px;margin-bottom:14px;font-size:.8rem;font-weight:700;">
+        <i class="fas fa-star"></i> Posting as UNIVEN Team (Admin)
+      </div>
+      <div class="field"><label>Title</label><div class="input-wrap"><i class="fas fa-heading"></i><input class="input" id="pu-title" placeholder="e.g. Venue change for tomorrow"></div></div>
+      <div class="field"><label>Message</label><textarea class="input no-icon" id="pu-body" style="height:100px;resize:vertical;" placeholder="Write your update…"></textarea></div>
+      <div class="field" id="pu-audience-field">
+        <label>Visible To</label>
+        <select class="select" id="pu-audience">
+          <option value="student">My Students Only</option>
+          <option value="all">Everyone (Students &amp; Lecturers)</option>
+        </select>
+      </div>
+      <button class="btn btn-primary" id="post-update-btn"><i class="fas fa-paper-plane"></i> Post Update</button>
+      <div class="status-msg" id="post-update-status"></div>
+    </div>
+    <div class="section-title"><h3>Your Recent Updates</h3></div>
+    <div id="my-updates-list"><div class="skel" style="height:60px;margin:0 18px 12px;"></div></div>
+    <div style="height:100px;"></div>
+  </div>
+
   <!-- ================= BOTTOM NAVS ================= -->
   <div class="bottom-nav hidden" id="student-nav">
     <div class="nav-item" data-screen="student-home-screen" onclick="navBottom('student-home-screen',this,'student')"><i class="fas fa-house"></i>Home</div>
     <div class="nav-item" data-screen="history-screen" onclick="navBottom('history-screen',this,'student')"><i class="fas fa-clock-rotate-left"></i>History</div>
-    <div class="nav-fab" onclick="nav('scan-screen')"><i class="fas fa-qrcode"></i></div>
+    <div class="nav-fab" onclick="openSessionScan()"><i class="fas fa-qrcode"></i></div>
     <div class="nav-item" data-screen="notifications-screen" onclick="navBottom('notifications-screen',this,'student')"><i class="fas fa-bell"></i>Alerts<span class="nav-dot" id="notif-dot"></span></div>
     <div class="nav-item" data-screen="profile-screen" onclick="navBottom('profile-screen',this,'student')"><i class="fas fa-user"></i>Profile</div>
   </div>
@@ -819,17 +964,16 @@ a{color:inherit;text-decoration:none;}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 <script>
 /* =====================================================================
-   UNIVEN ATTENDANCE — APP LOGIC
+   UNIVEN ATTENDANCE — APP LOGIC (v2: real student accounts, barcode
+   card verification, hard GPS-blocked check-in)
    Firebase Realtime Database + Auth (compat SDK v9.23.0)
    ===================================================================== */
 
 /* ---------------------------------------------------------------------
    1. FIREBASE CONFIG — replace with your project's config
-      (Firebase Console → Project Settings → General → Your apps)
 --------------------------------------------------------------------- */
 const firebaseConfig = {
-  
-    apiKey: "AIzaSyC9z5TmK1aJUulrEIscwe9MZ5qcusJMOpc",
+  apiKey: "AIzaSyC9z5TmK1aJUulrEIscwe9MZ5qcusJMOpc",
     authDomain: "blueflare-47c29.firebaseapp.com",
     projectId: "blueflare-47c29",
     storageBucket: "blueflare-47c29.firebasestorage.app",
@@ -842,44 +986,35 @@ const auth = firebase.auth();
 const db = firebase.database();
 
 /* ---------------------------------------------------------------------
-   2. GEOFENCE CONFIG — optional GPS verification
-      Off-site check-ins are NOT blocked, just marked "absent" so the
-      lecturer's dashboard can flag them. See attemptCheckIn() below.
+   2. CONSTANTS
 --------------------------------------------------------------------- */
-const GEOFENCE_CONFIG = {
-  ENFORCE_GEOFENCE: true,
-  ALLOWED_RADIUS_METERS: 500,
-  VENUES: {
-    "Auditorium": { lat: -22.976760, lng: 30.443308 }
-    // Add more venues here as you get real coordinates, e.g.:
-    // "Block A": { lat: -22.9770, lng: 30.4440 },
-  }
-};
+const DEFAULT_RADIUS_METERS = 50;
+const ADMIN_EMAIL = "kekanakarabouf@gmail.com"; // set the password via Lecturer > Register once
 
 /* ---------------------------------------------------------------------
    3. STATE
 --------------------------------------------------------------------- */
-let currentRole = null;       // 'student' | 'lecturer'
-let studentProfile = null;    // { uid, studentNumber, name }
-let lecturerProfile = null;   // { uid, name, email }
-let lecMode = 'login';        // lecturer auth form tab
+let currentRole = null;
+let studentProfile = null;
+let lecturerProfile = null;
+let lecMode = 'login';
 
 let historyFilter = 'all';
-let studFilter = 'all';
 let studSearchQ = '';
-let activeDashSession = null; // session id currently open in student-list-screen
-let studListUnsub = null;
-let dashSessionsUnsub = null;
-let homeAttendanceUnsub = null;
+let dashSessionsRef = null;
+let studListRef = null;
 
 let qrTimerInterval = null;
-let qrObj = null;
 let currentSessionId = null;
-let currentSessionExpiresAt = null;
 let expireMinutes = 10;
+let capturedSessionLocation = null;
 
 let html5QrScanner = null;
-let capturedGps = null;
+let scanContext = null;      // 'reg-card' | 'session'
+let scanLocked = false;
+let scannedCardBarcode = null; // captured during registration
+let pendingSessionId = null;
+let pendingSession = null;
 let trendChartInstance = null;
 
 /* ---------------------------------------------------------------------
@@ -891,13 +1026,11 @@ function esc(s){
   if(s===undefined||s===null) return '';
   return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 }
-
 function initials(name){
   if(!name) return '?';
   const parts = name.trim().split(/\s+/);
   return ((parts[0]?.[0]||'') + (parts[1]?.[0]||'')).toUpperCase() || name[0].toUpperCase();
 }
-
 let toastTimer;
 function toast(msg, type=''){
   const el = $('toast');
@@ -906,13 +1039,11 @@ function toast(msg, type=''){
   clearTimeout(toastTimer);
   toastTimer = setTimeout(()=>{ el.className = ''; }, 3200);
 }
-
 function setStatus(el, msg, type){
   if(!el) return;
   el.textContent = msg;
   el.className = 'status-msg' + (msg ? ' show '+type : '');
 }
-
 function haversineMeters(lat1, lng1, lat2, lng2){
   const R = 6371000;
   const toRad = d => d * Math.PI / 180;
@@ -920,7 +1051,6 @@ function haversineMeters(lat1, lng1, lat2, lng2){
   const a = Math.sin(dLat/2)**2 + Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLng/2)**2;
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 }
-
 function getGpsPosition(){
   return new Promise((resolve,reject)=>{
     if(!navigator.geolocation){ reject(new Error('Geolocation not supported')); return; }
@@ -931,14 +1061,22 @@ function getGpsPosition(){
     );
   });
 }
+function fmtTime(ts){ if(!ts) return '—'; return new Date(ts).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}); }
+function fmtDateShort(ts){ const d = new Date(ts); return { day: d.getDate(), mon: d.toLocaleString('en',{month:'short'}).toUpperCase() }; }
 
-function fmtTime(ts){
-  if(!ts) return '—';
-  return new Date(ts).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+function getCardFormats(){
+  if(typeof Html5QrcodeSupportedFormats === 'undefined') return undefined;
+  return [
+    Html5QrcodeSupportedFormats.CODE_128, Html5QrcodeSupportedFormats.CODE_39,
+    Html5QrcodeSupportedFormats.EAN_13, Html5QrcodeSupportedFormats.EAN_8,
+    Html5QrcodeSupportedFormats.UPC_A, Html5QrcodeSupportedFormats.UPC_E,
+    Html5QrcodeSupportedFormats.ITF, Html5QrcodeSupportedFormats.CODABAR,
+    Html5QrcodeSupportedFormats.QR_CODE
+  ];
 }
-function fmtDateShort(ts){
-  const d = new Date(ts);
-  return { day: d.getDate(), mon: d.toLocaleString('en',{month:'short'}).toUpperCase() };
+function getSessionFormats(){
+  if(typeof Html5QrcodeSupportedFormats === 'undefined') return undefined;
+  return [Html5QrcodeSupportedFormats.QR_CODE];
 }
 
 /* ---------------------------------------------------------------------
@@ -951,21 +1089,18 @@ function nav(screenId){
   window.scrollTo(0,0);
   const frame = $('frame'); if(frame) frame.scrollTop = 0;
 
-  // Show/hide bottom navs
-  const studentScreens = ['student-home-screen','history-screen','notifications-screen','profile-screen'];
-  const lecturerScreens = ['lecturer-dashboard-screen','create-session-screen','student-list-screen','lecturer-profile-screen'];
+  const studentScreens = ['student-home-screen','active-classes-screen','history-screen','notifications-screen','profile-screen','edit-profile-screen'];
+  const lecturerScreens = ['lecturer-dashboard-screen','create-session-screen','student-list-screen','lecturer-profile-screen','post-update-screen'];
   $('student-nav').classList.toggle('hidden', !studentScreens.includes(screenId));
   $('lecturer-nav').classList.toggle('hidden', !lecturerScreens.includes(screenId));
 
-  if(screenId === 'scan-screen') startScanner();
-  else stopScanner();
+  if(screenId !== 'scan-screen') stopScanner();
 }
-
 function navBottom(screenId, el, role){
   nav(screenId);
   const navEl = role === 'student' ? $('student-nav') : $('lecturer-nav');
   navEl.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  el.classList.add('active');
+  if(el) el.classList.add('active');
 
   if(screenId === 'student-home-screen') renderStudentHome();
   if(screenId === 'history-screen') renderHistory();
@@ -974,12 +1109,19 @@ function navBottom(screenId, el, role){
   if(screenId === 'lecturer-dashboard-screen') renderLecturerDashboard();
   if(screenId === 'lecturer-profile-screen') renderLecturerProfile();
 }
-
 function goNotifications(){
   nav('notifications-screen');
   $('student-nav').classList.remove('hidden');
   $('student-nav').querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active', n.dataset.screen==='notifications-screen'));
   renderNotifications();
+}
+function goStudentHome(){
+  nav('student-home-screen');
+  navBottom('student-home-screen', document.querySelector('#student-nav .nav-item[data-screen="student-home-screen"]'), 'student');
+}
+function goLecturerDashboard(){
+  nav('lecturer-dashboard-screen');
+  navBottom('lecturer-dashboard-screen', document.querySelector('#lecturer-nav .nav-item[data-screen="lecturer-dashboard-screen"]'), 'lecturer');
 }
 
 /* ---------------------------------------------------------------------
@@ -994,59 +1136,141 @@ function toggleDark(){
 /* ---------------------------------------------------------------------
    7. SPLASH → ROLE SCREEN
 --------------------------------------------------------------------- */
-setTimeout(()=>{
-  if(!currentRole) nav('role-screen');
-}, 1800);
+setTimeout(()=>{ if(!currentRole) nav('role-screen'); }, 1800);
 
 /* ---------------------------------------------------------------------
-   8. STUDENT LOGIN (Firebase Anonymous Auth + profile in RTDB)
-      Anonymous auth persists across reloads (Firebase's own storage,
-      not localStorage/sessionStorage), which is what gives us
-      "log in once" behaviour without a password for students.
+   8. STUDENT AUTH — real email/password accounts.
+      Registration requires a card-barcode scan first; that barcode
+      becomes both the account's unique card ID AND its initial
+      password. Students are forced toward Change Password afterward.
 --------------------------------------------------------------------- */
-$('student-login-btn').addEventListener('click', async ()=>{
-  const studentNumber = $('su-number').value.trim();
-  const name = $('su-name').value.trim();
-  const statusEl = $('student-login-status');
+function studentAuthTab(mode){
+  const isLogin = mode === 'login';
+  $('stu-tab-login').classList.toggle('active', isLogin);
+  $('stu-tab-register').classList.toggle('active', !isLogin);
+  $('stu-login-form').classList.toggle('hidden', !isLogin);
+  $('stu-register-form').classList.toggle('hidden', isLogin);
+  setStatus($('stu-auth-status'), '', '');
+}
 
-  if(!studentNumber || !name){
-    setStatus(statusEl, 'Please enter your student number and name.', 'error');
-    return;
-  }
+function openCardScanForReg(){
+  scanContext = 'reg-card';
+  nav('scan-screen');
+  startScanner();
+}
+$('reg-scan-card-btn').addEventListener('click', openCardScanForReg);
 
-  $('student-login-btn').disabled = true;
-  setStatus(statusEl, 'Signing you in…', 'info');
+function handleRegCardScan(text){
+  scannedCardBarcode = text.trim();
+  $('reg-card-value').textContent = 'Card scanned: ' + scannedCardBarcode;
+  $('reg-card-chip').classList.remove('hidden');
+  nav('student-auth-screen');
+  studentAuthTab('register');
+  toast('Card scanned — now finish your details', 'success');
+}
 
+$('reg-submit-btn').addEventListener('click', async ()=>{
+  const statusEl = $('stu-auth-status');
+  if(!scannedCardBarcode){ setStatus(statusEl, 'Please scan your student card first.', 'error'); return; }
+  const studentNumber = $('reg-number').value.trim();
+  const name = $('reg-name').value.trim();
+  const email = $('reg-email').value.trim();
+  if(!studentNumber || !name || !email){ setStatus(statusEl, 'Please fill in all fields.', 'error'); return; }
+
+  $('reg-submit-btn').disabled = true;
+  setStatus(statusEl, 'Creating your account…', 'info');
   try{
-    let user = auth.currentUser;
-    if(!user){
-      const cred = await auth.signInAnonymously();
-      user = cred.user;
+    // Reject duplicate card registrations up front (best-effort — the
+    // real guarantee comes from Firebase Auth's unique-email rule).
+    const dupSnap = await db.ref('students').orderByChild('cardBarcode').equalTo(scannedCardBarcode).limitToFirst(1).once('value');
+    if(dupSnap.exists()){
+      setStatus(statusEl, 'This student card is already linked to an account. Try logging in instead.', 'error');
+      $('reg-submit-btn').disabled = false;
+      return;
     }
-    const profile = { studentNumber, name, createdAt: Date.now() };
-    await db.ref('students/'+user.uid).update(profile);
-    studentProfile = { uid: user.uid, ...profile };
+
+    const cred = await auth.createUserWithEmailAndPassword(email, scannedCardBarcode);
+    const profile = { studentNumber, name, email, cardBarcode: scannedCardBarcode, mustChangePassword: true, createdAt: Date.now() };
+    await db.ref('students/'+cred.user.uid).set(profile);
+    studentProfile = { uid: cred.user.uid, ...profile };
     currentRole = 'student';
     setStatus(statusEl, '', '');
-    nav('student-home-screen');
-    navBottom('student-home-screen', document.querySelector('#student-nav .nav-item[data-screen="student-home-screen"]'), 'student');
+    toast('Account created!', 'success');
+    nav('change-password-screen');
   }catch(err){
-    console.error(err);
-    setStatus(statusEl, 'Could not sign in: ' + err.message, 'error');
+    setStatus(statusEl, friendlyAuthError(err), 'error');
   }finally{
-    $('student-login-btn').disabled = false;
+    $('reg-submit-btn').disabled = false;
+  }
+});
+
+$('stu-login-btn').addEventListener('click', async ()=>{
+  const idRaw = $('stu-login-id').value.trim();
+  const pwd = $('stu-login-pwd').value;
+  const statusEl = $('stu-auth-status');
+  if(!idRaw || !pwd){ setStatus(statusEl, 'Enter your student number/email and password.', 'error'); return; }
+
+  $('stu-login-btn').disabled = true;
+  setStatus(statusEl, 'Signing in…', 'info');
+  try{
+    let email = idRaw;
+    if(!idRaw.includes('@')){
+      const snap = await db.ref('students').orderByChild('studentNumber').equalTo(idRaw).limitToFirst(1).once('value');
+      const data = snap.val();
+      if(!data){ setStatus(statusEl, 'No account found for that student number.', 'error'); $('stu-login-btn').disabled=false; return; }
+      email = Object.values(data)[0].email;
+    }
+    const cred = await auth.signInWithEmailAndPassword(email, pwd);
+    const snap2 = await db.ref('students/'+cred.user.uid).once('value');
+    studentProfile = { uid: cred.user.uid, ...snap2.val() };
+    currentRole = 'student';
+    setStatus(statusEl, '', '');
+    if(studentProfile.mustChangePassword){ nav('change-password-screen'); }
+    else{ goStudentHome(); }
+  }catch(err){
+    setStatus(statusEl, friendlyAuthError(err), 'error');
+  }finally{
+    $('stu-login-btn').disabled = false;
   }
 });
 
 function studentLogout(){
   auth.signOut();
-  studentProfile = null;
-  currentRole = null;
+  studentProfile = null; currentRole = null; scannedCardBarcode = null;
   nav('role-screen');
 }
 
 /* ---------------------------------------------------------------------
-   9. LECTURER LOGIN / REGISTER (Firebase email+password Auth)
+   9. CHANGE PASSWORD
+--------------------------------------------------------------------- */
+$('cp-submit-btn').addEventListener('click', async ()=>{
+  const p1 = $('cp-new').value, p2 = $('cp-confirm').value;
+  const statusEl = $('cp-status');
+  if(!p1 || p1.length < 6){ setStatus(statusEl, 'Password must be at least 6 characters.', 'error'); return; }
+  if(p1 !== p2){ setStatus(statusEl, 'Passwords do not match.', 'error'); return; }
+
+  $('cp-submit-btn').disabled = true;
+  setStatus(statusEl, 'Saving…', 'info');
+  try{
+    await auth.currentUser.updatePassword(p1);
+    await db.ref('students/'+studentProfile.uid+'/mustChangePassword').set(false);
+    studentProfile.mustChangePassword = false;
+    setStatus(statusEl, '', '');
+    toast('Password updated', 'success');
+    goStudentHome();
+  }catch(err){
+    const msg = err.code === 'auth/requires-recent-login'
+      ? 'For security, please log out and log back in, then try again.'
+      : err.message;
+    setStatus(statusEl, msg, 'error');
+  }finally{
+    $('cp-submit-btn').disabled = false;
+  }
+});
+$('cp-skip-btn').addEventListener('click', ()=>{ if(studentProfile) goStudentHome(); else nav('role-screen'); });
+
+/* ---------------------------------------------------------------------
+   10. LECTURER LOGIN / REGISTER
 --------------------------------------------------------------------- */
 function lecLoginForm(){
   return `
@@ -1066,19 +1290,17 @@ function lecRegisterForm(){
 function lecSwitchTab(mode){
   lecMode = mode;
   const lb = $('lec-tab-login'), rb = $('lec-tab-register');
+  lb.classList.toggle('active', mode==='login');
+  rb.classList.toggle('active', mode==='register');
   if(mode==='login'){
-    lb.style.background='var(--green)'; lb.style.color='#fff';
-    rb.style.background='transparent'; rb.style.color='var(--text)';
     $('lec-auth-form').innerHTML = lecLoginForm();
     $('lec-login-submit').addEventListener('click', doLecturerLogin);
   }else{
-    rb.style.background='var(--green)'; rb.style.color='#fff';
-    lb.style.background='transparent'; lb.style.color='var(--text)';
     $('lec-auth-form').innerHTML = lecRegisterForm();
     $('lec-register-submit').addEventListener('click', doLecturerRegister);
   }
 }
-lecSwitchTab('login'); // initial render
+lecSwitchTab('login');
 
 async function doLecturerLogin(){
   const email = $('lec-email').value.trim();
@@ -1092,8 +1314,7 @@ async function doLecturerLogin(){
     lecturerProfile = { uid: cred.user.uid, ...(snap.val()||{ name: email, email }) };
     currentRole = 'lecturer';
     setStatus(statusEl,'','');
-    nav('lecturer-dashboard-screen');
-    navBottom('lecturer-dashboard-screen', document.querySelector('#lecturer-nav .nav-item[data-screen="lecturer-dashboard-screen"]'), 'lecturer');
+    goLecturerDashboard();
   }catch(err){
     setStatus(statusEl, friendlyAuthError(err), 'error');
   }
@@ -1113,8 +1334,7 @@ async function doLecturerRegister(){
     currentRole = 'lecturer';
     setStatus(statusEl,'','');
     toast('Welcome, '+name+'!','success');
-    nav('lecturer-dashboard-screen');
-    navBottom('lecturer-dashboard-screen', document.querySelector('#lecturer-nav .nav-item[data-screen="lecturer-dashboard-screen"]'), 'lecturer');
+    goLecturerDashboard();
   }catch(err){
     setStatus(statusEl, friendlyAuthError(err), 'error');
   }
@@ -1131,21 +1351,21 @@ function friendlyAuthError(err){
 }
 function lecturerLogout(){
   auth.signOut();
-  lecturerProfile = null;
-  currentRole = null;
+  lecturerProfile = null; currentRole = null;
   nav('role-screen');
 }
 
 /* ---------------------------------------------------------------------
-   10. STUDENT HOME
+   11. STUDENT HOME
 --------------------------------------------------------------------- */
 async function renderStudentHome(){
   if(!studentProfile) return;
+  $('pwd-nudge-banner').classList.toggle('hidden', !studentProfile.mustChangePassword);
+
   const hour = new Date().getHours();
   $('home-greeting').textContent = hour<12 ? 'Good morning,' : hour<17 ? 'Good afternoon,' : 'Good evening,';
   $('home-student-name').textContent = studentProfile.name;
 
-  // Pull this student's session history to compute attendance % and today's classes
   const snap = await db.ref('sessions').orderByChild('createdAt').limitToLast(80).once('value');
   const data = snap.val() || {};
   const all = Object.keys(data).map(id=>({id, ...data[id]}));
@@ -1156,8 +1376,7 @@ async function renderStudentHome(){
 
   all.forEach(s=>{
     const rec = (s.attendanceRecords||{})[studentProfile.studentNumber];
-    // Count as "total" only sessions this student actually has a record for (their own history)
-    if(rec){ total++; if(rec.status==='present') attended++; }
+    if(rec){ total++; attended++; } // hard-blocked model: any record = present
     if(s.sessionTime && new Date(s.sessionTime).toDateString() === todayStr){
       todays.push({...s, myRecord: rec});
     }
@@ -1170,7 +1389,6 @@ async function renderStudentHome(){
   const circumference = 170;
   $('home-ring-fg').style.strokeDashoffset = total>0 ? circumference - (circumference*pct/100) : circumference;
 
-  // Today's classes
   const container = $('today-classes');
   if(todays.length===0){
     container.innerHTML = `<div class="empty" style="padding:24px 10px;"><i class="fas fa-mug-hot"></i><h4>No classes today</h4><p style="font-size:.72rem;">Enjoy the break!</p></div>`;
@@ -1178,15 +1396,14 @@ async function renderStudentHome(){
     container.innerHTML = todays.map(s=>{
       const checkedIn = !!s.myRecord;
       return `<div class="class-card">
-        <span class="tag ${checkedIn?'':'now'}">${checkedIn ? 'Checked in' : 'Not yet'}</span>
-        <h4>${esc(s.moduleCode||'Module')}</h4>
+ <span style="color:#FA6632"class="tag ${checkedIn?'':'now'}">${checkedIn ? 'Checked in' : 'Not yet'}</span>
+        <h4 style="color:#021945">${esc(s.moduleCode||'Module')}</h4>
         <div class="meta"><i class="fas fa-location-dot"></i> ${esc(s.venue||'')}</div>
-        <div class="meta"><i class="fas fa-clock"></i> ${fmtTime(s.sessionTime)}</div>
+        <div class="meta" style="color:#4169E1"><i class="fas fa-clock" style="color:#4169E1"></i> ${fmtTime(s.sessionTime)}</div>
       </div>`;
     }).join('');
   }
 
-  // Announcements (from notifications node, audience student/all)
   const nSnap = await db.ref('notifications').orderByChild('createdAt').limitToLast(3).once('value');
   const nData = nSnap.val() || {};
   const notifs = Object.values(nData).filter(n => !n.audience || n.audience==='all' || n.audience==='student');
@@ -1196,27 +1413,56 @@ async function renderStudentHome(){
   }else{
     annEl.innerHTML = notifs.sort((a,b)=>b.createdAt-a.createdAt).map(n=>`
       <div class="announce-card">
-        <div class="a-icon"><i class="fas fa-megaphone"></i></div>
+        <div class="a-icon" style="background-image:url("https://i.ibb.co/QZC2JH3/file-00000000e9d471f4af794bc4c0b448a5.png")"><i class="fas fa-megaphone"></i></div>
         <div><h4>${esc(n.title)}</h4><p>${esc(n.body)}</p><span class="time">${new Date(n.createdAt).toLocaleDateString()}</span></div>
       </div>`).join('');
   }
 }
 
 /* ---------------------------------------------------------------------
-   11. QR SCANNER + CHECK-IN
+   12. ACTIVE CLASSES (Option B — pick a class instead of scanning QR)
+--------------------------------------------------------------------- */
+async function renderActiveClasses(){
+  const el = $('active-classes-list');
+  const now = Date.now();
+  const snap = await db.ref('sessions').orderByChild('expiresAt').startAt(now).once('value');
+  const data = snap.val() || {};
+  const rows = Object.keys(data).map(id=>({id, ...data[id]})).sort((a,b)=>(a.sessionTime||0)-(b.sessionTime||0));
+
+  if(rows.length===0){
+    el.innerHTML = `<div class="empty"><i class="fas fa-calendar-xmark"></i><h4>No active classes right now</h4><p>Check back closer to your class time.</p></div>`;
+    return;
+  }
+  el.innerHTML = rows.map(s=>`
+    <div class="session-row" onclick="selectActiveClass('${s.id}')">
+      <div class="top"><h4>${esc(s.moduleCode||'Module')}</h4><span class="session-status live"><i class="fas fa-circle" style="font-size:.5rem;"></i> Live</span></div>
+      <div class="meta"><i class="fas fa-location-dot"></i> ${esc(s.venue||'')} · ${fmtTime(s.sessionTime)} · ${esc(s.lecturerName||'')}</div>
+    </div>`).join('');
+}
+function selectActiveClass(sessionId){
+  attemptCheckIn(sessionId);
+}
+
+/* ---------------------------------------------------------------------
+   13. QR / BARCODE SCANNER (shared by registration-card and session-QR
+       contexts — box shape, formats, and hint text adapt to which one)
 --------------------------------------------------------------------- */
 function startScanner(){
   if(html5QrScanner) return;
-  html5QrScanner = new Html5Qrcode('reader');
+  const formats = scanContext === 'session' ? getSessionFormats() : getCardFormats();
+  const config = formats ? { formatsToSupport: formats } : {};
+  try{ html5QrScanner = new Html5Qrcode('reader', config); }
+  catch(e){ html5QrScanner = new Html5Qrcode('reader'); }
+
+  updateScanCopy();
+  // Barcodes are wide and short; QR codes are square — adjust the scan
+  // box to match whichever we're currently looking for.
+  const qrbox = scanContext === 'reg-card' ? { width: 280, height: 110 } : { width: 230, height: 230 };
   html5QrScanner.start(
     { facingMode:'environment' },
-    { fps: 10, qrbox: { width: 230, height: 230 } },
-    onScanSuccess,
-    ()=>{}
-  ).catch(err=>{
-    console.error(err);
-    toast('Camera access denied or unavailable', 'error');
-  });
+    { fps: 10, qrbox },
+    onScanSuccess, ()=>{}
+  ).catch(err=>{ console.error(err); toast('Camera access denied or unavailable', 'error'); });
 }
 function stopScanner(){
   if(html5QrScanner){
@@ -1224,107 +1470,153 @@ function stopScanner(){
     html5QrScanner = null;
   }
 }
-function stopScanAndGo(screenId){ stopScanner(); nav(screenId); }
+function stopScanAndGo(screenId){
+  stopScanner();
+  pendingSession = null; pendingSessionId = null; scanContext = null;
+  nav(screenId);
+}
+function updateScanCopy(){
+  const titleEl = $('scan-title-text'), hintEl = $('scan-hint-text'), pillEl = $('scan-step-pill');
+  const manualLabel = $('scan-manual-label'), manualInput = $('manual-session-id');
+  const frameEl = $('scan-frame-overlay');
+  if(scanContext === 'reg-card'){
+    titleEl.textContent = 'Scan Student Card';
+    hintEl.textContent = 'Align the barcode within the frame';
+    pillEl.textContent = 'Registration';
+    frameEl.classList.add('barcode-mode');
+    manualLabel.textContent = 'or type the barcode number';
+    manualInput.placeholder = 'Card barcode number';
+  }else if(scanContext === 'session'){
+    titleEl.textContent = 'Scan Session QR';
+    hintEl.textContent = "Point your camera at the lecturer's QR code";
+    pillEl.textContent = 'Scan to Check In';
+    frameEl.classList.remove('barcode-mode');
+    manualLabel.textContent = 'or enter session code';
+    manualInput.placeholder = 'Session ID';
+  }
+}
+function openSessionScan(){
+  scanContext = 'session';
+  pendingSessionId = null; pendingSession = null;
+  nav('scan-screen');
+  startScanner();
+}
 
-let scanLocked = false;
 async function onScanSuccess(decodedText){
   if(scanLocked) return;
   scanLocked = true;
   stopScanner();
-  await attemptCheckIn(decodedText);
+  if(scanContext === 'reg-card') handleRegCardScan(decodedText);
+  else if(scanContext === 'session') attemptCheckIn(decodedText);
   setTimeout(()=>{ scanLocked = false; }, 800);
 }
 
 $('manual-lookup-btn').addEventListener('click', ()=>{
-  const id = $('manual-session-id').value.trim();
-  if(!id){ toast('Enter a session ID','error'); return; }
-  attemptCheckIn(id);
+  const val = $('manual-session-id').value.trim();
+  if(!val){ toast(scanContext==='reg-card' ? 'Enter your card barcode number' : 'Enter a session ID', 'error'); return; }
+  stopScanner();
+  if(scanContext === 'reg-card') handleRegCardScan(val);
+  else attemptCheckIn(val);
 });
 
+/* ---------------------------------------------------------------------
+   14. ATTENDANCE FLOW
+        The card barcode is only ever needed at registration (it becomes
+        the account's identity + initial password). Checking in just
+        needs: identify the class (QR / manual / active-classes list),
+        then a hard GPS-radius check — no second card scan.
+--------------------------------------------------------------------- */
 async function attemptCheckIn(sessionId){
   if(!studentProfile){ toast('Please log in first','error'); return; }
+  if(!studentProfile.cardBarcode){
+    showScanResult('fail','No Card Linked','Your account has no student card on file. Please contact support.'); return;
+  }
   try{
     const snap = await db.ref('sessions/'+sessionId).once('value');
-    if(!snap.exists()){
-      showScanResult('fail','Session Not Found','This QR code doesn\'t match an active session. Ask your lecturer for a fresh one.');
-      return;
-    }
+    if(!snap.exists()){ showScanResult('fail','Session Not Found',"This code doesn't match an active session. Ask your lecturer for a fresh one."); return; }
     const session = snap.val();
 
     if(session.expiresAt && Date.now() > session.expiresAt){
-      showScanResult('fail','QR Code Expired','This session\'s check-in window has closed.');
-      return;
+      showScanResult('fail','Session Closed','This session is no longer accepting check-ins.'); return;
     }
-
     const existing = (session.attendanceRecords||{})[studentProfile.studentNumber];
     if(existing){
-      showScanResult('warn','Already Checked In','You already checked in for '+(session.moduleCode||'this session')+'.');
-      return;
+      showScanResult('warn','Already Checked In','You already checked in for '+(session.moduleCode||'this session')+'.'); return;
     }
 
-    // GPS + geofence
-    let attendanceStatus = 'present';
-    let distanceNote = null;
-    try{ capturedGps = await getGpsPosition(); }catch(e){ capturedGps = null; }
-
-    if(GEOFENCE_CONFIG.ENFORCE_GEOFENCE){
-      const venueCoords = GEOFENCE_CONFIG.VENUES[session.venue];
-      if(venueCoords && capturedGps){
-        const dist = haversineMeters(capturedGps.lat, capturedGps.lng, venueCoords.lat, venueCoords.lng);
-        if(dist > GEOFENCE_CONFIG.ALLOWED_RADIUS_METERS){ attendanceStatus='absent'; distanceNote=Math.round(dist); }
-      }else if(venueCoords && !capturedGps){
-        attendanceStatus = 'absent';
-      }
-    }
-
-    const recRef = db.ref(`sessions/${sessionId}/attendanceRecords/${studentProfile.studentNumber}`);
-    const result = await recRef.transaction(current=>{
-      if(current !== null) return; // abort — someone else's request beat us here
-      return {
-        name: studentProfile.name,
-        uid: studentProfile.uid,
-        timestamp: Date.now(),
-        gps: capturedGps || null,
-        status: attendanceStatus
-      };
-    });
-
-    if(!result.committed){
-      showScanResult('warn','Already Checked In','You already checked in for this session.');
-      return;
-    }
-
-    if(attendanceStatus === 'absent'){
-      showScanResult('warn','Recorded — Marked Absent',
-        'You appear to be' + (distanceNote?' '+distanceNote+'m':'') + ' outside ' + (session.venue||'the venue') + '. Contact your lecturer if this seems wrong.');
-    }else{
-      showScanResult('ok','Checked In!', 'You\'re marked present for '+(session.moduleCode||'this session')+' at '+(session.venue||'')+'.');
-    }
+    pendingSessionId = sessionId;
+    pendingSession = session;
+    await verifyGpsAndCheckIn();
   }catch(err){
     console.error(err);
     showScanResult('fail','Something Went Wrong', err.message);
   }
 }
 
-function showScanResult(type, title, msg){
+async function verifyGpsAndCheckIn(){
+  const session = pendingSession, sessionId = pendingSessionId;
+  if(!session || !sessionId){ showScanResult('fail','Something Went Wrong','Session data was lost — please scan again.'); return; }
+
+  toast('Checking your location…', 'info');
+  let gps;
+  try{ gps = await getGpsPosition(); }
+  catch(err){
+    showScanResult('fail','Location Required', "We couldn't get your location (" + err.message + "). Please enable location services and try again.", { retry:'gps' });
+    return;
+  }
+
+  if(session.lat===undefined || session.lng===undefined){
+    showScanResult('fail','Location Not Set', "Your lecturer hasn't set a location for this session yet. Please try again shortly or contact them.");
+    return;
+  }
+
+  const dist = haversineMeters(gps.lat, gps.lng, session.lat, session.lng);
+  const radius = session.radiusMeters || DEFAULT_RADIUS_METERS;
+  if(dist > radius){
+    showScanResult('fail','Outside Attendance Area',
+      `You're about ${Math.round(dist)}m from ${session.venue||'the class'}. You need to be within ${radius}m to check in.`,
+      { retry:'gps' });
+    return;
+  }
+
+  try{
+    const recRef = db.ref(`sessions/${sessionId}/attendanceRecords/${studentProfile.studentNumber}`);
+    const result = await recRef.transaction(current=>{
+      if(current !== null) return; // abort — already checked in
+      return { name: studentProfile.name, uid: studentProfile.uid, timestamp: Date.now(), gps, status: 'present' };
+    });
+    if(!result.committed){
+      showScanResult('warn','Already Checked In','You already checked in for this session.');
+      return;
+    }
+    showScanResult('ok','Checked In!', `You're marked present for ${session.moduleCode||'this session'} at ${session.venue||''}.`);
+  }catch(err){
+    showScanResult('fail','Something Went Wrong', err.message);
+  }
+}
+
+function showScanResult(type, title, msg, opts={}){
   const icon = type==='ok' ? 'fa-circle-check' : type==='warn' ? 'fa-triangle-exclamation' : 'fa-circle-xmark';
-  $('scan-result-card').innerHTML = `
-    <div class="result-icon ${type}"><i class="fas ${icon}"></i></div>
-    <h3>${esc(title)}</h3>
-    <p>${esc(msg)}</p>
-    <button class="btn btn-primary" onclick="closeScanResult()">Done</button>
-  `;
+  let btnHtml;
+  if(opts.retry === 'gps'){
+    btnHtml = `<button class="btn btn-primary" onclick="retryGpsCheck()">Try Again</button><button class="btn btn-ghost btn-sm" style="margin-top:8px;" onclick="closeScanResult()">Cancel</button>`;
+  }else{
+    btnHtml = `<button class="btn btn-primary" onclick="closeScanResult()">Done</button>`;
+  }
+  $('scan-result-card').innerHTML = `<div class="result-icon ${type}"><i class="fas ${icon}"></i></div><h3>${esc(title)}</h3><p>${esc(msg)}</p>${btnHtml}`;
   $('scan-result-overlay').classList.remove('hidden');
 }
+function retryGpsCheck(){ $('scan-result-overlay').classList.add('hidden'); verifyGpsAndCheckIn(); }
 function closeScanResult(){
   $('scan-result-overlay').classList.add('hidden');
+  pendingSession = null; pendingSessionId = null; scanContext = null;
+  stopScanner();
   $('manual-session-id').value = '';
-  stopScanAndGo('student-home-screen');
-  navBottom('student-home-screen', document.querySelector('#student-nav .nav-item[data-screen="student-home-screen"]'), 'student');
+  goStudentHome();
 }
 
 /* ---------------------------------------------------------------------
-   12. HISTORY (student)
+   15. HISTORY (student)
 --------------------------------------------------------------------- */
 function setHistoryFilter(f, el){
   historyFilter = f;
@@ -1332,7 +1624,6 @@ function setHistoryFilter(f, el){
   el.classList.add('active');
   renderHistory();
 }
-
 async function renderHistory(){
   if(!studentProfile) return;
   const listEl = $('history-list');
@@ -1342,33 +1633,28 @@ async function renderHistory(){
     .map(s=>({ session: s, record: (s.attendanceRecords||{})[studentProfile.studentNumber] }))
     .filter(r=>r.record);
 
-  if(historyFilter !== 'all') rows = rows.filter(r=>r.record.status === historyFilter);
   rows.sort((a,b)=> (b.record.timestamp||0) - (a.record.timestamp||0));
 
   if(rows.length===0){
     listEl.innerHTML = `<div class="empty"><i class="fas fa-inbox"></i><h4>No records yet</h4><p>Your attendance history will show up here.</p></div>`;
     return;
   }
-
   listEl.innerHTML = rows.map(r=>{
     const d = fmtDateShort(r.record.timestamp);
-    const status = r.record.status === 'present' ? 'present' : 'absent';
-    const label = status === 'present' ? 'Present' : 'Absent (off-site)';
-    const icon = status === 'present' ? 'fa-check' : 'fa-xmark';
     return `<div class="history-item">
       <div class="h-date"><div class="d">${d.day}</div><div class="m">${d.mon}</div></div>
       <div style="flex:1;">
         <h4>${esc(r.session.moduleCode||'Module')}</h4>
         <div class="meta"><i class="fas fa-location-dot"></i> ${esc(r.session.venue||'')} · ${fmtTime(r.record.timestamp)}</div>
         <div class="meta">Lecturer: ${esc(r.session.lecturerName||'—')}</div>
-        <span class="badge ${status}"><i class="fas ${icon}"></i> ${label}</span>
+        <span class="badge present"><i class="fas fa-check"></i> Present</span>
       </div>
     </div>`;
   }).join('');
 }
 
 /* ---------------------------------------------------------------------
-   13. NOTIFICATIONS
+   16. NOTIFICATIONS
 --------------------------------------------------------------------- */
 async function renderNotifications(){
   const listEl = $('notif-list');
@@ -1386,12 +1672,73 @@ async function renderNotifications(){
       <div class="n-icon"><i class="fas fa-megaphone"></i></div>
       <div><h4 style="font-size:.85rem;font-weight:700;">${esc(n.title)}</h4>
       <p style="font-size:.78rem;color:var(--text-soft);margin-top:2px;">${esc(n.body)}</p>
-      <span style="font-size:.68rem;color:var(--text-faint);">${new Date(n.createdAt).toLocaleString()}</span></div>
+      <span style="font-size:.68rem;color:var(--text-faint);">${new Date(n.createdAt).toLocaleString()}${n.postedBy?' · '+esc(n.postedBy):''}</span></div>
     </div>`).join('');
 }
 
 /* ---------------------------------------------------------------------
-   14. STUDENT PROFILE
+   17. POST UPDATE (lecturer announcements + admin site-wide updates)
+--------------------------------------------------------------------- */
+function isAdminLecturer(){
+  return !!(lecturerProfile && lecturerProfile.email && lecturerProfile.email.toLowerCase() === ADMIN_EMAIL.toLowerCase());
+}
+function renderPostUpdateScreen(){
+  if(!lecturerProfile) return;
+  const admin = isAdminLecturer();
+  $('admin-badge-row').classList.toggle('hidden', !admin);
+  const audienceField = $('pu-audience-field'), audienceSelect = $('pu-audience');
+  if(admin){
+    audienceField.style.display = '';
+    audienceSelect.innerHTML = `<option value="student">My Students Only</option><option value="all" selected>Everyone (Students &amp; Lecturers)</option>`;
+  }else{
+    audienceField.style.display = 'none';
+    audienceSelect.innerHTML = `<option value="student" selected>My Students Only</option>`;
+  }
+  loadMyUpdates();
+}
+async function loadMyUpdates(){
+  const listEl = $('my-updates-list');
+  const snap = await db.ref('notifications').orderByChild('postedByUid').equalTo(lecturerProfile.uid).limitToLast(20).once('value');
+  const data = snap.val() || {};
+  const items = Object.values(data).sort((a,b)=>b.createdAt-a.createdAt);
+  if(items.length===0){ listEl.innerHTML = `<div class="empty"><i class="fas fa-inbox"></i><h4>No updates posted yet</h4></div>`; return; }
+  listEl.innerHTML = items.map(n=>`
+    <div class="notif-item">
+      <div class="n-icon"><i class="fas fa-megaphone"></i></div>
+      <div><h4 style="font-size:.85rem;font-weight:700;">${esc(n.title)}</h4>
+      <p style="font-size:.78rem;color:var(--text-soft);margin-top:2px;">${esc(n.body)}</p>
+      <span style="font-size:.68rem;color:var(--text-faint);">${new Date(n.createdAt).toLocaleString()} · ${n.audience==='all'?'Everyone':'My students'}</span></div>
+    </div>`).join('');
+}
+$('post-update-btn').addEventListener('click', async ()=>{
+  const title = $('pu-title').value.trim();
+  const body = $('pu-body').value.trim();
+  const audience = $('pu-audience').value;
+  const statusEl = $('post-update-status');
+  if(!title || !body){ setStatus(statusEl, 'Please fill in both a title and a message.', 'error'); return; }
+  $('post-update-btn').disabled = true;
+  setStatus(statusEl, 'Posting…', 'info');
+  try{
+    await db.ref('notifications').push({
+      title, body,
+      audience: isAdminLecturer() ? audience : 'student',
+      createdAt: Date.now(),
+      postedBy: lecturerProfile.name,
+      postedByUid: lecturerProfile.uid,
+      isOfficial: isAdminLecturer() && audience === 'all'
+    });
+    setStatus(statusEl, 'Update posted!', 'success');
+    $('pu-title').value = ''; $('pu-body').value = '';
+    loadMyUpdates();
+  }catch(err){
+    setStatus(statusEl, 'Could not post: '+err.message, 'error');
+  }finally{
+    $('post-update-btn').disabled = false;
+  }
+});
+
+/* ---------------------------------------------------------------------
+   18. STUDENT PROFILE + EDIT PROFILE
 --------------------------------------------------------------------- */
 async function renderStudentProfile(){
   if(!studentProfile) return;
@@ -1404,23 +1751,58 @@ async function renderStudentProfile(){
   let attended=0, total=0;
   Object.values(data).forEach(s=>{
     const rec = (s.attendanceRecords||{})[studentProfile.studentNumber];
-    if(rec){ total++; if(rec.status==='present') attended++; }
+    if(rec){ total++; attended++; }
   });
   const pct = total>0 ? Math.round((attended/total)*100) : 0;
   $('pstat-pct').textContent = total>0 ? pct+'%' : '—';
   $('pstat-attended').textContent = attended;
   $('pstat-total').textContent = total;
 }
+function openEditProfile(){
+  if(!studentProfile) return;
+  $('ep-name').value = studentProfile.name || '';
+  $('ep-email').value = studentProfile.email || '';
+  $('ep-number').value = studentProfile.studentNumber || '';
+  $('ep-card').value = studentProfile.cardBarcode || '';
+  setStatus($('ep-status'), '', '');
+  nav('edit-profile-screen');
+}
+$('ep-save-btn').addEventListener('click', async ()=>{
+  const name = $('ep-name').value.trim();
+  const email = $('ep-email').value.trim();
+  const statusEl = $('ep-status');
+  if(!name || !email){ setStatus(statusEl, 'Name and email cannot be empty.', 'error'); return; }
+  $('ep-save-btn').disabled = true;
+  setStatus(statusEl, 'Saving…', 'info');
+  try{
+    if(email !== studentProfile.email && auth.currentUser){
+      await auth.currentUser.updateEmail(email);
+    }
+    await db.ref('students/'+studentProfile.uid).update({ name, email });
+    studentProfile.name = name; studentProfile.email = email;
+    setStatus(statusEl, '', '');
+    toast('Profile updated', 'success');
+    nav('profile-screen');
+    renderStudentProfile();
+  }catch(err){
+    const msg = err.code === 'auth/requires-recent-login'
+      ? 'For security, please log out and back in before changing your email.'
+      : err.message;
+    setStatus(statusEl, msg, 'error');
+  }finally{
+    $('ep-save-btn').disabled = false;
+  }
+});
 
 /* ---------------------------------------------------------------------
-   15. LECTURER DASHBOARD
+   19. LECTURER DASHBOARD
 --------------------------------------------------------------------- */
 async function renderLecturerDashboard(){
   if(!lecturerProfile) return;
-  if(dashSessionsUnsub) dashSessionsUnsub.off && dashSessionsUnsub.off();
+  if(dashSessionsRef) dashSessionsRef.off();
 
   const ref = db.ref('sessions').orderByChild('lecturerId').equalTo(lecturerProfile.uid);
-  dashSessionsUnsub = ref;
+  dashSessionsRef = ref;
   ref.on('value', snap=>{
     const data = snap.val() || {};
     const sessions = Object.keys(data).map(id=>({id, ...data[id]})).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
@@ -1428,8 +1810,7 @@ async function renderLecturerDashboard(){
     const now = Date.now();
     const active = sessions.filter(s=>s.expiresAt && s.expiresAt > now).length;
     const todayStr = new Date().toDateString();
-    let todayCheckins = 0;
-    let turnoutSum = 0, turnoutCount = 0;
+    let todayCheckins = 0, turnoutSum = 0, turnoutCount = 0;
 
     sessions.forEach(s=>{
       const count = Object.keys(s.attendanceRecords||{}).length;
@@ -1446,7 +1827,6 @@ async function renderLecturerDashboard(){
     renderDashSessionList(sessions.slice(0,15));
   });
 }
-
 function renderDashSessionList(sessions){
   const el = $('dash-session-list');
   if(sessions.length===0){
@@ -1463,36 +1843,19 @@ function renderDashSessionList(sessions){
     </div>`;
   }).join('');
 }
-
 function renderTrendChart(sessions){
   const ctx = document.getElementById('trend-chart');
   if(!ctx) return;
   const labels = sessions.map(s=>s.moduleCode || '—');
   const values = sessions.map(s=>Object.keys(s.attendanceRecords||{}).length);
-
   if(trendChartInstance) trendChartInstance.destroy();
   trendChartInstance = new Chart(ctx, {
     type: 'bar',
-    data: {
-      labels: labels.length ? labels : ['—'],
-      datasets: [{
-        data: values.length ? values : [0],
-        backgroundColor: '#0a7a41',
-        borderRadius: 8,
-        maxBarThickness: 28
-      }]
-    },
-    options: {
-      responsive:true,
-      plugins:{ legend:{ display:false } },
-      scales:{
-        y:{ beginAtZero:true, ticks:{ precision:0 }, grid:{ color:'rgba(0,0,0,.05)' } },
-        x:{ grid:{ display:false } }
-      }
-    }
+    data: { labels: labels.length ? labels : ['—'], datasets: [{ data: values.length ? values : [0], backgroundColor: '#12305c', borderRadius: 8, maxBarThickness: 28 }] },
+    options: { responsive:true, plugins:{ legend:{ display:false } },
+      scales:{ y:{ beginAtZero:true, ticks:{ precision:0 }, grid:{ color:'rgba(0,0,0,.05)' } }, x:{ grid:{ display:false } } } }
   });
 }
-
 async function renderLecturerProfile(){
   if(!lecturerProfile) return;
   $('lec-profile-avatar').textContent = initials(lecturerProfile.name);
@@ -1514,27 +1877,42 @@ async function renderLecturerProfile(){
 }
 
 /* ---------------------------------------------------------------------
-   16. CREATE SESSION + QR
+   20. CREATE SESSION + QR (lecturer sets live GPS location + radius)
 --------------------------------------------------------------------- */
 function setExpireOpt(el, minutes){
   document.querySelectorAll('.expire-opt').forEach(o=>o.classList.remove('active'));
   el.classList.add('active');
   expireMinutes = minutes;
 }
+$('cs-capture-location-btn').addEventListener('click', async ()=>{
+  const btn = $('cs-capture-location-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner spin"></i> Getting location…';
+  try{
+    const pos = await getGpsPosition();
+    capturedSessionLocation = pos;
+    $('cs-location-chip').classList.remove('hidden');
+    $('cs-location-chip').innerHTML = `<i class="fas fa-check-circle"></i> Location captured (±${Math.round(pos.accuracy)}m accuracy)`;
+  }catch(err){
+    toast('Could not get location: '+err.message, 'error');
+  }finally{
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-location-crosshairs"></i> Use My Current Location';
+  }
+});
 
 $('generate-qr-btn').addEventListener('click', async ()=>{
   const moduleCode = $('cs-module').value.trim();
-  const venue = $('cs-venue').value;
+  const venue = $('cs-venue').value.trim();
   const sessionTimeRaw = $('cs-time').value;
+  const radiusMeters = parseInt($('cs-radius').value) || DEFAULT_RADIUS_METERS;
   const statusEl = $('create-session-status');
 
-  if(!moduleCode || !venue || !sessionTimeRaw){
-    setStatus(statusEl, 'Please fill in module, venue and date/time.', 'error');
-    return;
-  }
+  if(!moduleCode || !venue || !sessionTimeRaw){ setStatus(statusEl, 'Please fill in module, venue and date/time.', 'error'); return; }
+  if(!capturedSessionLocation){ setStatus(statusEl, 'Please capture the class location first — tap "Use My Current Location".', 'error'); return; }
+
   $('generate-qr-btn').disabled = true;
   setStatus(statusEl, 'Creating session…', 'info');
-
   try{
     const sessionTime = new Date(sessionTimeRaw).getTime();
     const now = Date.now();
@@ -1543,16 +1921,16 @@ $('generate-qr-btn').addEventListener('click', async ()=>{
     await newRef.set({
       moduleCode, venue,
       sessionTime, createdAt: now, expiresAt,
-      lecturerId: lecturerProfile.uid,
-      lecturerName: lecturerProfile.name,
+      lecturerId: lecturerProfile.uid, lecturerName: lecturerProfile.name,
+      lat: capturedSessionLocation.lat, lng: capturedSessionLocation.lng, radiusMeters,
       attendanceRecords: {}
     });
     currentSessionId = newRef.key;
-    currentSessionExpiresAt = expiresAt;
-
     renderQr(currentSessionId, moduleCode, venue);
     startQrCountdown(expiresAt);
-    setStatus(statusEl, 'Session live! Students can scan now.', 'success');
+    setStatus(statusEl, 'Session live! Students can check in now.', 'success');
+    capturedSessionLocation = null;
+    $('cs-location-chip').classList.add('hidden');
   }catch(err){
     console.error(err);
     setStatus(statusEl, 'Could not create session: '+err.message, 'error');
@@ -1563,34 +1941,47 @@ $('generate-qr-btn').addEventListener('click', async ()=>{
 
 function renderQr(sessionId, moduleCode, venue){
   $('qrcode-box').innerHTML = '';
-  qrObj = new QRCode($('qrcode-box'), {
-    text: sessionId, width: 200, height: 200,
-    colorDark: '#12211a', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.H
-  });
-  $('qr-meta').innerHTML = `<strong>${esc(moduleCode)}</strong> · ${esc(venue)}<br>Session ID: <code>${sessionId}</code>`;
+  new QRCode($('qrcode-box'), { text: sessionId, width: 200, height: 200, colorDark: '#12211a', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.H });
+  $('qr-module-title').textContent = moduleCode;
+  $('qr-venue-line').textContent = venue;
+  $('qr-session-id-text').textContent = sessionId;
   $('qr-panel').classList.remove('hidden');
 }
-
 function startQrCountdown(expiresAt){
   clearInterval(qrTimerInterval);
   const timerEl = $('qr-timer');
   function tick(){
     const remaining = expiresAt - Date.now();
-    if(remaining <= 0){
-      timerEl.textContent = 'Expired';
-      timerEl.classList.add('expiring');
-      clearInterval(qrTimerInterval);
-      return;
-    }
-    const mins = Math.floor(remaining/60000);
-    const secs = Math.floor((remaining%60000)/1000);
+    if(remaining <= 0){ timerEl.textContent = 'Expired'; timerEl.classList.add('expiring'); clearInterval(qrTimerInterval); return; }
+    const mins = Math.floor(remaining/60000), secs = Math.floor((remaining%60000)/1000);
     timerEl.textContent = `${mins}:${secs.toString().padStart(2,'0')}`;
-    if(remaining < 60000) timerEl.classList.add('expiring'); else timerEl.classList.remove('expiring');
+    timerEl.classList.toggle('expiring', remaining < 60000);
   }
   tick();
   qrTimerInterval = setInterval(tick, 1000);
 }
-
+$('copy-session-id-btn').addEventListener('click', async ()=>{
+  if(!currentSessionId) return;
+  try{ await navigator.clipboard.writeText(currentSessionId); toast('Session ID copied','success'); }
+  catch(e){ toast('Could not copy — select it manually', 'error'); }
+});
+$('share-session-btn').addEventListener('click', async ()=>{
+  if(!currentSessionId) return;
+  const text = `Join my class session on UNIVEN Attendance!\nSession ID: ${currentSessionId}`;
+  if(navigator.share){ try{ await navigator.share({ title:'UNIVEN Attendance Session', text }); }catch(e){} }
+  else{ try{ await navigator.clipboard.writeText(text); toast('Session details copied to clipboard','success'); }catch(e){ toast('Could not share or copy','error'); } }
+});
+$('end-session-btn').addEventListener('click', async ()=>{
+  if(!currentSessionId) return;
+  if(!confirm("Close this session now? Students won't be able to check in after this.")) return;
+  try{
+    await db.ref('sessions/'+currentSessionId+'/expiresAt').set(Date.now());
+    toast('Session closed','success');
+    $('qr-panel').classList.add('hidden');
+    clearInterval(qrTimerInterval);
+    goLecturerDashboard();
+  }catch(err){ toast('Could not close session: '+err.message, 'error'); }
+});
 $('download-qr-btn').addEventListener('click', ()=>{
   const canvas = document.querySelector('#qrcode-box canvas');
   if(!canvas) return;
@@ -1601,8 +1992,9 @@ $('download-qr-btn').addEventListener('click', ()=>{
 });
 
 /* ---------------------------------------------------------------------
-   17. STUDENT LIST (lecturer view of a specific session)
+   21. STUDENT LIST (lecturer view of a specific session)
 --------------------------------------------------------------------- */
+let activeDashSession = null;
 function openStudentList(sessionId, moduleCode){
   activeDashSession = sessionId;
   $('stud-list-title').textContent = moduleCode || 'Students';
@@ -1611,21 +2003,18 @@ function openStudentList(sessionId, moduleCode){
   $('lecturer-nav').querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active', n.dataset.screen==='student-list-screen'));
   watchStudentList(sessionId);
 }
-
 function watchStudentList(sessionId){
-  if(studListUnsub) studListUnsub.off();
+  if(studListRef) studListRef.off();
   const ref = db.ref('sessions/'+sessionId);
-  studListUnsub = ref;
+  studListRef = ref;
   ref.on('value', snap=>{
     const session = snap.val();
     if(!session){ $('stud-list-body').innerHTML = `<div class="empty"><i class="fas fa-triangle-exclamation"></i><h4>Session not found</h4></div>`; return; }
     renderStudList(session);
   });
 }
-
 function renderStudList(session){
   let rows = Object.entries(session.attendanceRecords||{}).map(([studentNumber, rec])=>({studentNumber, ...rec}));
-  if(studFilter !== 'all') rows = rows.filter(r=>r.status === studFilter);
   if(studSearchQ.trim()){
     const q = studSearchQ.toLowerCase();
     rows = rows.filter(r=> r.studentNumber.toLowerCase().includes(q) || (r.name||'').toLowerCase().includes(q));
@@ -1634,36 +2023,26 @@ function renderStudList(session){
 
   const el = $('stud-list-body');
   if(rows.length===0){
-    el.innerHTML = `<div class="empty"><i class="fas fa-user-slash"></i><h4>No students yet</h4><p>Check back once students start scanning.</p></div>`;
+    el.innerHTML = `<div class="empty"><i class="fas fa-user-slash"></i><h4>No students yet</h4><p>Check back once students start checking in.</p></div>`;
     return;
   }
-  el.innerHTML = rows.map(r=>{
-    const isAbsent = r.status === 'absent';
-    return `<div class="stud-row">
+  el.innerHTML = rows.map(r=>`
+    <div class="stud-row">
       <div class="stud-avatar">${initials(r.name)}</div>
       <div style="flex:1;"><h4>${esc(r.name)}</h4><div class="meta">#${esc(r.studentNumber)} · ${fmtTime(r.timestamp)}</div></div>
-      <span class="badge ${isAbsent?'absent':'present'}" style="margin-top:0;">${isAbsent?'Absent':'Present'}</span>
-    </div>`;
-  }).join('');
-}
-
-function setStudFilter(f, el){
-  studFilter = f;
-  document.querySelectorAll('#student-list-screen .chip').forEach(c=>c.classList.remove('active'));
-  el.classList.add('active');
-  if(activeDashSession) db.ref('sessions/'+activeDashSession).once('value').then(s=>renderStudList(s.val()||{}));
+      <span class="badge present" style="margin-top:0;">Present</span>
+    </div>`).join('');
 }
 $('stud-search').addEventListener('input', e=>{
   studSearchQ = e.target.value;
   if(activeDashSession) db.ref('sessions/'+activeDashSession).once('value').then(s=>renderStudList(s.val()||{}));
 });
-
 $('export-csv-btn').addEventListener('click', async ()=>{
   if(!activeDashSession){ toast('Open a session first','error'); return; }
   const snap = await db.ref('sessions/'+activeDashSession).once('value');
   const session = snap.val();
   if(!session){ toast('Session not found','error'); return; }
-  const rows = Object.entries(session.attendanceRecords||{}).map(([num,r])=>[num, r.name, r.status, new Date(r.timestamp).toLocaleString()]);
+  const rows = Object.entries(session.attendanceRecords||{}).map(([num,r])=>[num, r.name, 'Present', new Date(r.timestamp).toLocaleString()]);
   let csv = 'Student Number,Name,Status,Timestamp\n';
   rows.forEach(r=>{ csv += r.map(v=>`"${(v||'').toString().replace(/"/g,'""')}"`).join(',') + '\n'; });
   const blob = new Blob([csv], {type:'text/csv'});
@@ -1676,36 +2055,30 @@ $('export-csv-btn').addEventListener('click', async ()=>{
 });
 
 /* ---------------------------------------------------------------------
-   18. AUTH STATE OBSERVER (keeps students/lecturers signed in)
+   22. AUTH STATE OBSERVER (keeps students/lecturers signed in across
+       reloads, using Firebase Auth's own persistence — no localStorage)
 --------------------------------------------------------------------- */
 auth.onAuthStateChanged(async user=>{
   if(!user) return;
-  if(currentRole) return; // already routed this session
+  if(currentRole) return;
 
-  // Try lecturer profile first (has email/password), fall back to student
-  if(!user.isAnonymous){
-    const snap = await db.ref('lecturers/'+user.uid).once('value');
-    if(snap.exists()){
-      lecturerProfile = { uid: user.uid, ...snap.val() };
-      currentRole = 'lecturer';
-      setTimeout(()=>{
-        nav('lecturer-dashboard-screen');
-        navBottom('lecturer-dashboard-screen', document.querySelector('#lecturer-nav .nav-item[data-screen="lecturer-dashboard-screen"]'), 'lecturer');
-      }, 1900);
-    }
-  }else{
-    const snap = await db.ref('students/'+user.uid).once('value');
-    if(snap.exists()){
-      studentProfile = { uid: user.uid, ...snap.val() };
-      currentRole = 'student';
-      setTimeout(()=>{
-        nav('student-home-screen');
-        navBottom('student-home-screen', document.querySelector('#student-nav .nav-item[data-screen="student-home-screen"]'), 'student');
-      }, 1900);
-    }
+  const lecSnap = await db.ref('lecturers/'+user.uid).once('value');
+  if(lecSnap.exists()){
+    lecturerProfile = { uid: user.uid, ...lecSnap.val() };
+    currentRole = 'lecturer';
+    setTimeout(goLecturerDashboard, 1900);
+    return;
+  }
+  const stuSnap = await db.ref('students/'+user.uid).once('value');
+  if(stuSnap.exists()){
+    studentProfile = { uid: user.uid, ...stuSnap.val() };
+    currentRole = 'student';
+    setTimeout(()=>{
+      if(studentProfile.mustChangePassword) nav('change-password-screen');
+      else goStudentHome();
+    }, 1900);
   }
 });
-
 </script>
 </body>
 </html>
