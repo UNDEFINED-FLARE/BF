@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Univen · Session List Maker</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="icon" href="https://www.univen.ac.za/wp-content/uploads/2026/02/logo.png" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root {
+    --green:#0b1f3a; --green-dark:#071328; --green-mid:#12305c;
+    --gold:#e0932c; --gold-light:#fdf1e2;
+    --bg:#eef1f5; --surface:#ffffff; --border:#e5ece8;
+    --text:#12211a; --text-soft:#5c6b63;
+    --danger:#e0464b; --success:#1fae6b; --warn:#b8860b;
+    --shadow-sm:0 2px 8px rgba(18,33,26,.06);
+    --shadow-md:0 8px 24px rgba(18,33,26,.09);
+    --shadow-lg:0 18px 48px rgba(18,33,26,.16);
+    --r-lg:22px; --r-md:16px; --r-sm:12px; --r-pill:999px;
+  }
+  body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; padding:1.5rem; }
+  .app-container { max-width:1100px; margin:0 auto; transition:max-width .2s; }
+  body.mobile-mode { padding-bottom:6.5rem; }
+  body.mobile-mode .app-container { max-width:460px; }
+  .hidden { display:none !important; }
+
+  /* ---------- shared header (auth screen) ---------- */
+  .university-header {
+    background:linear-gradient(135deg,var(--green) 0%,var(--green-dark) 100%);
+    border-radius:var(--r-lg); padding:1.5rem 2rem; margin-bottom:1.5rem; color:#fff;
+    display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem;
+    box-shadow:var(--shadow-lg); position:relative; overflow:hidden;
+  }
+  .university-header::after { content:''; position:absolute; right:-30px; top:-30px; width:200px; height:200px; border-radius:50%; background:rgba(224,147,44,0.12); }
+  .university-header .brand { display:flex; align-items:center; gap:1rem; position:relative; z-index:1; }
+  .university-header .crest { width:56px; height:56px; background:#fff; border-radius:var(--r-md); display:flex; align-items:center; justify-content:center; font-weight:900; font-size:1.6rem; color:var(--green); font-family:'Poppins',sans-serif; box-shadow:0 4px 12px rgba(0,0,0,0.15); }
+  .university-header h1 { font-size:1.4rem; font-weight:800; line-height:1.2; }
+  .university-header h1 small { display:block; font-size:0.65rem; font-weight:400; opacity:0.75; letter-spacing:1px; text-transform:uppercase; }
+  .university-header .subtitle { font-size:0.8rem; background:rgba(255,255,255,0.12); padding:0.4rem 1.2rem; border-radius:var(--r-pill); border:1px solid rgba(255,255,255,0.15); backdrop-filter:blur(4px); }
+  .university-header .subtitle i { color:var(--gold); margin-right:6px; }
+
+  /* ---------- mobile top bar (dashboard) ---------- */
+  .mobile-topbar { display:flex; align-items:center; justify-content:space-between; margin-bottom:1.2rem; }
+  .brand-mini { display:flex; align-items:center; gap:0.65rem; }
+  .crest-mini { width:40px; height:40px; background:var(--green); color:#fff; border-radius:11px; display:flex; align-items:center; justify-content:center; font-weight:900; font-family:'Poppins',sans-serif; font-size:1.1rem; }
+  .brand-mini .names { line-height:1.15; }
+  .brand-mini .names strong { display:block; font-size:0.92rem; color:var(--green); font-family:'Poppins',sans-serif; }
+  .brand-mini .names small { color:var(--text-soft); font-size:0.65rem; letter-spacing:0.4px; text-transform:uppercase; }
+  .bell-btn { width:42px; height:42px; border-radius:50%; background:#fff; box-shadow:var(--shadow-sm); display:flex; align-items:center; justify-content:center; position:relative; cursor:pointer; color:var(--green); border:none; }
+  .bell-dot { position:absolute; top:9px; right:11px; width:8px; height:8px; border-radius:50%; background:var(--gold); }
+
+  .greeting { margin-bottom:1.2rem; }
+  .greeting .hi { color:var(--text-soft); font-size:0.95rem; }
+  .greeting .who { font-family:'Poppins',sans-serif; font-weight:800; font-size:1.5rem; color:var(--green); }
+
+  /* ---------- ring stat card ---------- */
+  .ring-card { background:linear-gradient(135deg,var(--green) 0%,var(--green-dark) 100%); border-radius:var(--r-lg); padding:1.4rem 1.5rem; color:#fff; display:flex; align-items:center; gap:1.2rem; box-shadow:var(--shadow-lg); margin-bottom:1.2rem; position:relative; overflow:hidden; }
+  .ring-card::after { content:''; position:absolute; right:-40px; bottom:-40px; width:150px; height:150px; border-radius:50%; background:rgba(224,147,44,0.1); }
+  .ring-widget { width:104px; height:104px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; position:relative; z-index:1; }
+  .ring-inner { width:80px; height:80px; border-radius:50%; background:var(--green-dark); display:flex; flex-direction:column; align-items:center; justify-content:center; }
+  .ring-inner b { font-size:1.15rem; }
+  .ring-inner span { font-size:0.6rem; opacity:0.8; text-transform:uppercase; letter-spacing:0.4px; }
+  .ring-stats { display:flex; gap:1.3rem; position:relative; z-index:1; flex:1; }
+  .ring-stats div { text-align:center; }
+  .ring-stats b { display:block; font-size:1.3rem; }
+  .ring-stats span { font-size:0.68rem; opacity:0.8; text-transform:uppercase; letter-spacing:0.3px; }
+  .ring-caption { position:relative; z-index:1; font-size:0.72rem; opacity:0.85; grid-column:1/-1; margin-top:0.4rem; }
+
+  /* ---------- quick actions ---------- */
+  .section-label { font-family:'Poppins',sans-serif; font-weight:700; font-size:0.95rem; color:var(--green); margin:1.2rem 0 0.7rem; display:flex; align-items:center; justify-content:space-between; }
+  .qa-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:0.6rem; margin-bottom:0.4rem; }
+  .qa-btn { display:flex; flex-direction:column; align-items:center; gap:0.4rem; background:#fff; border-radius:16px; padding:0.85rem 0.3rem; box-shadow:var(--shadow-sm); cursor:pointer; border:1px solid var(--border); }
+  .qa-icon { width:42px; height:42px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:1.05rem; }
+  .qa-icon.blue { background:#e8edfb; color:var(--green-mid); }
+  .qa-icon.gold { background:var(--gold-light); color:var(--gold); }
+  .qa-icon.pink { background:#fdecf1; color:#c2337a; }
+  .qa-icon.grey { background:#eef1f2; color:var(--text-soft); }
+  .qa-btn span { font-size:0.66rem; font-weight:600; color:var(--text-soft); text-align:center; }
+
+  /* ---------- session cards ---------- */
+  .sess-card { background:#fff; border-radius:16px; padding:1rem 1.1rem; box-shadow:var(--shadow-sm); border-left:4px solid var(--gold); margin-bottom:0.8rem; }
+  .sess-card .top { display:flex; justify-content:space-between; align-items:flex-start; gap:0.6rem; margin-bottom:0.5rem; }
+  .sess-card .title { font-weight:700; font-size:0.95rem; color:var(--text); }
+  .sess-card .meta { display:flex; gap:1rem; font-size:0.75rem; color:var(--text-soft); flex-wrap:wrap; margin-bottom:0.6rem; }
+  .sess-card .meta span { display:flex; align-items:center; gap:0.3rem; }
+  .sess-card .actions { display:flex; gap:0.5rem; }
+
+  .card { background:var(--surface); border-radius:var(--r-lg); padding:1.8rem 2rem; box-shadow:var(--shadow-sm); margin-bottom:1.5rem; border:1px solid var(--border); }
+  .card-title { font-family:'Poppins',sans-serif; font-weight:700; font-size:1.1rem; color:var(--green); display:flex; align-items:center; gap:0.5rem; margin-bottom:1.2rem; }
+  .card-sub { font-size:0.82rem; color:var(--text-soft); margin-top:-0.8rem; margin-bottom:1.2rem; }
+
+  .form-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:1rem 1.5rem; align-items:end; }
+  .field-group label { display:block; font-weight:600; font-size:0.75rem; color:var(--text-soft); text-transform:uppercase; letter-spacing:0.3px; margin-bottom:0.25rem; }
+  .field-group input, .field-group select, .field-group textarea { width:100%; padding:0.65rem 1rem; border:2px solid var(--border); border-radius:var(--r-sm); font-size:0.9rem; background:#fbfcfb; transition:0.2s; font-family:inherit; }
+  .field-group input:focus, .field-group select:focus, .field-group textarea:focus { outline:none; border-color:var(--green-mid); box-shadow:0 0 0 4px rgba(18,48,92,0.08); background:#fff; }
+  .field-group small { display:block; margin-top:0.3rem; color:var(--text-soft); font-size:0.72rem; }
+
+  .toggle-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:0.7rem; }
+  .toggle-chip { display:flex; align-items:center; gap:0.6rem; padding:0.7rem 0.9rem; border:2px solid var(--border); border-radius:var(--r-sm); cursor:pointer; background:#fbfcfb; transition:0.15s; user-select:none; }
+  .toggle-chip.active { border-color:var(--green-mid); background:var(--gold-light); }
+  .toggle-chip input { width:16px; height:16px; accent-color:var(--green-mid); }
+  .toggle-chip span { font-weight:600; font-size:0.85rem; }
+
+  .btn { border:none; padding:0.65rem 1.5rem; border-radius:var(--r-pill); font-weight:700; font-size:0.8rem; display:inline-flex; align-items:center; gap:0.5rem; cursor:pointer; transition:all 0.15s; font-family:'Inter',sans-serif; }
+  .btn:active { transform:scale(0.96); }
+  .btn:disabled { opacity:0.5; cursor:not-allowed; }
+  .btn-block { width:100%; justify-content:center; }
+  .btn-primary { background:linear-gradient(135deg,var(--green-mid),var(--green-dark)); color:#fff; box-shadow:0 4px 12px rgba(11,31,58,0.25); }
+  .btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 18px rgba(11,31,58,0.3); }
+  .btn-success { background:linear-gradient(135deg,var(--success),#0d8f52); color:#fff; }
+  .btn-outline { background:transparent; border:2px solid var(--border); color:var(--text-soft); }
+  .btn-outline:hover { background:var(--surface); border-color:var(--text-soft); }
+  .btn-danger { background:#fdecec; color:var(--danger); border:1.5px solid var(--danger); }
+  .btn-danger:hover { background:var(--danger); color:#fff; }
+  .btn-pdf { background:linear-gradient(135deg,#dc3545,#b02a37); color:#fff; box-shadow:0 4px 12px rgba(220,53,69,0.25); }
+  .btn-sm { padding:0.45rem 1rem; font-size:0.72rem; }
+  .btn-group { display:flex; gap:0.6rem; flex-wrap:wrap; padding-top:0.2rem; }
+
+  .flex-sb { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.8rem; }
+  .link-box { display:flex; align-items:center; gap:0.6rem; background:#f4f7f5; border:1.5px dashed var(--border); border-radius:var(--r-sm); padding:0.7rem 1rem; font-size:0.82rem; font-family:monospace; overflow-x:auto; }
+  .link-box span { flex:1; white-space:nowrap; color:var(--green-mid); font-weight:600; }
+
+  .status-pill { padding:0.25rem 0.9rem; border-radius:var(--r-pill); font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.4px; white-space:nowrap; }
+  .status-active { background:#e6f8ef; color:var(--success); }
+  .status-expired { background:#fdecec; color:var(--danger); }
+  .status-closed { background:#f1f1f1; color:var(--text-soft); }
+  .status-full { background:#fff3e0; color:var(--warn); }
+
+  .table-wrapper { overflow-x:auto; border-radius:var(--r-md); border:1px solid var(--border); }
+  table { width:100%; border-collapse:collapse; font-size:0.88rem; }
+  th { background:#eef1f7; text-align:left; padding:0.8rem 1rem; font-weight:700; color:var(--green); border-bottom:2px solid var(--border); font-family:'Poppins',sans-serif; font-size:0.72rem; text-transform:uppercase; letter-spacing:0.5px; white-space:nowrap; }
+  td { padding:0.65rem 1rem; border-bottom:1px solid var(--border); }
+  tr:last-child td { border-bottom:none; }
+  tr:hover td { background:#fafcfb; }
+  .empty-row td { text-align:center; color:#94a39c; padding:2.2rem 1rem; font-style:italic; }
+  .action-icon { color:var(--text-soft); cursor:pointer; padding:0.2rem 0.5rem; border-radius:6px; transition:0.15s; }
+  .action-icon:hover { background:#eef1f7; color:var(--green); }
+  .action-icon.delete:hover { background:#fdecec; color:var(--danger); }
+  .file-chip { color:var(--green-mid); font-weight:600; text-decoration:none; font-size:0.8rem; }
+  .file-chip:hover { text-decoration:underline; }
+
+  .toast { position:fixed; bottom:6.5rem; left:50%; transform:translateX(-50%) translateY(100px); background:var(--green-dark); color:#fff; padding:0.7rem 2rem; border-radius:var(--r-pill); font-weight:600; font-size:0.85rem; box-shadow:var(--shadow-lg); opacity:0; transition:all 0.35s cubic-bezier(0.2,0.8,0.3,1); pointer-events:none; z-index:999; max-width:90vw; text-align:center; }
+  .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+  .toast.success { background:var(--success); }
+  .toast.error { background:var(--danger); }
+  .toast.warn { background:var(--warn); }
+
+  .center-state { text-align:center; padding:3rem 1.5rem; }
+  .center-state i { font-size:2.6rem; color:var(--gold); margin-bottom:1rem; display:block; }
+  .center-state h2 { font-family:'Poppins',sans-serif; color:var(--green); margin-bottom:0.5rem; }
+  .center-state p { color:var(--text-soft); font-size:0.9rem; }
+
+  .qr-box { display:flex; align-items:center; gap:1.2rem; flex-wrap:wrap; }
+  .qr-box canvas, .qr-box img { border-radius:var(--r-sm); border:1px solid var(--border); padding:8px; background:#fff; }
+  .countdown { font-weight:700; color:var(--green-mid); font-size:0.85rem; }
+  .file-drop { border:2px dashed var(--border); border-radius:var(--r-sm); padding:1.2rem; text-align:center; cursor:pointer; background:#fbfcfb; transition:0.15s; }
+  .file-drop:hover { border-color:var(--green-mid); background:var(--gold-light); }
+  .file-drop i { font-size:1.4rem; color:var(--gold); margin-bottom:0.4rem; display:block; }
+  .search-box { position:relative; max-width:280px; }
+  .search-box input { padding-left:2.4rem; }
+  .search-box i { position:absolute; left:0.9rem; top:50%; transform:translateY(-50%); color:var(--text-soft); }
+  #pdfContent { display:none; }
+
+  /* ---------- auth ---------- */
+  .auth-toggle { display:flex; background:#f1f4f2; border-radius:var(--r-pill); padding:0.3rem; margin-bottom:1.4rem; }
+  .auth-toggle button { flex:1; border:none; background:transparent; padding:0.55rem; border-radius:var(--r-pill); font-weight:700; font-size:0.82rem; cursor:pointer; color:var(--text-soft); }
+  .auth-toggle button.active { background:var(--green-mid); color:#fff; }
+  .field-stack { display:flex; flex-direction:column; gap:0.9rem; margin-bottom:1rem; }
+  .link-text { background:none; border:none; color:var(--green-mid); font-weight:600; font-size:0.78rem; cursor:pointer; text-decoration:underline; padding:0; }
+
+  /* ---------- back header ---------- */
+  .back-header { display:flex; align-items:center; gap:0.8rem; margin-bottom:1.2rem; }
+  .back-btn { width:38px; height:38px; border-radius:50%; background:#fff; box-shadow:var(--shadow-sm); border:none; display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--green); }
+  .back-header h2 { font-family:'Poppins',sans-serif; font-weight:800; font-size:1.15rem; color:var(--green); }
+
+  /* ---------- bottom nav ---------- */
+  .bottom-nav { position:fixed; left:50%; transform:translateX(-50%); bottom:0; width:100%; max-width:460px; background:#fff; border-top:1px solid var(--border); display:flex; justify-content:space-around; align-items:center; padding:0.7rem 0 calc(0.6rem + env(safe-area-inset-bottom)); box-shadow:0 -6px 20px rgba(0,0,0,.06); z-index:60; border-radius:20px 20px 0 0; }
+  .nav-item { display:flex; flex-direction:column; align-items:center; gap:0.22rem; font-size:0.63rem; color:var(--text-soft); cursor:pointer; font-weight:600; background:none; border:none; }
+  .nav-item i { font-size:1.05rem; }
+  .nav-item.active { color:var(--green-mid); }
+  .nav-fab { position:absolute; top:-24px; left:50%; transform:translateX(-50%); width:54px; height:54px; border-radius:50%; background:linear-gradient(135deg,var(--green-mid),var(--green-dark)); display:flex; align-items:center; justify-content:center; color:#fff; font-size:1.25rem; box-shadow:0 8px 20px rgba(11,31,58,.35); border:4px solid #fff; cursor:pointer; }
+  .nav-spacer { width:54px; }
+
+  @media (max-width:700px) {
+    .university-header { flex-direction:column; text-align:center; }
+    .university-header .brand { flex-direction:column; }
+    .card { padding:1.2rem; }
+    .form-grid { grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app-container">
+
+  <!-- ===================== AUTH VIEW ===================== -->
+  <div id="authView" class="hidden">
+    <div class="university-header">
+      <div class="brand">
+        <div class="crest"><div class="splash-crest"><img src="https://www.univen.ac.za/wp-content/uploads/2026/02/logo.png" alt="" onerror="this.style.display='none';this.parentElement.innerHTML='<span style=font-size:1.6rem;color:%230b1f3a;font-weight:800>UV</span>'"></div></div>
+        <div><h1>University of Venda <small>Session List Maker</small></h1></div>
+      </div>
+      <div class="subtitle"><i class="fas fa-shield-halved"></i> For session makers</div>
+    </div>
+
+    <div class="card">
+      <div class="auth-toggle">
+        <button id="tabSignIn" class="active">Sign In</button>
+        <button id="tabSignUp">Sign Up</button>
+      </div>
+
+      <div id="signInForm">
+        <div class="field-stack">
+          <div class="field-group"><label><i class="fas fa-envelope"></i> Email</label><input type="email" id="siEmail" placeholder="you@univen.ac.za" /></div>
+          <div class="field-group"><label><i class="fas fa-lock"></i> Password</label><input type="password" id="siPassword" placeholder="••••••••" /></div>
+        </div>
+        <button class="btn btn-primary btn-block" id="signInBtn"><i class="fas fa-right-to-bracket"></i> Sign In</button>
+        <div style="text-align:center;margin-top:0.9rem;"><button class="link-text" id="forgotBtn">Forgot password?</button></div>
+      </div>
+
+      <div id="signUpForm" class="hidden">
+        <div class="field-stack">
+          <div class="field-group"><label><i class="fas fa-user"></i> Full Name</label><input type="text" id="suName" placeholder="e.g. Karabo Kekana" /></div>
+          <div class="field-group"><label><i class="fas fa-envelope"></i> Email</label><input type="email" id="suEmail" placeholder="you@univen.ac.za" /></div>
+          <div class="field-group"><label><i class="fas fa-lock"></i> Password</label><input type="password" id="suPassword" placeholder="At least 6 characters" /></div>
+          <div class="field-group"><label><i class="fas fa-lock"></i> Confirm Password</label><input type="password" id="suPassword2" placeholder="Repeat password" /></div>
+        </div>
+        <button class="btn btn-primary btn-block" id="signUpBtn"><i class="fas fa-user-plus"></i> Create Account</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== DASHBOARD VIEW ===================== -->
+  <div id="dashboardView" class="hidden">
+    <div class="mobile-topbar">
+      <div class="brand-mini">
+        <div class="crest-mini"><div class="splash-crest"><img src="https://www.univen.ac.za/wp-content/uploads/2026/02/logo.png"  style="width:60px;height" alt="" onerror="this.style.display='none';this.parentElement.innerHTML='<span style=font-size:1.6rem;color:%230b1f3a;font-weight:800>UV</span>'"></div></div>
+        <div class="names"><strong>Univen</strong><small>Session List Maker</small></div>
+      </div>
+      <button class="bell-btn" id="bellBtn"><i class="fas fa-bell"></i><span class="bell-dot" id="bellDot"></span></button>
+    </div>
+
+    <div id="homeHeaderBlock">
+      <div class="greeting">
+        <div class="hi" id="greetHi">Good afternoon, 👋</div>
+        <div class="who" id="greetName">there</div>
+      </div>
+
+      <div class="ring-card">
+        <div class="ring-widget" id="ringWidget">
+          <div class="ring-inner"><b id="ringPct">0%</b><span>Active</span></div>
+        </div>
+        <div class="ring-stats">
+          <div><b id="statActive">0</b><span>Active</span></div>
+          <div><b id="statTotal">0</b><span>Sessions</span></div>
+          <div><b id="statEntries">0</b><span>Entries</span></div>
+        </div>
+      </div>
+
+      <div class="qa-grid">
+        <div class="qa-btn" id="qaNew"><div class="qa-icon blue"><i class="fas fa-plus"></i></div><span>New Session</span></div>
+        <div class="qa-btn" id="qaHome"><div class="qa-icon gold"><i class="fas fa-layer-group"></i></div><span>My Sessions</span></div>
+        <div class="qa-btn" id="qaHistory"><div class="qa-icon pink"><i class="fas fa-clock-rotate-left"></i></div><span>History</span></div>
+        <div class="qa-btn" id="qaProfile"><div class="qa-icon grey"><i class="fas fa-user"></i></div><span>Profile</span></div>
+      </div>
+    </div>
+
+    <div class="section-label"><span id="listTitle">My Sessions</span><i class="fas fa-rotate" id="refreshBtn" style="cursor:pointer;color:var(--text-soft);font-size:0.85rem;"></i></div>
+    <div id="dashList"></div>
+
+    <div id="profilePane" class="hidden card">
+      <div class="card-title"><i class="fas fa-user-circle" style="color:var(--gold);"></i> Profile</div>
+      <p style="font-size:0.9rem;margin-bottom:0.3rem;"><strong id="profName">—</strong></p>
+      <p style="font-size:0.82rem;color:var(--text-soft);margin-bottom:1.4rem;" id="profEmail">—</p>
+      <button class="btn btn-danger btn-block" id="signOutBtn"><i class="fas fa-right-from-bracket"></i> Sign Out</button>
+    </div>
+  </div>
+
+  <!-- ===================== CREATE SESSION VIEW ===================== -->
+  <div id="createView" class="hidden">
+    <div class="back-header"><button class="back-btn" id="backFromCreate"><i class="fas fa-arrow-left"></i></button><h2>New Session</h2></div>
+
+    <div class="card" id="createFormCard">
+      <div class="card-title"><i class="fas fa-magic" style="color:var(--gold);"></i> Session Details</div>
+      <div class="card-sub">Choose which fields people fill in, set an expiry, and share the link.</div>
+
+      <div class="form-grid" style="margin-bottom:1.2rem;">
+        <div class="field-group" style="grid-column:1/-1;"><label><i class="fas fa-heading"></i> Session Title</label><input type="text" id="sessTitle" placeholder="e.g. ACC1141 — Mid-Semester Attendance" /></div>
+      </div>
+
+      <div class="field-group" style="margin-bottom:1.2rem;">
+        <label><i class="fas fa-list-check"></i> Fields to Collect</label>
+        <div class="toggle-grid" id="fieldToggles"></div>
+      </div>
+
+      <div class="form-grid" style="margin-bottom:1.2rem;">
+        <div class="field-group">
+          <label><i class="fas fa-hourglass-half"></i> Expires In</label>
+          <select id="sessExpiry">
+            <option value="1h">1 hour</option><option value="6h">6 hours</option><option value="1d" selected>1 day</option>
+            <option value="3d">3 days</option><option value="7d">7 days</option><option value="custom">Custom date & time</option><option value="none">Never expires</option>
+          </select>
+        </div>
+        <div class="field-group hidden" id="customExpiryGroup"><label><i class="fas fa-calendar-alt"></i> Custom Expiry</label><input type="datetime-local" id="sessExpiryCustom" /></div>
+        <div class="field-group"><label><i class="fas fa-users-slash"></i> Max Entries (optional)</label><input type="number" id="sessMax" placeholder="Unlimited" min="1" /></div>
+      </div>
+
+      <button class="btn btn-primary btn-block" id="createBtn"><i class="fas fa-plus-circle"></i> Create Session</button>
+    </div>
+
+    <div class="card hidden" id="successCard">
+      <div class="card-title"><i class="fas fa-circle-check" style="color:var(--success);"></i> Session Created</div>
+      <div class="field-group" style="margin-bottom:0.8rem;">
+        <label>Public Link — share this with respondents</label>
+        <div class="link-box"><span id="publicLinkText"></span><button class="btn btn-outline btn-sm" id="copyPublicBtn"><i class="fas fa-copy"></i> Copy</button></div>
+      </div>
+      <div class="field-group" style="margin-bottom:1.2rem;">
+        <label>Admin Link — keep this private, it manages the session</label>
+        <div class="link-box"><span id="adminLinkText"></span><button class="btn btn-outline btn-sm" id="copyAdminBtn"><i class="fas fa-copy"></i> Copy</button></div>
+      </div>
+      <div class="qr-box"><div id="qrCanvas"></div>
+        <div><p style="font-size:0.85rem;color:var(--text-soft);max-width:320px;">Scan to open the public form on a phone.</p>
+          <div class="btn-group" style="margin-top:0.8rem;"><button class="btn btn-success btn-sm" id="doneCreateBtn"><i class="fas fa-check"></i> Done</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== PUBLIC FORM VIEW ===================== -->
+  <div id="publicFormView" class="hidden">
+    <div class="university-header">
+      <div class="brand"><div class="crest"><div class="splash-crest"><img src="https://www.univen.ac.za/wp-content/uploads/2026/02/logo.png" alt="" onerror="this.style.display='none';this.parentElement.innerHTML='<span style=font-size:1.6rem;color:%230b1f3a;font-weight:800>UV</span>'"></div></div><div><h1>University of Venda <small>Quick Sign-Up</small></h1></div></div>
+    </div>
+    <div class="card" id="publicCard">
+      <div class="card-title" id="publicTitle"><i class="fas fa-pen-to-square" style="color:var(--gold);"></i> Loading session…</div>
+      <div class="card-sub" id="publicSub"></div>
+      <div class="form-grid" id="publicFields"></div>
+      <div class="btn-group" style="margin-top:1.2rem;"><button class="btn btn-primary" id="submitEntryBtn"><i class="fas fa-paper-plane"></i> Submit</button></div>
+    </div>
+    <div class="card center-state hidden" id="publicBlockedCard"></div>
+    <div class="card center-state hidden" id="publicSuccessCard"><i class="fas fa-circle-check"></i><h2>You're on the list</h2><p>Your submission was recorded successfully.</p></div>
+  </div>
+
+  <!-- ===================== ADMIN VIEW ===================== -->
+  <div id="adminView" class="hidden">
+    <div class="card center-state hidden" id="adminDeniedCard"><i class="fas fa-lock"></i><h2>Access Denied</h2><p>This admin link is invalid or the session no longer exists.</p></div>
+    <div id="adminContent" class="hidden">
+      <div class="card">
+        <div class="flex-sb">
+          <div>
+            <div class="card-title" id="adminTitle" style="margin-bottom:0.3rem;"><i class="fas fa-gauge" style="color:var(--gold);"></i></div>
+            <span class="status-pill" id="adminStatusPill"></span>
+            <span class="countdown" id="adminCountdown" style="margin-left:0.6rem;"></span>
+          </div>
+          <div class="btn-group">
+            <button class="btn btn-outline btn-sm" id="copyPublicFromAdminBtn"><i class="fas fa-link"></i> Copy Public Link</button>
+            <button class="btn btn-outline btn-sm" id="extend1dBtn"><i class="fas fa-plus"></i> +1 Day</button>
+            <button class="btn btn-outline btn-sm" id="removeExpiryBtn"><i class="fas fa-infinity"></i> No Expiry</button>
+            <button class="btn btn-danger btn-sm" id="toggleCloseBtn"><i class="fas fa-ban"></i> Close Session</button>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="flex-sb" style="margin-bottom:1.2rem;">
+          <div class="card-title" style="margin-bottom:0;"><i class="fas fa-list-ul" style="color:var(--gold);"></i> Submissions</div>
+          <div style="display:flex;gap:0.6rem;align-items:center;flex-wrap:wrap;">
+            <div class="search-box"><i class="fas fa-search"></i><input type="text" id="entrySearch" placeholder="Search entries…" /></div>
+            <button class="btn btn-outline btn-sm" id="csvBtn"><i class="fas fa-file-csv"></i> CSV</button>
+            <button class="btn btn-pdf btn-sm" id="pdfBtn"><i class="fas fa-file-pdf"></i> PDF</button>
+            <span class="status-pill status-active" id="entryCountBadge">0</span>
+          </div>
+        </div>
+        <div class="table-wrapper"><table id="entryTable"><thead><tr id="entryTableHead"></tr></thead><tbody id="entryTableBody"></tbody></table></div>
+      </div>
+    </div>
+    <div id="pdfContent"></div>
+  </div>
+
+</div>
+
+<!-- bottom nav (mobile mode only) -->
+<div class="bottom-nav hidden" id="bottomNav">
+  <button class="nav-item active" id="navHome" data-tab="home"><i class="fas fa-house"></i>Home</button>
+  <button class="nav-item" id="navHistory" data-tab="history"><i class="fas fa-clock-rotate-left"></i>History</button>
+  <div class="nav-fab" id="navFab"><i class="fas fa-plus"></i></div>
+  <div class="nav-spacer"></div>
+  <button class="nav-item" id="navAlerts" data-tab="alerts"><i class="fas fa-bell"></i>Alerts</button>
+  <button class="nav-item" id="navProfile" data-tab="profile"><i class="fas fa-user"></i>Profile</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+  // ---------- Firebase ----------
+  const firebaseConfig = {
+    apiKey: "AIzaSyC9z5TmK1aJUulrEIscwe9MZ5qcusJMOpc",
+    authDomain: "blueflare-47c29.firebaseapp.com",
+    projectId: "blueflare-47c29",
+    storageBucket: "blueflare-47c29.firebasestorage.app",
+    messagingSenderId: "348839866641",
+    appId: "1:348839866641:web:64fb433419c80c15dddcb0"
+  };
+  if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+  const storage = firebase.storage();
+  const auth = firebase.auth();
+
+  const MAX_FILE_BYTES = 12 * 1024 * 1024; // 12MB
+
+  const FIELD_DEFS = {
+    studentNumber: { label: 'Student Number', icon: 'fa-id-badge', type: 'text', placeholder: 'e.g. 2025-001', default: true },
+    fullName:      { label: 'Full Name',       icon: 'fa-user',      type: 'text', placeholder: 'e.g. Thabo Mbeki', default: true },
+    phone:         { label: 'Phone Number',    icon: 'fa-phone-alt', type: 'text', placeholder: '+27 82 123 4567', default: true },
+    course:        { label: 'Course',          icon: 'fa-graduation-cap', type: 'text', placeholder: 'e.g. BCom Accounting', default: false },
+    module:        { label: 'Module',          icon: 'fa-book',      type: 'text', placeholder: 'e.g. ACC1141', default: false },
+    fileUpload:    { label: 'File Upload',     icon: 'fa-paperclip', type: 'file', placeholder: '', default: false }
+  };
+
+  // ---------- helpers ----------
+  const toast = document.getElementById('toast');
+  function showToast(msg, type = 'success') {
+    toast.textContent = msg; toast.className = 'toast ' + type;
+    requestAnimationFrame(() => toast.classList.add('show'));
+    clearTimeout(toast._t); toast._t = setTimeout(() => toast.classList.remove('show'), 3000);
+  }
+  function copyText(text) { navigator.clipboard.writeText(text).then(() => showToast('✅ Link copied', 'success')).catch(() => showToast('❌ Could not copy', 'error')); }
+  function randKey(len = 12) { const c='ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789'; let o=''; for(let i=0;i<len;i++) o+=c[Math.floor(Math.random()*c.length)]; return o; }
+  function fmtDate(ts) { if (!ts) return '—'; return new Date(ts).toLocaleString('en-ZA', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' }); }
+  function fmtRemaining(ms) { if (ms <= 0) return 'Expired'; const s=Math.floor(ms/1000); const d=Math.floor(s/86400),h=Math.floor((s%86400)/3600),m=Math.floor((s%3600)/60); if(d>0) return `${d}d ${h}h left`; if(h>0) return `${h}h ${m}m left`; return `${m}m left`; }
+  function baseUrl() { return location.origin + location.pathname; }
+  function sessionStatus(session, entryCount) {
+    if (session.closed) return { key:'closed', label:'Closed' };
+    if (session.expiresAt && Date.now() > session.expiresAt) return { key:'expired', label:'Expired' };
+    if (session.maxEntries && entryCount >= session.maxEntries) return { key:'full', label:'Full' };
+    return { key:'active', label:'Active' };
+  }
+  function greetWord() { const h = new Date().getHours(); if (h < 12) return 'Good morning'; if (h < 18) return 'Good afternoon'; return 'Good evening'; }
+
+  // ==========================================================
+  // ROUTING
+  // ==========================================================
+  const params = new URLSearchParams(location.search);
+  const sessionId = params.get('session');
+  const adminKeyParam = params.get('admin');
+
+  const authView = document.getElementById('authView');
+  const dashboardView = document.getElementById('dashboardView');
+  const createView = document.getElementById('createView');
+  const publicFormView = document.getElementById('publicFormView');
+  const adminView = document.getElementById('adminView');
+  const bottomNav = document.getElementById('bottomNav');
+
+  if (sessionId && adminKeyParam) {
+    initAdminView(sessionId, adminKeyParam);
+  } else if (sessionId) {
+    initPublicView(sessionId);
+  } else {
+    document.body.classList.add('mobile-mode');
+    auth.onAuthStateChanged(user => {
+      if (user) { showDashboard(user); } else { showAuth(); }
+    });
+    wireAuthForms();
+  }
+
+  // ==========================================================
+  // AUTH VIEW
+  // ==========================================================
+  function showAuth() {
+    dashboardView.classList.add('hidden'); createView.classList.add('hidden'); bottomNav.classList.add('hidden');
+    authView.classList.remove('hidden');
+  }
+
+  function wireAuthForms() {
+    const tabSignIn = document.getElementById('tabSignIn');
+    const tabSignUp = document.getElementById('tabSignUp');
+    const signInForm = document.getElementById('signInForm');
+    const signUpForm = document.getElementById('signUpForm');
+
+    tabSignIn.addEventListener('click', () => { tabSignIn.classList.add('active'); tabSignUp.classList.remove('active'); signInForm.classList.remove('hidden'); signUpForm.classList.add('hidden'); });
+    tabSignUp.addEventListener('click', () => { tabSignUp.classList.add('active'); tabSignIn.classList.remove('active'); signUpForm.classList.remove('hidden'); signInForm.classList.add('hidden'); });
+
+    document.getElementById('signInBtn').addEventListener('click', () => {
+      const email = document.getElementById('siEmail').value.trim();
+      const pass = document.getElementById('siPassword').value;
+      if (!email || !pass) return showToast('⚠️ Enter email and password', 'error');
+      auth.signInWithEmailAndPassword(email, pass).catch(err => showToast('❌ ' + friendlyAuthError(err), 'error'));
+    });
+
+    document.getElementById('forgotBtn').addEventListener('click', () => {
+      const email = document.getElementById('siEmail').value.trim();
+      if (!email) return showToast('⚠️ Enter your email first', 'error');
+      auth.sendPasswordResetEmail(email).then(() => showToast('✅ Password reset email sent', 'success')).catch(err => showToast('❌ ' + friendlyAuthError(err), 'error'));
+    });
+
+    document.getElementById('signUpBtn').addEventListener('click', () => {
+      const name = document.getElementById('suName').value.trim();
+      const email = document.getElementById('suEmail').value.trim();
+      const pass = document.getElementById('suPassword').value;
+      const pass2 = document.getElementById('suPassword2').value;
+      if (!name || !email || !pass) return showToast('⚠️ Fill in all fields', 'error');
+      if (pass.length < 6) return showToast('⚠️ Password must be 6+ characters', 'error');
+      if (pass !== pass2) return showToast('⚠️ Passwords do not match', 'error');
+
+      auth.createUserWithEmailAndPassword(email, pass).then(cred => {
+        return cred.user.updateProfile({ displayName: name }).then(() =>
+          db.ref('users/' + cred.user.uid + '/profile').set({ name, email, createdAt: firebase.database.ServerValue.TIMESTAMP })
+        );
+      }).then(() => showToast('✅ Account created', 'success'))
+        .catch(err => showToast('❌ ' + friendlyAuthError(err), 'error'));
+    });
+  }
+
+  function friendlyAuthError(err) {
+    const map = {
+      'auth/email-already-in-use': 'An account with this email already exists.',
+      'auth/invalid-email': 'That email address looks invalid.',
+      'auth/weak-password': 'Password is too weak.',
+      'auth/user-not-found': 'No account found with that email.',
+      'auth/wrong-password': 'Incorrect password.',
+      'auth/invalid-credential': 'Incorrect email or password.',
+      'auth/too-many-requests': 'Too many attempts. Try again later.'
+    };
+    return map[err.code] || err.message;
+  }
+
+  // ==========================================================
+  // DASHBOARD VIEW
+  // ==========================================================
+  let currentUser = null;
+  let dashboardTab = 'home';
+  let ownedSessions = [];
+  let sessionListeners = [];
+
+  function showDashboard(user) {
+    currentUser = user;
+    authView.classList.add('hidden'); createView.classList.add('hidden');
+    dashboardView.classList.remove('hidden'); bottomNav.classList.remove('hidden');
+
+    const name = user.displayName || (user.email ? user.email.split('@')[0] : 'there');
+    document.getElementById('greetHi').textContent = greetWord() + ', 👋';
+    document.getElementById('greetName').textContent = name;
+    document.getElementById('profName').textContent = name;
+    document.getElementById('profEmail').textContent = user.email || '';
+
+    wireDashboardActions();
+    loadOwnedSessions();
+  }
+
+  function wireDashboardActions() {
+    document.getElementById('qaNew').onclick = () => openCreateScreen();
+    document.getElementById('qaHome').onclick = () => setDashboardTab('home');
+    document.getElementById('qaHistory').onclick = () => setDashboardTab('history');
+    document.getElementById('qaProfile').onclick = () => setDashboardTab('profile');
+    document.getElementById('bellBtn').onclick = () => setDashboardTab('alerts');
+    document.getElementById('refreshBtn').onclick = () => loadOwnedSessions();
+    document.getElementById('signOutBtn').onclick = () => auth.signOut();
+
+    document.querySelectorAll('.nav-item').forEach(btn => {
+      btn.addEventListener('click', () => setDashboardTab(btn.dataset.tab));
+    });
+    document.getElementById('navFab').addEventListener('click', () => openCreateScreen());
+  }
+
+  function setDashboardTab(tab) {
+    dashboardTab = tab;
+    document.querySelectorAll('.nav-item').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+    const homeHeaderBlock = document.getElementById('homeHeaderBlock');
+    const profilePane = document.getElementById('profilePane');
+    const listTitle = document.getElementById('listTitle');
+    const dashList = document.getElementById('dashList');
+    const sectionLabelWrap = listTitle.parentElement;
+
+    if (tab === 'profile') {
+      homeHeaderBlock.classList.add('hidden'); dashList.classList.add('hidden'); sectionLabelWrap.classList.add('hidden');
+      profilePane.classList.remove('hidden');
+      return;
+    }
+    profilePane.classList.add('hidden'); homeHeaderBlock.classList.remove('hidden'); dashList.classList.remove('hidden'); sectionLabelWrap.classList.remove('hidden');
+
+    if (tab === 'home') listTitle.textContent = 'My Sessions';
+    if (tab === 'history') listTitle.textContent = 'Past & Closed Sessions';
+    if (tab === 'alerts') listTitle.textContent = 'Expiring Soon';
+
+    renderSessionList();
+  }
+
+  function loadOwnedSessions() {
+    if (!currentUser) return;
+    document.getElementById('dashList').innerHTML = '<p style="color:var(--text-soft);font-size:0.85rem;text-align:center;padding:1rem;"><i class="fas fa-spinner fa-spin"></i> Loading sessions…</p>';
+
+    db.ref('users/' + currentUser.uid + '/sessions').once('value').then(idxSnap => {
+      const ids = idxSnap.exists() ? Object.keys(idxSnap.val()) : [];
+      sessionListeners.forEach(off => off());
+      sessionListeners = [];
+
+      if (!ids.length) {
+        ownedSessions = [];
+        updateStats();
+        renderSessionList();
+        return;
+      }
+
+      const fetches = ids.map(id =>
+        Promise.all([
+          db.ref('sessions/' + id).once('value'),
+          db.ref('entries/' + id).once('value')
+        ]).then(([sSnap, eSnap]) => {
+          const s = sSnap.val();
+          if (!s) return null;
+          const entryCount = eSnap.exists() ? Object.keys(eSnap.val()).length : 0;
+          return { id, ...s, entryCount };
+        })
+      );
+
+      Promise.all(fetches).then(results => {
+        ownedSessions = results.filter(Boolean).sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+        updateStats();
+        renderSessionList();
+      });
+    });
+  }
+
+  function updateStats() {
+    const total = ownedSessions.length;
+    const active = ownedSessions.filter(s => sessionStatus(s, s.entryCount).key === 'active').length;
+    const totalEntries = ownedSessions.reduce((sum, s) => sum + s.entryCount, 0);
+    const pct = total ? Math.round((active / total) * 100) : 0;
+
+    document.getElementById('ringPct').textContent = pct + '%';
+    document.getElementById('statActive').textContent = active;
+    document.getElementById('statTotal').textContent = total;
+    document.getElementById('statEntries').textContent = totalEntries;
+    document.getElementById('ringWidget').style.background = `conic-gradient(var(--gold) ${pct}%, rgba(255,255,255,.22) 0)`;
+
+    document.getElementById('bellDot').classList.toggle('hidden', !ownedSessions.some(isExpiringSoon));
+  }
+
+  function isExpiringSoon(s) {
+    const status = sessionStatus(s, s.entryCount);
+    return status.key === 'active' && s.expiresAt && (s.expiresAt - Date.now()) < 24 * 3600e3;
+  }
+
+  function renderSessionList() {
+    const wrap = document.getElementById('dashList');
+    let list = ownedSessions;
+    if (dashboardTab === 'home') list = ownedSessions.filter(s => ['active', 'full'].includes(sessionStatus(s, s.entryCount).key));
+    if (dashboardTab === 'history') list = ownedSessions.filter(s => ['closed', 'expired'].includes(sessionStatus(s, s.entryCount).key));
+    if (dashboardTab === 'alerts') list = ownedSessions.filter(isExpiringSoon);
+
+    if (!list.length) {
+      const msg = dashboardTab === 'alerts' ? 'Nothing expiring soon.' : 'No sessions here yet.';
+      wrap.innerHTML = `<div class="card center-state"><i class="fas fa-inbox"></i><h2>All clear</h2><p>${msg}</p></div>`;
+      return;
+    }
+
+    wrap.innerHTML = '';
+    list.forEach(s => {
+      const status = sessionStatus(s, s.entryCount);
+      const publicUrl = `${baseUrl()}?session=${s.id}`;
+      const adminUrl = `${baseUrl()}?session=${s.id}&admin=${s.adminKey}`;
+      const el = document.createElement('div');
+      el.className = 'sess-card';
+      el.innerHTML = `
+        <div class="top"><span class="title">${s.title}</span><span class="status-pill status-${status.key}">${status.label}</span></div>
+        <div class="meta">
+          <span><i class="fas fa-users"></i> ${s.entryCount}${s.maxEntries ? ' / ' + s.maxEntries : ''}</span>
+          <span><i class="fas fa-hourglass-half"></i> ${s.expiresAt ? fmtRemaining(s.expiresAt - Date.now()) : 'No expiry'}</span>
+        </div>
+        <div class="actions">
+          <a class="btn btn-outline btn-sm" href="${adminUrl}"><i class="fas fa-gauge"></i> Manage</a>
+          <button class="btn btn-outline btn-sm copy-link-btn"><i class="fas fa-copy"></i> Copy Link</button>
+        </div>`;
+      el.querySelector('.copy-link-btn').addEventListener('click', () => copyText(publicUrl));
+      wrap.appendChild(el);
+    });
+  }
+
+  // ---------- create session screen ----------
+  function openCreateScreen() {
+    dashboardView.classList.add('hidden'); bottomNav.classList.add('hidden');
+    createView.classList.remove('hidden');
+    document.getElementById('createFormCard').classList.remove('hidden');
+    document.getElementById('successCard').classList.add('hidden');
+    setupCreateForm();
+  }
+  function closeCreateScreen() {
+    createView.classList.add('hidden'); dashboardView.classList.remove('hidden'); bottomNav.classList.remove('hidden');
+    setDashboardTab('home');
+    loadOwnedSessions();
+  }
+  document.getElementById('backFromCreate').addEventListener('click', closeCreateScreen);
+  document.getElementById('doneCreateBtn').addEventListener('click', closeCreateScreen);
+
+  let createFormWired = false;
+  function setupCreateForm() {
+    document.getElementById('sessTitle').value = '';
+    document.getElementById('sessMax').value = '';
+    document.getElementById('sessExpiry').value = '1d';
+    document.getElementById('customExpiryGroup').classList.add('hidden');
+
+    const toggleWrap = document.getElementById('fieldToggles');
+    toggleWrap.innerHTML = '';
+    Object.entries(FIELD_DEFS).forEach(([key, def]) => {
+      const chip = document.createElement('label');
+      chip.className = 'toggle-chip' + (def.default ? ' active' : '');
+      chip.innerHTML = `<input type="checkbox" data-field="${key}" ${def.default ? 'checked' : ''}/><i class="fas ${def.icon}"></i><span>${def.label}</span>`;
+      const cb = chip.querySelector('input');
+      cb.addEventListener('change', () => chip.classList.toggle('active', cb.checked));
+      toggleWrap.appendChild(chip);
+    });
+
+    if (!createFormWired) {
+      createFormWired = true;
+      document.getElementById('sessExpiry').addEventListener('change', e => {
+        document.getElementById('customExpiryGroup').classList.toggle('hidden', e.target.value !== 'custom');
+      });
+      document.getElementById('createBtn').addEventListener('click', createSession);
+    }
+  }
+
+  function createSession() {
+    const title = document.getElementById('sessTitle').value.trim();
+    if (!title) return showToast('⚠️ Give the session a title', 'error');
+
+    const fields = {}; let anyField = false;
+    document.querySelectorAll('#fieldToggles input[type="checkbox"]').forEach(cb => { fields[cb.dataset.field] = cb.checked; if (cb.checked) anyField = true; });
+    if (!anyField) return showToast('⚠️ Enable at least one field to collect', 'error');
+
+    const expiryChoice = document.getElementById('sessExpiry').value;
+    let expiresAt = null;
+    const durations = { '1h':3600e3, '6h':6*3600e3, '1d':86400e3, '3d':3*86400e3, '7d':7*86400e3 };
+    if (durations[expiryChoice]) expiresAt = Date.now() + durations[expiryChoice];
+    else if (expiryChoice === 'custom') {
+      const v = document.getElementById('sessExpiryCustom').value;
+      if (!v) return showToast('⚠️ Pick a custom expiry date & time', 'error');
+      expiresAt = new Date(v).getTime();
+      if (expiresAt <= Date.now()) return showToast('⚠️ Custom expiry must be in the future', 'error');
+    }
+
+    const maxVal = document.getElementById('sessMax').value;
+    const maxEntries = maxVal ? parseInt(maxVal, 10) : 0;
+
+    const newRef = db.ref('sessions').push();
+    const newSessionId = newRef.key;
+    const newAdminKey = randKey(12);
+
+    const sessionData = { title, fields, expiresAt, maxEntries, closed:false, createdAt: firebase.database.ServerValue.TIMESTAMP, adminKey: newAdminKey, ownerUid: currentUser.uid };
+
+    const createBtn = document.getElementById('createBtn');
+    createBtn.disabled = true; createBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating…';
+
+    newRef.set(sessionData).then(() => db.ref('users/' + currentUser.uid + '/sessions/' + newSessionId).set(true)).then(() => {
+      const publicUrl = `${baseUrl()}?session=${newSessionId}`;
+      const adminUrl = `${baseUrl()}?session=${newSessionId}&admin=${newAdminKey}`;
+
+      document.getElementById('publicLinkText').textContent = publicUrl;
+      document.getElementById('adminLinkText').textContent = adminUrl;
+      document.getElementById('createFormCard').classList.add('hidden');
+      document.getElementById('successCard').classList.remove('hidden');
+
+      document.getElementById('qrCanvas').innerHTML = '';
+      new QRCode(document.getElementById('qrCanvas'), { text: publicUrl, width: 128, height: 128, colorDark: '#0b1f3a' });
+
+      document.getElementById('copyPublicBtn').onclick = () => copyText(publicUrl);
+      document.getElementById('copyAdminBtn').onclick = () => copyText(adminUrl);
+
+      showToast('✅ Session created', 'success');
+    }).catch(err => showToast('❌ ' + err.message, 'error'))
+      .finally(() => { createBtn.disabled = false; createBtn.innerHTML = '<i class="fas fa-plus-circle"></i> Create Session'; });
+  }
+
+  // ==========================================================
+  // PUBLIC FORM VIEW — fill and submit (no login required)
+  // ==========================================================
+  function initPublicView(sid) {
+    publicFormView.classList.remove('hidden');
+
+    db.ref('sessions/' + sid).once('value').then(snap => {
+      const session = snap.val();
+      if (!session) return showBlocked('fa-circle-question', 'Session Not Found', 'This link is invalid or the session has been removed.');
+
+      db.ref('entries/' + sid).once('value').then(entrySnap => {
+        const entryCount = entrySnap.exists() ? Object.keys(entrySnap.val()).length : 0;
+        const status = sessionStatus(session, entryCount);
+        if (status.key === 'closed') return showBlocked('fa-ban', 'Session Closed', 'The creator has closed this session. New submissions are no longer accepted.');
+        if (status.key === 'expired') return showBlocked('fa-hourglass-end', 'Session Expired', `This session expired on ${fmtDate(session.expiresAt)}.`);
+        if (status.key === 'full') return showBlocked('fa-users-slash', 'Session Full', `This session has reached its limit of ${session.maxEntries} entries.`);
+        renderPublicForm(sid, session);
+      });
+    }).catch(() => showBlocked('fa-triangle-exclamation', 'Something Went Wrong', 'Could not load this session. Please try again.'));
+  }
+
+  function showBlocked(icon, title, msg) {
+    document.getElementById('publicCard').classList.add('hidden');
+    const card = document.getElementById('publicBlockedCard');
+    card.classList.remove('hidden');
+    card.innerHTML = `<i class="fas ${icon}"></i><h2>${title}</h2><p>${msg}</p>`;
+  }
+
+  let currentFileInput = null;
+
+  function renderPublicForm(sid, session) {
+    document.getElementById('publicTitle').innerHTML = `<i class="fas fa-pen-to-square" style="color:var(--gold);"></i> ${session.title}`;
+    document.getElementById('publicSub').textContent = session.expiresAt ? `Open until ${fmtDate(session.expiresAt)}` : 'This session has no expiry';
+
+    const wrap = document.getElementById('publicFields');
+    wrap.innerHTML = '';
+    Object.entries(session.fields || {}).forEach(([key, enabled]) => {
+      if (!enabled) return;
+      const def = FIELD_DEFS[key]; if (!def) return;
+      const fg = document.createElement('div'); fg.className = 'field-group';
+      if (def.type === 'file') {
+        fg.innerHTML = `<label><i class="fas ${def.icon}"></i> ${def.label} <small style="text-transform:none;font-weight:400;">(optional, under 12MB)</small></label>
+          <div class="file-drop" id="fileDropZone"><i class="fas fa-cloud-arrow-up"></i><span id="fileDropLabel">Click to choose a file</span></div>
+          <input type="file" id="field_${key}" class="hidden" />`;
+      } else {
+        fg.innerHTML = `<label><i class="fas ${def.icon}"></i> ${def.label}</label><input type="text" id="field_${key}" placeholder="${def.placeholder}" />`;
+      }
+      wrap.appendChild(fg);
+    });
+
+    const dropZone = document.getElementById('fileDropZone');
+    if (dropZone) {
+      const fileInput = document.getElementById('field_fileUpload');
+      currentFileInput = fileInput;
+      dropZone.addEventListener('click', () => fileInput.click());
+      fileInput.addEventListener('change', () => {
+        const f = fileInput.files[0]; const label = document.getElementById('fileDropLabel');
+        if (!f) { label.textContent = 'Click to choose a file'; return; }
+        if (f.size > MAX_FILE_BYTES) { showToast('⚠️ File must be under 12MB', 'error'); fileInput.value = ''; label.textContent = 'Click to choose a file'; return; }
+        label.textContent = `${f.name} (${(f.size / 1024 / 1024).toFixed(2)} MB)`;
+      });
+    }
+
+    document.getElementById('submitEntryBtn').onclick = () => submitEntry(sid, session);
+  }
+
+  function submitEntry(sid, session) {
+    const btn = document.getElementById('submitEntryBtn');
+    const payload = {}; let missing = false;
+    Object.entries(session.fields || {}).forEach(([key, enabled]) => {
+      if (!enabled) return;
+      const def = FIELD_DEFS[key]; if (def.type === 'file') return;
+      const el = document.getElementById('field_' + key); const val = el ? el.value.trim() : '';
+      if (!val) missing = true; payload[key] = val;
+    });
+    if (missing) return showToast('⚠️ Please fill all fields', 'error');
+
+    btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting…';
+
+    db.ref('entries/' + sid).once('value').then(entrySnap => {
+      const entryCount = entrySnap.exists() ? Object.keys(entrySnap.val()).length : 0;
+      const status = sessionStatus(session, entryCount);
+      if (status.key !== 'active') { btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit'; return showToast('⚠️ This session is no longer accepting entries', 'error'); }
+
+      const entryRef = db.ref('entries/' + sid).push();
+      const entryId = entryRef.key;
+      payload.submittedAt = firebase.database.ServerValue.TIMESTAMP;
+
+      const file = (session.fields.fileUpload && currentFileInput) ? currentFileInput.files[0] : null;
+      if (file) {
+        const storageRef = storage.ref(`session-uploads/${sid}/${entryId}_${file.name}`);
+        storageRef.put(file).then(() => storageRef.getDownloadURL()).then(url => {
+          payload.fileName = file.name; payload.fileSize = file.size; payload.fileURL = url;
+          finishSubmit(entryRef, payload, btn);
+        }).catch(err => { btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit'; showToast('❌ File upload failed: ' + err.message, 'error'); });
+      } else {
+        finishSubmit(entryRef, payload, btn);
+      }
+    });
+  }
+
+  function finishSubmit(entryRef, payload, btn) {
+    entryRef.set(payload).then(() => {
+      document.getElementById('publicCard').classList.add('hidden');
+      document.getElementById('publicSuccessCard').classList.remove('hidden');
+    }).catch(err => { btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit'; showToast('❌ ' + err.message, 'error'); });
+  }
+
+  // ==========================================================
+  // ADMIN VIEW — manage a session (link + key, no login required)
+  // ==========================================================
+  function initAdminView(sid, key) {
+    adminView.classList.remove('hidden');
+    db.ref('sessions/' + sid).once('value').then(snap => {
+      const session = snap.val();
+      if (!session || session.adminKey !== key) { document.getElementById('adminDeniedCard').classList.remove('hidden'); return; }
+      document.getElementById('adminContent').classList.remove('hidden');
+      wireAdminActions(sid, key, session);
+      watchAdminEntries(sid, session);
+      setInterval(() => refreshAdminHeader(sid, session), 1000);
+    }).catch(() => document.getElementById('adminDeniedCard').classList.remove('hidden'));
+  }
+
+  let lastKnownEntryCount = 0;
+
+  function refreshAdminHeader(sid, session) {
+    db.ref('sessions/' + sid).once('value').then(snap => {
+      const s = snap.val(); if (!s) return;
+      Object.assign(session, s);
+      const status = sessionStatus(session, lastKnownEntryCount);
+      const pill = document.getElementById('adminStatusPill');
+      pill.textContent = status.label; pill.className = 'status-pill status-' + status.key;
+
+      const countdownEl = document.getElementById('adminCountdown');
+      if (session.expiresAt && status.key === 'active') countdownEl.textContent = fmtRemaining(session.expiresAt - Date.now());
+      else if (!session.expiresAt) countdownEl.textContent = 'No expiry set';
+      else countdownEl.textContent = '';
+
+      document.getElementById('toggleCloseBtn').innerHTML = session.closed ? '<i class="fas fa-lock-open"></i> Reopen Session' : '<i class="fas fa-ban"></i> Close Session';
+    });
+  }
+
+  function wireAdminActions(sid, key, session) {
+    document.getElementById('adminTitle').innerHTML = `<i class="fas fa-gauge" style="color:var(--gold);"></i> ${session.title}`;
+    document.getElementById('copyPublicFromAdminBtn').addEventListener('click', () => copyText(`${baseUrl()}?session=${sid}`));
+
+    document.getElementById('extend1dBtn').addEventListener('click', () => {
+      const base = (session.expiresAt && session.expiresAt > Date.now()) ? session.expiresAt : Date.now();
+      const newExpiry = base + 86400e3;
+      db.ref('sessions/' + sid).update({ expiresAt: newExpiry }).then(() => { session.expiresAt = newExpiry; showToast('✅ Expiry extended by 1 day', 'success'); refreshAdminHeader(sid, session); });
+    });
+
+    document.getElementById('removeExpiryBtn').addEventListener('click', () => {
+      db.ref('sessions/' + sid).update({ expiresAt: null }).then(() => { session.expiresAt = null; showToast('✅ Expiry removed', 'success'); refreshAdminHeader(sid, session); });
+    });
+
+    document.getElementById('toggleCloseBtn').addEventListener('click', () => {
+      const newClosed = !session.closed;
+      db.ref('sessions/' + sid).update({ closed: newClosed }).then(() => { session.closed = newClosed; showToast(newClosed ? '✅ Session closed' : '✅ Session reopened', 'success'); refreshAdminHeader(sid, session); });
+    });
+
+    document.getElementById('entrySearch').addEventListener('input', e => filterEntryRows(e.target.value));
+    document.getElementById('csvBtn').addEventListener('click', () => exportCSV(session));
+    document.getElementById('pdfBtn').addEventListener('click', () => exportPDF(sid, session));
+
+    buildEntryTableHead(session);
+  }
+
+  function buildEntryTableHead(session) {
+    const head = document.getElementById('entryTableHead');
+    let html = '<th>#</th>';
+    Object.entries(session.fields || {}).forEach(([key, enabled]) => { if (!enabled) return; html += `<th>${FIELD_DEFS[key].label}</th>`; });
+    html += '<th>Submitted</th><th style="width:60px;"></th>';
+    head.innerHTML = html;
+  }
+
+  let currentEntries = {};
+
+  function watchAdminEntries(sid, session) {
+    db.ref('entries/' + sid).on('value', snap => {
+      const data = snap.val() || {};
+      currentEntries = data;
+      const keys = Object.keys(data);
+      lastKnownEntryCount = keys.length;
+
+      const badge = document.getElementById('entryCountBadge');
+      badge.textContent = session.maxEntries ? `${keys.length} / ${session.maxEntries}` : keys.length;
+
+      const tbody = document.getElementById('entryTableBody');
+      const colCount = Object.values(session.fields || {}).filter(Boolean).length + 3;
+      if (!keys.length) { tbody.innerHTML = `<tr class="empty-row"><td colspan="${colCount}"><i class="fas fa-inbox" style="font-size:1.5rem;display:block;margin-bottom:6px;"></i>No submissions yet</td></tr>`; return; }
+
+      let html = '';
+      keys.forEach((id, idx) => {
+        const e = data[id];
+        html += `<tr data-search="${(Object.values(e).join(' ') || '').toLowerCase()}"><td>${idx + 1}</td>`;
+        Object.entries(session.fields || {}).forEach(([key, enabled]) => {
+          if (!enabled) return;
+          if (key === 'fileUpload') html += `<td>${e.fileURL ? `<a class="file-chip" href="${e.fileURL}" target="_blank"><i class="fas fa-paperclip"></i> ${e.fileName || 'file'}</a>` : '—'}</td>`;
+          else html += `<td>${e[key] || ''}</td>`;
+        });
+        html += `<td>${fmtDate(e.submittedAt)}</td><td><span class="action-icon delete" data-id="${id}" title="Delete"><i class="fas fa-trash-alt"></i></span></td></tr>`;
+      });
+      tbody.innerHTML = html;
+
+      tbody.querySelectorAll('.action-icon.delete').forEach(el => {
+        el.onclick = () => {
+          const id = el.dataset.id;
+          if (!confirm('Delete this entry?')) return;
+          const entry = data[id];
+          const cleanup = entry && entry.fileURL ? storage.refFromURL(entry.fileURL).delete().catch(() => {}) : Promise.resolve();
+          cleanup.finally(() => db.ref('entries/' + sid + '/' + id).remove().then(() => showToast('✅ Entry deleted', 'success')).catch(err => showToast('❌ ' + err.message, 'error')));
+        };
+      });
+    });
+  }
+
+  function filterEntryRows(query) {
+    const q = query.trim().toLowerCase();
+    document.querySelectorAll('#entryTableBody tr[data-search]').forEach(tr => { tr.style.display = tr.dataset.search.includes(q) ? '' : 'none'; });
+  }
+
+  function exportCSV(session) {
+    const fieldKeys = Object.entries(session.fields || {}).filter(([,v]) => v).map(([k]) => k);
+    const header = ['#', ...fieldKeys.map(k => FIELD_DEFS[k].label), 'Submitted'];
+    const rows = [header];
+    Object.values(currentEntries).forEach((e, idx) => {
+      const row = [idx + 1];
+      fieldKeys.forEach(k => row.push(k === 'fileUpload' ? (e.fileURL || '') : (e[k] || '')));
+      row.push(fmtDate(e.submittedAt)); rows.push(row);
+    });
+    const csv = rows.map(r => r.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob); link.download = `${session.title.replace(/[^a-z0-9]/gi, '_')}.csv`; link.click();
+    showToast('✅ CSV exported', 'success');
+  }
+
+  function exportPDF(sid, session) {
+    const keys = Object.keys(currentEntries);
+    if (!keys.length) return showToast('⚠️ No submissions to export', 'error');
+
+    const fieldKeys = Object.entries(session.fields || {}).filter(([,v]) => v).map(([k]) => k);
+    let rows = '';
+    keys.forEach((id, idx) => {
+      const e = currentEntries[id];
+      rows += '<tr>';
+      rows += `<td style="padding:8px 12px;border-bottom:1px solid #e5ece8;text-align:center;">${idx + 1}</td>`;
+      fieldKeys.forEach(k => { const val = k === 'fileUpload' ? (e.fileName || '—') : (e[k] || ''); rows += `<td style="padding:8px 12px;border-bottom:1px solid #e5ece8;">${val}</td>`; });
+      rows += `<td style="padding:8px 12px;border-bottom:1px solid #e5ece8;">${fmtDate(e.submittedAt)}</td></tr>`;
+    });
+    const headCells = fieldKeys.map(k => `<th style="padding:8px 12px;text-align:left;font-weight:700;color:#0b1f3a;font-size:0.65rem;text-transform:uppercase;">${FIELD_DEFS[k].label}</th>`).join('');
+    const currentDate = new Date().toLocaleDateString('en-ZA', { year: 'numeric', month: 'long', day: 'numeric' });
+
+    const pdfContent = document.getElementById('pdfContent');
+    pdfContent.innerHTML = `
+      <div style="font-family:'Inter',sans-serif;padding:2rem;background:#fff;max-width:100%;">
+        <div style="background:linear-gradient(135deg,#0b1f3a,#071328);color:#fff;padding:1.5rem 2rem;border-radius:16px;margin-bottom:2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
+          <div style="display:flex;align-items:center;gap:1rem;">
+            <div style="width:50px;height:50px;background:#fff;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.2rem;color:#0b1f3a;">U</div>
+            <div><h1 style="font-size:1.3rem;font-weight:800;margin:0;">University of Venda</h1><p style="font-size:0.65rem;opacity:0.75;letter-spacing:0.5px;text-transform:uppercase;">${session.title}</p></div>
+          </div>
+          <div style="text-align:right;font-size:0.7rem;opacity:0.85;"><div>Generated ${currentDate}</div></div>
+        </div>
+        <h2 style="font-family:'Poppins',sans-serif;font-weight:700;font-size:1.1rem;color:#0b1f3a;border-bottom:3px solid #e0932c;padding-bottom:0.5rem;display:flex;justify-content:space-between;">
+          <span>Submissions</span><span style="font-size:0.7rem;background:#eef1f7;padding:0.1rem 1rem;border-radius:999px;color:#5c6b63;">Total: ${keys.length}</span>
+        </h2>
+        <table style="width:100%;border-collapse:collapse;margin-top:1.2rem;font-size:0.78rem;">
+          <thead><tr style="background:#eef1f7;border-bottom:2px solid #cbd5e1;"><th style="padding:8px 12px;text-align:center;font-weight:700;color:#0b1f3a;font-size:0.65rem;">#</th>${headCells}<th style="padding:8px 12px;text-align:left;font-weight:700;color:#0b1f3a;font-size:0.65rem;">Submitted</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>`;
+    pdfContent.style.display = 'block';
+
+    const opt = { margin:[0.4,0.4,0.4,0.4], filename:`${session.title.replace(/[^a-z0-9]/gi,'_')}.pdf`, image:{type:'jpeg',quality:0.98}, html2canvas:{scale:2,useCORS:true,backgroundColor:'#ffffff'}, jsPDF:{unit:'in',format:'a4',orientation:'portrait'} };
+    html2pdf().set(opt).from(pdfContent).save().then(() => { pdfContent.innerHTML = ''; pdfContent.style.display = 'none'; showToast('✅ PDF exported', 'success'); })
+      .catch(err => showToast('❌ PDF error: ' + err.message, 'error'));
+  }
+
+});
+</script>
+</body>
+</html>
