@@ -3,9 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>UNIVEN Attend</title>
+<title>UNIVEN Attendance</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="icon" href="https://www.univen.ac.za/wp-content/uploads/2026/02/logo.png" type="image/png">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
@@ -736,6 +735,21 @@ padding-bottom:50px;
     <div class="result-card" id="scan-result-card"></div>
   </div>
 
+  <!-- Reflection overlay -->
+  <div class="scan-result-overlay hidden" id="reflection-overlay">
+    <div class="result-card" id="reflection-card" style="text-align:left;">
+      <h3 style="text-align:center;margin-bottom:6px;"><i class="fas fa-pen-nib"></i> Class Reflection</h3>
+      <p id="reflection-instructions" style="text-align:center;">Write a short reflection on today's class.</p>
+      <textarea class="input no-icon" id="reflection-text" style="height:130px;resize:vertical;width:100%;" placeholder="What did you learn today?"></textarea>
+      <div style="display:flex;justify-content:space-between;margin:8px 0 18px;font-size:.72rem;color:var(--text-soft);">
+        <span id="reflection-wordcount">0 words</span>
+        <span id="reflection-requirement"></span>
+      </div>
+      <div class="status-msg" id="reflection-status"></div>
+      <button class="btn btn-primary" id="reflection-submit-btn"><i class="fas fa-check"></i> Submit &amp; Check In</button>
+    </div>
+  </div>
+
   <!-- ================= HISTORY ================= -->
   <div id="history-screen" class="screen">
     <div class="topbar"><h2><i class="fas fa-clock-rotate-left" style="color:var(--green);"></i> Attendance History</h2><span style="width:38px;"></span></div>
@@ -869,6 +883,21 @@ padding-bottom:50px;
           <div class="expire-opt" data-min="45" onclick="setExpireOpt(this,45)">45 min</div>
         </div>
       </div>
+
+      <div class="field">
+        <label>Class Reflection Requirement</label>
+        <div class="settings-row" style="border:1.5px solid var(--border);border-radius:var(--r-sm);background:var(--surface-2);padding:12px 14px;">
+          <i class="fas fa-pen-nib"></i><span>Require a written reflection</span>
+          <div class="toggle" id="cs-reflection-toggle" onclick="toggleReflectionRequirement()"><div class="knob"></div></div>
+        </div>
+        <div id="cs-reflection-options" class="hidden" style="margin-top:12px;">
+          <label>Minimum Word Count</label>
+          <div class="input-wrap"><i class="fas fa-font"></i><input class="input" type="number" id="cs-reflection-min-words" value="50" min="5" max="2000"></div>
+          <label style="margin-top:12px;">Prompt for Students <span style="font-weight:400;color:var(--text-faint);">(optional)</span></label>
+          <textarea class="input no-icon" id="cs-reflection-prompt" style="height:70px;resize:vertical;" placeholder="e.g. What was the most important thing you learned today?"></textarea>
+        </div>
+      </div>
+
       <button class="btn btn-primary" id="generate-qr-btn" style="margin-top:6px;"><i class="fas fa-qrcode"></i> Generate QR &amp; Start</button>
       <div class="status-msg" id="create-session-status"></div>
     </div>
@@ -1008,6 +1037,7 @@ let qrTimerInterval = null;
 let currentSessionId = null;
 let expireMinutes = 10;
 let capturedSessionLocation = null;
+let reflectionRequired = false;
 
 let html5QrScanner = null;
 let scanContext = null;      // 'reg-card' | 'session'
@@ -1015,6 +1045,7 @@ let scanLocked = false;
 let scannedCardBarcode = null; // captured during registration
 let pendingSessionId = null;
 let pendingSession = null;
+let pendingGps = null;
 let trendChartInstance = null;
 
 /* ---------------------------------------------------------------------
@@ -1030,6 +1061,12 @@ function initials(name){
   if(!name) return '?';
   const parts = name.trim().split(/\s+/);
   return ((parts[0]?.[0]||'') + (parts[1]?.[0]||'')).toUpperCase() || name[0].toUpperCase();
+}
+function countWords(text){
+  if(!text) return 0;
+  const trimmed = text.trim();
+  if(!trimmed) return 0;
+  return trimmed.split(/\s+/).length;
 }
 let toastTimer;
 function toast(msg, type=''){
@@ -1524,7 +1561,9 @@ $('manual-lookup-btn').addEventListener('click', ()=>{
         The card barcode is only ever needed at registration (it becomes
         the account's identity + initial password). Checking in just
         needs: identify the class (QR / manual / active-classes list),
-        then a hard GPS-radius check — no second card scan.
+        then a hard GPS-radius check, then (if the lecturer required
+        it) a written reflection meeting a minimum word count — no
+        second card scan.
 --------------------------------------------------------------------- */
 async function attemptCheckIn(sessionId){
   if(!studentProfile){ toast('Please log in first','error'); return; }
@@ -1579,11 +1618,62 @@ async function verifyGpsAndCheckIn(){
     return;
   }
 
+  pendingGps = gps;
+
+  if(session.requireReflection){
+    openReflectionPrompt();
+    return;
+  }
+
+  await finalizeCheckIn(null);
+}
+
+function openReflectionPrompt(){
+  const session = pendingSession;
+  const minWords = session.reflectionMinWords || 50;
+  $('reflection-instructions').textContent = session.reflectionPrompt
+    ? session.reflectionPrompt
+    : `Write a short reflection on today's ${esc(session.moduleCode||'class')}.`;
+  $('reflection-text').value = '';
+  $('reflection-wordcount').textContent = '0 words';
+  $('reflection-requirement').textContent = `Minimum ${minWords} words`;
+  setStatus($('reflection-status'), '', '');
+  $('reflection-overlay').classList.remove('hidden');
+  $('reflection-text').focus();
+}
+$('reflection-text').addEventListener('input', ()=>{
+  const n = countWords($('reflection-text').value);
+  $('reflection-wordcount').textContent = n + (n===1 ? ' word' : ' words');
+});
+$('reflection-submit-btn').addEventListener('click', async ()=>{
+  const session = pendingSession;
+  if(!session){ return; }
+  const minWords = session.reflectionMinWords || 50;
+  const text = $('reflection-text').value.trim();
+  const n = countWords(text);
+  if(n < minWords){
+    setStatus($('reflection-status'), `Your reflection needs at least ${minWords} words — you have ${n}.`, 'error');
+    return;
+  }
+  $('reflection-submit-btn').disabled = true;
+  setStatus($('reflection-status'), 'Submitting…', 'info');
+  await finalizeCheckIn(text);
+  $('reflection-submit-btn').disabled = false;
+  $('reflection-overlay').classList.add('hidden');
+});
+
+async function finalizeCheckIn(reflectionText){
+  const session = pendingSession, sessionId = pendingSessionId, gps = pendingGps;
   try{
     const recRef = db.ref(`sessions/${sessionId}/attendanceRecords/${studentProfile.studentNumber}`);
     const result = await recRef.transaction(current=>{
       if(current !== null) return; // abort — already checked in
-      return { name: studentProfile.name, uid: studentProfile.uid, timestamp: Date.now(), gps, status: 'present' };
+      const record = { name: studentProfile.name, uid: studentProfile.uid, timestamp: Date.now(), gps, status: 'present' };
+      if(reflectionText){
+        record.reflection = reflectionText;
+        record.reflectionWordCount = countWords(reflectionText);
+      }
+      return record;
     });
     if(!result.committed){
       showScanResult('warn','Already Checked In','You already checked in for this session.');
@@ -1609,7 +1699,7 @@ function showScanResult(type, title, msg, opts={}){
 function retryGpsCheck(){ $('scan-result-overlay').classList.add('hidden'); verifyGpsAndCheckIn(); }
 function closeScanResult(){
   $('scan-result-overlay').classList.add('hidden');
-  pendingSession = null; pendingSessionId = null; scanContext = null;
+  pendingSession = null; pendingSessionId = null; pendingGps = null; scanContext = null;
   stopScanner();
   $('manual-session-id').value = '';
   goStudentHome();
@@ -1641,6 +1731,9 @@ async function renderHistory(){
   }
   listEl.innerHTML = rows.map(r=>{
     const d = fmtDateShort(r.record.timestamp);
+    const reflectionHtml = r.record.reflection
+      ? `<div class="meta" style="margin-top:6px;background:var(--surface-2);border-radius:var(--r-xs);padding:8px 10px;"><i class="fas fa-pen-nib"></i> ${esc(r.record.reflection)}</div>`
+      : '';
     return `<div class="history-item">
       <div class="h-date"><div class="d">${d.day}</div><div class="m">${d.mon}</div></div>
       <div style="flex:1;">
@@ -1648,6 +1741,7 @@ async function renderHistory(){
         <div class="meta"><i class="fas fa-location-dot"></i> ${esc(r.session.venue||'')} · ${fmtTime(r.record.timestamp)}</div>
         <div class="meta">Lecturer: ${esc(r.session.lecturerName||'—')}</div>
         <span class="badge present"><i class="fas fa-check"></i> Present</span>
+        ${reflectionHtml}
       </div>
     </div>`;
   }).join('');
@@ -1837,9 +1931,10 @@ function renderDashSessionList(sessions){
   el.innerHTML = sessions.map(s=>{
     const live = s.expiresAt && s.expiresAt > now;
     const count = Object.keys(s.attendanceRecords||{}).length;
+    const reflectionTag = s.requireReflection ? ` · <i class="fas fa-pen-nib"></i> ${s.reflectionMinWords||50}w reflection` : '';
     return `<div class="session-row" onclick="openStudentList('${s.id}','${esc(s.moduleCode||'')}')">
       <div class="top"><h4>${esc(s.moduleCode||'Module')}</h4><span class="session-status ${live?'live':'ended'}">${live?'● Live':'Ended'}</span></div>
-      <div class="meta"><i class="fas fa-location-dot"></i> ${esc(s.venue||'')} · ${fmtTime(s.sessionTime)} · ${count} checked in</div>
+      <div class="meta"><i class="fas fa-location-dot"></i> ${esc(s.venue||'')} · ${fmtTime(s.sessionTime)} · ${count} checked in${reflectionTag}</div>
     </div>`;
   }).join('');
 }
@@ -1877,12 +1972,19 @@ async function renderLecturerProfile(){
 }
 
 /* ---------------------------------------------------------------------
-   20. CREATE SESSION + QR (lecturer sets live GPS location + radius)
+   20. CREATE SESSION + QR (lecturer sets live GPS location + radius,
+        and can optionally require a written reflection with a
+        minimum word count before check-in is accepted)
 --------------------------------------------------------------------- */
 function setExpireOpt(el, minutes){
   document.querySelectorAll('.expire-opt').forEach(o=>o.classList.remove('active'));
   el.classList.add('active');
   expireMinutes = minutes;
+}
+function toggleReflectionRequirement(){
+  reflectionRequired = !reflectionRequired;
+  $('cs-reflection-toggle').classList.toggle('on', reflectionRequired);
+  $('cs-reflection-options').classList.toggle('hidden', !reflectionRequired);
 }
 $('cs-capture-location-btn').addEventListener('click', async ()=>{
   const btn = $('cs-capture-location-btn');
@@ -1911,6 +2013,13 @@ $('generate-qr-btn').addEventListener('click', async ()=>{
   if(!moduleCode || !venue || !sessionTimeRaw){ setStatus(statusEl, 'Please fill in module, venue and date/time.', 'error'); return; }
   if(!capturedSessionLocation){ setStatus(statusEl, 'Please capture the class location first — tap "Use My Current Location".', 'error'); return; }
 
+  let reflectionMinWords = null, reflectionPrompt = '';
+  if(reflectionRequired){
+    reflectionMinWords = parseInt($('cs-reflection-min-words').value) || 50;
+    if(reflectionMinWords < 5){ setStatus(statusEl, 'Reflection minimum word count should be at least 5.', 'error'); return; }
+    reflectionPrompt = $('cs-reflection-prompt').value.trim();
+  }
+
   $('generate-qr-btn').disabled = true;
   setStatus(statusEl, 'Creating session…', 'info');
   try{
@@ -1918,19 +2027,30 @@ $('generate-qr-btn').addEventListener('click', async ()=>{
     const now = Date.now();
     const expiresAt = now + expireMinutes*60000;
     const newRef = db.ref('sessions').push();
-    await newRef.set({
+    const sessionData = {
       moduleCode, venue,
       sessionTime, createdAt: now, expiresAt,
       lecturerId: lecturerProfile.uid, lecturerName: lecturerProfile.name,
       lat: capturedSessionLocation.lat, lng: capturedSessionLocation.lng, radiusMeters,
+      requireReflection: !!reflectionRequired,
       attendanceRecords: {}
-    });
+    };
+    if(reflectionRequired){
+      sessionData.reflectionMinWords = reflectionMinWords;
+      if(reflectionPrompt) sessionData.reflectionPrompt = reflectionPrompt;
+    }
+    await newRef.set(sessionData);
     currentSessionId = newRef.key;
     renderQr(currentSessionId, moduleCode, venue);
     startQrCountdown(expiresAt);
     setStatus(statusEl, 'Session live! Students can check in now.', 'success');
     capturedSessionLocation = null;
     $('cs-location-chip').classList.add('hidden');
+    reflectionRequired = false;
+    $('cs-reflection-toggle').classList.remove('on');
+    $('cs-reflection-options').classList.add('hidden');
+    $('cs-reflection-prompt').value = '';
+    $('cs-reflection-min-words').value = 50;
   }catch(err){
     console.error(err);
     setStatus(statusEl, 'Could not create session: '+err.message, 'error');
@@ -2026,12 +2146,19 @@ function renderStudList(session){
     el.innerHTML = `<div class="empty"><i class="fas fa-user-slash"></i><h4>No students yet</h4><p>Check back once students start checking in.</p></div>`;
     return;
   }
-  el.innerHTML = rows.map(r=>`
-    <div class="stud-row">
-      <div class="stud-avatar">${initials(r.name)}</div>
-      <div style="flex:1;"><h4>${esc(r.name)}</h4><div class="meta">#${esc(r.studentNumber)} · ${fmtTime(r.timestamp)}</div></div>
-      <span class="badge present" style="margin-top:0;">Present</span>
-    </div>`).join('');
+  el.innerHTML = rows.map(r=>{
+    const reflectionHtml = r.reflection
+      ? `<div class="meta" style="margin-top:6px;background:var(--surface-2);border-radius:var(--r-xs);padding:8px 10px;line-height:1.4;"><i class="fas fa-pen-nib"></i> ${esc(r.reflection)} <span style="color:var(--text-faint);">(${r.reflectionWordCount||countWords(r.reflection)} words)</span></div>`
+      : (session.requireReflection ? `<div class="meta" style="margin-top:6px;color:var(--danger);"><i class="fas fa-triangle-exclamation"></i> No reflection submitted</div>` : '');
+    return `<div class="stud-row" style="align-items:flex-start;flex-direction:column;">
+      <div style="display:flex;align-items:center;gap:12px;width:100%;">
+        <div class="stud-avatar">${initials(r.name)}</div>
+        <div style="flex:1;"><h4>${esc(r.name)}</h4><div class="meta">#${esc(r.studentNumber)} · ${fmtTime(r.timestamp)}</div></div>
+        <span class="badge present" style="margin-top:0;">Present</span>
+      </div>
+      ${reflectionHtml}
+    </div>`;
+  }).join('');
 }
 $('stud-search').addEventListener('input', e=>{
   studSearchQ = e.target.value;
@@ -2042,8 +2169,8 @@ $('export-csv-btn').addEventListener('click', async ()=>{
   const snap = await db.ref('sessions/'+activeDashSession).once('value');
   const session = snap.val();
   if(!session){ toast('Session not found','error'); return; }
-  const rows = Object.entries(session.attendanceRecords||{}).map(([num,r])=>[num, r.name, 'Present', new Date(r.timestamp).toLocaleString()]);
-  let csv = 'Student Number,Name,Status,Timestamp\n';
+  const rows = Object.entries(session.attendanceRecords||{}).map(([num,r])=>[num, r.name, 'Present', new Date(r.timestamp).toLocaleString(), r.reflection||'', r.reflectionWordCount||'']);
+  let csv = 'Student Number,Name,Status,Timestamp,Reflection,Reflection Word Count\n';
   rows.forEach(r=>{ csv += r.map(v=>`"${(v||'').toString().replace(/"/g,'""')}"`).join(',') + '\n'; });
   const blob = new Blob([csv], {type:'text/csv'});
   const url = URL.createObjectURL(blob);
