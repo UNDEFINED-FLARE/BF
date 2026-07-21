@@ -243,6 +243,7 @@ textarea.input{height:auto;padding-top:10px;}
   border-radius:var(--r-sm);padding:10px 12px;font-size:.8rem;font-weight:700;
 }
 .confirm-chip.warn{background:var(--warn-light);color:var(--warn);}
+.confirm-chip{transition:background .2s ease,color .2s ease;}
 
 /* ===================================================================
    STATUS / TOAST
@@ -542,6 +543,55 @@ padding-bottom:50px;
 .stud-row .meta{font-size:.72rem;color:var(--text-soft);}
 
 /* ===================================================================
+   DIGITAL STUDENT ID CARD
+=================================================================== */
+.idc-stage{display:flex;flex-direction:column;align-items:center;padding:20px 18px 4px;}
+.idc-card{
+  width:100%;max-width:360px;background:#f7f5f0;border-radius:14px;overflow:hidden;
+  box-shadow:0 14px 34px rgba(0,0,0,.18), 0 0 0 1px rgba(0,0,0,.04);position:relative;
+}
+.idc-card::before{
+  content:'';position:absolute;inset:0;
+  background-image:radial-gradient(circle at 20% 30%, rgba(13,44,84,.04) 1px, transparent 1px),
+    radial-gradient(circle at 60% 70%, rgba(13,44,84,.04) 1px, transparent 1px);
+  background-size:38px 38px;pointer-events:none;
+}
+.idc-band{
+  background:linear-gradient(90deg,#8a6a1e,#c9982e,#e8c877,#c9982e);color:#fff;
+  display:flex;align-items:center;justify-content:space-between;padding:8px 14px;
+  border-bottom:2px solid #0d2c54;position:relative;z-index:1;
+}
+.idc-label{font-weight:800;letter-spacing:3px;font-size:13px;text-shadow:0 1px 1px rgba(0,0,0,.3);}
+.idc-year{font-weight:800;font-size:19px;font-family:Georgia,serif;text-shadow:0 1px 1px rgba(0,0,0,.3);}
+.idc-body{display:grid;grid-template-columns:1fr 100px 74px;gap:10px;padding:16px 14px 12px;position:relative;z-index:1;}
+.idc-info{display:flex;flex-direction:column;gap:6px;padding-top:2px;}
+.idc-name-line{font-weight:800;font-size:16px;color:#0d2c54;text-transform:uppercase;line-height:1.15;letter-spacing:.3px;word-break:break-word;}
+.idc-num{font-weight:700;font-size:15px;color:#111;margin-top:6px;}
+.idc-reg{font-size:11px;color:#0d2c54;margin-top:10px;}
+.idc-reg span:first-child{font-weight:600;}
+.idc-photo-col,.idc-crest-col{display:flex;flex-direction:column;align-items:center;gap:6px;}
+.idc-photo-box{
+  width:92px;height:118px;border:2px solid #0d2c54;background:#dfe3e8;display:flex;align-items:center;
+  justify-content:center;overflow:hidden;position:relative;cursor:pointer;border-radius:2px;flex-shrink:0;
+}
+.idc-photo-box img{width:100%;height:100%;object-fit:cover;}
+.idc-placeholder{font-size:10px;color:#6b7684;text-align:center;padding:6px;line-height:1.3;}
+.idc-hint{
+  position:absolute;bottom:0;left:0;right:0;background:rgba(13,44,84,.75);color:#fff;font-size:9px;
+  text-align:center;padding:2px 0;opacity:0;transition:opacity .15s;
+}
+.idc-photo-box:hover .idc-hint{opacity:1;}
+.idc-crest-box{width:64px;height:64px;display:flex;align-items:center;justify-content:center;border-radius:6px;flex-shrink:0;}
+.idc-crest-box img{width:100%;height:100%;object-fit:contain;}
+.idc-uni-name{font-size:11px;font-weight:700;color:#0d2c54;text-align:center;line-height:1.1;}
+.idc-tagline{font-size:9px;font-style:italic;color:#a8263b;text-align:center;margin-top:-2px;}
+.idc-stripe{height:6px;background:repeating-linear-gradient(45deg,#c9982e 0 8px,#0d2c54 8px 10px,#a8263b 10px 12px);margin:0 14px;border-radius:3px;}
+.idc-barcode-area{padding:10px 20px 16px;text-align:center;position:relative;z-index:1;}
+.idc-barcode-area svg{max-width:100%;height:46px;}
+.idc-site{font-size:11px;color:#333;font-family:Georgia,serif;margin-top:2px;}
+.idc-controls{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:18px;}
+
+/* ===================================================================
    SKELETON
 =================================================================== */
 .skel{background:linear-gradient(90deg,var(--border) 25%,var(--surface-2) 50%,var(--border) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;border-radius:8px;}
@@ -786,6 +836,7 @@ padding-bottom:50px;
       <div class="pstat"><b id="pstat-total">0</b><span>Sessions</span></div>
     </div>
     <div class="settings-list">
+      <div class="settings-row" onclick="nav('digital-card-screen')"><i class="fas fa-id-badge"></i><span>Digital ID Card</span><i class="fas fa-chevron-right chev"></i></div>
       <div class="settings-row" onclick="openEditProfile()"><i class="fas fa-user-pen"></i><span>Edit Profile</span><i class="fas fa-chevron-right chev"></i></div>
       <div class="settings-row" onclick="nav('change-password-screen')"><i class="fas fa-key"></i><span>Change Password</span><i class="fas fa-chevron-right chev"></i></div>
       <div class="settings-row"><i class="fas fa-moon"></i><span>Dark Mode</span><div class="toggle" id="dark-toggle" onclick="toggleDark()"><div class="knob"></div></div></div>
@@ -808,6 +859,52 @@ padding-bottom:50px;
       <button class="btn btn-primary" id="ep-save-btn"><i class="fas fa-floppy-disk"></i> Save Changes</button>
       <div class="status-msg" id="ep-status"></div>
     </div>
+  </div>
+
+  <!-- ================= DIGITAL STUDENT ID CARD ================= -->
+  <div id="digital-card-screen" class="screen">
+    <div class="topbar"><button class="icon-btn" onclick="nav('profile-screen')"><i class="fas fa-arrow-left"></i></button><h2>Digital ID Card</h2><span style="width:38px;"></span></div>
+    <div class="idc-stage">
+      <div class="idc-card" id="idc-card">
+        <div class="idc-band">
+          <div class="idc-label">STUDENT CARD</div>
+          <div class="idc-year" id="idc-year">—</div>
+        </div>
+        <div class="idc-body">
+          <div class="idc-info">
+            <div class="idc-name-line" id="idc-name1">—</div>
+            <div class="idc-name-line" id="idc-name2"></div>
+            <div class="idc-num" id="idc-number">—</div>
+            <div class="idc-reg"><span>REG:</span> <span id="idc-regdate">—</span></div>
+          </div>
+          <div class="idc-photo-col">
+            <div class="idc-photo-box" id="idc-photo-box" onclick="document.getElementById('idc-photo-input').click()">
+              <div class="idc-placeholder" id="idc-photo-placeholder">Tap to<br>upload photo</div>
+              <div class="idc-hint">Change photo</div>
+            </div>
+            <input type="file" id="idc-photo-input" accept="image/*" class="hidden">
+          </div>
+          <div class="idc-crest-col">
+            <div class="idc-crest-box">
+              <img src="https://www.univen.ac.za/wp-content/uploads/2026/02/logo.png" alt="" onerror="this.style.display='none'">
+            </div>
+            <div class="idc-uni-name">University of Venda</div>
+            <div class="idc-tagline">Creating Future Leaders</div>
+          </div>
+        </div>
+        <div class="idc-stripe"></div>
+        <div class="idc-barcode-area">
+          <svg id="idc-barcode-svg"></svg>
+          <div class="idc-site">www.univen.ac.za</div>
+        </div>
+      </div>
+      <div class="idc-controls">
+        <button class="btn btn-primary" style="width:auto;padding:0 20px;" onclick="downloadDigitalCard()"><i class="fas fa-download"></i> Download as Image</button>
+        <button class="btn btn-ghost" style="width:auto;padding:0 20px;" onclick="resetCardPhoto()"><i class="fas fa-rotate-left"></i> Reset Photo</button>
+      </div>
+      <p style="font-size:.72rem;color:var(--text-faint);text-align:center;padding:14px 24px 0;line-height:1.5;">Your name, student number, and barcode are pulled automatically from your registration — only your photo can be changed here.</p>
+    </div>
+    <div style="height:80px;"></div>
   </div>
 
   <!-- ================= LECTURER PROFILE ================= -->
@@ -843,6 +940,7 @@ padding-bottom:50px;
       </div>
       </div>
       <div style="display:flex;gap:8px;">
+        <button class="icon-btn" onclick="nav('manage-classes-screen')" title="My Classes"><i class="fas fa-people-group"></i></button>
         <button class="icon-btn" onclick="nav('post-update-screen');renderPostUpdateScreen()" ><i class="fas fa-bullhorn" style="color:#021945;"></i></button>
         <button class="icon-btn" onclick="nav('lecturer-profile-screen')"><i class="fas fa-user"></i></button>
       </div>
@@ -865,6 +963,11 @@ padding-bottom:50px;
     <div class="form-card">
       <div class="field"><label>Module Code</label><div class="input-wrap"><i class="fas fa-book"></i><input class="input" id="cs-module" placeholder="e.g. CSC301"></div></div>
       <div class="field"><label>Venue Name</label><div class="input-wrap"><i class="fas fa-location-dot"></i><input class="input" id="cs-venue" placeholder="e.g. Auditorium"></div></div>
+      <div class="field">
+        <label>Restrict To Class <span style="font-weight:400;color:var(--text-faint);">(optional)</span></label>
+        <select class="select" id="cs-class-select"><option value="">All students (no restriction)</option></select>
+        <p style="font-size:.72rem;color:var(--text-faint);margin-top:6px;line-height:1.5;">Only students on the chosen class list will see this session or be able to check in. <span style="color:var(--green);font-weight:700;cursor:pointer;" onclick="nav('manage-classes-screen')">Manage classes →</span></p>
+      </div>
       <div class="field"><label>Date &amp; Time</label><input class="input no-icon" type="datetime-local" id="cs-time"></div>
 
       <div class="field">
@@ -926,6 +1029,35 @@ padding-bottom:50px;
       </div>
       <button class="btn btn-danger btn-sm" id="end-session-btn" style="margin-top:10px;"><i class="fas fa-stop"></i> Close Session</button>
     </div>
+    <div style="height:60px;"></div>
+  </div>
+
+  <!-- ================= MANAGE CLASSES (lecturer) ================= -->
+  <div id="manage-classes-screen" class="screen">
+    <div class="topbar"><button class="icon-btn" onclick="nav('lecturer-dashboard-screen')"><i class="fas fa-arrow-left"></i></button><h2>My Classes</h2><span style="width:38px;"></span></div>
+    <div class="form-card">
+      <div class="field"><label>Class Name</label><div class="input-wrap"><i class="fas fa-users"></i><input class="input" id="mc-name" placeholder="e.g. CSC301 Group A"></div></div>
+      <div class="field"><label>Module Code <span style="font-weight:400;color:var(--text-faint);">(optional)</span></label><div class="input-wrap"><i class="fas fa-book"></i><input class="input" id="mc-module" placeholder="e.g. CSC301"></div></div>
+      <div class="field">
+        <label>Student List (CSV)</label>
+        <button class="btn btn-ghost" type="button" id="mc-csv-btn"><i class="fas fa-file-csv"></i> Upload CSV of Student Numbers</button>
+        <input type="file" id="mc-csv-input" accept=".csv,text/csv" class="hidden">
+        <div id="mc-csv-chip" class="confirm-chip hidden"><i class="fas fa-check-circle"></i> <span id="mc-csv-summary"></span></div>
+        <p style="font-size:.72rem;color:var(--text-faint);margin-top:8px;line-height:1.5;">One student number per line, or the first column of a multi-column CSV. A header row is detected and skipped automatically.</p>
+      </div>
+      <button class="btn btn-primary" id="mc-create-btn"><i class="fas fa-plus"></i> Create Class</button>
+      <div class="status-msg" id="mc-status"></div>
+    </div>
+    <div class="section-title"><h3>Your Classes</h3></div>
+    <div id="mc-list"><div class="skel" style="height:70px;margin:0 18px 10px;"></div></div>
+    <div style="height:80px;"></div>
+  </div>
+
+  <!-- ================= CLASS ROSTER (lecturer) ================= -->
+  <div id="class-roster-screen" class="screen">
+    <div class="topbar"><button class="icon-btn" onclick="nav('manage-classes-screen')"><i class="fas fa-arrow-left"></i></button><h2 id="cr-title">Class Roster</h2><button class="icon-btn" id="cr-delete-btn" title="Delete class"><i class="fas fa-trash"></i></button></div>
+    <div id="cr-meta" style="padding:14px 18px 0;font-size:.8rem;color:var(--text-soft);"></div>
+    <div id="cr-list" style="margin-top:10px;"></div>
     <div style="height:60px;"></div>
   </div>
 
@@ -991,6 +1123,8 @@ padding-bottom:50px;
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/JsBarcode/3.11.5/JsBarcode.all.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
 /* =====================================================================
    UNIVEN ATTENDANCE — APP LOGIC (v2: real student accounts, barcode
@@ -1047,6 +1181,9 @@ let pendingSessionId = null;
 let pendingSession = null;
 let pendingGps = null;
 let trendChartInstance = null;
+let lecturerClasses = {};       // classId -> { className, moduleCode, students:{studentNumber:true}, ... } for the logged-in lecturer
+let mcParsedStudents = null;    // student numbers parsed from the most recently uploaded CSV, awaiting "Create Class"
+let activeClassId = null;       // class currently open in the roster screen
 
 /* ---------------------------------------------------------------------
    4. HELPERS
@@ -1068,6 +1205,40 @@ function countWords(text){
   if(!trimmed) return 0;
   return trimmed.split(/\s+/).length;
 }
+// Parses an uploaded CSV/plain-text file into a de-duplicated list of
+// student numbers. Accepts one number per line, or the first column
+// of a multi-column CSV. A single obvious header row (e.g. "Student
+// Number") is detected and skipped automatically.
+function parseCsvStudentNumbers(text){
+  const lines = String(text||'').split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
+  const numbers = [];
+  const seen = new Set();
+  lines.forEach(line=>{
+    let firstCol = line.split(',')[0].trim();
+    firstCol = firstCol.replace(/^"|"$/g, '').trim();
+    if(!firstCol) return;
+    if(/^(student ?number|studentno|std ?no|number|id)$/i.test(firstCol)) return; // skip header row
+    if(seen.has(firstCol)) return;
+    seen.add(firstCol);
+    numbers.push(firstCol);
+  });
+  return numbers;
+}
+// Parses a CSV/plain-text file of student numbers: one per line, or the
+// first column of a multi-column CSV. Dedupes and skips an obvious
+// header row (e.g. "Student Number").
+function parseCsvStudentNumbers(text){
+  const lines = String(text||'').split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
+  const numbers = new Set();
+  lines.forEach(line=>{
+    let firstCol = line.split(',')[0].trim();
+    firstCol = firstCol.replace(/^"|"$/g,'').trim();
+    if(!firstCol) return;
+    if(/^(student.?number|std.?no|number|studentno)$/i.test(firstCol)) return; // skip header row
+    numbers.add(firstCol);
+  });
+  return Array.from(numbers);
+}
 let toastTimer;
 function toast(msg, type=''){
   const el = $('toast');
@@ -1088,16 +1259,49 @@ function haversineMeters(lat1, lng1, lat2, lng2){
   const a = Math.sin(dLat/2)**2 + Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLng/2)**2;
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 }
-function getGpsPosition(){
-  return new Promise((resolve,reject)=>{
+const GPS_MAX_ACCEPTABLE_ACCURACY = 100; // metres — readings worse than this are rejected outright
+const GPS_GOOD_ENOUGH_ACCURACY = 20;     // metres — stop early once we get a fix this good
+
+// Takes several GPS readings over a short window and keeps the most
+// accurate one, instead of trusting whatever the very first fix says.
+// A single getCurrentPosition() call can easily be 50-100m+ off
+// indoors; watching for a few seconds and keeping the tightest
+// accuracy value gives a materially better result.
+function getBestGpsFix(timeoutMs = 8000, minAcceptableAccuracy = GPS_GOOD_ENOUGH_ACCURACY){
+  return new Promise((resolve, reject)=>{
     if(!navigator.geolocation){ reject(new Error('Geolocation not supported')); return; }
-    navigator.geolocation.getCurrentPosition(
-      pos => resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude, accuracy: pos.coords.accuracy }),
-      err => reject(new Error(err.message)),
-      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+    let best = null;
+    let settled = false;
+    const watchId = navigator.geolocation.watchPosition(
+      pos => {
+        const reading = { lat: pos.coords.latitude, lng: pos.coords.longitude, accuracy: pos.coords.accuracy, timestamp: Date.now() };
+        if(!best || reading.accuracy < best.accuracy) best = reading;
+        if(reading.accuracy <= minAcceptableAccuracy && !settled){
+          settled = true;
+          navigator.geolocation.clearWatch(watchId);
+          resolve(best);
+        }
+      },
+      err => {
+        if(!settled){
+          settled = true;
+          navigator.geolocation.clearWatch(watchId);
+          if(best) resolve(best); else reject(new Error(err.message));
+        }
+      },
+      { enableHighAccuracy: true, maximumAge: 0, timeout: timeoutMs }
     );
+    setTimeout(()=>{
+      if(!settled){
+        settled = true;
+        navigator.geolocation.clearWatch(watchId);
+        if(best) resolve(best); else reject(new Error('Could not get a GPS fix in time'));
+      }
+    }, timeoutMs);
   });
 }
+// Kept as an alias so any existing callers still work.
+function getGpsPosition(timeoutMs, minAcceptableAccuracy){ return getBestGpsFix(timeoutMs, minAcceptableAccuracy); }
 function fmtTime(ts){ if(!ts) return '—'; return new Date(ts).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}); }
 function fmtDateShort(ts){ const d = new Date(ts); return { day: d.getDate(), mon: d.toLocaleString('en',{month:'short'}).toUpperCase() }; }
 
@@ -1126,12 +1330,20 @@ function nav(screenId){
   window.scrollTo(0,0);
   const frame = $('frame'); if(frame) frame.scrollTop = 0;
 
-  const studentScreens = ['student-home-screen','active-classes-screen','history-screen','notifications-screen','profile-screen','edit-profile-screen'];
-  const lecturerScreens = ['lecturer-dashboard-screen','create-session-screen','student-list-screen','lecturer-profile-screen','post-update-screen'];
+  const studentScreens = ['student-home-screen','active-classes-screen','history-screen','notifications-screen','profile-screen','edit-profile-screen','digital-card-screen'];
+  const lecturerScreens = ['lecturer-dashboard-screen','create-session-screen','student-list-screen','lecturer-profile-screen','post-update-screen','manage-classes-screen','class-roster-screen'];
   $('student-nav').classList.toggle('hidden', !studentScreens.includes(screenId));
   $('lecturer-nav').classList.toggle('hidden', !lecturerScreens.includes(screenId));
 
   if(screenId !== 'scan-screen') stopScanner();
+
+  if(lecturerProfile){
+    if(screenId === 'create-session-screen') fetchLecturerClasses();
+    if(screenId === 'manage-classes-screen') renderManageClasses();
+  }
+  if(studentProfile){
+    if(screenId === 'digital-card-screen') renderDigitalCard();
+  }
 }
 function navBottom(screenId, el, role){
   nav(screenId);
@@ -1415,7 +1627,8 @@ async function renderStudentHome(){
     const rec = (s.attendanceRecords||{})[studentProfile.studentNumber];
     if(rec){ total++; attended++; } // hard-blocked model: any record = present
     if(s.sessionTime && new Date(s.sessionTime).toDateString() === todayStr){
-      todays.push({...s, myRecord: rec});
+      const enrolled = !s.allowedStudents || s.allowedStudents[studentProfile.studentNumber];
+      if(enrolled) todays.push({...s, myRecord: rec});
     }
   });
 
@@ -1464,7 +1677,9 @@ async function renderActiveClasses(){
   const now = Date.now();
   const snap = await db.ref('sessions').orderByChild('expiresAt').startAt(now).once('value');
   const data = snap.val() || {};
-  const rows = Object.keys(data).map(id=>({id, ...data[id]})).sort((a,b)=>(a.sessionTime||0)-(b.sessionTime||0));
+  const rows = Object.keys(data).map(id=>({id, ...data[id]}))
+    .filter(s => !s.allowedStudents || (studentProfile && s.allowedStudents[studentProfile.studentNumber]))
+    .sort((a,b)=>(a.sessionTime||0)-(b.sessionTime||0));
 
   if(rows.length===0){
     el.innerHTML = `<div class="empty"><i class="fas fa-calendar-xmark"></i><h4>No active classes right now</h4><p>Check back closer to your class time.</p></div>`;
@@ -1578,6 +1793,10 @@ async function attemptCheckIn(sessionId){
     if(session.expiresAt && Date.now() > session.expiresAt){
       showScanResult('fail','Session Closed','This session is no longer accepting check-ins.'); return;
     }
+    if(session.allowedStudents && !session.allowedStudents[studentProfile.studentNumber]){
+      showScanResult('fail','Not Enrolled', `This session is restricted to students in ${session.className ? '"'+session.className+'"' : 'a specific class'}. Your student number isn't on that list — contact your lecturer if this seems wrong.`);
+      return;
+    }
     const existing = (session.attendanceRecords||{})[studentProfile.studentNumber];
     if(existing){
       showScanResult('warn','Already Checked In','You already checked in for '+(session.moduleCode||'this session')+'.'); return;
@@ -1596,11 +1815,18 @@ async function verifyGpsAndCheckIn(){
   const session = pendingSession, sessionId = pendingSessionId;
   if(!session || !sessionId){ showScanResult('fail','Something Went Wrong','Session data was lost — please scan again.'); return; }
 
-  toast('Checking your location…', 'info');
+  toast('Getting a precise location fix…', 'info');
   let gps;
-  try{ gps = await getGpsPosition(); }
+  try{ gps = await getBestGpsFix(); }
   catch(err){
     showScanResult('fail','Location Required', "We couldn't get your location (" + err.message + "). Please enable location services and try again.", { retry:'gps' });
+    return;
+  }
+
+  if(gps.accuracy > GPS_MAX_ACCEPTABLE_ACCURACY){
+    showScanResult('fail','Location Too Imprecise',
+      `Your GPS accuracy is ±${Math.round(gps.accuracy)}m, which is too low to verify your location. Try moving outdoors, away from tall buildings, or near a window, then try again.`,
+      { retry:'gps' });
     return;
   }
 
@@ -1611,9 +1837,14 @@ async function verifyGpsAndCheckIn(){
 
   const dist = haversineMeters(gps.lat, gps.lng, session.lat, session.lng);
   const radius = session.radiusMeters || DEFAULT_RADIUS_METERS;
-  if(dist > radius){
+  // Give some benefit of the doubt for GPS wobble: subtract the
+  // device's own accuracy margin from the measured distance so a
+  // student whose true position is inside the radius isn't unfairly
+  // rejected because of a noisy reading.
+  const effectiveDist = Math.max(0, dist - gps.accuracy);
+  if(effectiveDist > radius){
     showScanResult('fail','Outside Attendance Area',
-      `You're about ${Math.round(dist)}m from ${session.venue||'the class'}. You need to be within ${radius}m to check in.`,
+      `You're about ${Math.round(dist)}m from ${session.venue||'the class'} (±${Math.round(gps.accuracy)}m accuracy). You need to be within ${radius}m to check in.`,
       { retry:'gps' });
     return;
   }
@@ -1932,9 +2163,10 @@ function renderDashSessionList(sessions){
     const live = s.expiresAt && s.expiresAt > now;
     const count = Object.keys(s.attendanceRecords||{}).length;
     const reflectionTag = s.requireReflection ? ` · <i class="fas fa-pen-nib"></i> ${s.reflectionMinWords||50}w reflection` : '';
+    const classTag = s.className ? ` · <i class="fas fa-people-group"></i> ${esc(s.className)}` : '';
     return `<div class="session-row" onclick="openStudentList('${s.id}','${esc(s.moduleCode||'')}')">
       <div class="top"><h4>${esc(s.moduleCode||'Module')}</h4><span class="session-status ${live?'live':'ended'}">${live?'● Live':'Ended'}</span></div>
-      <div class="meta"><i class="fas fa-location-dot"></i> ${esc(s.venue||'')} · ${fmtTime(s.sessionTime)} · ${count} checked in${reflectionTag}</div>
+      <div class="meta"><i class="fas fa-location-dot"></i> ${esc(s.venue||'')} · ${fmtTime(s.sessionTime)} · ${count} checked in${reflectionTag}${classTag}</div>
     </div>`;
   }).join('');
 }
@@ -1972,6 +2204,236 @@ async function renderLecturerProfile(){
 }
 
 /* ---------------------------------------------------------------------
+   19b. CLASSES (lecturer uploads a CSV of student numbers to create a
+        class roster; sessions can then be restricted to that roster)
+--------------------------------------------------------------------- */
+async function fetchLecturerClasses(){
+  if(!lecturerProfile) return;
+  const snap = await db.ref('classes').orderByChild('lecturerId').equalTo(lecturerProfile.uid).once('value');
+  lecturerClasses = snap.val() || {};
+  populateClassSelect();
+}
+function populateClassSelect(){
+  const sel = $('cs-class-select');
+  if(!sel) return;
+  const current = sel.value;
+  const rows = Object.keys(lecturerClasses).map(id=>({id, ...lecturerClasses[id]})).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+  sel.innerHTML = `<option value="">All students (no restriction)</option>` +
+    rows.map(c=>`<option value="${c.id}">${esc(c.className)} (${c.studentCount||Object.keys(c.students||{}).length})</option>`).join('');
+  if(rows.some(r=>r.id===current)) sel.value = current;
+}
+async function renderManageClasses(){
+  if(!lecturerProfile) return;
+  await fetchLecturerClasses();
+  const el = $('mc-list');
+  const rows = Object.keys(lecturerClasses).map(id=>({id, ...lecturerClasses[id]})).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+  if(rows.length===0){
+    el.innerHTML = `<div class="empty"><i class="fas fa-people-group"></i><h4>No classes yet</h4><p>Upload a CSV above to create your first class.</p></div>`;
+    return;
+  }
+  el.innerHTML = rows.map(c=>{
+    const count = c.studentCount || Object.keys(c.students||{}).length;
+    return `<div class="session-row" onclick="openClassRoster('${c.id}')">
+      <div class="top"><h4>${esc(c.className)}</h4><span class="session-status ended">${count} student${count===1?'':'s'}</span></div>
+      <div class="meta"><i class="fas fa-book"></i> ${c.moduleCode?esc(c.moduleCode):'No module code'} · Created ${new Date(c.createdAt).toLocaleDateString()}</div>
+    </div>`;
+  }).join('');
+}
+$('mc-csv-btn').addEventListener('click', ()=> $('mc-csv-input').click());
+$('mc-csv-input').addEventListener('change', (e)=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = ()=>{
+    const nums = parseCsvStudentNumbers(reader.result);
+    if(nums.length === 0){ toast('No student numbers found in that file', 'error'); return; }
+    mcParsedStudents = nums;
+    $('mc-csv-chip').classList.remove('hidden');
+    $('mc-csv-summary').textContent = `${nums.length} student number${nums.length===1?'':'s'} loaded from ${file.name}`;
+  };
+  reader.onerror = ()=> toast('Could not read that file', 'error');
+  reader.readAsText(file);
+});
+$('mc-create-btn').addEventListener('click', async ()=>{
+  const name = $('mc-name').value.trim();
+  const moduleCode = $('mc-module').value.trim();
+  const statusEl = $('mc-status');
+  if(!name){ setStatus(statusEl, 'Please give the class a name.', 'error'); return; }
+  if(!mcParsedStudents || mcParsedStudents.length===0){ setStatus(statusEl, 'Please upload a CSV of student numbers first.', 'error'); return; }
+  $('mc-create-btn').disabled = true;
+  setStatus(statusEl, 'Creating class…', 'info');
+  try{
+    const studentsMap = {};
+    mcParsedStudents.forEach(n=> studentsMap[n] = true);
+    const newRef = db.ref('classes').push();
+    await newRef.set({
+      lecturerId: lecturerProfile.uid,
+      lecturerName: lecturerProfile.name,
+      className: name,
+      moduleCode: moduleCode || '',
+      students: studentsMap,
+      studentCount: mcParsedStudents.length,
+      createdAt: Date.now()
+    });
+    setStatus(statusEl, '', '');
+    toast('Class created with '+mcParsedStudents.length+' student'+(mcParsedStudents.length===1?'':'s'), 'success');
+    $('mc-name').value = ''; $('mc-module').value = ''; $('mc-csv-input').value = '';
+    mcParsedStudents = null;
+    $('mc-csv-chip').classList.add('hidden');
+    renderManageClasses();
+  }catch(err){
+    setStatus(statusEl, 'Could not create class: '+err.message, 'error');
+  }finally{
+    $('mc-create-btn').disabled = false;
+  }
+});
+function openClassRoster(classId){
+  activeClassId = classId;
+  nav('class-roster-screen');
+  renderClassRoster();
+}
+async function renderClassRoster(){
+  if(!activeClassId) return;
+  const snap = await db.ref('classes/'+activeClassId).once('value');
+  const cls = snap.val();
+  if(!cls){ $('cr-list').innerHTML = `<div class="empty"><i class="fas fa-triangle-exclamation"></i><h4>Class not found</h4></div>`; return; }
+  $('cr-title').textContent = cls.className;
+  const count = Object.keys(cls.students||{}).length;
+  $('cr-meta').textContent = `${cls.moduleCode ? cls.moduleCode+' · ' : ''}${count} student${count===1?'':'s'} · Created ${new Date(cls.createdAt).toLocaleDateString()}`;
+  const nums = Object.keys(cls.students||{}).sort();
+  $('cr-list').innerHTML = nums.length===0
+    ? `<div class="empty"><i class="fas fa-user-slash"></i><h4>No students in this class</h4></div>`
+    : nums.map(n=>`<div class="stud-row"><div class="stud-avatar">${esc(n.slice(-2))}</div><div style="flex:1;"><h4>#${esc(n)}</h4></div></div>`).join('');
+}
+$('cr-delete-btn').addEventListener('click', async ()=>{
+  if(!activeClassId) return;
+  if(!confirm("Delete this class? Sessions already created with this restriction keep their existing student list, but you won't be able to pick this class for new sessions.")) return;
+  try{
+    await db.ref('classes/'+activeClassId).remove();
+    toast('Class deleted', 'success');
+    nav('manage-classes-screen');
+  }catch(err){ toast('Could not delete: '+err.message, 'error'); }
+});
+
+/* ---------------------------------------------------------------------
+   19b. CLASSES — lecturer uploads a CSV of student numbers to define a
+        class roster. Sessions can optionally be restricted to a class,
+        so only enrolled students see or can check in to that session.
+--------------------------------------------------------------------- */
+async function fetchLecturerClasses(){
+  if(!lecturerProfile) return;
+  const snap = await db.ref('classes').orderByChild('lecturerId').equalTo(lecturerProfile.uid).once('value');
+  lecturerClasses = snap.val() || {};
+  populateClassSelect();
+}
+function populateClassSelect(){
+  const sel = $('cs-class-select');
+  if(!sel) return;
+  const current = sel.value;
+  const rows = Object.keys(lecturerClasses).map(id=>({id, ...lecturerClasses[id]})).sort((a,b)=>(a.className||'').localeCompare(b.className||''));
+  sel.innerHTML = `<option value="">All students (no restriction)</option>` +
+    rows.map(c=>`<option value="${c.id}">${esc(c.className)} (${Object.keys(c.students||{}).length})</option>`).join('');
+  if(rows.some(r=>r.id===current)) sel.value = current;
+}
+async function renderManageClasses(){
+  if(!lecturerProfile) return;
+  await fetchLecturerClasses();
+  const el = $('mc-list');
+  const rows = Object.keys(lecturerClasses).map(id=>({id, ...lecturerClasses[id]})).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+  if(rows.length===0){
+    el.innerHTML = `<div class="empty"><i class="fas fa-people-group"></i><h4>No classes yet</h4><p>Upload a CSV above to create your first class.</p></div>`;
+    return;
+  }
+  el.innerHTML = rows.map(c=>{
+    const count = Object.keys(c.students||{}).length;
+    return `<div class="session-row" onclick="openClassRoster('${c.id}')">
+      <div class="top"><h4>${esc(c.className)}</h4><span class="session-status ended">${count} student${count===1?'':'s'}</span></div>
+      <div class="meta">${c.moduleCode?esc(c.moduleCode)+' · ':''}Created ${new Date(c.createdAt).toLocaleDateString()}</div>
+    </div>`;
+  }).join('');
+}
+$('mc-csv-btn').addEventListener('click', ()=> $('mc-csv-input').click());
+$('mc-csv-input').addEventListener('change', (e)=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = ()=>{
+    const nums = parseCsvStudentNumbers(reader.result);
+    if(nums.length === 0){ toast('No student numbers found in that file', 'error'); return; }
+    mcParsedStudents = nums;
+    $('mc-csv-chip').classList.remove('hidden');
+    $('mc-csv-summary').textContent = `${nums.length} student number${nums.length===1?'':'s'} loaded from ${file.name}`;
+  };
+  reader.onerror = ()=> toast('Could not read that file', 'error');
+  reader.readAsText(file);
+});
+$('mc-create-btn').addEventListener('click', async ()=>{
+  const name = $('mc-name').value.trim();
+  const moduleCode = $('mc-module').value.trim();
+  const statusEl = $('mc-status');
+  if(!name){ setStatus(statusEl, 'Please give the class a name.', 'error'); return; }
+  if(!mcParsedStudents || mcParsedStudents.length===0){ setStatus(statusEl, 'Please upload a CSV of student numbers first.', 'error'); return; }
+  $('mc-create-btn').disabled = true;
+  setStatus(statusEl, 'Creating class…', 'info');
+  try{
+    const studentsMap = {};
+    mcParsedStudents.forEach(n=>{ studentsMap[n] = true; });
+    const newRef = db.ref('classes').push();
+    await newRef.set({
+      lecturerId: lecturerProfile.uid,
+      lecturerName: lecturerProfile.name,
+      className: name,
+      moduleCode: moduleCode || '',
+      students: studentsMap,
+      createdAt: Date.now()
+    });
+    setStatus(statusEl, '', '');
+    toast('Class created with '+mcParsedStudents.length+' student'+(mcParsedStudents.length===1?'':'s'), 'success');
+    $('mc-name').value = ''; $('mc-module').value = ''; $('mc-csv-input').value = '';
+    mcParsedStudents = null;
+    $('mc-csv-chip').classList.add('hidden');
+    renderManageClasses();
+  }catch(err){
+    setStatus(statusEl, 'Could not create class: '+err.message, 'error');
+  }finally{
+    $('mc-create-btn').disabled = false;
+  }
+});
+function openClassRoster(classId){
+  activeClassId = classId;
+  nav('class-roster-screen');
+  renderClassRoster();
+}
+async function renderClassRoster(){
+  if(!activeClassId) return;
+  const snap = await db.ref('classes/'+activeClassId).once('value');
+  const cls = snap.val();
+  if(!cls){
+    $('cr-title').textContent = 'Class Roster';
+    $('cr-meta').textContent = '';
+    $('cr-list').innerHTML = `<div class="empty"><i class="fas fa-triangle-exclamation"></i><h4>Class not found</h4></div>`;
+    return;
+  }
+  const nums = Object.keys(cls.students||{}).sort();
+  $('cr-title').textContent = cls.className;
+  $('cr-meta').textContent = `${cls.moduleCode?cls.moduleCode+' · ':''}${nums.length} student${nums.length===1?'':'s'} · Created ${new Date(cls.createdAt).toLocaleDateString()}`;
+  $('cr-list').innerHTML = nums.length===0
+    ? `<div class="empty"><i class="fas fa-user-slash"></i><h4>No students in this class</h4></div>`
+    : nums.map(n=>`<div class="stud-row"><div class="stud-avatar">${esc(n.slice(-2))}</div><div style="flex:1;"><h4>#${esc(n)}</h4></div></div>`).join('');
+}
+$('cr-delete-btn').addEventListener('click', async ()=>{
+  if(!activeClassId) return;
+  if(!confirm('Delete this class? Existing sessions already created with this restriction keep their student list, but you will no longer be able to select this class for new sessions.')) return;
+  try{
+    await db.ref('classes/'+activeClassId).remove();
+    toast('Class deleted', 'success');
+    nav('manage-classes-screen');
+  }catch(err){
+    toast('Could not delete class: '+err.message, 'error');
+  }
+});
+
+/* ---------------------------------------------------------------------
    20. CREATE SESSION + QR (lecturer sets live GPS location + radius,
         and can optionally require a written reflection with a
         minimum word count before check-in is accepted)
@@ -1989,12 +2451,19 @@ function toggleReflectionRequirement(){
 $('cs-capture-location-btn').addEventListener('click', async ()=>{
   const btn = $('cs-capture-location-btn');
   btn.disabled = true;
-  btn.innerHTML = '<i class="fas fa-spinner spin"></i> Getting location…';
+  btn.innerHTML = '<i class="fas fa-spinner spin"></i> Getting precise location…';
   try{
-    const pos = await getGpsPosition();
+    const pos = await getBestGpsFix();
     capturedSessionLocation = pos;
-    $('cs-location-chip').classList.remove('hidden');
-    $('cs-location-chip').innerHTML = `<i class="fas fa-check-circle"></i> Location captured (±${Math.round(pos.accuracy)}m accuracy)`;
+    const chip = $('cs-location-chip');
+    chip.classList.remove('hidden');
+    if(pos.accuracy > 30){
+      chip.classList.add('warn');
+      chip.innerHTML = `<i class="fas fa-triangle-exclamation"></i> Location captured but accuracy is only ±${Math.round(pos.accuracy)}m — consider retrying outdoors or near a window for a tighter fix.`;
+    }else{
+      chip.classList.remove('warn');
+      chip.innerHTML = `<i class="fas fa-check-circle"></i> Location captured (±${Math.round(pos.accuracy)}m accuracy)`;
+    }
   }catch(err){
     toast('Could not get location: '+err.message, 'error');
   }finally{
@@ -2020,6 +2489,16 @@ $('generate-qr-btn').addEventListener('click', async ()=>{
     reflectionPrompt = $('cs-reflection-prompt').value.trim();
   }
 
+  const selectedClassId = $('cs-class-select').value;
+  let allowedStudents = null, restrictClassId = null, restrictClassName = null;
+  if(selectedClassId){
+    const cls = lecturerClasses[selectedClassId];
+    if(!cls){ setStatus(statusEl, 'That class could not be found — please reselect it.', 'error'); return; }
+    allowedStudents = cls.students || {};
+    restrictClassId = selectedClassId;
+    restrictClassName = cls.className;
+  }
+
   $('generate-qr-btn').disabled = true;
   setStatus(statusEl, 'Creating session…', 'info');
   try{
@@ -2039,6 +2518,11 @@ $('generate-qr-btn').addEventListener('click', async ()=>{
       sessionData.reflectionMinWords = reflectionMinWords;
       if(reflectionPrompt) sessionData.reflectionPrompt = reflectionPrompt;
     }
+    if(allowedStudents){
+      sessionData.classId = restrictClassId;
+      sessionData.className = restrictClassName;
+      sessionData.allowedStudents = allowedStudents;
+    }
     await newRef.set(sessionData);
     currentSessionId = newRef.key;
     renderQr(currentSessionId, moduleCode, venue);
@@ -2046,6 +2530,7 @@ $('generate-qr-btn').addEventListener('click', async ()=>{
     setStatus(statusEl, 'Session live! Students can check in now.', 'success');
     capturedSessionLocation = null;
     $('cs-location-chip').classList.add('hidden');
+    $('cs-class-select').value = '';
     reflectionRequired = false;
     $('cs-reflection-toggle').classList.remove('on');
     $('cs-reflection-options').classList.add('hidden');
@@ -2180,6 +2665,97 @@ $('export-csv-btn').addEventListener('click', async ()=>{
   URL.revokeObjectURL(url);
   toast('CSV exported','success');
 });
+
+/* ---------------------------------------------------------------------
+   22b. DIGITAL STUDENT ID CARD — auto-filled from the student's own
+        registration record. The barcode is regenerated (Code128) from
+        the exact text captured when they scanned their physical card
+        at sign-up, so it stays scannable; only the photo is editable
+        here, and it's compressed client-side before being saved.
+--------------------------------------------------------------------- */
+function renderDigitalCard(){
+  if(!studentProfile) return;
+  const parts = (studentProfile.name||'').trim().split(/\s+/).filter(Boolean);
+  const first = parts[0] || '—';
+  const rest = parts.slice(1).join(' ');
+  $('idc-name1').textContent = first.toUpperCase();
+  $('idc-name2').textContent = rest.toUpperCase();
+  $('idc-number').textContent = studentProfile.studentNumber || '—';
+  $('idc-regdate').textContent = studentProfile.createdAt ? new Date(studentProfile.createdAt).toLocaleDateString() : '—';
+  $('idc-year').textContent = studentProfile.createdAt ? new Date(studentProfile.createdAt).getFullYear() : new Date().getFullYear();
+
+  const photoBox = $('idc-photo-box'), placeholder = $('idc-photo-placeholder');
+  let img = photoBox.querySelector('img');
+  if(studentProfile.photoData){
+    if(!img){ img = document.createElement('img'); photoBox.insertBefore(img, photoBox.firstChild); }
+    img.src = studentProfile.photoData;
+    placeholder.style.display = 'none';
+  }else{
+    if(img) img.remove();
+    placeholder.style.display = 'block';
+  }
+
+  try{
+    if(typeof JsBarcode !== 'undefined' && studentProfile.cardBarcode){
+      JsBarcode('#idc-barcode-svg', studentProfile.cardBarcode, {
+        format: 'CODE128', displayValue: false, height: 46, margin: 0, background: 'transparent'
+      });
+    }
+  }catch(e){ console.error('Barcode render failed', e); }
+}
+
+$('idc-photo-input').addEventListener('change', e=>{
+  const file = e.target.files[0];
+  if(!file || !studentProfile) return;
+  const reader = new FileReader();
+  reader.onload = ev=>{
+    const image = new Image();
+    image.onload = async ()=>{
+      // Downscale/compress before saving so the stored payload stays small.
+      const targetW = 260, targetH = 320;
+      const canvas = document.createElement('canvas');
+      canvas.width = targetW; canvas.height = targetH;
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#dfe3e8'; ctx.fillRect(0,0,targetW,targetH);
+      const scale = Math.max(targetW/image.width, targetH/image.height);
+      const drawW = image.width*scale, drawH = image.height*scale;
+      ctx.drawImage(image, (targetW-drawW)/2, (targetH-drawH)/2, drawW, drawH);
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.82);
+      try{
+        await db.ref('students/'+studentProfile.uid+'/photoData').set(dataUrl);
+        studentProfile.photoData = dataUrl;
+        renderDigitalCard();
+        toast('Photo updated', 'success');
+      }catch(err){
+        toast('Could not save photo: '+err.message, 'error');
+      }
+    };
+    image.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+});
+
+async function resetCardPhoto(){
+  if(!studentProfile) return;
+  try{
+    await db.ref('students/'+studentProfile.uid+'/photoData').remove();
+    delete studentProfile.photoData;
+    renderDigitalCard();
+    toast('Photo removed', 'success');
+  }catch(err){
+    toast('Could not remove photo: '+err.message, 'error');
+  }
+}
+
+function downloadDigitalCard(){
+  if(typeof html2canvas === 'undefined'){ toast('Download tool failed to load', 'error'); return; }
+  html2canvas($('idc-card'), { scale: 3, backgroundColor: null }).then(canvas=>{
+    const link = document.createElement('a');
+    link.download = 'student-card-'+(studentProfile.studentNumber||'card')+'.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  });
+}
 
 /* ---------------------------------------------------------------------
    22. AUTH STATE OBSERVER (keeps students/lecturers signed in across
