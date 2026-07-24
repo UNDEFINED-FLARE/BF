@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <style>
 /* ===================================================================
    DESIGN TOKENS
@@ -592,6 +593,18 @@ padding-bottom:50px;
 .idc-controls{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:18px;}
 
 /* ===================================================================
+   VENUE BOUNDARY DRAWING (Leaflet map)
+=================================================================== */
+.venue-map-wrap{margin:14px 18px;border-radius:var(--r-md);overflow:hidden;box-shadow:var(--shadow-sm);border:1px solid var(--border);}
+#draw-venue-map{width:100%;height:320px;background:var(--surface-2);}
+.dv-controls{display:flex;gap:8px;margin:14px 18px 0;flex-wrap:wrap;}
+.dv-controls .btn{width:auto;padding:0 14px;flex:1;min-width:90px;}
+.dv-badge{
+  display:inline-flex;align-items:center;gap:6px;margin:0 18px;padding:6px 12px;border-radius:var(--r-pill);
+  background:var(--green-light);color:var(--green);font-size:.76rem;font-weight:700;
+}
+
+/* ===================================================================
    SKELETON
 =================================================================== */
 .skel{background:linear-gradient(90deg,var(--border) 25%,var(--surface-2) 50%,var(--border) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;border-radius:8px;}
@@ -737,11 +750,12 @@ padding-bottom:50px;
     <div class="hscroll" id="today-classes"><div class="skel" style="width:220px;height:90px;flex-shrink:0;"></div></div>
 
     <div class="section-title"><h3>Quick Actions</h3></div>
-    <div class="quick-actions">
+    <div class="quick-actions" style="grid-template-columns:repeat(5,1fr);">
       <div class="qa-btn" onclick="openSessionScan()" style="color:#4169E1"><i class="fas fa-qrcode" style="color:#4169E1"></i><span style="color:#4169E1">Scan QR</span></div>
       <div class="qa-btn" onclick="nav('active-classes-screen');renderActiveClasses()"><i class="fas fa-layer-group"style="color:#FA6632"></i><span style="color:#FA6632">Classes</span></div>
       <div class="qa-btn" onclick="nav('history-screen')"><i class="fas fa-clock-rotate-left" style="color:#4169E1"></i><span style="color:#4169E1">History</span></div>
-      <div class="qa-btn" onclick="nav('profile-screen')"><i class="fas fa-user" style="color:#FA6632"></i><span style="color:#FA6632">Profile</span></div>
+      <div class="qa-btn" onclick="nav('venues-map-screen')"><i class="fas fa-map" style="color:#FA6632"></i><span style="color:#FA6632">Venues</span></div>
+      <div class="qa-btn" onclick="nav('profile-screen')"><i class="fas fa-user" style="color:#4169E1"></i><span style="color:#4169E1">Profile</span></div>
     </div>
     <div class="section-title"><h3>Announcements</h3></div>
     <div id="home-announcements"><div class="skel" style="height:60px;margin:0 18px 12px;"></div></div>
@@ -754,6 +768,16 @@ padding-bottom:50px;
     <p style="font-size:.8rem;color:var(--text-soft);padding:14px 18px 0;">Select your class instead of scanning a QR code — you'll still need to verify your card and location.</p>
     <div id="active-classes-list" style="margin-top:10px;"><div class="skel" style="height:70px;margin:0 18px 10px;"></div></div>
     <div style="height:60px;"></div>
+  </div>
+
+  <!-- ================= VENUES MAP (student) ================= -->
+  <div id="venues-map-screen" class="screen">
+    <div class="topbar"><button class="icon-btn" onclick="nav('student-home-screen')"><i class="fas fa-arrow-left"></i></button><h2>Venues Map</h2><span style="width:38px;"></span></div>
+    <p style="font-size:.8rem;color:var(--text-soft);padding:14px 18px 0;line-height:1.5;">See where classes are held on campus, and which module or class is currently using each venue.</p>
+    <div class="venue-map-wrap"><div id="student-venues-map" style="height:260px;"></div></div>
+    <div class="section-title"><h3>Venues</h3></div>
+    <div id="venues-map-list"><div class="skel" style="height:80px;margin:0 18px 10px;"></div></div>
+    <div style="height:100px;"></div>
   </div>
 
   <!-- ================= SCAN ================= -->
@@ -939,10 +963,13 @@ padding-bottom:50px;
         <div style="font-size:0.62rem;color:var(--muted);letter-spacing:.4px;">Digital Attendance Register</div>
       </div>
       </div>
-      <div style="display:flex;gap:8px;">
-        <button class="icon-btn" onclick="nav('manage-classes-screen')" title="My Classes"><i class="fas fa-people-group"></i></button>
-        <button class="icon-btn" onclick="nav('post-update-screen');renderPostUpdateScreen()" ><i class="fas fa-bullhorn" style="color:#021945;"></i></button>
-        <button class="icon-btn" onclick="nav('lecturer-profile-screen')"><i class="fas fa-user"></i></button>
+      <div style="display:flex;gap:8px;overflow-x:auto;max-width:56vw;padding-bottom:2px;">
+        <button class="icon-btn" onclick="nav('analytics-screen')" title="Analytics" style="flex-shrink:0;"><i class="fas fa-chart-line"></i></button>
+        <button class="icon-btn" onclick="nav('manage-timetable-screen')" title="My Timetable" style="flex-shrink:0;"><i class="fas fa-calendar-days"></i></button>
+        <button class="icon-btn" onclick="nav('manage-classes-screen')" title="My Classes" style="flex-shrink:0;"><i class="fas fa-people-group"></i></button>
+        <button class="icon-btn hidden" id="admin-panel-btn" onclick="nav('admin-panel-screen')" title="Admin Panel" style="flex-shrink:0;"><i class="fas fa-user-shield"></i></button>
+        <button class="icon-btn" onclick="nav('post-update-screen');renderPostUpdateScreen()" style="flex-shrink:0;"><i class="fas fa-bullhorn" style="color:#021945;"></i></button>
+        <button class="icon-btn" onclick="nav('lecturer-profile-screen')" style="flex-shrink:0;"><i class="fas fa-user"></i></button>
       </div>
     </div>
     <div class="stat-grid">
@@ -957,6 +984,20 @@ padding-bottom:50px;
     <div style="height:100px;"></div>
   </div>
 
+  <!-- ================= ADMIN PANEL (designated admin only) ================= -->
+  <div id="admin-panel-screen" class="screen">
+    <div class="topbar"><button class="icon-btn" onclick="nav('lecturer-dashboard-screen')"><i class="fas fa-arrow-left"></i></button><h2><i class="fas fa-user-shield"></i> Admin Panel</h2><span style="width:38px;"></span></div>
+    <p style="font-size:.8rem;color:var(--text-soft);padding:14px 18px 0;line-height:1.5;">Institution-wide controls — only visible to the designated admin account. Regular lecturers select from what's set up here; they don't create it themselves.</p>
+    <div class="role-cards" style="padding:16px 20px;">
+      <div class="role-card lecturer" onclick="nav('manage-venues-screen')">
+        <div class="r-icon"><i class="fas fa-draw-polygon"></i></div>
+        <div><h3>Manage Venues</h3><p>Draw and maintain every campus venue boundary, shared across all lecturers' sessions and timetables.</p></div>
+        <i class="fas fa-chevron-right chevron"></i>
+      </div>
+    </div>
+    <div style="height:80px;"></div>
+  </div>
+
   <!-- ================= CREATE SESSION ================= -->
   <div id="create-session-screen" class="screen">
     <div class="topbar"><button class="icon-btn" onclick="nav('lecturer-dashboard-screen')"><i class="fas fa-arrow-left"></i></button><h2>New Session</h2><span style="width:38px;"></span></div>
@@ -965,17 +1006,23 @@ padding-bottom:50px;
       <div class="field"><label>Venue Name</label><div class="input-wrap"><i class="fas fa-location-dot"></i><input class="input" id="cs-venue" placeholder="e.g. Auditorium"></div></div>
       <div class="field">
         <label>Restrict To Class <span style="font-weight:400;color:var(--text-faint);">(optional)</span></label>
-        <select class="select" id="cs-class-select"><option value="">All students (no restriction)</option></select>
+        <select class="select class-restrict-select" id="cs-class-select"><option value="">All students (no restriction)</option></select>
         <p style="font-size:.72rem;color:var(--text-faint);margin-top:6px;line-height:1.5;">Only students on the chosen class list will see this session or be able to check in. <span style="color:var(--green);font-weight:700;cursor:pointer;" onclick="nav('manage-classes-screen')">Manage classes →</span></p>
       </div>
       <div class="field"><label>Date &amp; Time</label><input class="input no-icon" type="datetime-local" id="cs-time"></div>
 
       <div class="field">
-        <label>Class Location (required for GPS check)</label>
+        <label>Venue Boundary <span style="font-weight:400;color:var(--text-faint);">(recommended — far more accurate than a radius)</span></label>
+        <select class="select venue-poly-select" id="cs-venue-poly-select"><option value="">— Use a quick GPS pin + radius instead —</option></select>
+        <p style="font-size:.72rem;color:var(--text-faint);margin-top:6px;line-height:1.5;">A drawn boundary follows the real shape of the room, so a student two doors down can't fall inside a circle that overlaps their location. Venues are set up centrally by your administrator — ask them to add one if yours is missing.</p>
+      </div>
+
+      <div class="field">
+        <label>Class Location <span style="font-weight:400;color:var(--text-faint);">(fallback if no venue boundary is selected above)</span></label>
         <button class="btn btn-ghost" type="button" id="cs-capture-location-btn"><i class="fas fa-location-crosshairs"></i> Use My Current Location</button>
         <div id="cs-location-chip" class="confirm-chip hidden"><i class="fas fa-check-circle"></i> <span id="cs-location-text"></span></div>
       </div>
-      <div class="field"><label>Attendance Radius (metres)</label><div class="input-wrap"><i class="fas fa-ruler"></i><input class="input" type="number" id="cs-radius" value="50" min="10" max="1000"></div></div>
+      <div class="field"><label>Attendance Radius (metres) <span style="font-weight:400;color:var(--text-faint);">(ignored if a venue boundary is selected)</span></label><div class="input-wrap"><i class="fas fa-ruler"></i><input class="input" type="number" id="cs-radius" value="50" min="10" max="1000"></div></div>
 
       <div class="field">
         <label>QR Code Expires In</label>
@@ -1061,6 +1108,143 @@ padding-bottom:50px;
     <div style="height:60px;"></div>
   </div>
 
+  <!-- ================= MANAGE VENUES (lecturer) ================= -->
+  <div id="manage-venues-screen" class="screen">
+    <div class="topbar"><button class="icon-btn" onclick="nav('admin-panel-screen')"><i class="fas fa-arrow-left"></i></button><h2>Manage Venues (Admin)</h2><span style="width:38px;"></span></div>
+    <p style="font-size:.8rem;color:var(--text-soft);padding:14px 18px 0;line-height:1.5;">Draw the exact outline of a classroom or hall once. Every lecturer can then select it when creating a session or timetable entry — far more accurate than a simple radius around one pin, and no lecturer has to draw it themselves.</p>
+    <div style="margin:14px 18px;">
+      <button class="btn btn-primary" onclick="startNewVenue()"><i class="fas fa-draw-polygon"></i> + Draw New Venue</button>
+    </div>
+    <div class="section-title"><h3>All Venues</h3></div>
+    <div id="mv-list"><div class="skel" style="height:90px;margin:0 18px 10px;"></div></div>
+    <div style="height:80px;"></div>
+  </div>
+
+  <!-- ================= DRAW VENUE (lecturer) ================= -->
+  <div id="draw-venue-screen" class="screen">
+    <div class="topbar"><button class="icon-btn" onclick="nav('manage-venues-screen')"><i class="fas fa-arrow-left"></i></button><h2>Draw Venue Boundary</h2><span style="width:38px;"></span></div>
+    <p style="font-size:.8rem;color:var(--text-soft);padding:14px 18px 0;line-height:1.5;">Tap the map to place each corner of the room or hall, in order, tracing its real outline. Add at least 3 points.</p>
+    <div class="dv-badge"><i class="fas fa-map-pin"></i> <span id="dv-vertex-count">0 points</span></div>
+    <div class="venue-map-wrap"><div id="draw-venue-map"></div></div>
+    <div class="dv-controls">
+      <button class="btn btn-ghost" onclick="undoVenuePoint()"><i class="fas fa-rotate-left"></i> Undo</button>
+      <button class="btn btn-ghost" onclick="clearVenuePoints()"><i class="fas fa-eraser"></i> Clear</button>
+      <button class="btn btn-ghost" onclick="centerMapOnMe()"><i class="fas fa-location-crosshairs"></i> Locate Me</button>
+    </div>
+    <div class="form-card" style="margin-top:14px;">
+      <div class="field"><label>Venue Name</label><div class="input-wrap"><i class="fas fa-signs-post"></i><input class="input" id="dv-name" placeholder="e.g. Block C Auditorium"></div></div>
+      <button class="btn btn-primary" id="dv-save-btn" disabled><i class="fas fa-floppy-disk"></i> Save Venue</button>
+      <div class="status-msg" id="dv-status"></div>
+    </div>
+    <div style="height:80px;"></div>
+  </div>
+
+  <!-- ================= MANAGE TIMETABLE (lecturer) ================= -->
+  <div id="manage-timetable-screen" class="screen">
+    <div class="topbar"><button class="icon-btn" onclick="nav('lecturer-dashboard-screen')"><i class="fas fa-arrow-left"></i></button><h2>My Timetable</h2><span style="width:38px;"></span></div>
+    <p style="font-size:.8rem;color:var(--text-soft);padding:14px 18px 0;line-height:1.5;">Set up each recurring class once — module, venue, class list, reflection rules. When it's actually time to teach, just tap Activate to start a fresh live session in one go.</p>
+    <div style="margin:14px 18px;">
+      <button class="btn btn-primary" onclick="startNewTimetableEntry()"><i class="fas fa-plus"></i> + Add Timetable Entry</button>
+    </div>
+    <div class="section-title"><h3>Saved Entries</h3></div>
+    <div id="tt-list"><div class="skel" style="height:110px;margin:0 18px 10px;"></div></div>
+    <div style="height:80px;"></div>
+  </div>
+
+  <!-- ================= ADD / EDIT TIMETABLE ENTRY (lecturer) ================= -->
+  <div id="add-timetable-screen" class="screen">
+    <div class="topbar"><button class="icon-btn" onclick="nav('manage-timetable-screen')"><i class="fas fa-arrow-left"></i></button><h2 id="tt-form-title">New Timetable Entry</h2><span style="width:38px;"></span></div>
+    <div class="form-card">
+      <div class="field"><label>Module Code</label><div class="input-wrap"><i class="fas fa-book"></i><input class="input" id="tt-module" placeholder="e.g. CSC301"></div></div>
+      <div class="field"><label>Venue Name</label><div class="input-wrap"><i class="fas fa-location-dot"></i><input class="input" id="tt-venue" placeholder="e.g. Auditorium"></div></div>
+
+      <div class="field">
+        <label>Day(s) <span style="font-weight:400;color:var(--text-faint);">(for your own reference)</span></label>
+        <div class="input-wrap"><i class="fas fa-calendar-week"></i><input class="input" id="tt-days" placeholder="e.g. Monday, Wednesday"></div>
+      </div>
+      <div class="field"><label>Usual Start Time <span style="font-weight:400;color:var(--text-faint);">(optional)</span></label><input class="input no-icon" type="time" id="tt-time"></div>
+
+      <div class="field">
+        <label>Restrict To Class <span style="font-weight:400;color:var(--text-faint);">(optional)</span></label>
+        <select class="select class-restrict-select" id="tt-class-select"><option value="">All students (no restriction)</option></select>
+      </div>
+
+      <div class="field">
+        <label>Venue Boundary <span style="font-weight:400;color:var(--text-faint);">(recommended)</span></label>
+        <select class="select venue-poly-select" id="tt-venue-poly-select"><option value="">— Use a quick GPS pin + radius instead —</option></select>
+        <p style="font-size:.72rem;color:var(--text-faint);margin-top:6px;line-height:1.5;">With a drawn venue selected, Activate needs no location capture at all. Without one, you'll capture your position with one tap right when you activate. Venues are set up centrally by your administrator.</p>
+      </div>
+      <div class="field"><label>Attendance Radius (metres) <span style="font-weight:400;color:var(--text-faint);">(only used if no venue boundary is selected)</span></label><div class="input-wrap"><i class="fas fa-ruler"></i><input class="input" type="number" id="tt-radius" value="50" min="10" max="1000"></div></div>
+
+      <div class="field">
+        <label>QR Code Expires In</label>
+        <div class="expire-select" id="tt-expire-select">
+          <div class="expire-opt" data-min="5" onclick="setTtExpireOpt(this,5)">5 min</div>
+          <div class="expire-opt active" data-min="10" onclick="setTtExpireOpt(this,10)">10 min</div>
+          <div class="expire-opt" data-min="20" onclick="setTtExpireOpt(this,20)">20 min</div>
+          <div class="expire-opt" data-min="45" onclick="setTtExpireOpt(this,45)">45 min</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Class Reflection Requirement</label>
+        <div class="settings-row" style="border:1.5px solid var(--border);border-radius:var(--r-sm);background:var(--surface-2);padding:12px 14px;">
+          <i class="fas fa-pen-nib"></i><span>Require a written reflection</span>
+          <div class="toggle" id="tt-reflection-toggle" onclick="toggleTtReflectionRequirement()"><div class="knob"></div></div>
+        </div>
+        <div id="tt-reflection-options" class="hidden" style="margin-top:12px;">
+          <label>Minimum Word Count</label>
+          <div class="input-wrap"><i class="fas fa-font"></i><input class="input" type="number" id="tt-reflection-min-words" value="50" min="5" max="2000"></div>
+          <label style="margin-top:12px;">Prompt for Students <span style="font-weight:400;color:var(--text-faint);">(optional)</span></label>
+          <textarea class="input no-icon" id="tt-reflection-prompt" style="height:70px;resize:vertical;" placeholder="e.g. What was the most important thing you learned today?"></textarea>
+        </div>
+      </div>
+
+      <button class="btn btn-primary" id="tt-save-btn" style="margin-top:6px;"><i class="fas fa-floppy-disk"></i> Save Timetable Entry</button>
+      <div class="status-msg" id="tt-status"></div>
+    </div>
+    <div style="height:60px;"></div>
+  </div>
+
+  <!-- ================= ATTENDANCE ANALYTICS (lecturer) ================= -->
+  <div id="analytics-screen" class="screen">
+    <div class="topbar"><button class="icon-btn" onclick="nav('lecturer-dashboard-screen')"><i class="fas fa-arrow-left"></i></button><h2>Analytics &amp; Reports</h2><span style="width:38px;"></span></div>
+
+    <div class="stat-grid">
+      <div class="stat-box"><div class="s-icon" style="background:var(--green-light);color:var(--green);"><i class="fas fa-layer-group"></i></div><b id="ana-total-sessions">0</b><span>Sessions</span></div>
+      <div class="stat-box"><div class="s-icon" style="background:var(--gold-light);color:var(--gold);"><i class="fas fa-user-check"></i></div><b id="ana-total-checkins">0</b><span>Check-ins</span></div>
+      <div class="stat-box"><div class="s-icon" style="background:var(--success-light);color:var(--success);"><i class="fas fa-percent"></i></div><b id="ana-avg-turnout">—</b><span>Avg Turnout</span></div>
+      <div class="stat-box"><div class="s-icon" style="background:var(--danger-light);color:var(--danger);"><i class="fas fa-triangle-exclamation"></i></div><b id="ana-below-threshold">0</b><span>Below Threshold</span></div>
+    </div>
+
+    <div class="chart-card"><h4>Attendance Trend (last 10 sessions)</h4><canvas id="analytics-trend-chart"></canvas></div>
+
+    <div class="form-card" style="margin-top:0;">
+      <div class="field">
+        <label>Class</label>
+        <select class="select class-restrict-select" id="ana-class-select" data-placeholder="Overall (all sessions)"><option value="">Overall (all sessions)</option></select>
+      </div>
+      <div class="field"><label>Attendance Threshold (%)</label><div class="input-wrap"><i class="fas fa-percent"></i><input class="input" type="number" id="ana-threshold" value="75" min="0" max="100"></div></div>
+    </div>
+
+    <div class="section-title"><h3>Per-Student Breakdown</h3></div>
+    <div id="ana-student-table"><div class="empty"><i class="fas fa-chart-simple"></i><h4>Select a class above</h4><p>Per-student attendance % needs a class roster to compute against.</p></div></div>
+
+    <div style="display:flex;gap:10px;margin:16px 18px;">
+      <button class="btn btn-gold btn-sm" style="flex:1;" onclick="exportAnalyticsExcel()"><i class="fas fa-file-excel"></i> Export Excel</button>
+      <button class="btn btn-ghost btn-sm" style="flex:1;" onclick="exportAnalyticsPdf()"><i class="fas fa-file-pdf"></i> Export PDF</button>
+    </div>
+
+    <div class="section-title"><h3>Attendance Heat Map</h3></div>
+    <p style="font-size:.78rem;color:var(--text-soft);padding:0 18px;line-height:1.5;">Average check-ins by venue and day of week, across all your sessions. Darker cells mean higher turnout.</p>
+    <div class="chart-card" style="overflow-x:auto;">
+      <div id="heatmap-grid"><div class="skel" style="height:140px;"></div></div>
+    </div>
+    <div id="heatmap-insights" style="margin:0 18px 8px;"></div>
+
+    <div style="height:80px;"></div>
+  </div>
+
   <!-- ================= STUDENT LIST (lecturer) ================= -->
   <div id="student-list-screen" class="screen">
     <div class="topbar"><button class="icon-btn" onclick="nav('lecturer-dashboard-screen')"><i class="fas fa-arrow-left"></i></button><h2 id="stud-list-title">Students</h2><button class="icon-btn" id="export-csv-btn"><i class="fas fa-file-export"></i></button></div>
@@ -1123,6 +1307,10 @@ padding-bottom:50px;
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/JsBarcode/3.11.5/JsBarcode.all.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
@@ -1184,6 +1372,23 @@ let trendChartInstance = null;
 let lecturerClasses = {};       // classId -> { className, moduleCode, students:{studentNumber:true}, ... } for the logged-in lecturer
 let mcParsedStudents = null;    // student numbers parsed from the most recently uploaded CSV, awaiting "Create Class"
 let activeClassId = null;       // class currently open in the roster screen
+
+let allVenues = {};             // venueId -> { name, polygon:[{lat,lng},...], centroid, ... } — all admin-managed venues, shared by every lecturer and visible to students on the venues map
+let drawMap = null;             // Leaflet map instance for the venue-drawing screen
+let drawVertices = [];          // [{lat,lng}, ...] points placed so far while drawing
+let drawMarkers = [];           // Leaflet marker layers for each placed vertex
+let drawPolygonLayer = null;    // Leaflet polygon layer preview
+let editingVenueId = null;      // set when re-drawing/editing an existing saved venue
+let studentVenuesMap = null;    // Leaflet map instance for the student-facing Venues Map screen
+
+let lecturerTimetables = {};    // timetableId -> saved recurring-class template
+let editingTimetableId = null;  // set when editing an existing timetable entry
+let ttExpireMinutes = 10;       // QR expiry chosen on the add/edit timetable form
+let ttReflectionRequired = false; // reflection toggle state on the add/edit timetable form
+
+let analyticsSessions = [];        // all of the lecturer's sessions, cached for the Analytics screen
+let analyticsChartInstance = null; // Chart.js instance for the attendance-trend chart
+let lastAnalyticsBreakdown = null; // most recently computed per-student breakdown, used by the export buttons
 
 /* ---------------------------------------------------------------------
    4. HELPERS
@@ -1259,6 +1464,57 @@ function haversineMeters(lat1, lng1, lat2, lng2){
   const a = Math.sin(dLat/2)**2 + Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLng/2)**2;
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 }
+// Flattens lat/lng to local metres around an origin point — accurate
+// enough for building-sized areas, and lets us do plain 2D geometry
+// (point-in-polygon, distance-to-edge) instead of spherical math.
+function projectToMeters(lat, lng, originLat, originLng){
+  const x = (lng - originLng) * Math.cos(originLat * Math.PI/180) * 111320;
+  const y = (lat - originLat) * 110540;
+  return { x, y };
+}
+function pointInPolygon(pt, poly){
+  let inside = false;
+  for(let i=0, j=poly.length-1; i<poly.length; j=i++){
+    const xi=poly[i].x, yi=poly[i].y, xj=poly[j].x, yj=poly[j].y;
+    const intersect = ((yi>pt.y) !== (yj>pt.y)) && (pt.x < (xj-xi)*(pt.y-yi)/(yj-yi)+xi);
+    if(intersect) inside = !inside;
+  }
+  return inside;
+}
+function distToSegmentMeters(p, a, b){
+  const dx=b.x-a.x, dy=b.y-a.y;
+  const lenSq = dx*dx+dy*dy;
+  let t = lenSq===0 ? 0 : ((p.x-a.x)*dx + (p.y-a.y)*dy) / lenSq;
+  t = Math.max(0, Math.min(1, t));
+  const projX = a.x + t*dx, projY = a.y + t*dy;
+  return Math.hypot(p.x-projX, p.y-projY);
+}
+function distToPolygonEdgeMeters(pt, poly){
+  let min = Infinity;
+  for(let i=0, j=poly.length-1; i<poly.length; j=i++){
+    const d = distToSegmentMeters(pt, poly[j], poly[i]);
+    if(d<min) min = d;
+  }
+  return min;
+}
+// Checks a GPS fix against a drawn venue boundary (array of {lat,lng}).
+// Inside the polygon => always accepted. Just outside => accepted only
+// if the distance to the nearest edge is within the reading's own GPS
+// accuracy margin, same tolerance philosophy as the circular check.
+function isWithinVenuePolygon(gps, polygonLatLng){
+  if(!polygonLatLng || polygonLatLng.length < 3) return { ok:false, distance:null };
+  const origin = polygonLatLng[0];
+  const polyM = polygonLatLng.map(v=>projectToMeters(v.lat, v.lng, origin.lat, origin.lng));
+  const ptM = projectToMeters(gps.lat, gps.lng, origin.lat, origin.lng);
+  if(pointInPolygon(ptM, polyM)) return { ok:true, distance:0 };
+  const edgeDist = distToPolygonEdgeMeters(ptM, polyM);
+  return { ok: edgeDist <= (gps.accuracy||0), distance: edgeDist };
+}
+function polygonCentroid(points){
+  let x=0, y=0;
+  points.forEach(p=>{ x+=p.lat; y+=p.lng; });
+  return { lat: x/points.length, lng: y/points.length };
+}
 const GPS_MAX_ACCEPTABLE_ACCURACY = 100; // metres — readings worse than this are rejected outright
 const GPS_GOOD_ENOUGH_ACCURACY = 20;     // metres — stop early once we get a fix this good
 
@@ -1330,19 +1586,30 @@ function nav(screenId){
   window.scrollTo(0,0);
   const frame = $('frame'); if(frame) frame.scrollTop = 0;
 
-  const studentScreens = ['student-home-screen','active-classes-screen','history-screen','notifications-screen','profile-screen','edit-profile-screen','digital-card-screen'];
-  const lecturerScreens = ['lecturer-dashboard-screen','create-session-screen','student-list-screen','lecturer-profile-screen','post-update-screen','manage-classes-screen','class-roster-screen'];
+  const studentScreens = ['student-home-screen','active-classes-screen','history-screen','notifications-screen','profile-screen','edit-profile-screen','digital-card-screen','venues-map-screen'];
+  const lecturerScreens = ['lecturer-dashboard-screen','create-session-screen','student-list-screen','lecturer-profile-screen','post-update-screen','manage-classes-screen','class-roster-screen','manage-venues-screen','draw-venue-screen','manage-timetable-screen','add-timetable-screen','analytics-screen','admin-panel-screen'];
   $('student-nav').classList.toggle('hidden', !studentScreens.includes(screenId));
   $('lecturer-nav').classList.toggle('hidden', !lecturerScreens.includes(screenId));
 
   if(screenId !== 'scan-screen') stopScanner();
 
+  const adminOnlyScreens = ['admin-panel-screen','manage-venues-screen','draw-venue-screen'];
+  if(adminOnlyScreens.includes(screenId) && !(lecturerProfile && isAdminLecturer())){
+    toast('Only the admin account can access that', 'error');
+    if(lecturerProfile) return nav('lecturer-dashboard-screen');
+    return;
+  }
+
   if(lecturerProfile){
-    if(screenId === 'create-session-screen') fetchLecturerClasses();
+    if(screenId === 'create-session-screen' || screenId === 'add-timetable-screen'){ fetchLecturerClasses(); fetchAllVenues(); }
     if(screenId === 'manage-classes-screen') renderManageClasses();
+    if(screenId === 'manage-venues-screen') renderManageVenues();
+    if(screenId === 'manage-timetable-screen') renderManageTimetable();
+    if(screenId === 'analytics-screen') renderAnalytics();
   }
   if(studentProfile){
     if(screenId === 'digital-card-screen') renderDigitalCard();
+    if(screenId === 'venues-map-screen') renderVenuesMap();
   }
 }
 function navBottom(screenId, el, role){
@@ -1696,6 +1963,79 @@ function selectActiveClass(sessionId){
 }
 
 /* ---------------------------------------------------------------------
+   12b. VENUES MAP (student) — every admin-drawn venue plotted on a map,
+        with whichever module/class is currently live there (or was
+        most recently), so students can see at a glance where things
+        are happening on campus.
+--------------------------------------------------------------------- */
+async function renderVenuesMap(){
+  const vSnap = await db.ref('venues').once('value');
+  const venuesData = vSnap.val() || {};
+  const venues = Object.keys(venuesData).map(id=>({id, ...venuesData[id]})).filter(v=>v.polygon && v.polygon.length>=3);
+
+  const sSnap = await db.ref('sessions').once('value');
+  const sessionsData = sSnap.val() || {};
+  const sessions = Object.keys(sessionsData).map(id=>({id, ...sessionsData[id]}));
+
+  const now = Date.now();
+  const venueInfo = {};
+  venues.forEach(v=>{ venueInfo[v.id] = { live:null, recent:null }; });
+  sessions.forEach(s=>{
+    if(!s.venueId || !venueInfo[s.venueId]) return;
+    const isLive = s.expiresAt && s.expiresAt > now;
+    const bucket = isLive ? 'live' : 'recent';
+    if(!venueInfo[s.venueId][bucket] || (s.createdAt||0) > (venueInfo[s.venueId][bucket].createdAt||0)){
+      venueInfo[s.venueId][bucket] = s;
+    }
+  });
+
+  if(typeof L === 'undefined'){
+    $('student-venues-map').innerHTML = '<div class="empty"><i class="fas fa-map"></i><h4>Map failed to load</h4><p>Check your connection and try again.</p></div>';
+  }else{
+    if(studentVenuesMap){ studentVenuesMap.remove(); studentVenuesMap = null; }
+    const center = venues[0] ? venues[0].centroid : { lat:-22.9767, lng:30.4486 };
+    studentVenuesMap = L.map('student-venues-map').setView([center.lat, center.lng], 17);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 20,
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(studentVenuesMap);
+    venues.forEach(v=>{
+      const info = venueInfo[v.id];
+      const color = info.live ? '#1fae6b' : '#12305c';
+      const poly = L.polygon(v.polygon.map(p=>[p.lat, p.lng]), { color, weight:2, fillOpacity:.25 }).addTo(studentVenuesMap);
+      const label = info.live
+        ? `<strong>${esc(v.name)}</strong><br>${esc(info.live.moduleCode||'')}${info.live.className?' · '+esc(info.live.className):''}<br><span style="color:#1fae6b;">● Live now</span>`
+        : (info.recent
+          ? `<strong>${esc(v.name)}</strong><br>Last used: ${esc(info.recent.moduleCode||'')}${info.recent.className?' · '+esc(info.recent.className):''}`
+          : `<strong>${esc(v.name)}</strong><br>No sessions recorded yet`);
+      poly.bindPopup(label);
+    });
+    setTimeout(()=>{ if(studentVenuesMap) studentVenuesMap.invalidateSize(); }, 150);
+  }
+
+  const listEl = $('venues-map-list');
+  if(venues.length===0){
+    listEl.innerHTML = `<div class="empty"><i class="fas fa-map"></i><h4>No venues yet</h4><p>Check back once your institution has added venues.</p></div>`;
+    return;
+  }
+  listEl.innerHTML = venues.map(v=>{
+    const info = venueInfo[v.id];
+    const statusHtml = info.live
+      ? `<span class="session-status live"><i class="fas fa-circle" style="font-size:.5rem;"></i> Live now</span>`
+      : `<span class="session-status ended">Not active</span>`;
+    const moduleLine = info.live
+      ? `<i class="fas fa-book"></i> ${esc(info.live.moduleCode||'—')}${info.live.className?' · '+esc(info.live.className):''}`
+      : (info.recent
+        ? `<i class="fas fa-clock-rotate-left"></i> Last: ${esc(info.recent.moduleCode||'—')}${info.recent.className?' · '+esc(info.recent.className):''}`
+        : `<i class="fas fa-circle-question"></i> No sessions recorded yet`);
+    return `<div class="session-row" style="cursor:default;">
+      <div class="top"><h4>${esc(v.name)}</h4>${statusHtml}</div>
+      <div class="meta">${moduleLine}</div>
+    </div>`;
+  }).join('');
+}
+
+/* ---------------------------------------------------------------------
    13. QR / BARCODE SCANNER (shared by registration-card and session-QR
        contexts — box shape, formats, and hint text adapt to which one)
 --------------------------------------------------------------------- */
@@ -1835,18 +2175,31 @@ async function verifyGpsAndCheckIn(){
     return;
   }
 
-  const dist = haversineMeters(gps.lat, gps.lng, session.lat, session.lng);
-  const radius = session.radiusMeters || DEFAULT_RADIUS_METERS;
-  // Give some benefit of the doubt for GPS wobble: subtract the
-  // device's own accuracy margin from the measured distance so a
-  // student whose true position is inside the radius isn't unfairly
-  // rejected because of a noisy reading.
-  const effectiveDist = Math.max(0, dist - gps.accuracy);
-  if(effectiveDist > radius){
-    showScanResult('fail','Outside Attendance Area',
-      `You're about ${Math.round(dist)}m from ${session.venue||'the class'} (±${Math.round(gps.accuracy)}m accuracy). You need to be within ${radius}m to check in.`,
-      { retry:'gps' });
-    return;
+  if(session.venuePolygon && session.venuePolygon.length >= 3){
+    // Precise boundary check: is the student's GPS point inside the
+    // drawn venue shape (with a GPS-accuracy buffer at the edges)?
+    const result = isWithinVenuePolygon(gps, session.venuePolygon);
+    if(!result.ok){
+      const distText = result.distance!==null ? ` (about ${Math.round(result.distance)}m outside the boundary)` : '';
+      showScanResult('fail','Outside Venue Boundary',
+        `You don't appear to be inside ${session.venueName||session.venue||'the venue'}${distText}. Move inside the room and try again.`,
+        { retry:'gps' });
+      return;
+    }
+  }else{
+    const dist = haversineMeters(gps.lat, gps.lng, session.lat, session.lng);
+    const radius = session.radiusMeters || DEFAULT_RADIUS_METERS;
+    // Give some benefit of the doubt for GPS wobble: subtract the
+    // device's own accuracy margin from the measured distance so a
+    // student whose true position is inside the radius isn't unfairly
+    // rejected because of a noisy reading.
+    const effectiveDist = Math.max(0, dist - gps.accuracy);
+    if(effectiveDist > radius){
+      showScanResult('fail','Outside Attendance Area',
+        `You're about ${Math.round(dist)}m from ${session.venue||'the class'} (±${Math.round(gps.accuracy)}m accuracy). You need to be within ${radius}m to check in.`,
+        { retry:'gps' });
+      return;
+    }
   }
 
   pendingGps = gps;
@@ -2124,6 +2477,7 @@ $('ep-save-btn').addEventListener('click', async ()=>{
 --------------------------------------------------------------------- */
 async function renderLecturerDashboard(){
   if(!lecturerProfile) return;
+  $('admin-panel-btn').classList.toggle('hidden', !isAdminLecturer());
   if(dashSessionsRef) dashSessionsRef.off();
 
   const ref = db.ref('sessions').orderByChild('lecturerId').equalTo(lecturerProfile.uid);
@@ -2164,9 +2518,10 @@ function renderDashSessionList(sessions){
     const count = Object.keys(s.attendanceRecords||{}).length;
     const reflectionTag = s.requireReflection ? ` · <i class="fas fa-pen-nib"></i> ${s.reflectionMinWords||50}w reflection` : '';
     const classTag = s.className ? ` · <i class="fas fa-people-group"></i> ${esc(s.className)}` : '';
+    const venueTag = s.venueName ? ` · <i class="fas fa-draw-polygon"></i> ${esc(s.venueName)}` : '';
     return `<div class="session-row" onclick="openStudentList('${s.id}','${esc(s.moduleCode||'')}')">
       <div class="top"><h4>${esc(s.moduleCode||'Module')}</h4><span class="session-status ${live?'live':'ended'}">${live?'● Live':'Ended'}</span></div>
-      <div class="meta"><i class="fas fa-location-dot"></i> ${esc(s.venue||'')} · ${fmtTime(s.sessionTime)} · ${count} checked in${reflectionTag}${classTag}</div>
+      <div class="meta"><i class="fas fa-location-dot"></i> ${esc(s.venue||'')} · ${fmtTime(s.sessionTime)} · ${count} checked in${reflectionTag}${classTag}${venueTag}</div>
     </div>`;
   }).join('');
 }
@@ -2327,13 +2682,16 @@ async function fetchLecturerClasses(){
   populateClassSelect();
 }
 function populateClassSelect(){
-  const sel = $('cs-class-select');
-  if(!sel) return;
-  const current = sel.value;
+  const sels = document.querySelectorAll('.class-restrict-select');
+  if(!sels.length) return;
   const rows = Object.keys(lecturerClasses).map(id=>({id, ...lecturerClasses[id]})).sort((a,b)=>(a.className||'').localeCompare(b.className||''));
-  sel.innerHTML = `<option value="">All students (no restriction)</option>` +
-    rows.map(c=>`<option value="${c.id}">${esc(c.className)} (${Object.keys(c.students||{}).length})</option>`).join('');
-  if(rows.some(r=>r.id===current)) sel.value = current;
+  const optionsListHtml = rows.map(c=>`<option value="${c.id}">${esc(c.className)} (${Object.keys(c.students||{}).length})</option>`).join('');
+  sels.forEach(sel=>{
+    const current = sel.value;
+    const placeholder = sel.dataset.placeholder || 'All students (no restriction)';
+    sel.innerHTML = `<option value="">${esc(placeholder)}</option>` + optionsListHtml;
+    if(rows.some(r=>r.id===current)) sel.value = current;
+  });
 }
 async function renderManageClasses(){
   if(!lecturerProfile) return;
@@ -2434,6 +2792,618 @@ $('cr-delete-btn').addEventListener('click', async ()=>{
 });
 
 /* ---------------------------------------------------------------------
+   19c. VENUES — lecturer draws the real outline of a room/hall on a
+        map (instead of a single pin + radius). Sessions can attach a
+        venue's polygon; check-in then tests whether the student's GPS
+        point falls inside that shape (with a GPS-accuracy buffer),
+        which stops the "circle happens to reach the corridor/next
+        room" problem a simple radius has.
+--------------------------------------------------------------------- */
+async function fetchAllVenues(){
+  const snap = await db.ref('venues').once('value');
+  allVenues = snap.val() || {};
+  populateVenueSelect();
+}
+function populateVenueSelect(){
+  const sels = document.querySelectorAll('.venue-poly-select');
+  if(!sels.length) return;
+  const rows = Object.keys(allVenues).map(id=>({id, ...allVenues[id]})).sort((a,b)=>(a.name||'').localeCompare(b.name||''));
+  const optionsHtml = `<option value="">— Use a quick GPS pin + radius instead —</option>` +
+    rows.map(v=>`<option value="${v.id}">${esc(v.name)} (${(v.polygon||[]).length} pts)</option>`).join('');
+  sels.forEach(sel=>{
+    const current = sel.value;
+    sel.innerHTML = optionsHtml;
+    if(rows.some(r=>r.id===current)) sel.value = current;
+  });
+}
+async function renderManageVenues(){
+  if(!lecturerProfile) return;
+  if(!isAdminLecturer()){
+    toast('Only the admin account can manage venues', 'error');
+    nav('lecturer-dashboard-screen');
+    return;
+  }
+  await fetchAllVenues();
+  const el = $('mv-list');
+  const rows = Object.keys(allVenues).map(id=>({id, ...allVenues[id]})).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+  if(rows.length===0){
+    el.innerHTML = `<div class="empty"><i class="fas fa-draw-polygon"></i><h4>No venues drawn yet</h4><p>Tap "+ Draw New Venue" to outline your first classroom or hall.</p></div>`;
+    return;
+  }
+  el.innerHTML = rows.map(v=>{
+    const count = (v.polygon||[]).length;
+    return `<div class="session-row" style="cursor:default;">
+      <div class="top"><h4>${esc(v.name)}</h4><span class="session-status ended">${count} pt${count===1?'':'s'}</span></div>
+      <div class="meta">Created ${new Date(v.createdAt).toLocaleDateString()}</div>
+      <div style="display:flex;gap:8px;margin-top:10px;">
+        <button class="btn btn-ghost btn-sm" style="flex:1;" onclick="editVenue('${v.id}')"><i class="fas fa-pen"></i> Edit</button>
+        <button class="btn btn-danger btn-sm" style="flex:1;" onclick="deleteVenue('${v.id}')"><i class="fas fa-trash"></i> Delete</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+function startNewVenue(){
+  if(!isAdminLecturer()){ toast('Only the admin account can add venues', 'error'); return; }
+  editingVenueId = null;
+  $('dv-name').value = '';
+  setStatus($('dv-status'), '', '');
+  nav('draw-venue-screen');
+  setTimeout(()=>initDrawMap([]), 60);
+}
+function editVenue(venueId){
+  const v = allVenues[venueId];
+  if(!v) return;
+  editingVenueId = venueId;
+  $('dv-name').value = v.name || '';
+  setStatus($('dv-status'), '', '');
+  nav('draw-venue-screen');
+  setTimeout(()=>initDrawMap(v.polygon || []), 60);
+}
+async function deleteVenue(venueId){
+  if(!confirm('Delete this venue? Sessions already created with it keep their saved boundary, but you will no longer be able to select it for new sessions.')) return;
+  try{
+    await db.ref('venues/'+venueId).remove();
+    toast('Venue deleted', 'success');
+    renderManageVenues();
+  }catch(err){
+    toast('Could not delete venue: '+err.message, 'error');
+  }
+}
+function initDrawMap(existingPolygon){
+  if(typeof L === 'undefined'){ toast('Map library failed to load — check your connection', 'error'); return; }
+  if(drawMap){ drawMap.remove(); drawMap = null; }
+  drawVertices = (existingPolygon || []).map(v=>({ lat:v.lat, lng:v.lng }));
+  const center = drawVertices[0] || { lat:-22.9767, lng:30.4486 }; // fallback: Univen campus area
+  drawMap = L.map('draw-venue-map').setView([center.lat, center.lng], 19);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 20,
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(drawMap);
+  drawMap.on('click', e=>{
+    drawVertices.push({ lat: e.latlng.lat, lng: e.latlng.lng });
+    redrawVenuePolygon();
+  });
+  setTimeout(()=>{ if(drawMap) drawMap.invalidateSize(); }, 120);
+  redrawVenuePolygon();
+}
+function redrawVenuePolygon(){
+  if(!drawMap) return;
+  if(drawPolygonLayer){ drawMap.removeLayer(drawPolygonLayer); drawPolygonLayer = null; }
+  drawMarkers.forEach(m=>drawMap.removeLayer(m));
+  drawMarkers = [];
+  drawVertices.forEach(v=>{
+    const marker = L.circleMarker([v.lat, v.lng], { radius:6, color:'#0b1f3a', weight:2, fillColor:'#e0932c', fillOpacity:1 }).addTo(drawMap);
+    drawMarkers.push(marker);
+  });
+  if(drawVertices.length >= 2){
+    drawPolygonLayer = L.polygon(drawVertices.map(v=>[v.lat, v.lng]), { color:'#12305c', weight:2, fillOpacity:.15 }).addTo(drawMap);
+  }
+  $('dv-vertex-count').textContent = drawVertices.length + ' point' + (drawVertices.length===1?'':'s');
+  $('dv-save-btn').disabled = drawVertices.length < 3;
+}
+function undoVenuePoint(){
+  drawVertices.pop();
+  redrawVenuePolygon();
+}
+function clearVenuePoints(){
+  drawVertices = [];
+  redrawVenuePolygon();
+}
+async function centerMapOnMe(){
+  if(!drawMap) return;
+  try{
+    const pos = await getBestGpsFix();
+    drawMap.setView([pos.lat, pos.lng], 19);
+  }catch(err){
+    toast('Could not get your location: '+err.message, 'error');
+  }
+}
+$('dv-save-btn').addEventListener('click', async ()=>{
+  const name = $('dv-name').value.trim();
+  const statusEl = $('dv-status');
+  if(!name){ setStatus(statusEl, 'Please name this venue.', 'error'); return; }
+  if(drawVertices.length < 3){ setStatus(statusEl, 'Add at least 3 points to form a boundary.', 'error'); return; }
+  $('dv-save-btn').disabled = true;
+  setStatus(statusEl, 'Saving venue…', 'info');
+  try{
+    const centroid = polygonCentroid(drawVertices);
+    const payload = {
+      createdBy: lecturerProfile.uid,
+      name,
+      polygon: drawVertices,
+      centroid,
+      createdAt: Date.now()
+    };
+    if(editingVenueId){
+      await db.ref('venues/'+editingVenueId).update(payload);
+    }else{
+      await db.ref('venues').push(payload);
+    }
+    setStatus(statusEl, '', '');
+    toast('Venue saved', 'success');
+    editingVenueId = null;
+    nav('manage-venues-screen');
+  }catch(err){
+    setStatus(statusEl, 'Could not save venue: '+err.message, 'error');
+  }finally{
+    $('dv-save-btn').disabled = false;
+  }
+});
+
+/* ---------------------------------------------------------------------
+   19d. TIMETABLE TEMPLATES — a lecturer sets up each recurring class
+        once (module, venue, class restriction, venue boundary,
+        reflection rules, QR expiry), then taps "Activate" whenever
+        that class is actually happening to spin up a fresh live
+        session with all of that pre-filled — no re-entering details
+        every single time.
+--------------------------------------------------------------------- */
+function setTtExpireOpt(el, minutes){
+  document.querySelectorAll('#tt-expire-select .expire-opt').forEach(o=>o.classList.remove('active'));
+  el.classList.add('active');
+  ttExpireMinutes = minutes;
+}
+function toggleTtReflectionRequirement(){
+  ttReflectionRequired = !ttReflectionRequired;
+  $('tt-reflection-toggle').classList.toggle('on', ttReflectionRequired);
+  $('tt-reflection-options').classList.toggle('hidden', !ttReflectionRequired);
+}
+function resetTimetableForm(){
+  $('tt-module').value = ''; $('tt-venue').value = '';
+  $('tt-days').value = ''; $('tt-time').value = '';
+  $('tt-class-select').value = ''; $('tt-venue-poly-select').value = '';
+  $('tt-radius').value = 50;
+  ttExpireMinutes = 10;
+  document.querySelectorAll('#tt-expire-select .expire-opt').forEach(o=>o.classList.toggle('active', o.dataset.min==='10'));
+  ttReflectionRequired = false;
+  $('tt-reflection-toggle').classList.remove('on');
+  $('tt-reflection-options').classList.add('hidden');
+  $('tt-reflection-min-words').value = 50;
+  $('tt-reflection-prompt').value = '';
+  setStatus($('tt-status'), '', '');
+}
+function startNewTimetableEntry(){
+  editingTimetableId = null;
+  resetTimetableForm();
+  $('tt-form-title').textContent = 'New Timetable Entry';
+  nav('add-timetable-screen');
+}
+function editTimetableEntry(timetableId){
+  const t = lecturerTimetables[timetableId];
+  if(!t) return;
+  editingTimetableId = timetableId;
+  resetTimetableForm();
+  $('tt-form-title').textContent = 'Edit Timetable Entry';
+  $('tt-module').value = t.moduleCode || '';
+  $('tt-venue').value = t.venue || '';
+  $('tt-days').value = t.scheduleDays || '';
+  $('tt-time').value = t.scheduleTime || '';
+  $('tt-radius').value = t.radiusMeters || 50;
+  ttExpireMinutes = t.expireMinutes || 10;
+  document.querySelectorAll('#tt-expire-select .expire-opt').forEach(o=>o.classList.toggle('active', parseInt(o.dataset.min)===ttExpireMinutes));
+  if(t.requireReflection){
+    ttReflectionRequired = true;
+    $('tt-reflection-toggle').classList.add('on');
+    $('tt-reflection-options').classList.remove('hidden');
+    $('tt-reflection-min-words').value = t.reflectionMinWords || 50;
+    $('tt-reflection-prompt').value = t.reflectionPrompt || '';
+  }
+  nav('add-timetable-screen');
+  // Selects are (re)populated asynchronously by fetchLecturerClasses/
+  // fetchAllVenues (triggered by nav()) — set their values shortly after.
+  setTimeout(()=>{
+    if(t.classId) $('tt-class-select').value = t.classId;
+    if(t.venueId) $('tt-venue-poly-select').value = t.venueId;
+  }, 300);
+}
+async function deleteTimetableEntry(timetableId){
+  if(!confirm('Delete this timetable entry? This does not affect any sessions already activated from it.')) return;
+  try{
+    await db.ref('timetables/'+timetableId).remove();
+    toast('Timetable entry deleted', 'success');
+    renderManageTimetable();
+  }catch(err){
+    toast('Could not delete: '+err.message, 'error');
+  }
+}
+$('tt-save-btn').addEventListener('click', async ()=>{
+  const moduleCode = $('tt-module').value.trim();
+  const venue = $('tt-venue').value.trim();
+  const statusEl = $('tt-status');
+  if(!moduleCode || !venue){ setStatus(statusEl, 'Please fill in module and venue.', 'error'); return; }
+
+  const selectedClassId = $('tt-class-select').value;
+  const selectedVenueId = $('tt-venue-poly-select').value;
+  const radiusMeters = parseInt($('tt-radius').value) || DEFAULT_RADIUS_METERS;
+
+  let reflectionMinWords = null, reflectionPrompt = '';
+  if(ttReflectionRequired){
+    reflectionMinWords = parseInt($('tt-reflection-min-words').value) || 50;
+    if(reflectionMinWords < 5){ setStatus(statusEl, 'Reflection minimum word count should be at least 5.', 'error'); return; }
+    reflectionPrompt = $('tt-reflection-prompt').value.trim();
+  }
+
+  $('tt-save-btn').disabled = true;
+  setStatus(statusEl, 'Saving…', 'info');
+  try{
+    const payload = {
+      lecturerId: lecturerProfile.uid,
+      lecturerName: lecturerProfile.name,
+      moduleCode, venue,
+      scheduleDays: $('tt-days').value.trim(),
+      scheduleTime: $('tt-time').value,
+      radiusMeters,
+      expireMinutes: ttExpireMinutes,
+      requireReflection: !!ttReflectionRequired,
+      createdAt: Date.now()
+    };
+    if(ttReflectionRequired){
+      payload.reflectionMinWords = reflectionMinWords;
+      if(reflectionPrompt) payload.reflectionPrompt = reflectionPrompt;
+    }
+    if(selectedClassId){
+      const cls = lecturerClasses[selectedClassId];
+      if(cls){
+        payload.classId = selectedClassId;
+        payload.className = cls.className;
+        payload.allowedStudents = cls.students || {};
+      }
+    }
+    if(selectedVenueId){
+      const v = allVenues[selectedVenueId];
+      if(v){
+        payload.venueId = selectedVenueId;
+        payload.venuePolygon = v.polygon;
+        payload.venueCentroid = v.centroid;
+        payload.venueBoundaryName = v.name;
+      }
+    }
+    if(editingTimetableId){
+      await db.ref('timetables/'+editingTimetableId).update(payload);
+    }else{
+      await db.ref('timetables').push(payload);
+    }
+    setStatus(statusEl, '', '');
+    toast('Timetable entry saved', 'success');
+    editingTimetableId = null;
+    nav('manage-timetable-screen');
+  }catch(err){
+    setStatus(statusEl, 'Could not save: '+err.message, 'error');
+  }finally{
+    $('tt-save-btn').disabled = false;
+  }
+});
+async function renderManageTimetable(){
+  if(!lecturerProfile) return;
+  const el = $('tt-list');
+  const snap = await db.ref('timetables').orderByChild('lecturerId').equalTo(lecturerProfile.uid).once('value');
+  const data = snap.val() || {};
+  lecturerTimetables = data;
+  const rows = Object.keys(data).map(id=>({id, ...data[id]})).sort((a,b)=>(a.moduleCode||'').localeCompare(b.moduleCode||''));
+  if(rows.length===0){
+    el.innerHTML = `<div class="empty"><i class="fas fa-calendar-days"></i><h4>No timetable entries yet</h4><p>Tap "+ Add Timetable Entry" to set up your first recurring class.</p></div>`;
+    return;
+  }
+  el.innerHTML = rows.map(t=>{
+    const scheduleLine = [t.scheduleDays, t.scheduleTime].filter(Boolean).join(' · ');
+    const classTag = t.className ? ` · <i class="fas fa-people-group"></i> ${esc(t.className)}` : '';
+    const venueTag = t.venueBoundaryName ? ` · <i class="fas fa-draw-polygon"></i> ${esc(t.venueBoundaryName)}` : ' · <i class="fas fa-location-crosshairs"></i> Quick GPS pin';
+    const reflectionTag = t.requireReflection ? ` · <i class="fas fa-pen-nib"></i> ${t.reflectionMinWords||50}w reflection` : '';
+    return `<div class="session-row" style="cursor:default;">
+      <div class="top"><h4>${esc(t.moduleCode)}</h4><span class="session-status ended">${esc(t.expireMinutes||10)} min QR</span></div>
+      <div class="meta"><i class="fas fa-location-dot"></i> ${esc(t.venue)}${scheduleLine?' · '+esc(scheduleLine):''}</div>
+      <div class="meta">${venueTag}${classTag}${reflectionTag}</div>
+      <div style="display:flex;gap:8px;margin-top:10px;">
+        <button class="btn btn-primary btn-sm" style="flex:2;" onclick="activateTimetableEntry('${t.id}')"><i class="fas fa-bolt"></i> Activate Now</button>
+        <button class="btn btn-ghost btn-sm" style="flex:1;" onclick="editTimetableEntry('${t.id}')"><i class="fas fa-pen"></i></button>
+        <button class="btn btn-danger btn-sm" style="flex:1;" onclick="deleteTimetableEntry('${t.id}')"><i class="fas fa-trash"></i></button>
+      </div>
+    </div>`;
+  }).join('');
+}
+async function activateTimetableEntry(timetableId){
+  const t = lecturerTimetables[timetableId];
+  if(!t) return;
+  if(t.venuePolygon && t.venueCentroid){
+    // Fixed, previously-drawn boundary — no need to be standing there
+    // right now to activate; the shape itself doesn't move.
+    await launchSessionFromTimetable(t, t.venueCentroid.lat, t.venueCentroid.lng);
+  }else{
+    // Quick-pin method: capture wherever the lecturer is standing right
+    // now as the session's location, same as the manual flow.
+    toast('Getting your current location…', 'info');
+    try{
+      const pos = await getBestGpsFix();
+      await launchSessionFromTimetable(t, pos.lat, pos.lng);
+    }catch(err){
+      toast('Could not get your location: '+err.message, 'error');
+    }
+  }
+}
+async function launchSessionFromTimetable(t, lat, lng){
+  try{
+    const now = Date.now();
+    const expiresAt = now + (t.expireMinutes||10)*60000;
+    const newRef = db.ref('sessions').push();
+    const sessionData = {
+      moduleCode: t.moduleCode, venue: t.venue,
+      sessionTime: now, createdAt: now, expiresAt,
+      lecturerId: lecturerProfile.uid, lecturerName: lecturerProfile.name,
+      lat, lng, radiusMeters: t.radiusMeters || DEFAULT_RADIUS_METERS,
+      requireReflection: !!t.requireReflection,
+      attendanceRecords: {}
+    };
+    if(t.requireReflection){
+      sessionData.reflectionMinWords = t.reflectionMinWords || 50;
+      if(t.reflectionPrompt) sessionData.reflectionPrompt = t.reflectionPrompt;
+    }
+    if(t.classId){
+      sessionData.classId = t.classId;
+      sessionData.className = t.className;
+      sessionData.allowedStudents = t.allowedStudents || {};
+    }
+    if(t.venuePolygon){
+      sessionData.venuePolygon = t.venuePolygon;
+      sessionData.venueId = t.venueId;
+      sessionData.venueName = t.venueBoundaryName;
+    }
+    await newRef.set(sessionData);
+    currentSessionId = newRef.key;
+    nav('create-session-screen');
+    renderQr(currentSessionId, t.moduleCode, t.venue);
+    startQrCountdown(expiresAt);
+    toast('Session activated — students can check in now!', 'success');
+  }catch(err){
+    toast('Could not activate session: '+err.message, 'error');
+  }
+}
+
+/* ---------------------------------------------------------------------
+   19e. AUTOMATIC ABSENCE DETECTION — for a session restricted to a
+        class, once it has expired we know the full expected roster
+        (allowedStudents) and who actually checked in (attendanceRecords).
+        The first time any screen looks at a closed session like this,
+        we compute "everyone expected minus everyone who showed up" and
+        persist it as sessions/{id}/absentees, so the lecturer never
+        has to manually mark anyone absent. Sessions with no class
+        restriction have no fixed roster, so absence can't be computed
+        for them — there's no list of who was "supposed" to attend.
+--------------------------------------------------------------------- */
+async function ensureAbsenteesComputed(sessionId, session){
+  if(!session || !session.allowedStudents) return session;
+  if(!session.expiresAt || Date.now() < session.expiresAt) return session; // still open
+  if(session.absentees) return session; // already computed
+  const present = Object.keys(session.attendanceRecords || {});
+  const expected = Object.keys(session.allowedStudents || {});
+  const absentees = {};
+  expected.forEach(sn=>{ if(!present.includes(sn)) absentees[sn] = true; });
+  try{
+    await db.ref('sessions/'+sessionId+'/absentees').set(absentees);
+    session = { ...session, absentees };
+  }catch(e){
+    console.error('Could not persist absentees', e);
+  }
+  return session;
+}
+
+/* ---------------------------------------------------------------------
+   19f. ATTENDANCE ANALYTICS & HEAT MAP — real-time stats, a per-student
+        breakdown against a configurable attendance threshold, trend
+        charting, Excel/PDF export, and a venue×day heat map built from
+        the same session data.
+--------------------------------------------------------------------- */
+async function renderAnalytics(){
+  if(!lecturerProfile) return;
+  await fetchLecturerClasses();
+  const snap = await db.ref('sessions').orderByChild('lecturerId').equalTo(lecturerProfile.uid).once('value');
+  const data = snap.val() || {};
+  analyticsSessions = Object.keys(data).map(id=>({id, ...data[id]}));
+  await computeAndRenderAnalytics();
+  renderHeatmap();
+}
+$('ana-class-select').addEventListener('change', computeAndRenderAnalytics);
+$('ana-threshold').addEventListener('input', computeAndRenderAnalytics);
+
+async function computeAndRenderAnalytics(){
+  const sessions = analyticsSessions || [];
+  const selectedClassId = $('ana-class-select').value;
+  const threshold = parseFloat($('ana-threshold').value) || 75;
+
+  // Backfill absentees for any closed, class-restricted sessions in view.
+  for(let i=0; i<sessions.length; i++){
+    const s = sessions[i];
+    if(s.allowedStudents && s.expiresAt && Date.now() > s.expiresAt && !s.absentees){
+      sessions[i] = await ensureAbsenteesComputed(s.id, s);
+    }
+  }
+
+  const relevant = selectedClassId ? sessions.filter(s=>s.classId===selectedClassId) : sessions;
+  const totalSessions = relevant.length;
+  let totalCheckins = 0, turnoutSum = 0, turnoutCount = 0;
+
+  relevant.forEach(s=>{
+    const c = Object.keys(s.attendanceRecords||{}).length;
+    totalCheckins += c;
+    if(s.allowedStudents){
+      const expected = Object.keys(s.allowedStudents).length;
+      if(expected>0){ turnoutSum += (c/expected)*100; turnoutCount++; }
+    }
+  });
+
+  $('ana-total-sessions').textContent = totalSessions;
+  $('ana-total-checkins').textContent = totalCheckins;
+  $('ana-avg-turnout').textContent = turnoutCount>0 ? Math.round(turnoutSum/turnoutCount)+'%' : '—';
+
+  const trendSessions = relevant.slice().sort((a,b)=>(a.createdAt||0)-(b.createdAt||0)).slice(-10);
+  renderAnalyticsTrendChart(
+    trendSessions.map(s=>s.moduleCode||'—'),
+    trendSessions.map(s=>Object.keys(s.attendanceRecords||{}).length)
+  );
+
+  if(!selectedClassId){
+    $('ana-below-threshold').textContent = '—';
+    $('ana-student-table').innerHTML = `<div class="empty"><i class="fas fa-chart-simple"></i><h4>Select a class above</h4><p>Per-student attendance % needs a class roster to compute against.</p></div>`;
+    lastAnalyticsBreakdown = null;
+    return;
+  }
+
+  const cls = lecturerClasses[selectedClassId];
+  const roster = cls ? Object.keys(cls.students||{}) : [];
+  const breakdown = roster.map(sn=>{
+    let attended = 0, name = null;
+    relevant.forEach(s=>{
+      const rec = (s.attendanceRecords||{})[sn];
+      if(rec){ attended++; if(!name) name = rec.name; }
+    });
+    const pct = relevant.length>0 ? Math.round((attended/relevant.length)*100) : 0;
+    return { studentNumber: sn, name: name || 'Unknown (never checked in)', attended, total: relevant.length, pct };
+  }).sort((a,b)=>a.pct-b.pct);
+
+  lastAnalyticsBreakdown = { className: cls ? cls.className : '', threshold, rows: breakdown, sessionCount: relevant.length };
+
+  const belowCount = breakdown.filter(r=>r.pct < threshold).length;
+  $('ana-below-threshold').textContent = belowCount;
+
+  $('ana-student-table').innerHTML = breakdown.length===0
+    ? `<div class="empty"><i class="fas fa-user-slash"></i><h4>No students in this class</h4></div>`
+    : breakdown.map(r=>`
+      <div class="stud-row">
+        <div class="stud-avatar" style="${r.pct<threshold?'background:var(--danger-light);color:var(--danger);':''}">${esc(r.studentNumber.slice(-2))}</div>
+        <div style="flex:1;"><h4>${esc(r.name)}</h4><div class="meta">#${esc(r.studentNumber)} · ${r.attended}/${r.total} sessions</div></div>
+        <span class="badge ${r.pct<threshold?'absent':'present'}">${r.pct}%</span>
+      </div>`).join('');
+}
+function renderAnalyticsTrendChart(labels, values){
+  const ctx = document.getElementById('analytics-trend-chart');
+  if(!ctx) return;
+  if(analyticsChartInstance) analyticsChartInstance.destroy();
+  analyticsChartInstance = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels.length ? labels : ['—'],
+      datasets: [{ label:'Check-ins', data: values.length ? values : [0], borderColor:'#12305c', backgroundColor:'rgba(18,48,92,.12)', fill:true, tension:.3, pointRadius:3 }]
+    },
+    options: { responsive:true, plugins:{ legend:{ display:false } }, scales:{ y:{ beginAtZero:true, ticks:{ precision:0 } } } }
+  });
+}
+function exportAnalyticsExcel(){
+  if(!lastAnalyticsBreakdown){ toast('Select a class above first — export needs a class roster.', 'error'); return; }
+  if(typeof XLSX === 'undefined'){ toast('Export tool failed to load — check your connection.', 'error'); return; }
+  const { className, threshold, rows } = lastAnalyticsBreakdown;
+  const data = rows.map(r=>({
+    'Student Number': r.studentNumber,
+    'Name': r.name,
+    'Sessions Attended': r.attended,
+    'Total Sessions': r.total,
+    'Attendance %': r.pct,
+    'Below Threshold': r.pct < threshold ? 'YES' : ''
+  }));
+  const ws = XLSX.utils.json_to_sheet(data);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Attendance');
+  XLSX.writeFile(wb, (className || 'class') + '-attendance-report.xlsx');
+}
+function exportAnalyticsPdf(){
+  if(!lastAnalyticsBreakdown){ toast('Select a class above first — export needs a class roster.', 'error'); return; }
+  if(typeof window.jspdf === 'undefined'){ toast('PDF tool failed to load — check your connection.', 'error'); return; }
+  const { jsPDF } = window.jspdf;
+  const { className, threshold, rows, sessionCount } = lastAnalyticsBreakdown;
+  const doc = new jsPDF();
+  doc.setFontSize(14);
+  doc.text('Attendance Report — ' + (className || 'Class'), 14, 16);
+  doc.setFontSize(10);
+  doc.text(`Sessions: ${sessionCount}   Threshold: ${threshold}%   Generated: ${new Date().toLocaleString()}`, 14, 23);
+  doc.autoTable({
+    startY: 28,
+    head: [['Student Number','Name','Attended','Total','Attendance %','Below Threshold']],
+    body: rows.map(r=>[r.studentNumber, r.name, r.attended, r.total, r.pct+'%', r.pct<threshold?'YES':'']),
+    styles: { fontSize:9 },
+    headStyles: { fillColor:[11,31,58] }
+  });
+  doc.save((className || 'class') + '-attendance-report.pdf');
+}
+async function renderHeatmap(){
+  if(!lecturerProfile) return;
+  const sessions = analyticsSessions || [];
+  const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const venues = [...new Set(sessions.map(s=>s.venueName || s.venue || 'Unknown'))].sort();
+
+  if(venues.length===0){
+    $('heatmap-grid').innerHTML = `<div class="empty"><i class="fas fa-table-cells"></i><h4>No session data yet</h4><p>Create sessions to see attendance patterns build up here.</p></div>`;
+    $('heatmap-insights').innerHTML = '';
+    return;
+  }
+
+  const grid = {};
+  venues.forEach(v=>{ grid[v] = {}; dayNames.forEach(d=>{ grid[v][d] = { sum:0, count:0 }; }); });
+  sessions.forEach(s=>{
+    const venueKey = s.venueName || s.venue || 'Unknown';
+    const day = dayNames[new Date(s.sessionTime || s.createdAt || Date.now()).getDay()];
+    const checkins = Object.keys(s.attendanceRecords||{}).length;
+    if(!grid[venueKey]) grid[venueKey] = {};
+    if(!grid[venueKey][day]) grid[venueKey][day] = { sum:0, count:0 };
+    grid[venueKey][day].sum += checkins;
+    grid[venueKey][day].count += 1;
+  });
+
+  let maxAvg = 0;
+  venues.forEach(v=>dayNames.forEach(d=>{
+    const cell = grid[v][d];
+    const avg = cell.count ? cell.sum/cell.count : 0;
+    if(avg>maxAvg) maxAvg = avg;
+  }));
+
+  let html = '<table style="border-collapse:collapse;width:100%;font-size:.72rem;"><tr><th style="padding:6px;text-align:left;">Venue</th>' +
+    dayNames.map(d=>`<th style="padding:6px;">${d}</th>`).join('') + '</tr>';
+  venues.forEach(v=>{
+    html += `<tr><td style="padding:6px;font-weight:700;white-space:nowrap;">${esc(v)}</td>`;
+    dayNames.forEach(d=>{
+      const cell = grid[v][d];
+      const avg = cell.count ? cell.sum/cell.count : 0;
+      const intensity = maxAvg>0 ? avg/maxAvg : 0;
+      const bg = cell.count ? `rgba(18,48,92,${(0.1 + intensity*0.75).toFixed(2)})` : 'transparent';
+      const textColor = intensity>0.55 ? '#fff' : 'inherit';
+      html += `<td style="padding:6px;text-align:center;background:${bg};color:${textColor};border-radius:6px;">${cell.count ? Math.round(avg) : '—'}</td>`;
+    });
+    html += '</tr>';
+  });
+  html += '</table>';
+  $('heatmap-grid').innerHTML = html;
+
+  const venueAverages = venues.map(v=>{
+    let sum=0, count=0;
+    dayNames.forEach(d=>{ sum += grid[v][d].sum; count += grid[v][d].count; });
+    return { venue:v, avg: count ? sum/count : 0, sessions: count };
+  }).filter(v=>v.sessions>0).sort((a,b)=>b.avg-a.avg);
+
+  $('heatmap-insights').innerHTML = venueAverages.length===0 ? '' : `
+    <div style="font-size:.78rem;color:var(--text-soft);line-height:1.6;">
+      <i class="fas fa-arrow-trend-up" style="color:var(--success);"></i> Highest average turnout: <strong>${esc(venueAverages[0].venue)}</strong> (${Math.round(venueAverages[0].avg)} check-ins/session)<br>
+      <i class="fas fa-arrow-trend-down" style="color:var(--danger);"></i> Lowest average turnout: <strong>${esc(venueAverages[venueAverages.length-1].venue)}</strong> (${Math.round(venueAverages[venueAverages.length-1].avg)} check-ins/session)
+    </div>`;
+}
+
+/* ---------------------------------------------------------------------
    20. CREATE SESSION + QR (lecturer sets live GPS location + radius,
         and can optionally require a written reflection with a
         minimum word count before check-in is accepted)
@@ -2480,7 +3450,20 @@ $('generate-qr-btn').addEventListener('click', async ()=>{
   const statusEl = $('create-session-status');
 
   if(!moduleCode || !venue || !sessionTimeRaw){ setStatus(statusEl, 'Please fill in module, venue and date/time.', 'error'); return; }
-  if(!capturedSessionLocation){ setStatus(statusEl, 'Please capture the class location first — tap "Use My Current Location".', 'error'); return; }
+
+  const selectedVenueId = $('cs-venue-poly-select').value;
+  let venuePolygon = null, venueCentroid = null, venuePolyName = null;
+  if(selectedVenueId){
+    const v = allVenues[selectedVenueId];
+    if(!v){ setStatus(statusEl, 'That venue could not be found — please reselect it.', 'error'); return; }
+    venuePolygon = v.polygon;
+    venueCentroid = v.centroid;
+    venuePolyName = v.name;
+  }
+  if(!venuePolygon && !capturedSessionLocation){
+    setStatus(statusEl, 'Select a drawn venue boundary, or tap "Use My Current Location" for a quick GPS pin.', 'error');
+    return;
+  }
 
   let reflectionMinWords = null, reflectionPrompt = '';
   if(reflectionRequired){
@@ -2506,14 +3489,21 @@ $('generate-qr-btn').addEventListener('click', async ()=>{
     const now = Date.now();
     const expiresAt = now + expireMinutes*60000;
     const newRef = db.ref('sessions').push();
+    const locLat = venuePolygon ? venueCentroid.lat : capturedSessionLocation.lat;
+    const locLng = venuePolygon ? venueCentroid.lng : capturedSessionLocation.lng;
     const sessionData = {
       moduleCode, venue,
       sessionTime, createdAt: now, expiresAt,
       lecturerId: lecturerProfile.uid, lecturerName: lecturerProfile.name,
-      lat: capturedSessionLocation.lat, lng: capturedSessionLocation.lng, radiusMeters,
+      lat: locLat, lng: locLng, radiusMeters,
       requireReflection: !!reflectionRequired,
       attendanceRecords: {}
     };
+    if(venuePolygon){
+      sessionData.venuePolygon = venuePolygon;
+      sessionData.venueId = selectedVenueId;
+      sessionData.venueName = venuePolyName;
+    }
     if(reflectionRequired){
       sessionData.reflectionMinWords = reflectionMinWords;
       if(reflectionPrompt) sessionData.reflectionPrompt = reflectionPrompt;
@@ -2531,6 +3521,7 @@ $('generate-qr-btn').addEventListener('click', async ()=>{
     capturedSessionLocation = null;
     $('cs-location-chip').classList.add('hidden');
     $('cs-class-select').value = '';
+    $('cs-venue-poly-select').value = '';
     reflectionRequired = false;
     $('cs-reflection-toggle').classList.remove('on');
     $('cs-reflection-options').classList.add('hidden');
@@ -2612,9 +3603,10 @@ function watchStudentList(sessionId){
   if(studListRef) studListRef.off();
   const ref = db.ref('sessions/'+sessionId);
   studListRef = ref;
-  ref.on('value', snap=>{
-    const session = snap.val();
+  ref.on('value', async snap=>{
+    let session = snap.val();
     if(!session){ $('stud-list-body').innerHTML = `<div class="empty"><i class="fas fa-triangle-exclamation"></i><h4>Session not found</h4></div>`; return; }
+    session = await ensureAbsenteesComputed(sessionId, session);
     renderStudList(session);
   });
 }
@@ -2627,11 +3619,30 @@ function renderStudList(session){
   rows.sort((a,b)=>(b.timestamp||0)-(a.timestamp||0));
 
   const el = $('stud-list-body');
-  if(rows.length===0){
+
+  let absentHtml = '';
+  if(session.absentees){
+    let absentNums = Object.keys(session.absentees);
+    if(studSearchQ.trim()){
+      const q = studSearchQ.toLowerCase();
+      absentNums = absentNums.filter(sn=>sn.toLowerCase().includes(q));
+    }
+    if(absentNums.length>0){
+      absentHtml = `<div class="section-title" style="margin:18px 18px 6px;"><h3 style="font-size:.85rem;color:var(--danger);"><i class="fas fa-triangle-exclamation"></i> Absent (${absentNums.length})</h3></div>` +
+        absentNums.sort().map(sn=>`
+          <div class="stud-row">
+            <div class="stud-avatar" style="background:var(--danger-light);color:var(--danger);">${esc(sn.slice(-2))}</div>
+            <div style="flex:1;"><h4>#${esc(sn)}</h4><div class="meta">Did not check in — marked absent automatically</div></div>
+            <span class="badge absent">Absent</span>
+          </div>`).join('');
+    }
+  }
+
+  if(rows.length===0 && !absentHtml){
     el.innerHTML = `<div class="empty"><i class="fas fa-user-slash"></i><h4>No students yet</h4><p>Check back once students start checking in.</p></div>`;
     return;
   }
-  el.innerHTML = rows.map(r=>{
+  const presentHtml = rows.map(r=>{
     const reflectionHtml = r.reflection
       ? `<div class="meta" style="margin-top:6px;background:var(--surface-2);border-radius:var(--r-xs);padding:8px 10px;line-height:1.4;"><i class="fas fa-pen-nib"></i> ${esc(r.reflection)} <span style="color:var(--text-faint);">(${r.reflectionWordCount||countWords(r.reflection)} words)</span></div>`
       : (session.requireReflection ? `<div class="meta" style="margin-top:6px;color:var(--danger);"><i class="fas fa-triangle-exclamation"></i> No reflection submitted</div>` : '');
@@ -2644,6 +3655,7 @@ function renderStudList(session){
       ${reflectionHtml}
     </div>`;
   }).join('');
+  el.innerHTML = presentHtml + absentHtml;
 }
 $('stud-search').addEventListener('input', e=>{
   studSearchQ = e.target.value;
@@ -2652,9 +3664,15 @@ $('stud-search').addEventListener('input', e=>{
 $('export-csv-btn').addEventListener('click', async ()=>{
   if(!activeDashSession){ toast('Open a session first','error'); return; }
   const snap = await db.ref('sessions/'+activeDashSession).once('value');
-  const session = snap.val();
+  let session = snap.val();
   if(!session){ toast('Session not found','error'); return; }
+  session = await ensureAbsenteesComputed(activeDashSession, session);
   const rows = Object.entries(session.attendanceRecords||{}).map(([num,r])=>[num, r.name, 'Present', new Date(r.timestamp).toLocaleString(), r.reflection||'', r.reflectionWordCount||'']);
+  if(session.absentees){
+    Object.keys(session.absentees).forEach(num=>{
+      rows.push([num, '', 'Absent', '', '', '']);
+    });
+  }
   let csv = 'Student Number,Name,Status,Timestamp,Reflection,Reflection Word Count\n';
   rows.forEach(r=>{ csv += r.map(v=>`"${(v||'').toString().replace(/"/g,'""')}"`).join(',') + '\n'; });
   const blob = new Blob([csv], {type:'text/csv'});
