@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Yoco Payment</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f0f4f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            max-width: 480px;
+            width: 100%;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+        }
+        h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 8px;
+        }
+        .subtitle {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+        .product-card {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+            border: 1px solid #e5e7eb;
+        }
+        .product-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a1a2e;
+        }
+        .product-price {
+            font-size: 24px;
+            font-weight: 700;
+            color: #059669;
+            margin-top: 4px;
+        }
+        .form-group {
+            margin-bottom: 16px;
+        }
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 4px;
+        }
+        input {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+        input:focus {
+            outline: none;
+            border-color: #059669;
+            box-shadow: 0 0 0 3px rgba(5,150,105,0.1);
+        }
+        .pay-btn {
+            width: 100%;
+            padding: 14px;
+            background: #059669;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .pay-btn:hover {
+            background: #047857;
+        }
+        .pay-btn:active {
+            transform: scale(0.98);
+        }
+        .pay-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .status {
+            margin-top: 16px;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            display: none;
+        }
+        .status.success {
+            display: block;
+            background: #ecfdf5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+        .status.error {
+            display: block;
+            background: #fef2f2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+        }
+        .status.loading {
+            display: block;
+            background: #eff6ff;
+            color: #1e40af;
+            border: 1px solid #93c5fd;
+        }
+        .demo-badge {
+            display: inline-block;
+            background: #fef3c7;
+            color: #92400e;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+        .secure-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            color: #6b7280;
+            font-size: 12px;
+            margin-top: 16px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Demo Badge -->
+    <div class="demo-badge">🧪 Demo Mode (no real charges)</div>
+
+    <h1>💳 Pay with Yoco</h1>
+    <p class="subtitle">Secure card payment • Powered by Yoco</p>
+
+    <!-- Product Info -->
+    <div class="product-card">
+        <div class="product-name">📚 Student Essentials Bundle</div>
+        <div class="product-price">R 150.00</div>
+        <div style="color: #6b7280; font-size: 13px; margin-top: 4px;">Includes: Notebook, Pen Set & Calculator</div>
+    </div>
+
+    <!-- Buyer Form -->
+    <div class="form-group">
+        <label>Full Name *</label>
+        <input type="text" id="buyerName" placeholder="e.g. Thabo Nkosi" value="Demo User">
+    </div>
+    <div class="form-group">
+        <label>Email *</label>
+        <input type="email" id="buyerEmail" placeholder="you@example.com" value="demo@example.com">
+    </div>
+    <div class="form-group">
+        <label>WhatsApp (for order updates)</label>
+        <input type="tel" id="buyerPhone" placeholder="076 123 4567" value="0761234567">
+    </div>
+
+    <!-- Pay Button -->
+    <button class="pay-btn" id="payBtn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="1" y="4" width="22" height="16" rx="2" stroke="currentColor" />
+            <path d="M1 10h22" stroke="currentColor" />
+            <circle cx="7" cy="14" r="2" fill="currentColor" />
+        </svg>
+        Pay with Yoco
+    </button>
+
+    <!-- Status Messages -->
+    <div class="status" id="status"></div>
+
+    <div class="secure-badge">
+        <span>🔒</span> Secured by Yoco • PCI Compliant
+    </div>
+</div>
+
+<!-- Yoco SDK -->
+<script src="https://js.yoco.com/sdk/v1/yoco-sdk.js"></script>
+
+<script>
+    // ========================= CONFIG =========================
+    // Replace with your actual Yoco public key (pk_test_... for testing)
+    const YOCO_PUBLIC_KEY = "pk_test_49eccf33WkZVPEO6d184";
+
+    // ========================= STATE =========================
+    let yoco = null;
+
+    // Initialize Yoco SDK
+    try {
+        if (typeof YocoSDK !== 'undefined') {
+            yoco = new YocoSDK({ publicKey: YOCO_PUBLIC_KEY });
+            console.log('✅ Yoco SDK initialized');
+        } else {
+            console.warn('⚠️ Yoco SDK not loaded');
+        }
+    } catch (e) {
+        console.error('Failed to initialize Yoco:', e.message);
+    }
+
+    // ========================= DOM REFS =========================
+    const payBtn = document.getElementById('payBtn');
+    const statusEl = document.getElementById('status');
+    const buyerName = document.getElementById('buyerName');
+    const buyerEmail = document.getElementById('buyerEmail');
+    const buyerPhone = document.getElementById('buyerPhone');
+
+    // ========================= HELPERS =========================
+    function setStatus(message, type) {
+        statusEl.textContent = message;
+        statusEl.className = 'status ' + type;
+    }
+
+    function clearStatus() {
+        statusEl.className = 'status';
+        statusEl.textContent = '';
+    }
+
+    function validateForm() {
+        if (!buyerName.value.trim()) {
+            setStatus('Please enter your full name', 'error');
+            buyerName.focus();
+            return false;
+        }
+        if (!buyerEmail.value.trim() || !buyerEmail.value.includes('@')) {
+            setStatus('Please enter a valid email address', 'error');
+            buyerEmail.focus();
+            return false;
+        }
+        return true;
+    }
+
+    // ========================= PAYMENT HANDLER =========================
+    async function handlePayment() {
+        // Validate form
+        if (!validateForm()) return;
+
+        // Check Yoco is available
+        if (!yoco) {
+            setStatus('⚠️ Payment system is unavailable. Please try again later.', 'error');
+            return;
+        }
+
+        // Disable button and show loading
+        payBtn.disabled = true;
+        payBtn.innerHTML = '⏳ Processing...';
+        setStatus('Opening secure payment form...', 'loading');
+
+        // Product details
+        const amountInCents = 15000; // R150.00
+        const productName = 'Student Essentials Bundle';
+
+        // Buyer info
+        const buyer = {
+            name: buyerName.value.trim(),
+            email: buyerEmail.value.trim(),
+            phone: buyerPhone.value.trim() || 'Not provided'
+        };
+
+        try {
+            // Show Yoco popup
+            yoco.showPopup({
+                amountInCents: amountInCents,
+                currency: 'ZAR',
+                name: 'Venda Market',
+                description: productName,
+                metadata: {
+                    buyerName: buyer.name,
+                    buyerEmail: buyer.email,
+                    buyerPhone: buyer.phone
+                },
+                callback: function(result) {
+                    // This callback is triggered after the popup is closed
+                    // Result contains either an error or a payment token
+                    if (result.error) {
+                        // Payment failed or was cancelled
+                        console.error('Payment error:', result.error);
+                        setStatus('❌ ' + (result.error.message || 'Payment was declined or cancelled.'), 'error');
+                        resetButton();
+                        return;
+                    }
+
+                    // Payment was successful — we got a token
+                    // In production, you would send this token to your backend
+                    console.log('✅ Payment token received:', result.id);
+                    
+                    // Simulate backend verification (in production, call your server)
+                    setStatus('⏳ Verifying payment...', 'loading');
+                    
+                    // Simulate a brief delay for "processing"
+                    setTimeout(() => {
+                        // Success! (In a real app, you'd verify with your backend)
+                        setStatus(`✅ Payment successful! Thank you ${buyer.name}. Your order for "${productName}" is confirmed.`, 'success');
+                        
+                        // Log order details
+                        console.log('📦 Order placed:', {
+                            product: productName,
+                            amount: 'R' + (amountInCents / 100).toFixed(2),
+                            buyer: buyer,
+                            transactionId: result.id,
+                            timestamp: new Date().toISOString()
+                        });
+                        
+                        resetButton();
+                    }, 1500);
+                }
+            });
+        } catch (err) {
+            console.error('Yoco popup error:', err);
+            setStatus('❌ An unexpected error occurred. Please try again.', 'error');
+            resetButton();
+        }
+    }
+
+    function resetButton() {
+        payBtn.disabled = false;
+        payBtn.innerHTML = `
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="1" y="4" width="22" height="16" rx="2" stroke="currentColor" />
+                <path d="M1 10h22" stroke="currentColor" />
+                <circle cx="7" cy="14" r="2" fill="currentColor" />
+            </svg>
+            Pay with Yoco
+        `;
+    }
+
+    // ========================= EVENT LISTENERS =========================
+    payBtn.addEventListener('click', handlePayment);
+
+    // Allow Enter key to trigger payment
+    document.querySelectorAll('input').forEach(input => {
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                handlePayment();
+            }
+        });
+    });
+
+    // Clear status when user starts typing
+    document.querySelectorAll('input').forEach(input => {
+        input.addEventListener('input', clearStatus);
+    });
+
+    // ========================= INIT =========================
+    console.log('🚀 Yoco payment example ready');
+    console.log('📌 Replace YOCO_PUBLIC_KEY with your actual key');
+    console.log('💡 Mode: ' + (YOCO_PUBLIC_KEY.includes('pk_test_') ? 'TEST (simulated)' : 'LIVE'));
+
+    // ========================= PRODUCTION NOTES =========================
+    /*
+    === TO TAKE REAL PAYMENTS ===
+    
+    1. Get your Yoco keys from: https://business.yoco.com/settings/api-keys
+       - Use pk_test_... for testing (no real charges)
+       - Use pk_live_... for production (real charges)
+    
+    2. Replace YOCO_PUBLIC_KEY above with your actual key.
+    
+    3. For production, you MUST:
+       - Send the payment token (result.id) to your backend
+       - Verify the charge using Yoco's API with your secret key
+       - Store order details in your database
+       - Never expose your secret key in frontend code!
+    
+    === BACKEND EXAMPLE (Node.js) ===
+    
+    const yoco = require('yoco-sdk')({
+        secretKey: 'sk_test_...'
+    });
+    
+    app.post('/charge', async (req, res) => {
+        const { token, amount, currency } = req.body;
+        try {
+            const charge = await yoco.charges.create({
+                token: token,
+                amountInCents: amount,
+                currency: currency
+            });
+            // Save order to database...
+            res.json({ success: true, charge });
+        } catch (err) {
+            res.status(400).json({ error: err.message });
+        }
+    });
+    
+    === === ===
+    */
+</script>
+
+</body>
+</html>
