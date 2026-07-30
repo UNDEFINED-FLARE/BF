@@ -4,1235 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>UNIVEN Market</title>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
-            <link rel="icon" 
-      href="https://wqtquxcjqfrayowbioya.supabase.co/storage/v1/object/public/Univen/file_000000000e347243b7528a4a7f4bdf2a.png" 
-      type="image/png"
-    >
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
-
-<!-- AUTH SCREEN -->
-<div id="auth-screen" class="screen active">
-  <div class="auth-bg">
-    <div class="auth-blob b1"></div>
-    <div class="auth-blob b2"></div>
-    <div class="auth-blob b3"></div>
-  </div>
-  <div class="auth-container">
-  <img src="https://wqtquxcjqfrayowbioya.supabase.co/storage/v1/object/public/Univen/file_000000000e347243b7528a4a7f4bdf2a.png" alt="" style="float:left;border:none;width:65px;height:65px;margin-left:10px;"/>
-  <br>
-<p class="logo" style="color:peru;letter-spacing: none;">
-  univen
-</p>    <p class="auth-tagline">Creating future leaders</p>
-
-    <div class="auth-tabs">
-      <button class="auth-tab active" onclick="switchAuthTab('login')">Sign In</button>
-      <button class="auth-tab" onclick="switchAuthTab('register')">Join</button>
-    </div>
-
-    <div id="login-form" class="auth-form">
-      <div class="input-group">
-        <label>Student Email</label>
-        <input type="email" id="login-email" placeholder="studentnumber@mvula.univen.ac.za">
-      </div>
-      <div class="input-group">
-        <label>Password</label>
-        <input type="password" id="login-password" placeholder="••••••••">
-      </div>
-      <button class="btn-primary" onclick="loginUser()">Sign In</button>
-      <button class="btn-ghost" onclick="loginGuest()">Continue as Guest</button>
-    </div>
-
-    <div id="register-form" class="auth-form hidden">
-      <div class="input-group">
-        <label>Full Name</label>
-        <input type="text" id="reg-name" placeholder="e.g. Lesedi Kekana">
-      </div>
-      <div class="input-group">
-        <label>Student Email</label>
-        <input type="email" id="reg-email" placeholder="studentnumber@mvula.univen.ac.za">
-      </div>
-      <div class="input-group">
-        <label>Role</label>
-        <select id="reg-role">
-          <option value="student">Student</option>
-          <option value="faculty">Faculty</option>
-          <option value="staff">Staff</option>
-        </select>
-      </div>
-      <div class="input-group">
-        <label>Password</label>
-        <input type="password" id="reg-password" placeholder="Min. 6 characters">
-      </div>
-      <button class="btn-primary" onclick="registerUser()">Create Account</button>
-    </div>
-
-    <p id="auth-error" class="auth-error hidden"></p>
-  </div>
-</div>
-
-<div id="tab-login">
-  
-</div>
-<!-- MAIN APP -->
-<div id="app-screen" class="screen">
-
-  <!-- TOP HEADER -->
-            <div class="hdrPage">
-
-
-  <img src="https://wqtquxcjqfrayowbioya.supabase.co/storage/v1/object/public/Univen/file_000000000e347243b7528a4a7f4bdf2a.png" alt="" style="float:left;border:none;width:65px;height:65px;margin-left:10px;"/>
-  <br>
-        <div style="font-family:'Sora',sans-serif;font-size:0.95rem;font-weight:700;line-height:1.1;">UNIVEN <span style="color:var(--green)">Market</span></div>
-        <div style="font-size:0.62rem;color:var(--muted);letter-spacing:.4px;">UNIVEN CAMPUS MARKETPLACE</div>
-
-
-</div>
-
-
-
-
-
-
-
-<!-- FEED FILTERS -->
-
-
-  <!-- SEARCH BAR (hidden by default) -->
-  <div id="search-bar" class="search-bar hidden">
-    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-    <input type="text" id="search-input" placeholder="Search posts, hashtags, people..." oninput="searchPosts(this.value)">
-    <button onclick="closeSearch()">✕</button>
-  </div>
-
-  <!-- PAGE CONTENT AREA -->
-  <main class="content-area" id="content-area">
-
-
-
-    <!-- HOME FEED -->
-    <section id="page-home" class="page " >
-      <div class="feed-filters" id="feed-filters">
-  <button class="filter-btn active" data-filter="latest" onclick="setFilter('latest', this)">🔥 Latest</button>
-  <button class="filter-btn" data-filter="smart" onclick="setFilter('smart', this)">⚡ Smart Feed</button>
-  <button class="filter-btn" data-filter="following" onclick="setFilter('following', this)">👥 Following</button>
-</div>
-  <div class="hero-strip">
-    <div class="hero-logo">
-      <img src="https://wqtquxcjqfrayowbioya.supabase.co/storage/v1/object/public/Univen/file_000000000e347243b7528a4a7f4bdf2a.png" alt="">
-      <span>UNIVEN CHATS  <small>Student markets</small></span>
-    </div>
-
-  </div>
-
-            <div class="pageName" style="color:RGB(65, 105, 225);" id="pageName">
-
-
-
-            <div class="user-actions">
-              <div class="action-icon" class="icon-btn" onclick="openSearch()">
-                <i class="fas fa-search"></i>
-              </div>
-              <div class="action-icon" onclick="showToast('Notifications coming soon!')"onclick="showToast('Notifications coming soon!')">
-                <i class="fas fa-bell"></i>
-                <div class="notification-badge">•</div>
-              </div>
-
-                    <div class="header-avatar" onclick="goToProfile()">
-        <img id="header-avatar-img" src="" alt="">
-        <span id="header-avatar-initials"></span>
-      </div>
-
-            </div>
-    </div>
-
-
-      <div id="posts-container" class="posts-container">
-        <div class="loading-posts">
-          <div class="spinner"></div>
-          <p>Loading feed...</p>
-        </div>
-      </div>
-        <button class="fab" id="fab" onclick="openComposer()">
-    <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-  </button>
-    </section>
-
-    <!-- NEWS PAGE -->
-    <section id="page-news" class="page">
-      <div class="page-header-inner">
-        <h2>📰 Official Notices</h2>
-        <p>University announcements & events</p>
-      </div>
-      <div id="news-container" class="posts-container"></div>
-    </section>
-
-    <!-- Q&A PAGE -->
-    <section id="page-qa" class="page">
-      <div class="page-header-inner">
-        <h2>❓ Campus Q&A</h2>
-        <p>Ask. Answer. Learn together.</p>
-      </div>
-      <div id="qa-container" class="posts-container"></div>
-    </section>
-
-    <!-- Market PAGE -->
-    <section id="page-Market" class="page active">
-    <div id="marketplace-screen" class="screen active">
-
-  <!-- TOP NAV -->
-  <div class="pageName">
-
-    <div style="display:flex;gap:0.4rem;align-items:center;">
-      <button class="nav-btn nav-btn-ghost" id="wishlist-nav-btn" style="position:relative;width:36px;padding:0;justify-content:center;">
-        <i class="fas fa-heart"></i>
-        <span class="notification-badge hidden" id="wishlist-count-badge">0</span>
-      </button>
-      <button class="nav-btn nav-btn-ghost" id="track-order-btn" style="gap:4px;"><i class="fas fa-box-open"></i> Track</button>
-      <button class="nav-btn nav-btn-gold" id="open-seller-btn"><i class="fas fa-store"></i> Sell</button>
-    </div>
-  </div>
-
-  <!-- HERO -->
-  <div class="hero-strip">
-    <div class="hero-logo">
-      <img src="https://wqtquxcjqfrayowbioya.supabase.co/storage/v1/object/public/Univen/file_000000000e347243b7528a4a7f4bdf2a.png" alt="">
-      <span>UNIVEN   <small>Student markets</small></span>
-    </div>
-    <div class="hero-stats">
-      <div class="hero-stat"><div class="num" id="stat-products">—</div><div class="lbl">Products</div></div>
-      <div class="hero-stat"><div class="num" id="stat-sellers">—</div><div class="lbl">Sellers</div></div>
-      <div class="hero-stat"><div class="num" id="stat-orders">—</div><div class="lbl">Today's Orders</div></div>
-    </div>
-  </div>
-
-  <!-- PROMO BANNER -->
-  <div class="promo-banner" id="promo-banner" style="margin-top:0.8rem;">
-    <span style="font-size:1.8rem;flex-shrink:0">🚀</span>
-    <div class="promo-text">
-      <strong>Sell to 14,000+ UNIVEN students</strong>
-      <small>Free to list · No commission · WhatsApp ordering</small>
-    </div>
-    <button class="promo-close" onclick="document.getElementById('promo-banner').remove()">✕</button>
-  </div>
-
-  <!-- SEARCH -->
-  <div class="search-wrap" style="margin-top:0.8rem;">
-    <div class="search-row">
-      <div class="search-input-wrap">
-        <i class="fas fa-search"></i>
-        <input type="text" id="market-search" placeholder="Search food, print, clothes…" autocomplete="off">
-      </div>
-      <button class="btn-search" id="search-btn"><i class="fas fa-sliders"></i></button>
-    </div>
-    <div class="cats" id="cats">
-      <span class="cat active" data-cat="all">✨ All</span>
-      <span class="cat" data-cat="Food">🍔 Food</span>
-      <span class="cat" data-cat="Clothing">👕 Clothing</span>
-      <span class="cat" data-cat="Printing">🖨️ Print</span>
-      <span class="cat" data-cat="Beauty">💇 Beauty</span>
-      <span class="cat" data-cat="Services">📚 Services</span>
-      <span class="cat" data-cat="Electronics">📱 Electronics</span>
-      <span class="cat" data-cat="Stationery">✏️ Stationery</span>
-      <span class="cat" data-cat="Groceries">🛒 Groceries</span>
-    </div>
-  </div>
-
-  <!-- SORT -->
-  <div class="sort-bar">
-    <span class="result-count" id="result-count">Loading…</span>
-    <select class="sort-select" id="sort-select">
-      <option value="newest">Newest First</option>
-      <option value="price-asc">Price: Low–High</option>
-      <option value="price-desc">Price: High–Low</option>
-      <option value="rating">Top Rated</option>
-    </select>
-  </div>
-
-  <!-- CARDS -->
-  <div class="cards-grid" id="cards-grid">
-    <div class="card" style="height:280px"><div class="skeleton" style="width:100%;height:140px"></div><div style="padding:.75rem"><div class="skeleton" style="height:14px;margin-bottom:6px;width:70%"></div><div class="skeleton" style="height:18px;margin-bottom:6px;width:40%"></div><div class="skeleton" style="height:10px;margin-bottom:14px;width:90%"></div><div class="skeleton" style="height:32px;border-radius:40px"></div></div></div>
-    <div class="card" style="height:280px"><div class="skeleton" style="width:100%;height:140px"></div><div style="padding:.75rem"><div class="skeleton" style="height:14px;margin-bottom:6px;width:70%"></div><div class="skeleton" style="height:18px;margin-bottom:6px;width:40%"></div><div class="skeleton" style="height:10px;margin-bottom:14px;width:90%"></div><div class="skeleton" style="height:32px;border-radius:40px"></div></div></div>
-    <div class="card" style="height:280px"><div class="skeleton" style="width:100%;height:140px"></div><div style="padding:.75rem"><div class="skeleton" style="height:14px;margin-bottom:6px;width:70%"></div><div class="skeleton" style="height:18px;margin-bottom:6px;width:40%"></div><div class="skeleton" style="height:10px;margin-bottom:14px;width:90%"></div><div class="skeleton" style="height:32px;border-radius:40px"></div></div></div>
-    <div class="card" style="height:280px"><div class="skeleton" style="width:100%;height:140px"></div><div style="padding:.75rem"><div class="skeleton" style="height:14px;margin-bottom:6px;width:70%"></div><div class="skeleton" style="height:18px;margin-bottom:6px;width:40%"></div><div class="skeleton" style="height:10px;margin-bottom:14px;width:90%"></div><div class="skeleton" style="height:32px;border-radius:40px"></div></div></div>
-  </div>
-
-  <!-- CART FAB -->
-  <button class="fab hidden" id="cart-fab">
-    <i class="fas fa-shopping-bag"></i>
-    <span class="fab-count" id="cart-count">0</span>
-  </button>
-</div>
-
-<!-- ===== SELLER SCREEN ===== -->
-<div id="seller-screen" class="screen">
-  <div class="pageName">
-    <h2><i class="fas fa-store" style="color:var(--green);margin-right:5px;"></i> Seller Central</h2>
-    <div style="display:flex;gap:0.4rem;">
-      <button class="nav-btn nav-btn-ghost" id="back-market-btn"><i class="fas fa-arrow-left"></i> Market</button>
-      <button class="nav-btn nav-btn-ghost hidden" id="logout-btn" style="color:var(--danger);border-color:#fcd5d5;"><i class="fas fa-sign-out-alt"></i></button>
-    </div>
-  </div>
-  <div id="seller-body"></div>
-</div>
-
-<!-- ===== ORDER MODAL ===== -->
-<div class="modal-overlay hidden" id="order-modal">
-  <div class="modal-box">
-    <span class="modal-handle"></span>
-    <div class="modal-header">
-      <h3><i class="fas fa-bolt" style="color:var(--green)"></i> Place Order</h3>
-      <button class="close-btn" id="close-order-modal">&times;</button>
-    </div>
-    <div id="order-product-preview"></div>
-    <div class="form-group">
-      <label>Quantity</label>
-      <div class="qty-control">
-        <button class="qty-btn" id="qty-minus">−</button>
-        <span class="qty-display" id="qty-display">1</span>
-        <button class="qty-btn" id="qty-plus">+</button>
-      </div>
-    </div>
-    <div class="form-group"><label>Your Name *</label><input class="input" id="buyer-name" placeholder="Full name"></div>
-    <div class="form-group"><label>WhatsApp Number *</label><input class="input" id="buyer-phone" type="tel" placeholder="e.g. 0761234567"></div>
-    <div class="form-group"><label>Campus Location / Residence</label><input class="input" id="buyer-location" placeholder="e.g. Goede Hoop Res, Block C"></div>
-    <div class="form-group"><label>Special Request (optional)</label><textarea class="textarea" id="order-note" placeholder="Any special instructions…"></textarea></div>
-    <div class="total-line"><span>Total</span><span id="order-total">R 0.00</span></div>
-    <button class="btn-full btn-full-green" id="submit-order-btn"><i class="fas fa-check"></i> Confirm Order</button>
-    <div class="or-divider">or</div>
-    <button class="btn-full btn-full-wa" id="whatsapp-order-btn"><i class="fab fa-whatsapp"></i> Order via WhatsApp</button>
-  </div>
-</div>
-
-<!-- ===== TRACK MODAL ===== -->
-<div class="modal-overlay hidden" id="track-modal">
-  <div class="modal-box">
-    <span class="modal-handle"></span>
-    <div class="modal-header"><h3><i class="fas fa-box-open" style="color:var(--green)"></i> Track Order</h3><button class="close-btn" id="close-track-modal">&times;</button></div>
-    <div class="form-group"><label>Enter your Order ID</label><input class="input" id="track-input" placeholder="e.g. VM123456"></div>
-    <button class="btn-full btn-full-green" id="do-track-btn">Track <i class="fas fa-arrow-right"></i></button>
-    <div id="track-result" style="margin-top:1rem"></div>
-  </div>
-</div>
-
-<!-- ===== PRODUCT DETAIL DRAWER ===== -->
-<div class="detail-drawer hidden" id="detail-drawer">
-  <div class="detail-content" id="detail-content"></div>
-</div>
-
-<!-- ===== CART DRAWER ===== -->
-<div class="cart-drawer" id="cart-drawer">
-  <div class="modal-header">
-    <h3><i class="fas fa-shopping-bag" style="color:var(--green)"></i> My Cart</h3>
-    <button class="close-btn" id="close-cart">&times;</button>
-  </div>
-  <div id="cart-items"></div>
-  <button class="btn-full btn-full-green" id="checkout-cart-btn" style="margin-top:0.8rem;"><i class="fas fa-bolt"></i> Quick Checkout</button>
-</div>
-
-<!-- TOAST -->
-<div class="toast1 hidden" id="toast1"></div>  </section>
-
-    <!-- GROUPS PAGE -->
-    <section id="page-groups" class="page" style="display: none;">
-      <div class="page-header-inner">
-        <h2>👥 Groups</h2>
-        <p>Study groups, clubs & departments</p>
-      </div>
-      <div class="groups-grid">
-        <div class="group-card" onclick="openGroup('accounting')">
-          <div class="group-icon" style="background:#0B1F3A">📊</div>
-          <div class="group-info">
-            <h4>Accounting 101</h4>
-            <p>342 members · Active</p>
-          </div>
-          <button class="join-btn">Join</button>
-        </div>
-        <div class="group-card" onclick="openGroup('cs')">
-          <div class="group-icon" style="background:#0E6B50">💻</div>
-          <div class="group-info">
-            <h4>CS Study Group</h4>
-            <p>218 members · Active</p>
-          </div>
-          <button class="join-btn joined">Joined</button>
-        </div>
-        <div class="group-card" onclick="openGroup('src')">
-          <div class="group-icon" style="background:#D4A017">🎓</div>
-          <div class="group-info">
-            <h4>SRC – Student Council</h4>
-            <p>1.2k members · Official</p>
-          </div>
-          <button class="join-btn">Join</button>
-        </div>
-        <div class="group-card" onclick="openGroup('research')">
-          <div class="group-icon" style="background:#1a3a5c">🔬</div>
-          <div class="group-info">
-            <h4>Research Hub</h4>
-            <p>87 members · Invite only</p>
-          </div>
-          <button class="join-btn">Request</button>
-        </div>
-        <div class="group-card" onclick="openGroup('residence')">
-          <div class="group-icon" style="background:#2d5a3d">🏠</div>
-          <div class="group-info">
-            <h4>Residence Hall A</h4>
-            <p>156 members · Active</p>
-          </div>
-          <button class="join-btn">Join</button>
-        </div>
-        <div class="group-card" onclick="openGroup('sports')">
-          <div class="group-icon" style="background:#5a1a1a">⚽</div>
-          <div class="group-info">
-            <h4>UNIVEN Sports</h4>
-            <p>523 members · Active</p>
-          </div>
-          <button class="join-btn">Join</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- PROFILE PAGE -->
-    <section id="page-profile" class="page">
-      <div class="profile-header">
-        <div class="profile-cover"></div>
-        <div class="profile-info">
-          <div class="profile-big-avatar">
-            <img id="profile-avatar-img" src="" alt="">
-            <span id="profile-avatar-initials"></span>
-          </div>
-          <div class="profile-details">
-            <h2 id="profile-name">Loading...</h2>
-            <p id="profile-role" class="profile-role-badge">Student</p>
-            <p id="profile-email" class="profile-email"></p>
-          </div>
-          <div class="profile-stats">
-            <div class="stat"><span id="stat-posts">0</span><label>Posts</label></div>
-            <div class="stat"><span>—</span><label>Followers</label></div>
-            <div class="stat"><span>—</span><label>Following</label></div>
-          </div>
-          <button class="btn-outline-primary" onclick="signOutUser()">Sign Out</button>
-        </div>
-      </div>
-      <div id="profile-posts" class="posts-container" style="padding-top:8px"></div>
-    </section>
-
-  </main>
-
-  <!-- FAB -->
-
-
-  <!-- BOTTOM NAV -->
-  <nav class="bottom-nav">
-    
-        <button class="nav-item active" onclick="goToPage('Market', this)" data-label="Market">
-<svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-      <span>Home</span>
-    </button>
-    
-    <button class="nav-item" onclick="goToPage('home', this)" data-label="home">
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-</svg>
-      <span>Chats</span>
-    </button>
-    <button class="nav-item" onclick="goToPage('news', this)" data-label="News">
-      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/></svg>
-      <span>News</span>
-    </button>
-    <button class="nav-item" onclick="goToPage('qa', this)" data-label="Q&A">
-      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
-      <span>Q&A</span>
-    </button>
-
-    <button class="nav-item" onclick="goToPage('groups', this)" data-label="Groups">
-      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-      <span>Groups</span>
-    </button>
-  </nav>
-</div>
-
-<!-- POST COMPOSER MODAL -->
-<div id="composer-modal" class="modal-overlay hidden">
-  <div class="composer-sheet">
-    <div class="composer-header">
-      <button class="composer-cancel" onclick="closeComposer()">Cancel</button>
-      <h3>Create Post</h3>
-      <button class="composer-post-btn" onclick="submitPost()" id="post-btn" disabled>Post</button>
-    </div>
-
-    <div class="identity-selector">
-      <span>Post as:</span>
-      <div class="identity-toggle">
-        <button class="id-option active" id="id-real" onclick="setIdentity('real')">
-          <div class="id-avatar" id="composer-avatar-preview"></div>
-          <span id="composer-name-preview">You</span>
-        </button>
-        <button class="id-option" id="id-anon" onclick="setIdentity('anon')">
-          <div class="id-avatar anon">👤</div>
-          <span>Anonymous</span>
-        </button>
-      </div>
-    </div>
-
-    <div class="composer-type-row">
-      <label>Category:</label>
-      <select id="post-category">
-        <option value="general">💬 General</option>
-        <option value="question">❓ Question</option>
-        <option value="announcement">📢 Announcement</option>
-        <option value="event">📅 Event</option>
-        <option value="resource">📚 Resource</option>
-      </select>
-    </div>
-
-    <textarea id="post-text" class="composer-textarea" placeholder="What's happening around campus?" maxlength="500" oninput="onComposerInput(this)"></textarea>
-
-    <div id="hashtag-preview" class="hashtag-preview"></div>
-
-    <div class="composer-actions-row">
-      <button class="action-chip" onclick="showToast('Image upload coming soon!')">📷 Image</button>
-      <button class="action-chip" onclick="insertTeamsLink()">🔗 Link</button>
-      <button class="action-chip" onclick="insertPoll()">📊 Poll</button>
-    </div>
-
-    <div id="poll-section" class="poll-section hidden">
-      <input type="text" id="poll-opt1" placeholder="Option 1" class="poll-input">
-      <input type="text" id="poll-opt2" placeholder="Option 2" class="poll-input">
-      <input type="text" id="poll-opt3" placeholder="Option 3 (optional)" class="poll-input">
-    </div>
-
-    <div id="link-section" class="link-section hidden">
-      <input type="url" id="link-url" placeholder="Paste Teams / Meet / Zoom link..." class="poll-input">
-      <input type="text" id="link-title" placeholder="Event title" class="poll-input">
-    </div>
-
-    <div class="composer-footer">
-      <span id="char-count" class="char-count">0 / 500</span>
-    </div>
-  </div>
-</div>
-
-<!-- POST DETAIL MODAL -->
-<div id="post-modal" class="modal-overlay hidden">
-  <div class="post-detail-sheet">
-    <div class="post-detail-header">
-      <button onclick="closePostModal()">
-        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>
-        Back
-      </button>
-      <h3>Post</h3>
-      <div></div>
-    </div>
-    <div id="post-detail-content"></div>
-    <div class="comment-composer">
-      <div class="comment-avatar" id="comment-avatar"></div>
-      <input type="text" id="comment-input" placeholder="Write a reply..." onkeydown="if(event.key==='Enter')submitComment()">
-      <button onclick="submitComment()" class="send-btn">
-        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-      </button>
-    </div>
-  </div>
-</div>
-
-<!-- TOAST -->
-<div id="toast" class="toast hidden"></div>
-
-<!-- Firebase SDK - Using correct versions for Realtime Database -->
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
-<script src="app.js"></script>
-</body>
-</html>
-
-<script>
-/* ====================== IMPORTANT ======================
-   Replace this config with your actual Firebase project config.
-   The rest of the code below will work automatically once
-   Firebase is initialised via app.js or directly here.
-   ======================================================= */
-
-// Firebase assumed initialised externally via app.js
-// If running standalone, uncomment & fill:
-/*
-firebase.initializeApp({
-
-apiKey: "AIzaSyBSMvHpZ0_VkqWjJ94UMa6vqEhFiqrsIWM",
-authDomain: "rare-5f47e.firebaseapp.com",
-databaseURL: "https://rare-5f47e-default-rtdb.firebaseio.com",
-projectId: "rare-5f47e",
-storageBucket: "rare-5f47e.appspot.com",
-messagingSenderId: "811727087812",
-appId: "1:811727087812:web:d362e68abf6c26acf24191"
-});
-*/
-
-
-const db = firebase.database();
-//const auth = firebase.auth();
-const storage = firebase.storage();
-
-// ======================== STATE ========================
-let allListings = [];
-let currentCat = 'all';
-let searchQ = '';
-let sortBy = 'newest';
-let currentSeller = null;
-let currentSellerData = null;
-let orderProduct = null;
-let orderQty = 1;
-let wishlist = JSON.parse(localStorage.getItem('vm_wishlist') || '[]');
-let cart = JSON.parse(localStorage.getItem('vm_cart') || '[]');
-let activeSellerTab = 'overview';
-
-// Image slots for add-listing modal
-let listingImages = [null, null]; // max 2: base64 or URL
-
-// ======================== UTILS ========================
-const $ = id => document.getElementById(id);
-function esc(s){ if(!s)return''; return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
-function catEmoji(cat){ return{Food:'🍔',Clothing:'👕',Printing:'🖨️',Beauty:'💇',Services:'📚',Electronics:'📱',Stationery:'✏️',Groceries:'🛒'}[cat]||'🏪'; }
-function formatPrice(p){ return 'R '+Number(p).toFixed(2); }
-function genId(){ return 'VM'+Math.random().toString(36).slice(2,8).toUpperCase(); }
-function timeAgo(ts){
-  const diff=Date.now()-ts,m=Math.floor(diff/60000),h=Math.floor(m/60),d=Math.floor(h/24);
-  if(d>0)return d+'d ago';if(h>0)return h+'h ago';if(m>0)return m+'m ago';return 'just now';
-}
-
-function toast1(msg,type='',dur=3500){
-  const el=$('toast1');if(!el)return;
-  el.textContent=msg;el.className='toast1 '+(type||'');
-  clearTimeout(toastTimer);
-  toastTimer=setTimeout(()=>{if(el)el.className='toast1 hidden';},dur);
-}
-function saveWishlist(){ localStorage.setItem('vm_wishlist',JSON.stringify(wishlist)); updateWishlistBadge(); }
-function saveCart(){ localStorage.setItem('vm_cart',JSON.stringify(cart)); updateCartBadge(); }
-function updateWishlistBadge(){
-  const b=$('wishlist-count-badge');if(!b)return;
-  if(wishlist.length>0){b.textContent=wishlist.length;b.classList.remove('hidden');}
-  else b.classList.add('hidden');
-}
-function updateCartBadge(){
-  const fab=$('cart-fab'),cnt=$('cart-count');if(!fab||!cnt)return;
-  const total=cart.reduce((a,c)=>a+c.qty,0);
-  if(total>0){fab.classList.remove('hidden');cnt.textContent=total;}
-  else fab.classList.add('hidden');
-}
-
-// ======================== IMAGE TO BASE64 ========================
-function fileToBase64(file){
-  return new Promise((res,rej)=>{
-    const r=new FileReader();
-    r.onload=e=>res(e.target.result);
-    r.onerror=rej;
-    r.readAsDataURL(file);
-  });
-}
-
-// Compress image to max ~300KB base64
-async function compressImage(file, maxW=800, quality=0.75){
-  return new Promise(res=>{
-    const img=new Image();
-    const url=URL.createObjectURL(file);
-    img.onload=()=>{
-      const canvas=document.createElement('canvas');
-      let w=img.width,h=img.height;
-      if(w>maxW){h=Math.round(h*maxW/w);w=maxW;}
-      canvas.width=w;canvas.height=h;
-      canvas.getContext('2d').drawImage(img,0,0,w,h);
-      URL.revokeObjectURL(url);
-      res(canvas.toDataURL('image/jpeg',quality));
-    };
-    img.src=url;
-  });
-}
-
-// ======================== LOAD LISTINGS ========================
-function loadListings(){
-  db.ref('vendamarket/listings').on('value',snap=>{
-    const data=snap.val();
-    allListings=[];
-    if(data) Object.keys(data).forEach(k=>{
-      const l=data[k];
-      if(l.status==='active') allListings.push({id:k,...l});
-    });
-    renderListings();
-    updateStats();
-  });
-}
-
-function filteredListings(){
-  let arr=[...allListings];
-  if(currentCat!=='all') arr=arr.filter(l=>l.category===currentCat);
-  if(searchQ.trim()){
-    const q=searchQ.toLowerCase();
-    arr=arr.filter(l=>(l.title||'').toLowerCase().includes(q)||(l.shopName||'').toLowerCase().includes(q)||(l.description||'').toLowerCase().includes(q));
-  }
-  if(sortBy==='price-asc') arr.sort((a,b)=>a.price-b.price);
-  else if(sortBy==='price-desc') arr.sort((a,b)=>b.price-a.price);
-  else if(sortBy==='rating') arr.sort((a,b)=>(b.rating||0)-(a.rating||0));
-  else arr.sort((a,b)=>b.createdAt-a.createdAt);
-  return arr;
-}
-
-function renderListings(){
-  const arr=filteredListings();
-  const grid=$('cards-grid'),rc=$('result-count');
-  if(!grid||!rc)return;
-  rc.textContent=`${arr.length} product${arr.length!==1?'s':''} found`;
-  if(arr.length===0){
-    grid.innerHTML=`<div class="empty-state"><div class="empty-icon">🛒</div><h3>No products yet</h3><p>Be the first to list in this category!</p><button class="btn-full btn-full-green" style="max-width:220px;margin:0 auto" onclick="openSeller()"><i class="fas fa-plus"></i> Start Selling</button></div>`;
-    return;
-  }
-  grid.innerHTML=arr.map((item,i)=>{
-    const liked=wishlist.includes(item.id);
-    const stars=item.rating>0?'⭐'.repeat(Math.min(5,Math.round(item.rating))):'— new';
-    const reviewCount=item.reviewCount||0;
-    // Use first image if available
-    const hasImg=item.images&&item.images.length>0&&item.images[0];
-    const imgHtml=hasImg
-      ?`<img class="product-img" src="${item.images[0]}" alt="${esc(item.title)}" loading="lazy">`
-      :`<span class="cat-emoji">${catEmoji(item.category)}</span>`;
-    const multiImg=hasImg&&item.images.length>1;
-    return `<div class="card fade-up" style="animation-delay:${i*0.04}s" data-id="${item.id}">
-      <div class="card-img">
-        ${imgHtml}
-        <span class="card-badge">${esc(item.category)}</span>
-        ${multiImg?`<div class="img-dots"><span class="img-dot active"></span><span class="img-dot"></span></div>`:''}
-        <button class="wishlist-btn ${liked?'liked':''}" data-wid="${item.id}" onclick="event.stopPropagation();toggleWishlist('${item.id}')">
-          <i class="fa${liked?'s':'r'} fa-heart"></i>
-        </button>
-        ${item.soldOut?`<div class="sold-out-overlay">SOLD OUT</div>`:''}
-      </div>
-      <div class="card-body">
-        <div class="card-top">
-          <div class="card-title">${esc(item.title)}</div>
-          <div class="card-price">${formatPrice(item.price)}</div>
-        </div>
-        <div class="card-shop"><i class="fas fa-store" style="font-size:.7rem;color:var(--green)"></i> ${esc(item.shopName)}</div>
-        <div class="card-rating"><span>${stars}</span>${reviewCount>0?`<span style="color:var(--muted)"> (${reviewCount})</span>`:''}</div>
-        <p class="card-desc">${esc((item.description||'').substring(0,70))}${(item.description||'').length>70?'…':''}</p>
-        <div class="card-actions">
-          <button class="btn-wa" onclick="event.stopPropagation();waContact('${item.whatsapp}','${esc(item.title)}')"><i class="fab fa-whatsapp"></i></button>
-          <button class="btn-order${item.soldOut?' disabled':''}" onclick="event.stopPropagation();${item.soldOut?'':'openOrder(\''+item.id+'\')'}">
-            <i class="fas fa-bolt"></i> ${item.soldOut?'Sold Out':'Order'}
-          </button>
-        </div>
-      </div>
-    </div>`;
-  }).join('');
-  document.querySelectorAll('.card[data-id]').forEach(c=>{
-    c.addEventListener('click',()=>openDetail(c.dataset.id));
-  });
-}
-
-function updateStats(){
-  const sp=$('stat-products'),ss=$('stat-sellers'),so=$('stat-orders');
-  if(sp) sp.textContent=allListings.length;
-  if(ss) db.ref('vendamarket/sellers').once('value',s=>{if(ss)ss.textContent=s.val()?Object.keys(s.val()).length:0;});
-  if(so) db.ref('vendamarket/orders').orderByChild('createdAt').startAt(Date.now()-86400000).once('value',s=>{if(so)so.textContent=s.val()?Object.keys(s.val()).length:0;});
-}
-
-// ======================== WISHLIST ========================
-function toggleWishlist(id){
-  if(wishlist.includes(id)) wishlist=wishlist.filter(w=>w!==id);
-  else{wishlist.push(id);toast1('❤️ Added to wishlist!');}
-  saveWishlist();renderListings();
-}
-
-// ======================== PRODUCT DETAIL (with image slider) ========================
-let detailSliderIdx=0;
-function openDetail(id){
-  const p=allListings.find(l=>l.id===id);if(!p)return;
-  const liked=wishlist.includes(id);
-  const dc=$('detail-content');if(!dc)return;
-
-  const images=(p.images||[]).filter(Boolean);
-  let sliderHtml='';
-  if(images.length>0){
-    sliderHtml=`<div class="detail-img-wrap" id="detail-slider">
-      <div class="slider-imgs" id="slider-imgs">
-        ${images.map(src=>`<img src="${src}" alt="${esc(p.title)}">`).join('')}
-        ${images.length===0?`<div class="detail-img-emoji">${catEmoji(p.category)}</div>`:''}
-      </div>
-      ${images.length>1?`
-        <button class="slider-arrow left" onclick="slideDetail(-1)">‹</button>
-        <button class="slider-arrow right" onclick="slideDetail(1)">›</button>
-        <div class="slider-nav">${images.map((_,i)=>`<span class="slider-dot${i===0?' active':''}" onclick="goSlide(${i})"></span>`).join('')}</div>
-      `:''}
-    </div>`;
-  } else {
-    sliderHtml=`<div style="text-align:center;font-size:5rem;padding:1.5rem 0;">${catEmoji(p.category)}</div>`;
-  }
-  detailSliderIdx=0;
-
-  dc.innerHTML=`
-    <div class="modal-header" style="margin-bottom:0.5rem">
-      <span></span>
-      <button class="close-btn" onclick="document.getElementById('detail-drawer').classList.add('hidden')">&times;</button>
-    </div>
-    ${sliderHtml}
-    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-      <div>
-        <h2 class="syne" style="font-size:1.25rem;line-height:1.2;">${esc(p.title)}</h2>
-        <span class="status-badge status-active" style="margin-top:4px;display:inline-block;">${esc(p.category)}</span>
-      </div>
-      <div class="detail-price">${formatPrice(p.price)}</div>
-    </div>
-    <div class="detail-shop">
-      <div class="shop-avatar">${(p.shopName||'?')[0].toUpperCase()}</div>
-      <div><strong>${esc(p.shopName)}</strong><br><small style="color:var(--muted)">Listed ${timeAgo(p.createdAt)}</small></div>
-    </div>
-    <p style="color:var(--text-soft);font-size:0.88rem;line-height:1.65;margin-bottom:1.2rem;">${esc(p.description||'No description provided.')}</p>
-    ${p.rating>0?`<div class="card-rating" style="margin-bottom:1rem;">${'⭐'.repeat(Math.min(5,Math.round(p.rating)))} <strong>${p.rating}</strong>/5 (${p.reviewCount||0} reviews)</div>`:''}
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.7rem;margin-bottom:0.7rem;">
-      <button class="btn-full btn-full-wa" onclick="waContact('${p.whatsapp}','${esc(p.title)}')"><i class="fab fa-whatsapp"></i> WhatsApp</button>
-      <button class="btn-full btn-full-green" onclick="document.getElementById('detail-drawer').classList.add('hidden');openOrder('${p.id}')"><i class="fas fa-bolt"></i> Order Now</button>
-    </div>
-    <button style="width:100%;padding:0.72rem;border-radius:40px;border:1.5px solid var(--border);background:#fff;cursor:pointer;font-weight:600;font-size:0.88rem;display:flex;align-items:center;justify-content:center;gap:8px;color:${liked?'var(--danger)':'var(--muted)'};" onclick="toggleWishlist('${p.id}');document.getElementById('detail-drawer').classList.add('hidden')">
-      <i class="fa${liked?'s':'r'} fa-heart"></i> ${liked?'Remove from Wishlist':'Save to Wishlist'}
-    </button>`;
-
-  const drawer=$('detail-drawer');if(drawer)drawer.classList.remove('hidden');
-}
-
-window.slideDetail=function(dir){
-  const imgs=document.getElementById('slider-imgs');if(!imgs)return;
-  const count=imgs.children.length;
-  detailSliderIdx=(detailSliderIdx+dir+count)%count;
-  imgs.style.transform=`translateX(-${detailSliderIdx*100}%)`;
-  document.querySelectorAll('.slider-dot').forEach((d,i)=>d.classList.toggle('active',i===detailSliderIdx));
-};
-window.goSlide=function(i){
-  detailSliderIdx=i;
-  const imgs=document.getElementById('slider-imgs');if(!imgs)return;
-  imgs.style.transform=`translateX(-${i*100}%)`;
-  document.querySelectorAll('.slider-dot').forEach((d,j)=>d.classList.toggle('active',j===i));
-};
-
-// ======================== ORDER MODAL ========================
-function openOrder(id){
-  const p=allListings.find(l=>l.id===id);if(!p)return;
-  orderProduct=p;orderQty=1;
-  const qd=$('qty-display');if(qd)qd.textContent=1;
-  updateOrderTotal();
-  const op=$('order-product-preview');
-  if(op){
-    const img=(p.images&&p.images[0])?`<img class="order-product-img" src="${p.images[0]}" alt="">`:`<div class="order-product-emoji">${catEmoji(p.category)}</div>`;
-    op.innerHTML=`<div class="order-product-card">${img}<div class="order-product-info"><h4>${esc(p.title)}</h4><div class="price-tag">${formatPrice(p.price)}</div><div class="shop-tag"><i class="fas fa-store" style="font-size:.7rem;margin-right:3px;"></i>${esc(p.shopName)}</div></div></div>`;
-  }
-  const modal=$('order-modal');if(modal)modal.classList.remove('hidden');
-  const bn=$('buyer-name');if(bn)bn.focus();
-}
-function updateOrderTotal(){
-  if(!orderProduct)return;
-  const ot=$('order-total');if(ot)ot.textContent=formatPrice(orderProduct.price*orderQty);
-}
-
-// ======================== SEARCH / FILTER ========================
-document.addEventListener('DOMContentLoaded',()=>{
-  const si=$('market-search');
-  if(si) si.addEventListener('input',e=>{searchQ=e.target.value;renderListings();});
-  const sb=$('search-btn');
-  if(sb) sb.addEventListener('click',()=>renderListings());
-  const ss=$('sort-select');
-  if(ss) ss.addEventListener('change',e=>{sortBy=e.target.value;renderListings();});
-  document.querySelectorAll('.cat').forEach(c=>{
-    c.addEventListener('click',()=>{
-      document.querySelectorAll('.cat').forEach(x=>x.classList.remove('active'));
-      c.classList.add('active');currentCat=c.dataset.cat;renderListings();
-    });
-  });
-  // Qty
-  const qm=$('qty-minus'),qp=$('qty-plus');
-  if(qm) qm.addEventListener('click',()=>{if(orderQty>1)orderQty--;const qd=$('qty-display');if(qd)qd.textContent=orderQty;updateOrderTotal();});
-  if(qp) qp.addEventListener('click',()=>{orderQty++;const qd=$('qty-display');if(qd)qd.textContent=orderQty;updateOrderTotal();});
-  // Close order modal
-  const com=$('close-order-modal');
-  if(com) com.addEventListener('click',()=>{const om=$('order-modal');if(om)om.classList.add('hidden');});
-  // Submit order
-  const sob=$('submit-order-btn');
-  if(sob) sob.addEventListener('click',async()=>{
-    if(!orderProduct)return;
-    const name=$('buyer-name')?.value.trim()||'';
-    const phone=$('buyer-phone')?.value.trim()||'';
-    const location=$('buyer-location')?.value.trim()||'';
-    const note=$('order-note')?.value.trim()||'';
-    if(!name){toast1('Please enter your name','error');return;}
-    if(!phone){toast1('Please enter your phone number','error');return;}
-    const oid=genId();
-    const order={orderId:oid,productId:orderProduct.id,productTitle:orderProduct.title,shopId:orderProduct.sellerId,shopName:orderProduct.shopName,sellerWhatsapp:orderProduct.whatsapp,price:orderProduct.price,buyerName:name,buyerPhone:phone,buyerLocation:location,quantity:orderQty,total:orderProduct.price*orderQty,note,status:'pending',createdAt:Date.now()};
-    try{
-      await db.ref('vendamarket/orders/'+oid).set(order);
-      await db.ref(`vendamarket/sellerInbox/${orderProduct.sellerId}/${oid}`).set(order);
-      toast1(`✅ Order #${oid} placed! Seller notified.`,'success',5000);
-      localStorage.setItem('last_order_id',oid);
-      const modal=$('order-modal');if(modal)modal.classList.add('hidden');
-      ['buyer-name','buyer-phone','buyer-location','order-note'].forEach(id=>{const el=$(id);if(el)el.value='';});
-    }catch(e){toast1('Error placing order. Try again.','error');console.error(e);}
-  });
-  // WhatsApp order
-  const wo=$('whatsapp-order-btn');
-  if(wo) wo.addEventListener('click',()=>{
-    if(!orderProduct)return;
-    const name=$('buyer-name')?.value.trim()||'a student';
-    const wa=orderProduct.whatsapp?.replace(/\D/g,'');
-    if(!wa){toast1('No WhatsApp number for this seller','error');return;}
-    const msg=`Hi! I'm ordering *${orderProduct.title}* (×${orderQty}) = *${formatPrice(orderProduct.price*orderQty)}* via UNIVEN MARKET . My name: ${name}.${$('order-note')?.value?'\nNote: '+$('order-note').value:''}`;
-    window.open(`https://wa.me/${wa}?text=${encodeURIComponent(msg)}`,'_blank');
-  });
-  // Track
-  const tob=$('track-order-btn');
-  if(tob) tob.addEventListener('click',()=>{const tm=$('track-modal');if(tm)tm.classList.remove('hidden');});
-  const ctm=$('close-track-modal');
-  if(ctm) ctm.addEventListener('click',()=>{const tm=$('track-modal');if(tm)tm.classList.add('hidden');});
-  const dtb=$('do-track-btn');
-  if(dtb) dtb.addEventListener('click',async()=>{
-    const oid=$('track-input')?.value.trim().toUpperCase();
-    if(!oid){toast1('Enter order ID','error');return;}
-    const snap=await db.ref('vendamarket/orders/'+oid).once('value');
-    const o=snap.val();
-    const statusMap={
-      pending:{color:'#E65100',bg:'#FFF3E0',icon:'🕐',label:'Pending — Seller reviewing'},
-      confirmed:{color:'#1565C0',bg:'#E3F2FD',icon:'✅',label:'Confirmed — Being prepared'},
-      ready:{color:'#6A1B9A',bg:'#F3E5F5',icon:'📦',label:'Ready — Come collect!'},
-      delivered:{color:'#2E7D32',bg:'#E8F5E9',icon:'🎉',label:'Delivered!'},
-      cancelled:{color:'#C62828',bg:'#FFEBEE',icon:'❌',label:'Cancelled'}
-    };
-    const tr=$('track-result');if(!tr)return;
-    if(!o){tr.innerHTML=`<div style="padding:1rem;background:#FFEBEE;border-radius:var(--r-md);text-align:center"><strong>Order not found.</strong><br>Check your order ID.</div>`;return;}
-    const st=statusMap[o.status]||statusMap.pending;
-    tr.innerHTML=`<div style="background:${st.bg};border-radius:var(--r-md);padding:1.2rem"><div style="font-size:2rem;text-align:center;margin-bottom:.5rem">${st.icon}</div><h4 style="text-align:center;color:${st.color};margin-bottom:.8rem">${st.label}</h4><div style="font-size:.85rem;display:grid;gap:.3rem"><div>📦 <strong>${esc(o.productTitle)}</strong> ×${o.quantity}</div><div>🏪 ${esc(o.shopName)}</div><div>💰 ${formatPrice(o.total||o.price*o.quantity)}</div><div>🕐 ${new Date(o.createdAt).toLocaleString()}</div>${o.buyerLocation?`<div>📍 ${esc(o.buyerLocation)}</div>`:''}</div></div>`;
-  });
-  // Wishlist btn
-  const wb=$('wishlist-nav-btn');
-  if(wb) wb.addEventListener('click',()=>{
-    if(wishlist.length===0){toast1('Your wishlist is empty! Heart a product to save it.');return;}
-    const arr=allListings.filter(l=>wishlist.includes(l.id));
-    const grid=$('cards-grid'),rc=$('result-count');if(!grid||!rc)return;
-    rc.textContent=`${arr.length} wishlist item${arr.length!==1?'s':''}`;
-    grid.innerHTML=`<div style="grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;padding:0 0 .5rem"><h3 style="font-size:1rem"><i class="fas fa-heart" style="color:var(--danger)"></i> Your Wishlist</h3><button style="background:none;border:none;font-size:.82rem;color:var(--muted);cursor:pointer" onclick="renderListings()">← All products</button></div>`+arr.map((item,i)=>{
-      const hasImg=item.images&&item.images.length>0&&item.images[0];
-      const imgHtml=hasImg?`<img class="product-img" src="${item.images[0]}" alt="${esc(item.title)}" loading="lazy">`:`<span class="cat-emoji">${catEmoji(item.category)}</span>`;
-      return `<div class="card fade-up" style="animation-delay:${i*0.04}s" data-id="${item.id}">
-        <div class="card-img">${imgHtml}<span class="card-badge">${esc(item.category)}</span><button class="wishlist-btn liked" onclick="event.stopPropagation();toggleWishlist('${item.id}')"><i class="fas fa-heart"></i></button></div>
-        <div class="card-body"><div class="card-top"><div class="card-title">${esc(item.title)}</div><div class="card-price">${formatPrice(item.price)}</div></div><div class="card-shop"><i class="fas fa-store" style="font-size:.7rem;color:var(--green)"></i> ${esc(item.shopName)}</div><div class="card-actions"><button class="btn-wa" onclick="event.stopPropagation();waContact('${item.whatsapp}','${esc(item.title)}')"><i class="fab fa-whatsapp"></i></button><button class="btn-order" onclick="event.stopPropagation();openOrder('${item.id}')"><i class="fas fa-bolt"></i> Order</button></div></div></div>`;
-    }).join('');
-    document.querySelectorAll('.card[data-id]').forEach(c=>c.addEventListener('click',()=>openDetail(c.dataset.id)));
-  });
-  // Cart
-  const cf=$('cart-fab');
-  if(cf) cf.addEventListener('click',()=>{
-    const d=$('cart-drawer');if(!d)return;
-    if(d.classList.contains('open')){d.classList.remove('open');return;}
-    renderCart();d.classList.add('open');
-  });
-  const cc=$('close-cart');
-  if(cc) cc.addEventListener('click',()=>{const cd=$('cart-drawer');if(cd)cd.classList.remove('open');});
-  // Sellers
-  const osb=$('open-seller-btn');
-  if(osb) osb.addEventListener('click',openSeller);
-  const bmb=$('back-market-btn');
-  if(bmb) bmb.addEventListener('click',()=>{
-    const ss=$('seller-screen'),ms=$('marketplace-screen');
-    if(ss)ss.classList.remove('active');if(ms)ms.classList.add('active');
-  });
-  const lb=$('logout-btn');
-  if(lb) lb.addEventListener('click',async()=>{
-    await auth.signOut();currentSeller=null;currentSellerData=null;
-    toast1('Logged out');
-    const ss=$('seller-screen'),ms=$('marketplace-screen');
-    if(ss)ss.classList.remove('active');if(ms)ms.classList.add('active');
-  });
-  // Drawer close on backdrop
-  const dd=$('detail-drawer');if(dd)dd.addEventListener('click',e=>{if(e.target===dd)dd.classList.add('hidden');});
-  const om=$('order-modal');if(om)om.addEventListener('click',e=>{if(e.target===om)om.classList.add('hidden');});
-  const tm=$('track-modal');if(tm)tm.addEventListener('click',e=>{if(e.target===tm)tm.classList.add('hidden');});
-  // Checkout cart
-  const ccb=$('checkout-cart-btn');
-  if(ccb) ccb.addEventListener('click',()=>{
-    if(cart.length===0){toast1('Cart is empty','error');return;}
-    const first=cart[0];const p=allListings.find(l=>l.id===first.id);
-    if(p)openOrder(p.id);
-    const cd=$('cart-drawer');if(cd)cd.classList.remove('open');
-  });
-});
-
-function waContact(wa,title){
-  const clean=(wa||'').replace(/\D/g,'');
-  if(!clean){toast1('No WhatsApp number available','error');return;}
-  window.open(`https://wa.me/${clean}?text=${encodeURIComponent('Hi! I saw your '+title+' on UNIVEN MARKET  (UNIVEN). Is it still available?')}`,'_blank');
-}
-
-// ======================== CART ========================
-function renderCart(){
-  const ci=$('cart-items');if(!ci)return;
-  if(cart.length===0){ci.innerHTML=`<p style="text-align:center;color:var(--muted);padding:1.5rem">Cart is empty 🛒</p>`;return;}
-  ci.innerHTML=cart.map(item=>`<div class="listing-row"><div>${catEmoji(item.category)} <strong>${esc(item.title)}</strong><br><small style="color:var(--muted)">${formatPrice(item.price)} × ${item.qty} = ${formatPrice(item.price*item.qty)}</small></div><button class="btn-sm btn-danger" onclick="removeFromCart('${item.id}')"><i class="fas fa-trash"></i></button></div>`).join('');
-  const total=cart.reduce((a,c)=>a+c.price*c.qty,0);
-  ci.innerHTML+=`<div class="total-line"><span>Cart Total</span><span>${formatPrice(total)}</span></div>`;
-}
-function addToCart(id){
-  const p=allListings.find(l=>l.id===id);if(!p)return;
-  const ex=cart.find(c=>c.id===id);
-  if(ex)ex.qty++;else cart.push({id:p.id,title:p.title,price:p.price,category:p.category,qty:1});
-  saveCart();toast1('🛒 Added to cart!','success');
-}
-function removeFromCart(id){cart=cart.filter(c=>c.id!==id);saveCart();renderCart();}
-
-// ======================== SELLER PORTAL ========================
-function openSeller(){
-  const ms=$('marketplace-screen'),ss=$('seller-screen');
-  if(ms)ms.classList.remove('active');if(ss)ss.classList.add('active');
-  if(currentSeller)loadSellerDashboard();else renderSellerAuth();
-}
-
-function renderSellerAuth(){
-  const sb=$('seller-body');if(!sb)return;
-  sb.innerHTML=`<div class="auth-wrap fade-up"><div class="auth-card"><div class="auth-logo"><div class="icon">🏪</div><h2>Seller Portal</h2><p>Reach 14,000+ UNIVEN students with your business</p></div><div class="auth-toggle"><button class="auth-toggle-btn active" id="tab-login" onclick="switchSellerTab('login')">Log In</button><button class="auth-toggle-btn" id="tab-register" onclick="switchSellerTab('register')">Register</button></div><div id="auth-form-wrap">${loginForm()}</div></div><p style="text-align:center;margin-top:.8rem;font-size:.78rem;color:var(--muted)">Free to use · No commission · Instant orders</p></div>`;
-}
-
-function loginForm(){return`<div class="form-group"><label>Email</label><input class="input" id="l-email" type="email" placeholder="you@univen.ac.za"></div><div class="form-group"><label>Password</label><input class="input" id="l-pwd" type="password" placeholder="Password"></div><button class="btn-full btn-full-green" onclick="doLogin()"><i class="fas fa-sign-in-alt"></i> Log In</button><p style="text-align:center;font-size:.78rem;color:var(--muted);margin-top:.7rem">Forgot password? <a href="#" onclick="doResetPwd()" style="color:var(--green)">Reset it</a></p>`;}
-function registerForm(){return`<div class="input-row"><div class="form-group"><label>Shop Name *</label><input class="input" id="r-shop" placeholder="Mama T's Kitchen"></div><div class="form-group"><label>Your Name *</label><input class="input" id="r-owner" placeholder="Thabo Nkosi"></div></div><div class="form-group"><label>Email *</label><input class="input" id="r-email" type="email" placeholder="you@univen.ac.za"></div><div class="form-group"><label>WhatsApp Number *</label><input class="input" id="r-wa" type="tel" placeholder="0761234567"></div><div class="form-group"><label>Main Category *</label><select class="select" id="r-cat"><option>Food</option><option>Clothing</option><option>Printing</option><option>Beauty</option><option>Services</option><option>Electronics</option><option>Stationery</option><option>Groceries</option></select></div><div class="form-group"><label>Campus Location</label><input class="input" id="r-loc" placeholder="e.g. Residences, Main Campus"></div><div class="form-group"><label>Password (min 6 chars) *</label><input class="input" id="r-pwd" type="password" placeholder="Password"></div><button class="btn-full btn-full-gold" onclick="doRegister()"><i class="fas fa-rocket"></i> Start Selling Free →</button>`;}
-
-window.switchSellerTab=function(t){
-  const tl=$('tab-login'),tr=$('tab-register'),aw=$('auth-form-wrap');
-  if(tl)tl.classList.toggle('active',t==='login');if(tr)tr.classList.toggle('active',t==='register');
-  if(aw)aw.innerHTML=t==='login'?loginForm():registerForm();
-};
-
-async function doLogin(){
-  const email=$('l-email')?.value.trim(),pwd=$('l-pwd')?.value;
-  if(!email||!pwd){toast1('Fill all fields','error');return;}
-  try{
-    const cred=await auth.signInWithEmailAndPassword(email,pwd);
-    const snap=await db.ref('vendamarket/sellers/'+cred.user.uid).once('value');
-    if(!snap.exists())throw new Error('No seller profile found.');
-    currentSeller=cred.user;currentSellerData=snap.val();loadSellerDashboard();
-  }catch(err){toast1('Login failed: '+err.message,'error');}
-}
-async function doRegister(){
-  const shop=$('r-shop')?.value.trim(),owner=$('r-owner')?.value.trim(),
-    email=$('r-email')?.value.trim(),wa=$('r-wa')?.value.trim(),
-    cat=$('r-cat')?.value,loc=$('r-loc')?.value.trim(),pwd=$('r-pwd')?.value;
-  if(!shop||!owner||!email||!wa||!pwd||pwd.length<6){toast1('Fill all required fields (password 6+ chars)','error');return;}
-  try{
-    const cred=await auth.createUserWithEmailAndPassword(email,pwd);
-    const profile={shopName:shop,ownerName:owner,email,whatsapp:wa,category:cat,location:loc,status:'active',createdAt:Date.now(),listingsCount:0};
-    await db.ref('vendamarket/sellers/'+cred.user.uid).set(profile);
-    currentSeller=cred.user;currentSellerData=profile;
-    toast1('🎉 Welcome! Your shop is live!','success');loadSellerDashboard();
-  }catch(err){toast1('Registration error: '+err.message,'error');}
-}
-window.doResetPwd=async function(){
-  const e=prompt('Enter your email for password reset:');if(!e)return;
-  try{await auth.sendPasswordResetEmail(e);toast1('Reset email sent!','success');}
-  catch(err){toast1(err.message,'error');}
-};
-
-async function loadSellerDashboard(){
-  if(!currentSeller)return;
-  const lb=$('logout-btn');if(lb)lb.classList.remove('hidden');
-  const uid=currentSeller.uid;
-  const [ls,os,is_]=await Promise.all([
-    db.ref('vendamarket/listings').orderByChild('sellerId').equalTo(uid).once('value'),
-    db.ref('vendamarket/orders').orderByChild('shopId').equalTo(uid).once('value'),
-    db.ref('vendamarket/sellerInbox/'+uid).once('value')
-  ]);
-  const myListings=ls.val()?Object.keys(ls.val()).map(k=>({id:k,...ls.val()[k]})):[];
-  const myOrders=os.val()?Object.keys(os.val()).map(k=>({id:k,...os.val()[k]})):[];
-  const messages=is_.val()?Object.values(is_.val()):[];
-  const pending=myOrders.filter(o=>o.status==='pending').length;
-  const revenue=myOrders.filter(o=>o.status==='delivered').reduce((a,c)=>a+(c.total||0),0);
-
-  const sb=$('seller-body');if(!sb)return;
-  sb.innerHTML=`
-<div class="seller-tabs">
-  <button class="tab-btn ${activeSellerTab==='overview'?'active':''}" onclick="setTab('overview',this)"><i class="fas fa-chart-pie"></i>Overview</button>
-  <button class="tab-btn ${activeSellerTab==='listings'?'active':''}" onclick="setTab('listings',this)"><i class="fas fa-box"></i>Products</button>
-  <button class="tab-btn ${activeSellerTab==='orders'?'active':''}" onclick="setTab('orders',this)"><i class="fas fa-shopping-bag"></i>Orders${pending>0?`<span style="background:var(--danger);color:#fff;border-radius:20px;padding:1px 5px;font-size:.62rem;margin-left:3px;">${pending}</span>`:''}</button>
-  <button class="tab-btn ${activeSellerTab==='messages'?'active':''}" onclick="setTab('messages',this)"><i class="fas fa-comment-dots"></i>Inbox</button>
-</div>
-<div class="seller-content">
-  <!-- OVERVIEW -->
-  <div id="tab-overview" class="${activeSellerTab==='overview'?'':'hidden'}">
-    <div style="display:flex;align-items:center;gap:12px;margin-bottom:1.2rem;background:var(--surface);padding:1rem;border-radius:var(--r-md);border:1px solid var(--border);">
-      <div class="shop-avatar" style="width:50px;height:50px;font-size:1.4rem;">${(currentSellerData.shopName||'?')[0].toUpperCase()}</div>
-      <div><div class="syne" style="font-size:1.1rem;font-weight:700;">${esc(currentSellerData.shopName)}</div><div style="font-size:.78rem;color:var(--muted);">${esc(currentSellerData.ownerName)} · ${esc(currentSellerData.category)}</div>${currentSellerData.location?`<div style="font-size:.75rem;color:var(--muted);"><i class="fas fa-map-marker-alt" style="color:var(--green);font-size:.65rem;"></i> ${esc(currentSellerData.location)}</div>`:''}
-      </div>
-    </div>
-    <div class="stat-cards"><div class="stat-card"><div class="stat-icon">📦</div><div class="stat-num">${myListings.length}</div><div class="stat-label">Products</div></div><div class="stat-card"><div class="stat-icon">🛒</div><div class="stat-num">${myOrders.length}</div><div class="stat-label">Total Orders</div></div><div class="stat-card"><div class="stat-icon">⏳</div><div class="stat-num">${pending}</div><div class="stat-label">Pending</div></div><div class="stat-card"><div class="stat-icon">💰</div><div class="stat-num" style="font-size:1.2rem;">R${revenue.toFixed(0)}</div><div class="stat-label">Revenue</div></div></div>
-    ${pending>0?`<div style="background:#fff3e0;border-radius:var(--r-md);padding:.9rem;display:flex;align-items:center;gap:10px;border:1px solid #ffe0b2;"><span style="font-size:1.4rem;">⚠️</span><div><strong style="font-size:.88rem;">${pending} pending order${pending>1?'s':''}</strong><br><small style="color:var(--muted);">Respond quickly to keep customers happy</small></div><button class="btn-sm" style="background:var(--green);color:#fff;margin-left:auto;" onclick="setTab('orders',document.querySelector('.tab-btn:nth-child(3)'))">View →</button></div>`:''}
-    <div style="margin-top:1rem;padding:.9rem;background:var(--green-light);border-radius:var(--r-md);border:1px solid rgba(26,122,74,.2);"><div style="font-size:.78rem;color:var(--green);font-weight:600;margin-bottom:.3rem;">💡 Tip</div><div style="font-size:.8rem;color:var(--text-soft);">Add product photos to get <strong>3× more orders</strong>. Buyers trust listings with real images!</div></div>
-  </div>
-  <!-- LISTINGS -->
-  <div id="tab-listings" class="${activeSellerTab==='listings'?'':'hidden'}">
-    <div class="section-header"><h3>Your Products</h3><button class="btn-full btn-full-green" style="width:auto;padding:.45rem .9rem;font-size:.82rem;" onclick="showAddListing()"><i class="fas fa-plus"></i> Add Product</button></div>
-    ${myListings.length===0?`<div class="empty-state"><div class="empty-icon">📦</div><h3>No products yet</h3><p>Add your first product to start selling</p><button class="btn-full btn-full-gold" style="max-width:200px;margin:0 auto;" onclick="showAddListing()"><i class="fas fa-plus"></i> Add First Product</button></div>`:myListings.map(l=>`
-    <div class="listing-row">
-      <div style="display:flex;gap:10px;align-items:center;flex:1;min-width:0;">
-        ${l.images&&l.images[0]?`<img src="${l.images[0]}" style="width:48px;height:48px;border-radius:10px;object-fit:cover;flex-shrink:0;" alt="">`:
-          `<div style="width:48px;height:48px;border-radius:10px;background:var(--surface);display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;">${catEmoji(l.category)}</div>`}
-        <div class="listing-info" style="min-width:0;"><h4 style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${catEmoji(l.category)} ${esc(l.title)}</h4><p>${formatPrice(l.price)} · ${esc(l.category)} · ${timeAgo(l.createdAt)}</p></div>
-      </div>
-      <div class="listing-actions" style="flex-shrink:0;">
-        <span class="status-badge ${l.soldOut?'status-sold':'status-active'}">${l.soldOut?'Sold Out':'Active'}</span>
-        <button class="btn-sm btn-edit" onclick="toggleSoldOut('${l.id}',${!!l.soldOut})">${l.soldOut?'Available':'Sold Out'}</button>
-        <button class="btn-sm btn-danger" onclick="deleteListing('${l.id}')"><i class="fas fa-trash"></i></button>
-      </div>
-    </div>`).join('')}
-  </div>
-  <!-- ORDERS -->
-  <div id="tab-orders" class="${activeSellerTab==='orders'?'':'hidden'}">
-    <h3 style="margin-bottom:.8rem;">Orders (${myOrders.length})</h3>
-    ${myOrders.length===0?`<div class="empty-state"><div class="empty-icon">📬</div><h3>No orders yet</h3><p>Share your shop link to get your first order!</p></div>`:myOrders.sort((a,b)=>b.createdAt-a.createdAt).map(o=>`<div class="order-row"><div class="order-top"><div><strong style="font-size:.88rem;">${esc(o.productTitle)}</strong> ×${o.quantity} <span class="status-badge status-${o.status}" style="margin-left:4px;">${o.status}</span></div><strong>${formatPrice(o.total||o.price*o.quantity)}</strong></div><div class="order-meta">👤 ${esc(o.buyerName)} · 📞 ${o.buyerPhone||'—'} ${o.buyerLocation?'· 📍 '+esc(o.buyerLocation):''}</div>${o.note?`<div class="order-meta">📝 ${esc(o.note)}</div>`:''}<div class="order-meta" style="margin-bottom:.5rem;">🕐 ${new Date(o.createdAt).toLocaleString()} · #${o.orderId}</div><div style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;"><select class="order-status-select" onchange="updateOrderStatus('${o.orderId}',this.value)">${['pending','confirmed','ready','delivered','cancelled'].map(s=>`<option ${o.status===s?'selected':''}>${s}</option>`).join('')}</select>${o.buyerPhone?`<a href="https://wa.me/${o.buyerPhone.replace(/\D/g,'')}?text=${encodeURIComponent('Hi '+o.buyerName+'! Your order ('+o.productTitle+') status: '+o.status+'. From '+currentSellerData.shopName+' via UNIVEN MARKET .')}" target="_blank"><button class="btn-sm btn-wa" style="background:var(--wa);color:#fff;"><i class="fab fa-whatsapp"></i> Notify</button></a>`:''}</div></div>`).join('')}
-  </div>
-  <!-- MESSAGES -->
-  <div id="tab-messages" class="${activeSellerTab==='messages'?'':'hidden'}">
-    <h3 style="margin-bottom:.8rem;">Buyer Messages (${messages.length})</h3>
-    ${messages.length===0?`<div class="empty-state"><div class="empty-icon">💬</div><h3>No messages yet</h3><p>Orders placed will appear here</p></div>`:messages.sort((a,b)=>b.createdAt-a.createdAt).map(m=>`<div class="listing-row"><div><strong>${esc(m.buyerName)}</strong> — ${esc(m.productTitle)}<br><small style="color:var(--muted);">Qty: ${m.quantity} · ${formatPrice(m.total||m.price*m.quantity)} · ${timeAgo(m.createdAt)}</small>${m.note?`<br><small style="color:var(--muted);">📝 ${esc(m.note)}</small>`:''}</div>${m.buyerPhone?`<a href="https://wa.me/${m.buyerPhone.replace(/\D/g,'')}?text=${encodeURIComponent('Hi '+m.buyerName+'! Thanks for your order on UNIVEN MARKET .')}" target="_blank"><button class="btn-sm" style="background:var(--wa);color:#fff;"><i class="fab fa-whatsapp"></i> Reply</button></a>`:''}</div>`).join('')}
-  </div>
-</div>`;
-}
-
-window.setTab=function(t,btn){
-  activeSellerTab=t;
-  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-  if(btn)btn.classList.add('active');
-  ['overview','listings','orders','messages'].forEach(x=>{
-    const el=document.getElementById('tab-'+x);if(el)el.classList.toggle('hidden',x!==t);
-  });
-};
-window.updateOrderStatus=async function(oid,status){
-  await db.ref('vendamarket/orders/'+oid+'/status').set(status);
-  toast1(`Order updated: ${status}`,'success');
-};
-window.deleteListing=async function(id){
-  if(!confirm('Delete this listing? This cannot be undone.'))return;
-  await db.ref('vendamarket/listings/'+id).remove();
-  toast1('Listing deleted');loadSellerDashboard();
-};
-window.toggleSoldOut=async function(id,current){
-  await db.ref('vendamarket/listings/'+id+'/soldOut').set(!current);
-  toast1(!current?'Marked as sold out':'Marked as available','success');
-  loadSellerDashboard();
-};
-
-// ======================== ADD LISTING (with image upload) ========================
-window.showAddListing=function(){
-  listingImages=[null,null];
-  const modal=document.createElement('div');
-  modal.className='modal-overlay';
-  modal.id='add-listing-modal';
-  modal.innerHTML=`<div class="modal-box"><div class="modal-header"><h3><i class="fas fa-plus" style="color:var(--green)"></i> Add Product</h3><button class="close-btn" onclick="this.closest('.modal-overlay').remove()">&times;</button></div>
-
-  <div class="form-group">
-    <label>📸 Product Photos (up to 2)</label>
-    <div class="img-upload-area" id="upload-slots">
-      ${[0,1].map(i=>`
-      <div class="img-upload-slot" id="slot-${i}">
-        <i class="fas fa-camera"></i>
-        <span>Photo ${i+1}</span>
-        <input type="file" accept="image/*" onchange="handleImgUpload(${i}, this)">
-      </div>`).join('')}
-    </div>
-    <p style="font-size:.72rem;color:var(--muted);margin-top:.3rem;">Real photos get 3× more orders · JPEG/PNG · Max 2 images</p>
-  </div>
-
-  <div class="form-group"><label>Product Name *</label><input class="input" id="nl-title" placeholder="e.g. Pap & Vleis Combo"></div>
-  <div class="input-row">
-    <div class="form-group"><label>Price (R) *</label><input class="input" id="nl-price" type="number" step="0.01" placeholder="35.00"></div>
-    <div class="form-group"><label>Category</label><select class="select" id="nl-cat"><option>Food</option><option>Clothing</option><option>Printing</option><option>Beauty</option><option>Services</option><option>Electronics</option><option>Stationery</option><option>Groceries</option></select></div>
-  </div>
-  <div class="form-group"><label>Description</label><textarea class="textarea" id="nl-desc" placeholder="Describe your product…"></textarea></div>
-  <div class="form-group"><label>Stock Available (0 = unlimited)</label><input class="input" id="nl-stock" type="number" placeholder="0" value="0"></div>
-  <button class="btn-full btn-full-green" id="publish-btn" onclick="submitListing(this)"><i class="fas fa-rocket"></i> Publish Listing</button></div>`;
-
-  document.body.appendChild(modal);
-  modal.addEventListener('click',e=>{if(e.target===modal)modal.remove();});
-  setTimeout(()=>{const inp=$('nl-title');if(inp)inp.focus();},50);
-};
-
-window.handleImgUpload=async function(idx,input){
-  const file=input.files[0];if(!file)return;
-  const slot=document.getElementById('slot-'+idx);if(!slot)return;
-  // Show loading
-  slot.innerHTML=`<i class="fas fa-spinner fa-spin" style="color:var(--green);font-size:1.4rem;"></i><span style="font-size:.7rem;color:var(--muted);">Processing…</span>`;
-  try{
-    const compressed=await compressImage(file);
-    listingImages[idx]=compressed;
-    slot.innerHTML=`<img src="${compressed}" alt="Photo ${idx+1}"><button class="remove-img" onclick="removeListingImg(${idx})">✕</button>`;
-    slot.classList.add('has-image');
-  }catch(e){
-    slot.innerHTML=`<i class="fas fa-camera"></i><span>Photo ${idx+1}</span><input type="file" accept="image/*" onchange="handleImgUpload(${idx},this)">`;
-    toast1('Could not load image. Try another.','error');
-  }
-};
-
-window.removeListingImg=function(idx){
-  listingImages[idx]=null;
-  const slot=document.getElementById('slot-'+idx);if(!slot)return;
-  slot.classList.remove('has-image');
-  slot.innerHTML=`<i class="fas fa-camera"></i><span>Photo ${idx+1}</span><input type="file" accept="image/*" onchange="handleImgUpload(${idx},this)">`;
-};
-
-window.submitListing=async function(btn){
-  const title=$('nl-title')?.value.trim(),price=parseFloat($('nl-price')?.value);
-  const cat=$('nl-cat')?.value,desc=$('nl-desc')?.value.trim(),stock=parseInt($('nl-stock')?.value)||0;
-  if(!title||!price){toast1('Title and price required','error');return;}
-  btn.disabled=true;btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Publishing…';
-  const images=listingImages.filter(Boolean); // only non-null
-  const listing={sellerId:currentSeller.uid,shopName:currentSellerData.shopName,whatsapp:currentSellerData.whatsapp,title,price,category:cat,description:desc,stock,status:'active',soldOut:false,createdAt:Date.now(),rating:0,reviewCount:0,images};
-  try{
-    await db.ref('vendamarket/listings').push(listing);
-    document.getElementById('add-listing-modal')?.remove();
-    toast1('🎉 Listing is live!','success');
-    loadSellerDashboard();
-  }catch(e){
-    toast1('Error publishing. Try again.','error');
-    btn.disabled=false;btn.innerHTML='<i class="fas fa-rocket"></i> Publish Listing';
-  }
-};
-
-// ======================== AUTH OBSERVER ========================
-auth.onAuthStateChanged(async user=>{
-  if(user){
-    const snap=await db.ref('vendamarket/sellers/'+user.uid).once('value');
-    if(snap.exists()){
-      currentSeller=user;currentSellerData=snap.val();
-      const lb=$('logout-btn');if(lb)lb.classList.remove('hidden');
-    }
-  }else{
-    currentSeller=null;currentSellerData=null;
-    const lb=$('logout-btn');if(lb)lb.classList.add('hidden');
-  }
-});
-
-// ======================== INIT ========================
-updateWishlistBadge();
-updateCartBadge();
-loadListings();
-
-// Seed demo data if empty
-setTimeout(async()=>{
-  const snap=await db.ref('vendamarket/listings').once('value');
-  if(!snap.exists()){
-    const demos=[
-      {sellerId:'demo_001',shopName:"Mama T's Kitchen",whatsapp:'27781234567',title:'Pap & Vleis Combo',price:35,category:'Food',description:'Delicious home-cooked pap, beef stew and veggies. Served daily 12pm–3pm at the residences.',status:'active',soldOut:false,createdAt:Date.now()-3600000,rating:4.8,reviewCount:24,images:[]},
-      {sellerId:'demo_001',shopName:"Mama T's Kitchen",whatsapp:'27781234567',title:'Vetkoek & Mince (3 for R30)',price:15,category:'Food',description:'Freshly fried vetkoek filled with savoury mince. Order 3 for only R30!',status:'active',soldOut:false,createdAt:Date.now()-7200000,rating:4.5,reviewCount:12,images:[]},
-      {sellerId:'demo_002',shopName:'Campus Prints',whatsapp:'27789876543',title:'A4 Black & White Printing',price:0.5,category:'Printing',description:'Fast, affordable printing near the library. 50c per page. Colour printing also available at R3/page.',status:'active',soldOut:false,createdAt:Date.now()-86400000,rating:4.2,reviewCount:55,images:[]},
-      {sellerId:'demo_002',shopName:'Campus Prints',whatsapp:'27789876543',title:'CV Printing + Spiral Binding',price:25,category:'Printing',description:'Professional CV print + spiral binding. Impress any employer. Ready in under 30 minutes.',status:'active',soldOut:false,createdAt:Date.now()-172800000,rating:4.7,reviewCount:8,images:[]},
-      {sellerId:'demo_003',shopName:'Thabo Styles',whatsapp:'27762345678',title:'UNIVEN Hoodies — S/M/L/XL',price:250,category:'Clothing',description:'Quality UNIVEN branded hoodies. Show campus pride! Pre-order only. Delivery within 5 days.',status:'active',soldOut:false,createdAt:Date.now()-259200000,rating:5,reviewCount:3,images:[]},
-      {sellerId:'demo_004',shopName:'Beauty by Nandi',whatsapp:'27713456789',title:'Hair Braiding — Full Head',price:180,category:'Beauty',description:'Neat, affordable braiding. Box braids, cornrows & knotless braids. Book in advance. Home visits available.',status:'active',soldOut:false,createdAt:Date.now()-345600000,rating:4.6,reviewCount:18,images:[]},
-    ];
-    for(const d of demos) await db.ref('vendamarket/listings').push(d);
-  }
-},1200);
-</script>
+<link rel="icon" href="https://timetable.univen.ac.za/images/univen-crest.png" type="image/png">
 <style>
 :root{
   --green:#1a7a4a;
@@ -1441,6 +215,9 @@ body{max-width:600px;margin:0 auto;background:#fff;min-height:100vh;}
 .btn-full-gold:hover{background:#b88b0e;}
 .btn-full-wa{background:var(--wa);color:#fff;}
 .btn-full-wa:hover{background:var(--wa-dark);}
+.btn-full-dark{background:#1B1F27;color:#fff;}
+.btn-full-dark:hover{background:#000;}
+.btn-full:disabled{opacity:.6;cursor:not-allowed;}
 .btn-sm{font-size:0.75rem;padding:0.3rem 0.65rem;border-radius:8px;border:none;cursor:pointer;font-weight:600;font-family:'DM Sans',sans-serif;transition:all .15s;}
 .btn-edit{background:var(--green-light);color:var(--green);}
 .btn-danger{background:#ffeaea;color:var(--danger);}
@@ -1738,8 +515,1021 @@ body{max-width:600px;margin:0 auto;background:#fff;min-height:100vh;}
   color:rgba(255,255,255,.5);cursor:pointer;font-size:1rem;
 }
 
+/* ========== PAYMENT BADGES ========== */
+.pay-status-badge{display:inline-flex;align-items:center;gap:3px;font-size:0.68rem;font-weight:700;padding:2px 8px;border-radius:20px;}
+.pay-status-paid{background:#e3f2fd;color:#1565c0;}
+.pay-status-unpaid{background:#f3f4f7;color:var(--muted);}
+.demo-mode-banner{background:#fff3e0;color:#8A5300;font-size:0.72rem;padding:0.5rem 0.7rem;border-radius:var(--r-sm);margin-bottom:0.7rem;display:flex;align-items:center;gap:6px;}
+
 /* Misc */
 .hidden{display:none!important;}
 .syne{font-family:'Sora',sans-serif;}
 a{color:inherit;text-decoration:none;}
 </style>
+</head>
+<body>
+
+<!-- ===== MARKETPLACE SCREEN ===== -->
+<div id="marketplace-screen" class="screen active">
+
+  <!-- TOP NAV -->
+  <div class="pageName">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <img src="https://timetable.univen.ac.za/images/univen-crest.png" style="width:30px;height:30px;border-radius:6px;" alt="">
+      <div>
+        <div style="font-family:'Sora',sans-serif;font-size:0.95rem;font-weight:700;line-height:1.1;">UNIVEN <span style="color:var(--green)">Market</span></div>
+        <div style="font-size:0.62rem;color:var(--muted);letter-spacing:.4px;">VENDA CAMPUS MARKETPLACE</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:0.4rem;align-items:center;">
+      <button class="nav-btn nav-btn-ghost" id="wishlist-nav-btn" style="position:relative;width:36px;padding:0;justify-content:center;">
+        <i class="fas fa-heart"></i>
+        <span class="notification-badge hidden" id="wishlist-count-badge">0</span>
+      </button>
+      <button class="nav-btn nav-btn-ghost" id="track-order-btn" style="gap:4px;"><i class="fas fa-box-open"></i> Track</button>
+      <button class="nav-btn nav-btn-gold" id="open-seller-btn"><i class="fas fa-store"></i> Sell</button>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero-strip">
+    <div class="hero-logo">
+      <img src="https://timetable.univen.ac.za/images/univen-crest.png" alt="">
+      <span>Venda Market <small>Student commerce, simplified</small></span>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="num" id="stat-products">—</div><div class="lbl">Products</div></div>
+      <div class="hero-stat"><div class="num" id="stat-sellers">—</div><div class="lbl">Sellers</div></div>
+      <div class="hero-stat"><div class="num" id="stat-orders">—</div><div class="lbl">Today's Orders</div></div>
+    </div>
+  </div>
+
+  <!-- PROMO BANNER -->
+  <div class="promo-banner" id="promo-banner" style="margin-top:0.8rem;">
+    <span style="font-size:1.8rem;flex-shrink:0">🚀</span>
+    <div class="promo-text">
+      <strong>Sell to 14,000+ UNIVEN students</strong>
+      <small>Free to list · No commission · Card & WhatsApp ordering</small>
+    </div>
+    <button class="promo-close" onclick="document.getElementById('promo-banner').remove()">✕</button>
+  </div>
+
+  <!-- SEARCH -->
+  <div class="search-wrap" style="margin-top:0.8rem;">
+    <div class="search-row">
+      <div class="search-input-wrap">
+        <i class="fas fa-search"></i>
+        <input type="text" id="market-search" placeholder="Search food, print, clothes…" autocomplete="off">
+      </div>
+      <button class="btn-search" id="search-btn"><i class="fas fa-sliders"></i></button>
+    </div>
+    <div class="cats" id="cats">
+      <span class="cat active" data-cat="all">✨ All</span>
+      <span class="cat" data-cat="Food">🍔 Food</span>
+      <span class="cat" data-cat="Clothing">👕 Clothing</span>
+      <span class="cat" data-cat="Printing">🖨️ Print</span>
+      <span class="cat" data-cat="Beauty">💇 Beauty</span>
+      <span class="cat" data-cat="Services">📚 Services</span>
+      <span class="cat" data-cat="Electronics">📱 Electronics</span>
+      <span class="cat" data-cat="Stationery">✏️ Stationery</span>
+      <span class="cat" data-cat="Groceries">🛒 Groceries</span>
+    </div>
+  </div>
+
+  <!-- SORT -->
+  <div class="sort-bar">
+    <span class="result-count" id="result-count">Loading…</span>
+    <select class="sort-select" id="sort-select">
+      <option value="newest">Newest First</option>
+      <option value="price-asc">Price: Low–High</option>
+      <option value="price-desc">Price: High–Low</option>
+      <option value="rating">Top Rated</option>
+    </select>
+  </div>
+
+  <!-- CARDS -->
+  <div class="cards-grid" id="cards-grid">
+    <div class="card" style="height:280px"><div class="skeleton" style="width:100%;height:140px"></div><div style="padding:.75rem"><div class="skeleton" style="height:14px;margin-bottom:6px;width:70%"></div><div class="skeleton" style="height:18px;margin-bottom:6px;width:40%"></div><div class="skeleton" style="height:10px;margin-bottom:14px;width:90%"></div><div class="skeleton" style="height:32px;border-radius:40px"></div></div></div>
+    <div class="card" style="height:280px"><div class="skeleton" style="width:100%;height:140px"></div><div style="padding:.75rem"><div class="skeleton" style="height:14px;margin-bottom:6px;width:70%"></div><div class="skeleton" style="height:18px;margin-bottom:6px;width:40%"></div><div class="skeleton" style="height:10px;margin-bottom:14px;width:90%"></div><div class="skeleton" style="height:32px;border-radius:40px"></div></div></div>
+    <div class="card" style="height:280px"><div class="skeleton" style="width:100%;height:140px"></div><div style="padding:.75rem"><div class="skeleton" style="height:14px;margin-bottom:6px;width:70%"></div><div class="skeleton" style="height:18px;margin-bottom:6px;width:40%"></div><div class="skeleton" style="height:10px;margin-bottom:14px;width:90%"></div><div class="skeleton" style="height:32px;border-radius:40px"></div></div></div>
+    <div class="card" style="height:280px"><div class="skeleton" style="width:100%;height:140px"></div><div style="padding:.75rem"><div class="skeleton" style="height:14px;margin-bottom:6px;width:70%"></div><div class="skeleton" style="height:18px;margin-bottom:6px;width:40%"></div><div class="skeleton" style="height:10px;margin-bottom:14px;width:90%"></div><div class="skeleton" style="height:32px;border-radius:40px"></div></div></div>
+  </div>
+
+  <!-- CART FAB -->
+  <button class="fab hidden" id="cart-fab">
+    <i class="fas fa-shopping-bag"></i>
+    <span class="fab-count" id="cart-count">0</span>
+  </button>
+</div>
+
+<!-- ===== SELLER SCREEN ===== -->
+<div id="seller-screen" class="screen">
+  <div class="pageName">
+    <h2><i class="fas fa-store" style="color:var(--green);margin-right:5px;"></i> Seller Central</h2>
+    <div style="display:flex;gap:0.4rem;">
+      <button class="nav-btn nav-btn-ghost" id="back-market-btn"><i class="fas fa-arrow-left"></i> Market</button>
+      <button class="nav-btn nav-btn-ghost hidden" id="logout-btn" style="color:var(--danger);border-color:#fcd5d5;"><i class="fas fa-sign-out-alt"></i></button>
+    </div>
+  </div>
+  <div id="seller-body"></div>
+</div>
+
+<!-- ===== ORDER MODAL ===== -->
+<div class="modal-overlay hidden" id="order-modal">
+  <div class="modal-box">
+    <span class="modal-handle"></span>
+    <div class="modal-header">
+      <h3><i class="fas fa-bolt" style="color:var(--green)"></i> Place Order</h3>
+      <button class="close-btn" id="close-order-modal">&times;</button>
+    </div>
+    <div id="order-product-preview"></div>
+    <div class="form-group">
+      <label>Quantity</label>
+      <div class="qty-control">
+        <button class="qty-btn" id="qty-minus">−</button>
+        <span class="qty-display" id="qty-display">1</span>
+        <button class="qty-btn" id="qty-plus">+</button>
+      </div>
+    </div>
+    <div class="form-group"><label>Your Name *</label><input class="input" id="buyer-name" placeholder="Full name"></div>
+    <div class="form-group"><label>WhatsApp Number *</label><input class="input" id="buyer-phone" type="tel" placeholder="e.g. 0761234567"></div>
+    <div class="form-group"><label>Campus Location / Residence</label><input class="input" id="buyer-location" placeholder="e.g. Goede Hoop Res, Block C"></div>
+    <div class="form-group"><label>Special Request (optional)</label><textarea class="textarea" id="order-note" placeholder="Any special instructions…"></textarea></div>
+    <div class="total-line"><span>Total</span><span id="order-total">R 0.00</span></div>
+
+    <button class="btn-full btn-full-dark" id="yoco-pay-btn"><i class="fas fa-credit-card"></i> Pay Securely by Card</button>
+    <div id="yoco-status"></div>
+
+    <div class="or-divider">or</div>
+    <button class="btn-full btn-full-green" id="submit-order-btn"><i class="fas fa-check"></i> Reserve & Pay on Collection</button>
+    <div class="or-divider">or</div>
+    <button class="btn-full btn-full-wa" id="whatsapp-order-btn"><i class="fab fa-whatsapp"></i> Order via WhatsApp</button>
+  </div>
+</div>
+
+<!-- ===== TRACK MODAL ===== -->
+<div class="modal-overlay hidden" id="track-modal">
+  <div class="modal-box">
+    <span class="modal-handle"></span>
+    <div class="modal-header"><h3><i class="fas fa-box-open" style="color:var(--green)"></i> Track Order</h3><button class="close-btn" id="close-track-modal">&times;</button></div>
+    <div class="form-group"><label>Enter your Order ID</label><input class="input" id="track-input" placeholder="e.g. VM123456"></div>
+    <button class="btn-full btn-full-green" id="do-track-btn">Track <i class="fas fa-arrow-right"></i></button>
+    <div id="track-result" style="margin-top:1rem"></div>
+  </div>
+</div>
+
+<!-- ===== PRODUCT DETAIL DRAWER ===== -->
+<div class="detail-drawer hidden" id="detail-drawer">
+  <div class="detail-content" id="detail-content"></div>
+</div>
+
+<!-- ===== CART DRAWER ===== -->
+<div class="cart-drawer" id="cart-drawer">
+  <div class="modal-header">
+    <h3><i class="fas fa-shopping-bag" style="color:var(--green)"></i> My Cart</h3>
+    <button class="close-btn" id="close-cart">&times;</button>
+  </div>
+  <div id="cart-items"></div>
+  <button class="btn-full btn-full-green" id="checkout-cart-btn" style="margin-top:0.8rem;"><i class="fas fa-bolt"></i> Quick Checkout</button>
+</div>
+
+<!-- TOAST -->
+<div class="toast1 hidden" id="toast1"></div>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+<!-- Yoco card payments SDK (client-side, public key only — safe to expose) -->
+<script src="https://js.yoco.com/sdk/v1/yoco-sdk-web.js"></script>
+
+<script>
+/* ====================== IMPORTANT ======================
+   Replace this config with your actual Firebase project config.
+   ======================================================= */
+
+firebase.initializeApp({
+apiKey: "AIzaSyBSMvHpZ0_VkqWjJ94UMa6vqEhFiqrsIWM",
+authDomain: "rare-5f47e.firebaseapp.com",
+databaseURL: "https://rare-5f47e-default-rtdb.firebaseio.com",
+projectId: "rare-5f47e",
+storageBucket: "rare-5f47e.appspot.com",
+messagingSenderId: "811727087812",
+appId: "1:811727087812:web:d362e68abf6c26acf24191"
+});
+
+const db = firebase.database();
+const auth = firebase.auth();
+const storage = firebase.storage();
+
+/* ====================== YOCO PAYMENT CONFIG ======================
+   YOCO_PUBLIC_KEY: safe to expose in the browser — get it from
+     Yoco Business Portal > Settings > API Keys (use pk_test_... while testing).
+
+   CHARGE_ENDPOINT: a Cloud Function URL you deploy separately. It's the
+     ONLY place your Yoco *secret* key may live, because it must never be
+     shipped to the browser. See the deployment note at the bottom of
+     this file for the exact function code to deploy.
+
+   DEMO MODE: while CHARGE_ENDPOINT is empty, card payments are SIMULATED
+     locally (no real charge happens) so you can test the full flow right
+     now without any backend. Set CHARGE_ENDPOINT once your function is
+     deployed to start taking real payments.
+   =================================================================== */
+const YOCO_PUBLIC_KEY = "pk_test_YOUR_PUBLIC_KEY";
+const CHARGE_ENDPOINT = ""; // e.g. "https://us-central1-yourproject.cloudfunctions.net/chargeYocoPayment"
+const DEMO_MODE = !CHARGE_ENDPOINT;
+
+let yoco = null;
+try {
+  if (window.YocoSDK) yoco = new window.YocoSDK({ publicKey: YOCO_PUBLIC_KEY });
+} catch (e) { console.warn("Yoco SDK not available:", e.message); }
+
+// ======================== STATE ========================
+let allListings = [];
+let currentCat = 'all';
+let searchQ = '';
+let sortBy = 'newest';
+let currentSeller = null;
+let currentSellerData = null;
+let orderProduct = null;
+let orderQty = 1;
+let wishlist = JSON.parse(localStorage.getItem('vm_wishlist') || '[]');
+let cart = JSON.parse(localStorage.getItem('vm_cart') || '[]');
+let activeSellerTab = 'overview';
+
+// Image slots for add-listing modal
+let listingImages = [null, null]; // max 2: base64 or URL
+
+// ======================== UTILS ========================
+const $ = id => document.getElementById(id);
+function esc(s){ if(!s)return''; return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+function catEmoji(cat){ return{Food:'🍔',Clothing:'👕',Printing:'🖨️',Beauty:'💇',Services:'📚',Electronics:'📱',Stationery:'✏️',Groceries:'🛒'}[cat]||'🏪'; }
+function formatPrice(p){ return 'R '+Number(p).toFixed(2); }
+function genId(){ return 'VM'+Math.random().toString(36).slice(2,8).toUpperCase(); }
+function timeAgo(ts){
+  const diff=Date.now()-ts,m=Math.floor(diff/60000),h=Math.floor(m/60),d=Math.floor(h/24);
+  if(d>0)return d+'d ago';if(h>0)return h+'h ago';if(m>0)return m+'m ago';return 'just now';
+}
+let toastTimer;
+function toast1(msg,type='',dur=3500){
+  const el=$('toast1');if(!el)return;
+  el.textContent=msg;el.className='toast1 '+(type||'');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>{if(el)el.className='toast1 hidden';},dur);
+}
+function saveWishlist(){ localStorage.setItem('vm_wishlist',JSON.stringify(wishlist)); updateWishlistBadge(); }
+function saveCart(){ localStorage.setItem('vm_cart',JSON.stringify(cart)); updateCartBadge(); }
+function updateWishlistBadge(){
+  const b=$('wishlist-count-badge');if(!b)return;
+  if(wishlist.length>0){b.textContent=wishlist.length;b.classList.remove('hidden');}
+  else b.classList.add('hidden');
+}
+function updateCartBadge(){
+  const fab=$('cart-fab'),cnt=$('cart-count');if(!fab||!cnt)return;
+  const total=cart.reduce((a,c)=>a+c.qty,0);
+  if(total>0){fab.classList.remove('hidden');cnt.textContent=total;}
+  else fab.classList.add('hidden');
+}
+
+// ======================== IMAGE TO BASE64 ========================
+function fileToBase64(file){
+  return new Promise((res,rej)=>{
+    const r=new FileReader();
+    r.onload=e=>res(e.target.result);
+    r.onerror=rej;
+    r.readAsDataURL(file);
+  });
+}
+
+// Compress image to max ~300KB base64
+async function compressImage(file, maxW=800, quality=0.75){
+  return new Promise(res=>{
+    const img=new Image();
+    const url=URL.createObjectURL(file);
+    img.onload=()=>{
+      const canvas=document.createElement('canvas');
+      let w=img.width,h=img.height;
+      if(w>maxW){h=Math.round(h*maxW/w);w=maxW;}
+      canvas.width=w;canvas.height=h;
+      canvas.getContext('2d').drawImage(img,0,0,w,h);
+      URL.revokeObjectURL(url);
+      res(canvas.toDataURL('image/jpeg',quality));
+    };
+    img.src=url;
+  });
+}
+
+// ======================== LOAD LISTINGS ========================
+function loadListings(){
+  db.ref('vendamarket/listings').on('value',snap=>{
+    const data=snap.val();
+    allListings=[];
+    if(data) Object.keys(data).forEach(k=>{
+      const l=data[k];
+      if(l.status==='active') allListings.push({id:k,...l});
+    });
+    renderListings();
+    updateStats();
+  });
+}
+
+function filteredListings(){
+  let arr=[...allListings];
+  if(currentCat!=='all') arr=arr.filter(l=>l.category===currentCat);
+  if(searchQ.trim()){
+    const q=searchQ.toLowerCase();
+    arr=arr.filter(l=>(l.title||'').toLowerCase().includes(q)||(l.shopName||'').toLowerCase().includes(q)||(l.description||'').toLowerCase().includes(q));
+  }
+  if(sortBy==='price-asc') arr.sort((a,b)=>a.price-b.price);
+  else if(sortBy==='price-desc') arr.sort((a,b)=>b.price-a.price);
+  else if(sortBy==='rating') arr.sort((a,b)=>(b.rating||0)-(a.rating||0));
+  else arr.sort((a,b)=>b.createdAt-a.createdAt);
+  return arr;
+}
+
+function renderListings(){
+  const arr=filteredListings();
+  const grid=$('cards-grid'),rc=$('result-count');
+  if(!grid||!rc)return;
+  rc.textContent=`${arr.length} product${arr.length!==1?'s':''} found`;
+  if(arr.length===0){
+    grid.innerHTML=`<div class="empty-state"><div class="empty-icon">🛒</div><h3>No products yet</h3><p>Be the first to list in this category!</p><button class="btn-full btn-full-green" style="max-width:220px;margin:0 auto" onclick="openSeller()"><i class="fas fa-plus"></i> Start Selling</button></div>`;
+    return;
+  }
+  grid.innerHTML=arr.map((item,i)=>{
+    const liked=wishlist.includes(item.id);
+    const stars=item.rating>0?'⭐'.repeat(Math.min(5,Math.round(item.rating))):'— new';
+    const reviewCount=item.reviewCount||0;
+    const hasImg=item.images&&item.images.length>0&&item.images[0];
+    const imgHtml=hasImg
+      ?`<img class="product-img" src="${item.images[0]}" alt="${esc(item.title)}" loading="lazy">`
+      :`<span class="cat-emoji">${catEmoji(item.category)}</span>`;
+    const multiImg=hasImg&&item.images.length>1;
+    return `<div class="card fade-up" style="animation-delay:${i*0.04}s" data-id="${item.id}">
+      <div class="card-img">
+        ${imgHtml}
+        <span class="card-badge">${esc(item.category)}</span>
+        ${multiImg?`<div class="img-dots"><span class="img-dot active"></span><span class="img-dot"></span></div>`:''}
+        <button class="wishlist-btn ${liked?'liked':''}" data-wid="${item.id}" onclick="event.stopPropagation();toggleWishlist('${item.id}')">
+          <i class="fa${liked?'s':'r'} fa-heart"></i>
+        </button>
+        ${item.soldOut?`<div class="sold-out-overlay">SOLD OUT</div>`:''}
+      </div>
+      <div class="card-body">
+        <div class="card-top">
+          <div class="card-title">${esc(item.title)}</div>
+          <div class="card-price">${formatPrice(item.price)}</div>
+        </div>
+        <div class="card-shop"><i class="fas fa-store" style="font-size:.7rem;color:var(--green)"></i> ${esc(item.shopName)}</div>
+        <div class="card-rating"><span>${stars}</span>${reviewCount>0?`<span style="color:var(--muted)"> (${reviewCount})</span>`:''}</div>
+        <p class="card-desc">${esc((item.description||'').substring(0,70))}${(item.description||'').length>70?'…':''}</p>
+        <div class="card-actions">
+          <button class="btn-wa" onclick="event.stopPropagation();waContact('${item.whatsapp}','${esc(item.title)}')"><i class="fab fa-whatsapp"></i></button>
+          <button class="btn-order${item.soldOut?' disabled':''}" onclick="event.stopPropagation();${item.soldOut?'':'openOrder(\''+item.id+'\')'}">
+            <i class="fas fa-bolt"></i> ${item.soldOut?'Sold Out':'Order'}
+          </button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+  document.querySelectorAll('.card[data-id]').forEach(c=>{
+    c.addEventListener('click',()=>openDetail(c.dataset.id));
+  });
+}
+
+function updateStats(){
+  const sp=$('stat-products'),ss=$('stat-sellers'),so=$('stat-orders');
+  if(sp) sp.textContent=allListings.length;
+  if(ss) db.ref('vendamarket/sellers').once('value',s=>{if(ss)ss.textContent=s.val()?Object.keys(s.val()).length:0;});
+  if(so) db.ref('vendamarket/orders').orderByChild('createdAt').startAt(Date.now()-86400000).once('value',s=>{if(so)so.textContent=s.val()?Object.keys(s.val()).length:0;});
+}
+
+// ======================== WISHLIST ========================
+function toggleWishlist(id){
+  if(wishlist.includes(id)) wishlist=wishlist.filter(w=>w!==id);
+  else{wishlist.push(id);toast1('❤️ Added to wishlist!');}
+  saveWishlist();renderListings();
+}
+
+// ======================== PRODUCT DETAIL (with image slider) ========================
+let detailSliderIdx=0;
+function openDetail(id){
+  const p=allListings.find(l=>l.id===id);if(!p)return;
+  const liked=wishlist.includes(id);
+  const dc=$('detail-content');if(!dc)return;
+
+  const images=(p.images||[]).filter(Boolean);
+  let sliderHtml='';
+  if(images.length>0){
+    sliderHtml=`<div class="detail-img-wrap" id="detail-slider">
+      <div class="slider-imgs" id="slider-imgs">
+        ${images.map(src=>`<img src="${src}" alt="${esc(p.title)}">`).join('')}
+      </div>
+      ${images.length>1?`
+        <button class="slider-arrow left" onclick="slideDetail(-1)">‹</button>
+        <button class="slider-arrow right" onclick="slideDetail(1)">›</button>
+        <div class="slider-nav">${images.map((_,i)=>`<span class="slider-dot${i===0?' active':''}" onclick="goSlide(${i})"></span>`).join('')}</div>
+      `:''}
+    </div>`;
+  } else {
+    sliderHtml=`<div style="text-align:center;font-size:5rem;padding:1.5rem 0;">${catEmoji(p.category)}</div>`;
+  }
+  detailSliderIdx=0;
+
+  dc.innerHTML=`
+    <div class="modal-header" style="margin-bottom:0.5rem">
+      <span></span>
+      <button class="close-btn" onclick="document.getElementById('detail-drawer').classList.add('hidden')">&times;</button>
+    </div>
+    ${sliderHtml}
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
+      <div>
+        <h2 class="syne" style="font-size:1.25rem;line-height:1.2;">${esc(p.title)}</h2>
+        <span class="status-badge status-active" style="margin-top:4px;display:inline-block;">${esc(p.category)}</span>
+      </div>
+      <div class="detail-price">${formatPrice(p.price)}</div>
+    </div>
+    <div class="detail-shop">
+      <div class="shop-avatar">${(p.shopName||'?')[0].toUpperCase()}</div>
+      <div><strong>${esc(p.shopName)}</strong><br><small style="color:var(--muted)">Listed ${timeAgo(p.createdAt)}</small></div>
+    </div>
+    <p style="color:var(--text-soft);font-size:0.88rem;line-height:1.65;margin-bottom:1.2rem;">${esc(p.description||'No description provided.')}</p>
+    ${p.rating>0?`<div class="card-rating" style="margin-bottom:1rem;">${'⭐'.repeat(Math.min(5,Math.round(p.rating)))} <strong>${p.rating}</strong>/5 (${p.reviewCount||0} reviews)</div>`:''}
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.7rem;margin-bottom:0.7rem;">
+      <button class="btn-full btn-full-wa" onclick="waContact('${p.whatsapp}','${esc(p.title)}')"><i class="fab fa-whatsapp"></i> WhatsApp</button>
+      <button class="btn-full btn-full-green" onclick="document.getElementById('detail-drawer').classList.add('hidden');openOrder('${p.id}')"><i class="fas fa-bolt"></i> Order Now</button>
+    </div>
+    <button style="width:100%;padding:0.72rem;border-radius:40px;border:1.5px solid var(--border);background:#fff;cursor:pointer;font-weight:600;font-size:0.88rem;display:flex;align-items:center;justify-content:center;gap:8px;color:${liked?'var(--danger)':'var(--muted)'};" onclick="toggleWishlist('${p.id}');document.getElementById('detail-drawer').classList.add('hidden')">
+      <i class="fa${liked?'s':'r'} fa-heart"></i> ${liked?'Remove from Wishlist':'Save to Wishlist'}
+    </button>`;
+
+  const drawer=$('detail-drawer');if(drawer)drawer.classList.remove('hidden');
+}
+
+window.slideDetail=function(dir){
+  const imgs=document.getElementById('slider-imgs');if(!imgs)return;
+  const count=imgs.children.length;
+  detailSliderIdx=(detailSliderIdx+dir+count)%count;
+  imgs.style.transform=`translateX(-${detailSliderIdx*100}%)`;
+  document.querySelectorAll('.slider-dot').forEach((d,i)=>d.classList.toggle('active',i===detailSliderIdx));
+};
+window.goSlide=function(i){
+  detailSliderIdx=i;
+  const imgs=document.getElementById('slider-imgs');if(!imgs)return;
+  imgs.style.transform=`translateX(-${i*100}%)`;
+  document.querySelectorAll('.slider-dot').forEach((d,j)=>d.classList.toggle('active',j===i));
+};
+
+// ======================== ORDER MODAL ========================
+function openOrder(id){
+  const p=allListings.find(l=>l.id===id);if(!p)return;
+  orderProduct=p;orderQty=1;
+  const qd=$('qty-display');if(qd)qd.textContent=1;
+  updateOrderTotal();
+  const op=$('order-product-preview');
+  if(op){
+    const img=(p.images&&p.images[0])?`<img class="order-product-img" src="${p.images[0]}" alt="">`:`<div class="order-product-emoji">${catEmoji(p.category)}</div>`;
+    op.innerHTML=`<div class="order-product-card">${img}<div class="order-product-info"><h4>${esc(p.title)}</h4><div class="price-tag">${formatPrice(p.price)}</div><div class="shop-tag"><i class="fas fa-store" style="font-size:.7rem;margin-right:3px;"></i>${esc(p.shopName)}</div></div></div>`;
+  }
+  const statusEl=$('yoco-status');if(statusEl)statusEl.innerHTML=DEMO_MODE?`<div class="demo-mode-banner"><i class="fas fa-flask"></i> Demo mode: card payment is simulated, no real charge occurs.</div>`:'';
+  const modal=$('order-modal');if(modal)modal.classList.remove('hidden');
+  const bn=$('buyer-name');if(bn)bn.focus();
+}
+function updateOrderTotal(){
+  if(!orderProduct)return;
+  const ot=$('order-total');if(ot)ot.textContent=formatPrice(orderProduct.price*orderQty);
+}
+
+// ======================== BUILD ORDER PAYLOAD (shared by all 3 payment paths) ========================
+function currentOrderPayload(){
+  const name=$('buyer-name')?.value.trim()||'';
+  const phone=$('buyer-phone')?.value.trim()||'';
+  const location=$('buyer-location')?.value.trim()||'';
+  const note=$('order-note')?.value.trim()||'';
+  if(!orderProduct||!name||!phone) return null;
+  const oid=genId();
+  return {
+    orderId:oid,productId:orderProduct.id,productTitle:orderProduct.title,
+    shopId:orderProduct.sellerId,shopName:orderProduct.shopName,sellerWhatsapp:orderProduct.whatsapp,
+    price:orderProduct.price,buyerName:name,buyerPhone:phone,buyerLocation:location,
+    quantity:orderQty,total:orderProduct.price*orderQty,note,
+    status:'pending',paymentStatus:'unpaid',paymentMethod:'unpaid',createdAt:Date.now()
+  };
+}
+
+// ======================== SEARCH / FILTER / ORDER FORM ========================
+document.addEventListener('DOMContentLoaded',()=>{
+  const si=$('market-search');
+  if(si) si.addEventListener('input',e=>{searchQ=e.target.value;renderListings();});
+  const sb=$('search-btn');
+  if(sb) sb.addEventListener('click',()=>renderListings());
+  const ss=$('sort-select');
+  if(ss) ss.addEventListener('change',e=>{sortBy=e.target.value;renderListings();});
+  document.querySelectorAll('.cat').forEach(c=>{
+    c.addEventListener('click',()=>{
+      document.querySelectorAll('.cat').forEach(x=>x.classList.remove('active'));
+      c.classList.add('active');currentCat=c.dataset.cat;renderListings();
+    });
+  });
+  // Qty
+  const qm=$('qty-minus'),qp=$('qty-plus');
+  if(qm) qm.addEventListener('click',()=>{if(orderQty>1)orderQty--;const qd=$('qty-display');if(qd)qd.textContent=orderQty;updateOrderTotal();});
+  if(qp) qp.addEventListener('click',()=>{orderQty++;const qd=$('qty-display');if(qd)qd.textContent=orderQty;updateOrderTotal();});
+  // Close order modal
+  const com=$('close-order-modal');
+  if(com) com.addEventListener('click',()=>{const om=$('order-modal');if(om)om.classList.add('hidden');});
+
+  // ---- Reserve & pay on collection (original manual order flow) ----
+  const sob=$('submit-order-btn');
+  if(sob) sob.addEventListener('click',async()=>{
+    const order=currentOrderPayload();
+    if(!order){toast1(!$('buyer-name')?.value.trim()?'Please enter your name':'Please enter your phone number','error');return;}
+    order.paymentMethod='collection';
+    try{
+      await db.ref('vendamarket/orders/'+order.orderId).set(order);
+      await db.ref(`vendamarket/sellerInbox/${order.shopId}/${order.orderId}`).set(order);
+      toast1(`✅ Order #${order.orderId} placed! Seller notified.`,'success',5000);
+      localStorage.setItem('last_order_id',order.orderId);
+      const modal=$('order-modal');if(modal)modal.classList.add('hidden');
+      ['buyer-name','buyer-phone','buyer-location','order-note'].forEach(id=>{const el=$(id);if(el)el.value='';});
+    }catch(e){toast1('Error placing order. Try again.','error');console.error(e);}
+  });
+
+  // ---- WhatsApp order ----
+  const wo=$('whatsapp-order-btn');
+  if(wo) wo.addEventListener('click',()=>{
+    if(!orderProduct)return;
+    const name=$('buyer-name')?.value.trim()||'a student';
+    const wa=orderProduct.whatsapp?.replace(/\D/g,'');
+    if(!wa){toast1('No WhatsApp number for this seller','error');return;}
+    const msg=`Hi! I'm ordering *${orderProduct.title}* (×${orderQty}) = *${formatPrice(orderProduct.price*orderQty)}* via Venda Market. My name: ${name}.${$('order-note')?.value?'\nNote: '+$('order-note').value:''}`;
+    window.open(`https://wa.me/${wa}?text=${encodeURIComponent(msg)}`,'_blank');
+  });
+
+  // ---- Pay by card (Yoco) ----
+  const payBtn=$('yoco-pay-btn');
+  if(payBtn) payBtn.addEventListener('click',()=>{
+    const order=currentOrderPayload();
+    if(!order){toast1(!$('buyer-name')?.value.trim()?'Please enter your name first':'Please enter your WhatsApp number first','error');return;}
+
+    const statusEl=$('yoco-status');
+    payBtn.disabled=true;
+    payBtn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Opening secure card form…';
+
+    const finish=(html)=>{ payBtn.disabled=false; payBtn.innerHTML='<i class="fas fa-credit-card"></i> Pay Securely by Card'; if(statusEl) statusEl.innerHTML=html; };
+
+    if(DEMO_MODE){
+      // No backend configured: simulate a successful card charge locally so
+      // the flow is fully testable. Nothing is actually charged.
+      setTimeout(async ()=>{
+        order.status='confirmed';
+        order.paymentStatus='paid';
+        order.paymentMethod='card-demo';
+        order.paymentRef='DEMO-'+Date.now();
+        try{
+          await db.ref('vendamarket/orders/'+order.orderId).set(order);
+          await db.ref(`vendamarket/sellerInbox/${order.shopId}/${order.orderId}`).set(order);
+          finish(`<div style="color:var(--green);font-size:.82rem;"><i class="fas fa-check-circle"></i> Demo payment successful.</div>`);
+          toast1(`✅ (Demo) Payment successful! Order #${order.orderId} confirmed.`,'success',5000);
+          $('order-modal').classList.add('hidden');
+          ['buyer-name','buyer-phone','buyer-location','order-note'].forEach(id=>{const el=$(id);if(el)el.value='';});
+          localStorage.setItem('last_order_id',order.orderId);
+        }catch(e){ finish(`<div style="color:var(--danger);font-size:.82rem;">Could not save order. Try again.</div>`); }
+      }, 900);
+      return;
+    }
+
+    if(!yoco){ finish(`<div style="color:var(--danger);font-size:.82rem;">Card payments are unavailable right now.</div>`); return; }
+
+    yoco.showPopup({
+      amountInCents: Math.round(order.total*100),
+      currency:'ZAR',
+      name: order.shopName,
+      description: `${order.productTitle} × ${order.quantity}`,
+      callback: async (result)=>{
+        if(result.error){ finish(`<div style="color:var(--danger);font-size:.82rem;">${esc(result.error.message)}</div>`); return; }
+        if(statusEl) statusEl.innerHTML=`<div style="color:var(--muted);font-size:.82rem;"><i class="fas fa-spinner fa-spin"></i> Processing payment…</div>`;
+        try{
+          const res=await fetch(CHARGE_ENDPOINT,{
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({token:result.id,order})
+          });
+          const data=await res.json();
+          if(!res.ok||!data.success) throw new Error(data.error||'Payment failed');
+          finish(`<div style="color:var(--green);font-size:.82rem;"><i class="fas fa-check-circle"></i> Payment successful.</div>`);
+          toast1(`✅ Payment successful! Order #${order.orderId} confirmed.`,'success',5000);
+          $('order-modal').classList.add('hidden');
+          ['buyer-name','buyer-phone','buyer-location','order-note'].forEach(id=>{const el=$(id);if(el)el.value='';});
+          localStorage.setItem('last_order_id',order.orderId);
+        }catch(err){ finish(`<div style="color:var(--danger);font-size:.82rem;">${esc(err.message)}</div>`); }
+      }
+    });
+  });
+
+  // Track
+  const tob=$('track-order-btn');
+  if(tob) tob.addEventListener('click',()=>{const tm=$('track-modal');if(tm)tm.classList.remove('hidden');});
+  const ctm=$('close-track-modal');
+  if(ctm) ctm.addEventListener('click',()=>{const tm=$('track-modal');if(tm)tm.classList.add('hidden');});
+  const dtb=$('do-track-btn');
+  if(dtb) dtb.addEventListener('click',async()=>{
+    const oid=$('track-input')?.value.trim().toUpperCase();
+    if(!oid){toast1('Enter order ID','error');return;}
+    const snap=await db.ref('vendamarket/orders/'+oid).once('value');
+    const o=snap.val();
+    const statusMap={
+      pending:{color:'#E65100',bg:'#FFF3E0',icon:'🕐',label:'Pending — Seller reviewing'},
+      confirmed:{color:'#1565C0',bg:'#E3F2FD',icon:'✅',label:'Confirmed — Being prepared'},
+      ready:{color:'#6A1B9A',bg:'#F3E5F5',icon:'📦',label:'Ready — Come collect!'},
+      delivered:{color:'#2E7D32',bg:'#E8F5E9',icon:'🎉',label:'Delivered!'},
+      cancelled:{color:'#C62828',bg:'#FFEBEE',icon:'❌',label:'Cancelled'}
+    };
+    const tr=$('track-result');if(!tr)return;
+    if(!o){tr.innerHTML=`<div style="padding:1rem;background:#FFEBEE;border-radius:var(--r-md);text-align:center"><strong>Order not found.</strong><br>Check your order ID.</div>`;return;}
+    const st=statusMap[o.status]||statusMap.pending;
+    const payBadge=o.paymentStatus==='paid'?`<span class="pay-status-badge pay-status-paid"><i class="fas fa-check"></i> Paid${o.paymentMethod==='card-demo'?' (demo)':''}</span>`:`<span class="pay-status-badge pay-status-unpaid">Pay on collection</span>`;
+    tr.innerHTML=`<div style="background:${st.bg};border-radius:var(--r-md);padding:1.2rem"><div style="font-size:2rem;text-align:center;margin-bottom:.5rem">${st.icon}</div><h4 style="text-align:center;color:${st.color};margin-bottom:.4rem">${st.label}</h4><div style="text-align:center;margin-bottom:.8rem;">${payBadge}</div><div style="font-size:.85rem;display:grid;gap:.3rem"><div>📦 <strong>${esc(o.productTitle)}</strong> ×${o.quantity}</div><div>🏪 ${esc(o.shopName)}</div><div>💰 ${formatPrice(o.total||o.price*o.quantity)}</div><div>🕐 ${new Date(o.createdAt).toLocaleString()}</div>${o.buyerLocation?`<div>📍 ${esc(o.buyerLocation)}</div>`:''}</div></div>`;
+  });
+  // Wishlist btn
+  const wb=$('wishlist-nav-btn');
+  if(wb) wb.addEventListener('click',()=>{
+    if(wishlist.length===0){toast1('Your wishlist is empty! Heart a product to save it.');return;}
+    const arr=allListings.filter(l=>wishlist.includes(l.id));
+    const grid=$('cards-grid'),rc=$('result-count');if(!grid||!rc)return;
+    rc.textContent=`${arr.length} wishlist item${arr.length!==1?'s':''}`;
+    grid.innerHTML=`<div style="grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;padding:0 0 .5rem"><h3 style="font-size:1rem"><i class="fas fa-heart" style="color:var(--danger)"></i> Your Wishlist</h3><button style="background:none;border:none;font-size:.82rem;color:var(--muted);cursor:pointer" onclick="renderListings()">← All products</button></div>`+arr.map((item,i)=>{
+      const hasImg=item.images&&item.images.length>0&&item.images[0];
+      const imgHtml=hasImg?`<img class="product-img" src="${item.images[0]}" alt="${esc(item.title)}" loading="lazy">`:`<span class="cat-emoji">${catEmoji(item.category)}</span>`;
+      return `<div class="card fade-up" style="animation-delay:${i*0.04}s" data-id="${item.id}">
+        <div class="card-img">${imgHtml}<span class="card-badge">${esc(item.category)}</span><button class="wishlist-btn liked" onclick="event.stopPropagation();toggleWishlist('${item.id}')"><i class="fas fa-heart"></i></button></div>
+        <div class="card-body"><div class="card-top"><div class="card-title">${esc(item.title)}</div><div class="card-price">${formatPrice(item.price)}</div></div><div class="card-shop"><i class="fas fa-store" style="font-size:.7rem;color:var(--green)"></i> ${esc(item.shopName)}</div><div class="card-actions"><button class="btn-wa" onclick="event.stopPropagation();waContact('${item.whatsapp}','${esc(item.title)}')"><i class="fab fa-whatsapp"></i></button><button class="btn-order" onclick="event.stopPropagation();openOrder('${item.id}')"><i class="fas fa-bolt"></i> Order</button></div></div></div>`;
+    }).join('');
+    document.querySelectorAll('.card[data-id]').forEach(c=>c.addEventListener('click',()=>openDetail(c.dataset.id)));
+  });
+  // Cart
+  const cf=$('cart-fab');
+  if(cf) cf.addEventListener('click',()=>{
+    const d=$('cart-drawer');if(!d)return;
+    if(d.classList.contains('open')){d.classList.remove('open');return;}
+    renderCart();d.classList.add('open');
+  });
+  const cc=$('close-cart');
+  if(cc) cc.addEventListener('click',()=>{const cd=$('cart-drawer');if(cd)cd.classList.remove('open');});
+  // Sellers
+  const osb=$('open-seller-btn');
+  if(osb) osb.addEventListener('click',openSeller);
+  const bmb=$('back-market-btn');
+  if(bmb) bmb.addEventListener('click',()=>{
+    const ss=$('seller-screen'),ms=$('marketplace-screen');
+    if(ss)ss.classList.remove('active');if(ms)ms.classList.add('active');
+  });
+  const lb=$('logout-btn');
+  if(lb) lb.addEventListener('click',async()=>{
+    await auth.signOut();currentSeller=null;currentSellerData=null;
+    toast1('Logged out');
+    const ss=$('seller-screen'),ms=$('marketplace-screen');
+    if(ss)ss.classList.remove('active');if(ms)ms.classList.add('active');
+  });
+  // Drawer close on backdrop
+  const dd=$('detail-drawer');if(dd)dd.addEventListener('click',e=>{if(e.target===dd)dd.classList.add('hidden');});
+  const om=$('order-modal');if(om)om.addEventListener('click',e=>{if(e.target===om)om.classList.add('hidden');});
+  const tm=$('track-modal');if(tm)tm.addEventListener('click',e=>{if(e.target===tm)tm.classList.add('hidden');});
+  // Checkout cart
+  const ccb=$('checkout-cart-btn');
+  if(ccb) ccb.addEventListener('click',()=>{
+    if(cart.length===0){toast1('Cart is empty','error');return;}
+    const first=cart[0];const p=allListings.find(l=>l.id===first.id);
+    if(p)openOrder(p.id);
+    const cd=$('cart-drawer');if(cd)cd.classList.remove('open');
+  });
+});
+
+function waContact(wa,title){
+  const clean=(wa||'').replace(/\D/g,'');
+  if(!clean){toast1('No WhatsApp number available','error');return;}
+  window.open(`https://wa.me/${clean}?text=${encodeURIComponent('Hi! I saw your '+title+' on Venda Market (UNIVEN). Is it still available?')}`,'_blank');
+}
+
+// ======================== CART ========================
+function renderCart(){
+  const ci=$('cart-items');if(!ci)return;
+  if(cart.length===0){ci.innerHTML=`<p style="text-align:center;color:var(--muted);padding:1.5rem">Cart is empty 🛒</p>`;return;}
+  ci.innerHTML=cart.map(item=>`<div class="listing-row"><div>${catEmoji(item.category)} <strong>${esc(item.title)}</strong><br><small style="color:var(--muted)">${formatPrice(item.price)} × ${item.qty} = ${formatPrice(item.price*item.qty)}</small></div><button class="btn-sm btn-danger" onclick="removeFromCart('${item.id}')"><i class="fas fa-trash"></i></button></div>`).join('');
+  const total=cart.reduce((a,c)=>a+c.price*c.qty,0);
+  ci.innerHTML+=`<div class="total-line"><span>Cart Total</span><span>${formatPrice(total)}</span></div>`;
+}
+function addToCart(id){
+  const p=allListings.find(l=>l.id===id);if(!p)return;
+  const ex=cart.find(c=>c.id===id);
+  if(ex)ex.qty++;else cart.push({id:p.id,title:p.title,price:p.price,category:p.category,qty:1});
+  saveCart();toast1('🛒 Added to cart!','success');
+}
+function removeFromCart(id){cart=cart.filter(c=>c.id!==id);saveCart();renderCart();}
+
+// ======================== SELLER PORTAL ========================
+function openSeller(){
+  const ms=$('marketplace-screen'),ss=$('seller-screen');
+  if(ms)ms.classList.remove('active');if(ss)ss.classList.add('active');
+  if(currentSeller)loadSellerDashboard();else renderSellerAuth();
+}
+
+function renderSellerAuth(){
+  const sb=$('seller-body');if(!sb)return;
+  sb.innerHTML=`<div class="auth-wrap fade-up"><div class="auth-card"><div class="auth-logo"><div class="icon">🏪</div><h2>Seller Portal</h2><p>Reach 14,000+ UNIVEN students with your business</p></div><div class="auth-toggle"><button class="auth-toggle-btn active" id="tab-login" onclick="switchSellerTab('login')">Log In</button><button class="auth-toggle-btn" id="tab-register" onclick="switchSellerTab('register')">Register</button></div><div id="auth-form-wrap">${loginForm()}</div></div><p style="text-align:center;margin-top:.8rem;font-size:.78rem;color:var(--muted)">Free to use · No commission · Instant orders</p></div>`;
+}
+
+function loginForm(){return`<div class="form-group"><label>Email</label><input class="input" id="l-email" type="email" placeholder="you@univen.ac.za"></div><div class="form-group"><label>Password</label><input class="input" id="l-pwd" type="password" placeholder="Password"></div><button class="btn-full btn-full-green" onclick="doLogin()"><i class="fas fa-sign-in-alt"></i> Log In</button><p style="text-align:center;font-size:.78rem;color:var(--muted);margin-top:.7rem">Forgot password? <a href="#" onclick="doResetPwd()" style="color:var(--green)">Reset it</a></p>`;}
+function registerForm(){return`<div class="input-row"><div class="form-group"><label>Shop Name *</label><input class="input" id="r-shop" placeholder="Mama T's Kitchen"></div><div class="form-group"><label>Your Name *</label><input class="input" id="r-owner" placeholder="Thabo Nkosi"></div></div><div class="form-group"><label>Email *</label><input class="input" id="r-email" type="email" placeholder="you@univen.ac.za"></div><div class="form-group"><label>WhatsApp Number *</label><input class="input" id="r-wa" type="tel" placeholder="0761234567"></div><div class="form-group"><label>Main Category *</label><select class="select" id="r-cat"><option>Food</option><option>Clothing</option><option>Printing</option><option>Beauty</option><option>Services</option><option>Electronics</option><option>Stationery</option><option>Groceries</option></select></div><div class="form-group"><label>Campus Location</label><input class="input" id="r-loc" placeholder="e.g. Residences, Main Campus"></div><div class="form-group"><label>Password (min 6 chars) *</label><input class="input" id="r-pwd" type="password" placeholder="Password"></div><button class="btn-full btn-full-gold" onclick="doRegister()"><i class="fas fa-rocket"></i> Start Selling Free →</button>`;}
+
+window.switchSellerTab=function(t){
+  const tl=$('tab-login'),tr=$('tab-register'),aw=$('auth-form-wrap');
+  if(tl)tl.classList.toggle('active',t==='login');if(tr)tr.classList.toggle('active',t==='register');
+  if(aw)aw.innerHTML=t==='login'?loginForm():registerForm();
+};
+
+async function doLogin(){
+  const email=$('l-email')?.value.trim(),pwd=$('l-pwd')?.value;
+  if(!email||!pwd){toast1('Fill all fields','error');return;}
+  try{
+    const cred=await auth.signInWithEmailAndPassword(email,pwd);
+    const snap=await db.ref('vendamarket/sellers/'+cred.user.uid).once('value');
+    if(!snap.exists())throw new Error('No seller profile found.');
+    currentSeller=cred.user;currentSellerData=snap.val();loadSellerDashboard();
+  }catch(err){toast1('Login failed: '+err.message,'error');}
+}
+async function doRegister(){
+  const shop=$('r-shop')?.value.trim(),owner=$('r-owner')?.value.trim(),
+    email=$('r-email')?.value.trim(),wa=$('r-wa')?.value.trim(),
+    cat=$('r-cat')?.value,loc=$('r-loc')?.value.trim(),pwd=$('r-pwd')?.value;
+  if(!shop||!owner||!email||!wa||!pwd||pwd.length<6){toast1('Fill all required fields (password 6+ chars)','error');return;}
+  try{
+    const cred=await auth.createUserWithEmailAndPassword(email,pwd);
+    const profile={shopName:shop,ownerName:owner,email,whatsapp:wa,category:cat,location:loc,status:'active',createdAt:Date.now(),listingsCount:0};
+    await db.ref('vendamarket/sellers/'+cred.user.uid).set(profile);
+    currentSeller=cred.user;currentSellerData=profile;
+    toast1('🎉 Welcome! Your shop is live!','success');loadSellerDashboard();
+  }catch(err){toast1('Registration error: '+err.message,'error');}
+}
+window.doResetPwd=async function(){
+  const e=prompt('Enter your email for password reset:');if(!e)return;
+  try{await auth.sendPasswordResetEmail(e);toast1('Reset email sent!','success');}
+  catch(err){toast1(err.message,'error');}
+};
+
+async function loadSellerDashboard(){
+  if(!currentSeller)return;
+  const lb=$('logout-btn');if(lb)lb.classList.remove('hidden');
+  const uid=currentSeller.uid;
+  const [ls,os,is_]=await Promise.all([
+    db.ref('vendamarket/listings').orderByChild('sellerId').equalTo(uid).once('value'),
+    db.ref('vendamarket/orders').orderByChild('shopId').equalTo(uid).once('value'),
+    db.ref('vendamarket/sellerInbox/'+uid).once('value')
+  ]);
+  const myListings=ls.val()?Object.keys(ls.val()).map(k=>({id:k,...ls.val()[k]})):[];
+  const myOrders=os.val()?Object.keys(os.val()).map(k=>({id:k,...os.val()[k]})):[];
+  const messages=is_.val()?Object.values(is_.val()):[];
+  const pending=myOrders.filter(o=>o.status==='pending').length;
+  const paidOrders=myOrders.filter(o=>o.paymentStatus==='paid');
+  const revenue=myOrders.filter(o=>o.status==='delivered').reduce((a,c)=>a+(c.total||0),0);
+  const cardRevenue=paidOrders.reduce((a,c)=>a+(c.total||0),0);
+
+  const sb=$('seller-body');if(!sb)return;
+  sb.innerHTML=`
+<div class="seller-tabs">
+  <button class="tab-btn ${activeSellerTab==='overview'?'active':''}" onclick="setTab('overview',this)"><i class="fas fa-chart-pie"></i>Overview</button>
+  <button class="tab-btn ${activeSellerTab==='listings'?'active':''}" onclick="setTab('listings',this)"><i class="fas fa-box"></i>Products</button>
+  <button class="tab-btn ${activeSellerTab==='orders'?'active':''}" onclick="setTab('orders',this)"><i class="fas fa-shopping-bag"></i>Orders${pending>0?`<span style="background:var(--danger);color:#fff;border-radius:20px;padding:1px 5px;font-size:.62rem;margin-left:3px;">${pending}</span>`:''}</button>
+  <button class="tab-btn ${activeSellerTab==='messages'?'active':''}" onclick="setTab('messages',this)"><i class="fas fa-comment-dots"></i>Inbox</button>
+</div>
+<div class="seller-content">
+  <!-- OVERVIEW -->
+  <div id="tab-overview" class="${activeSellerTab==='overview'?'':'hidden'}">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:1.2rem;background:var(--surface);padding:1rem;border-radius:var(--r-md);border:1px solid var(--border);">
+      <div class="shop-avatar" style="width:50px;height:50px;font-size:1.4rem;">${(currentSellerData.shopName||'?')[0].toUpperCase()}</div>
+      <div><div class="syne" style="font-size:1.1rem;font-weight:700;">${esc(currentSellerData.shopName)}</div><div style="font-size:.78rem;color:var(--muted);">${esc(currentSellerData.ownerName)} · ${esc(currentSellerData.category)}</div>${currentSellerData.location?`<div style="font-size:.75rem;color:var(--muted);"><i class="fas fa-map-marker-alt" style="color:var(--green);font-size:.65rem;"></i> ${esc(currentSellerData.location)}</div>`:''}
+      </div>
+    </div>
+    <div class="stat-cards"><div class="stat-card"><div class="stat-icon">📦</div><div class="stat-num">${myListings.length}</div><div class="stat-label">Products</div></div><div class="stat-card"><div class="stat-icon">🛒</div><div class="stat-num">${myOrders.length}</div><div class="stat-label">Total Orders</div></div><div class="stat-card"><div class="stat-icon">⏳</div><div class="stat-num">${pending}</div><div class="stat-label">Pending</div></div><div class="stat-card"><div class="stat-icon">💳</div><div class="stat-num" style="font-size:1.2rem;">R${cardRevenue.toFixed(0)}</div><div class="stat-label">Paid by Card</div></div></div>
+    ${pending>0?`<div style="background:#fff3e0;border-radius:var(--r-md);padding:.9rem;display:flex;align-items:center;gap:10px;border:1px solid #ffe0b2;"><span style="font-size:1.4rem;">⚠️</span><div><strong style="font-size:.88rem;">${pending} pending order${pending>1?'s':''}</strong><br><small style="color:var(--muted);">Respond quickly to keep customers happy</small></div><button class="btn-sm" style="background:var(--green);color:#fff;margin-left:auto;" onclick="setTab('orders',document.querySelector('.tab-btn:nth-child(3)'))">View →</button></div>`:''}
+    <div style="margin-top:1rem;padding:.9rem;background:var(--green-light);border-radius:var(--r-md);border:1px solid rgba(26,122,74,.2);"><div style="font-size:.78rem;color:var(--green);font-weight:600;margin-bottom:.3rem;">💡 Tip</div><div style="font-size:.8rem;color:var(--text-soft);">Add product photos to get <strong>3× more orders</strong>. Buyers trust listings with real images!</div></div>
+  </div>
+  <!-- LISTINGS -->
+  <div id="tab-listings" class="${activeSellerTab==='listings'?'':'hidden'}">
+    <div class="section-header"><h3>Your Products</h3><button class="btn-full btn-full-green" style="width:auto;padding:.45rem .9rem;font-size:.82rem;" onclick="showAddListing()"><i class="fas fa-plus"></i> Add Product</button></div>
+    ${myListings.length===0?`<div class="empty-state"><div class="empty-icon">📦</div><h3>No products yet</h3><p>Add your first product to start selling</p><button class="btn-full btn-full-gold" style="max-width:200px;margin:0 auto;" onclick="showAddListing()"><i class="fas fa-plus"></i> Add First Product</button></div>`:myListings.map(l=>`
+    <div class="listing-row">
+      <div style="display:flex;gap:10px;align-items:center;flex:1;min-width:0;">
+        ${l.images&&l.images[0]?`<img src="${l.images[0]}" style="width:48px;height:48px;border-radius:10px;object-fit:cover;flex-shrink:0;" alt="">`:
+          `<div style="width:48px;height:48px;border-radius:10px;background:var(--surface);display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;">${catEmoji(l.category)}</div>`}
+        <div class="listing-info" style="min-width:0;"><h4 style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${catEmoji(l.category)} ${esc(l.title)}</h4><p>${formatPrice(l.price)} · ${esc(l.category)} · ${timeAgo(l.createdAt)}</p></div>
+      </div>
+      <div class="listing-actions" style="flex-shrink:0;">
+        <span class="status-badge ${l.soldOut?'status-sold':'status-active'}">${l.soldOut?'Sold Out':'Active'}</span>
+        <button class="btn-sm btn-edit" onclick="toggleSoldOut('${l.id}',${!!l.soldOut})">${l.soldOut?'Available':'Sold Out'}</button>
+        <button class="btn-sm btn-danger" onclick="deleteListing('${l.id}')"><i class="fas fa-trash"></i></button>
+      </div>
+    </div>`).join('')}
+  </div>
+  <!-- ORDERS -->
+  <div id="tab-orders" class="${activeSellerTab==='orders'?'':'hidden'}">
+    <h3 style="margin-bottom:.8rem;">Orders (${myOrders.length})</h3>
+    ${myOrders.length===0?`<div class="empty-state"><div class="empty-icon">📬</div><h3>No orders yet</h3><p>Share your shop link to get your first order!</p></div>`:myOrders.sort((a,b)=>b.createdAt-a.createdAt).map(o=>{
+      const payBadge=o.paymentStatus==='paid'?`<span class="pay-status-badge pay-status-paid"><i class="fas fa-check"></i> Paid${o.paymentMethod==='card-demo'?' (demo)':''}</span>`:`<span class="pay-status-badge pay-status-unpaid">Pay on collection</span>`;
+      return `<div class="order-row"><div class="order-top"><div><strong style="font-size:.88rem;">${esc(o.productTitle)}</strong> ×${o.quantity} <span class="status-badge status-${o.status}" style="margin-left:4px;">${o.status}</span></div><strong>${formatPrice(o.total||o.price*o.quantity)}</strong></div><div class="order-meta">${payBadge}</div><div class="order-meta">👤 ${esc(o.buyerName)} · 📞 ${o.buyerPhone||'—'} ${o.buyerLocation?'· 📍 '+esc(o.buyerLocation):''}</div>${o.note?`<div class="order-meta">📝 ${esc(o.note)}</div>`:''}<div class="order-meta" style="margin-bottom:.5rem;">🕐 ${new Date(o.createdAt).toLocaleString()} · #${o.orderId}</div><div style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;"><select class="order-status-select" onchange="updateOrderStatus('${o.orderId}',this.value)">${['pending','confirmed','ready','delivered','cancelled'].map(s=>`<option ${o.status===s?'selected':''}>${s}</option>`).join('')}</select>${o.buyerPhone?`<a href="https://wa.me/${o.buyerPhone.replace(/\D/g,'')}?text=${encodeURIComponent('Hi '+o.buyerName+'! Your order ('+o.productTitle+') status: '+o.status+'. From '+currentSellerData.shopName+' via Venda Market.')}" target="_blank"><button class="btn-sm btn-wa" style="background:var(--wa);color:#fff;"><i class="fab fa-whatsapp"></i> Notify</button></a>`:''}</div></div>`;
+    }).join('')}
+  </div>
+  <!-- MESSAGES -->
+  <div id="tab-messages" class="${activeSellerTab==='messages'?'':'hidden'}">
+    <h3 style="margin-bottom:.8rem;">Buyer Messages (${messages.length})</h3>
+    ${messages.length===0?`<div class="empty-state"><div class="empty-icon">💬</div><h3>No messages yet</h3><p>Orders placed will appear here</p></div>`:messages.sort((a,b)=>b.createdAt-a.createdAt).map(m=>`<div class="listing-row"><div><strong>${esc(m.buyerName)}</strong> — ${esc(m.productTitle)}<br><small style="color:var(--muted);">Qty: ${m.quantity} · ${formatPrice(m.total||m.price*m.quantity)} · ${timeAgo(m.createdAt)}</small>${m.note?`<br><small style="color:var(--muted);">📝 ${esc(m.note)}</small>`:''}</div>${m.buyerPhone?`<a href="https://wa.me/${m.buyerPhone.replace(/\D/g,'')}?text=${encodeURIComponent('Hi '+m.buyerName+'! Thanks for your order on Venda Market.')}" target="_blank"><button class="btn-sm" style="background:var(--wa);color:#fff;"><i class="fab fa-whatsapp"></i> Reply</button></a>`:''}</div>`).join('')}
+  </div>
+</div>`;
+}
+
+window.setTab=function(t,btn){
+  activeSellerTab=t;
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  ['overview','listings','orders','messages'].forEach(x=>{
+    const el=document.getElementById('tab-'+x);if(el)el.classList.toggle('hidden',x!==t);
+  });
+};
+window.updateOrderStatus=async function(oid,status){
+  await db.ref('vendamarket/orders/'+oid+'/status').set(status);
+  toast1(`Order updated: ${status}`,'success');
+};
+window.deleteListing=async function(id){
+  if(!confirm('Delete this listing? This cannot be undone.'))return;
+  await db.ref('vendamarket/listings/'+id).remove();
+  toast1('Listing deleted');loadSellerDashboard();
+};
+window.toggleSoldOut=async function(id,current){
+  await db.ref('vendamarket/listings/'+id+'/soldOut').set(!current);
+  toast1(!current?'Marked as sold out':'Marked as available','success');
+  loadSellerDashboard();
+};
+
+// ======================== ADD LISTING (with image upload) ========================
+window.showAddListing=function(){
+  listingImages=[null,null];
+  const modal=document.createElement('div');
+  modal.className='modal-overlay';
+  modal.id='add-listing-modal';
+  modal.innerHTML=`<div class="modal-box"><div class="modal-header"><h3><i class="fas fa-plus" style="color:var(--green)"></i> Add Product</h3><button class="close-btn" onclick="this.closest('.modal-overlay').remove()">&times;</button></div>
+
+  <div class="form-group">
+    <label>📸 Product Photos (up to 2)</label>
+    <div class="img-upload-area" id="upload-slots">
+      ${[0,1].map(i=>`
+      <div class="img-upload-slot" id="slot-${i}">
+        <i class="fas fa-camera"></i>
+        <span>Photo ${i+1}</span>
+        <input type="file" accept="image/*" onchange="handleImgUpload(${i}, this)">
+      </div>`).join('')}
+    </div>
+    <p style="font-size:.72rem;color:var(--muted);margin-top:.3rem;">Real photos get 3× more orders · JPEG/PNG · Max 2 images</p>
+  </div>
+
+  <div class="form-group"><label>Product Name *</label><input class="input" id="nl-title" placeholder="e.g. Pap & Vleis Combo"></div>
+  <div class="input-row">
+    <div class="form-group"><label>Price (R) *</label><input class="input" id="nl-price" type="number" step="0.01" placeholder="35.00"></div>
+    <div class="form-group"><label>Category</label><select class="select" id="nl-cat"><option>Food</option><option>Clothing</option><option>Printing</option><option>Beauty</option><option>Services</option><option>Electronics</option><option>Stationery</option><option>Groceries</option></select></div>
+  </div>
+  <div class="form-group"><label>Description</label><textarea class="textarea" id="nl-desc" placeholder="Describe your product…"></textarea></div>
+  <div class="form-group"><label>Stock Available (0 = unlimited)</label><input class="input" id="nl-stock" type="number" placeholder="0" value="0"></div>
+  <button class="btn-full btn-full-green" id="publish-btn" onclick="submitListing(this)"><i class="fas fa-rocket"></i> Publish Listing</button></div>`;
+
+  document.body.appendChild(modal);
+  modal.addEventListener('click',e=>{if(e.target===modal)modal.remove();});
+  setTimeout(()=>{const inp=$('nl-title');if(inp)inp.focus();},50);
+};
+
+window.handleImgUpload=async function(idx,input){
+  const file=input.files[0];if(!file)return;
+  const slot=document.getElementById('slot-'+idx);if(!slot)return;
+  slot.innerHTML=`<i class="fas fa-spinner fa-spin" style="color:var(--green);font-size:1.4rem;"></i><span style="font-size:.7rem;color:var(--muted);">Processing…</span>`;
+  try{
+    const compressed=await compressImage(file);
+    listingImages[idx]=compressed;
+    slot.innerHTML=`<img src="${compressed}" alt="Photo ${idx+1}"><button class="remove-img" onclick="removeListingImg(${idx})">✕</button>`;
+    slot.classList.add('has-image');
+  }catch(e){
+    slot.innerHTML=`<i class="fas fa-camera"></i><span>Photo ${idx+1}</span><input type="file" accept="image/*" onchange="handleImgUpload(${idx},this)">`;
+    toast1('Could not load image. Try another.','error');
+  }
+};
+
+window.removeListingImg=function(idx){
+  listingImages[idx]=null;
+  const slot=document.getElementById('slot-'+idx);if(!slot)return;
+  slot.classList.remove('has-image');
+  slot.innerHTML=`<i class="fas fa-camera"></i><span>Photo ${idx+1}</span><input type="file" accept="image/*" onchange="handleImgUpload(${idx},this)">`;
+};
+
+window.submitListing=async function(btn){
+  const title=$('nl-title')?.value.trim(),price=parseFloat($('nl-price')?.value);
+  const cat=$('nl-cat')?.value,desc=$('nl-desc')?.value.trim(),stock=parseInt($('nl-stock')?.value)||0;
+  if(!title||!price){toast1('Title and price required','error');return;}
+  btn.disabled=true;btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Publishing…';
+  const images=listingImages.filter(Boolean);
+  const listing={sellerId:currentSeller.uid,shopName:currentSellerData.shopName,whatsapp:currentSellerData.whatsapp,title,price,category:cat,description:desc,stock,status:'active',soldOut:false,createdAt:Date.now(),rating:0,reviewCount:0,images};
+  try{
+    await db.ref('vendamarket/listings').push(listing);
+    document.getElementById('add-listing-modal')?.remove();
+    toast1('🎉 Listing is live!','success');
+    loadSellerDashboard();
+  }catch(e){
+    toast1('Error publishing. Try again.','error');
+    btn.disabled=false;btn.innerHTML='<i class="fas fa-rocket"></i> Publish Listing';
+  }
+};
+
+// ======================== AUTH OBSERVER ========================
+auth.onAuthStateChanged(async user=>{
+  if(user){
+    const snap=await db.ref('vendamarket/sellers/'+user.uid).once('value');
+    if(snap.exists()){
+      currentSeller=user;currentSellerData=snap.val();
+      const lb=$('logout-btn');if(lb)lb.classList.remove('hidden');
+    }
+  }else{
+    currentSeller=null;currentSellerData=null;
+    const lb=$('logout-btn');if(lb)lb.classList.add('hidden');
+  }
+});
+
+// ======================== INIT ========================
+updateWishlistBadge();
+updateCartBadge();
+loadListings();
+
+// Seed demo data if empty
+setTimeout(async()=>{
+  const snap=await db.ref('vendamarket/listings').once('value');
+  if(!snap.exists()){
+    const demos=[
+      {sellerId:'demo_001',shopName:"Mama T's Kitchen",whatsapp:'27781234567',title:'Pap & Vleis Combo',price:35,category:'Food',description:'Delicious home-cooked pap, beef stew and veggies. Served daily 12pm–3pm at the residences.',status:'active',soldOut:false,createdAt:Date.now()-3600000,rating:4.8,reviewCount:24,images:[]},
+      {sellerId:'demo_001',shopName:"Mama T's Kitchen",whatsapp:'27781234567',title:'Vetkoek & Mince (3 for R30)',price:15,category:'Food',description:'Freshly fried vetkoek filled with savoury mince. Order 3 for only R30!',status:'active',soldOut:false,createdAt:Date.now()-7200000,rating:4.5,reviewCount:12,images:[]},
+      {sellerId:'demo_002',shopName:'Campus Prints',whatsapp:'27789876543',title:'A4 Black & White Printing',price:0.5,category:'Printing',description:'Fast, affordable printing near the library. 50c per page. Colour printing also available at R3/page.',status:'active',soldOut:false,createdAt:Date.now()-86400000,rating:4.2,reviewCount:55,images:[]},
+      {sellerId:'demo_002',shopName:'Campus Prints',whatsapp:'27789876543',title:'CV Printing + Spiral Binding',price:25,category:'Printing',description:'Professional CV print + spiral binding. Impress any employer. Ready in under 30 minutes.',status:'active',soldOut:false,createdAt:Date.now()-172800000,rating:4.7,reviewCount:8,images:[]},
+      {sellerId:'demo_003',shopName:'Thabo Styles',whatsapp:'27762345678',title:'UNIVEN Hoodies — S/M/L/XL',price:250,category:'Clothing',description:'Quality UNIVEN branded hoodies. Show campus pride! Pre-order only. Delivery within 5 days.',status:'active',soldOut:false,createdAt:Date.now()-259200000,rating:5,reviewCount:3,images:[]},
+      {sellerId:'demo_004',shopName:'Beauty by Nandi',whatsapp:'27713456789',title:'Hair Braiding — Full Head',price:180,category:'Beauty',description:'Neat, affordable braiding. Box braids, cornrows & knotless braids. Book in advance. Home visits available.',status:'active',soldOut:false,createdAt:Date.now()-345600000,rating:4.6,reviewCount:18,images:[]},
+    ];
+    for(const d of demos) await db.ref('vendamarket/listings').push(d);
+  }
+},1200);
+
+/* ============================================================================
+   GOING LIVE WITH REAL CARD CHARGES (do this when ready — not required to
+   test the app now, since DEMO_MODE handles everything locally):
+
+   1. firebase init functions   (choose JavaScript)
+   2. firebase functions:config:set yoco.secret="sk_test_YOUR_SECRET_KEY"
+   3. Paste this into functions/index.js:
+
+   const functions = require("firebase-functions");
+   const admin = require("firebase-admin");
+   const fetch = require("node-fetch");
+   const cors = require("cors")({ origin: true });
+   admin.initializeApp();
+   const db = admin.database();
+
+   exports.chargeYocoPayment = functions.https.onRequest((req, res) => {
+     cors(req, res, async () => {
+       if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
+       const { token, order } = req.body;
+       if (!token || !order || !order.orderId || !order.total) {
+         return res.status(400).json({ error: "Missing token or order details" });
+       }
+       try {
+         const yocoRes = await fetch("https://online.yoco.com/v1/charges/", {
+           method: "POST",
+           headers: { "X-Auth-Secret-Key": functions.config().yoco.secret, "Content-Type": "application/json" },
+           body: JSON.stringify({ token, amountInCents: Math.round(order.total * 100), currency: "ZAR" })
+         });
+         const yocoData = await yocoRes.json();
+         if (!yocoRes.ok || yocoData.status !== "successful") {
+           return res.status(402).json({ success: false, error: yocoData.displayMessage || "Card was declined" });
+         }
+         const orderWithPayment = { ...order, status: "confirmed", paymentStatus: "paid", paymentMethod: "card", paymentRef: yocoData.id, paidAt: Date.now() };
+         await db.ref("vendamarket/orders/" + order.orderId).set(orderWithPayment);
+         await db.ref(`vendamarket/sellerInbox/${order.shopId}/${order.orderId}`).set(orderWithPayment);
+         await db.ref("vendamarket/payments/" + yocoData.id).set({ orderId: order.orderId, shopId: order.shopId, amount: order.total, status: "success", createdAt: Date.now() });
+         return res.json({ success: true, reference: yocoData.id });
+       } catch (err) {
+         console.error(err);
+         return res.status(500).json({ success: false, error: "Payment processing error. Please try again." });
+       }
+     });
+   });
+
+   4. firebase deploy --only functions
+   5. Copy the deployed URL into CHARGE_ENDPOINT above, and your real
+      pk_test_/sk_test_ (then live) keys into YOCO_PUBLIC_KEY / yoco.secret.
+   ============================================================================ */
+</script>
+</body>
+</html>
