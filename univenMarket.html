@@ -515,6 +515,18 @@ body{max-width:600px;margin:0 auto;background:#fff;min-height:100vh;}
   color:rgba(255,255,255,.5);cursor:pointer;font-size:1rem;
 }
 
+/* ========== BRANDED SHOP LINKS ========== */
+.shops-row{display:grid;grid-template-columns:repeat(3,1fr);gap:0.6rem;padding:0.9rem 1rem 0;}
+.shop-link-btn{
+  border:1.5px solid var(--border);background:#fff;border-radius:var(--r-md);
+  padding:0.7rem 0.4rem;text-align:center;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  transition:all .2s;font-family:'DM Sans',sans-serif;
+}
+.shop-link-btn:hover{border-color:var(--green);transform:translateY(-2px);box-shadow:var(--shadow-sm);}
+.shop-link-btn .slb-emoji{font-size:1.6rem;}
+.shop-link-btn .slb-name{font-size:0.72rem;font-weight:600;color:var(--text);}
+
 /* ========== PAYMENT BADGES ========== */
 .pay-status-badge{display:inline-flex;align-items:center;gap:3px;font-size:0.68rem;font-weight:700;padding:2px 8px;border-radius:20px;}
 .pay-status-paid{background:#e3f2fd;color:#1565c0;}
@@ -562,6 +574,13 @@ a{color:inherit;text-decoration:none;}
       <div class="hero-stat"><div class="num" id="stat-sellers">—</div><div class="lbl">Sellers</div></div>
       <div class="hero-stat"><div class="num" id="stat-orders">—</div><div class="lbl">Today's Orders</div></div>
     </div>
+  </div>
+
+  <!-- CAMPUS EATERIES (branded single-vendor pages) -->
+  <div class="shops-row" id="shops-row">
+    <button class="shop-link-btn" data-shop="cafeteria"><span class="slb-emoji">☕</span><span class="slb-name">Cafeteria</span></button>
+    <button class="shop-link-btn" data-shop="fish_chips"><span class="slb-emoji">🐟</span><span class="slb-name">Fish & Chips</span></button>
+    <button class="shop-link-btn" data-shop="galitos"><span class="slb-emoji">🍗</span><span class="slb-name">Galitos</span></button>
   </div>
 
   <!-- PROMO BANNER -->
@@ -634,6 +653,33 @@ a{color:inherit;text-decoration:none;}
   <div id="seller-body"></div>
 </div>
 
+<!-- ===== BRANDED SHOP PAGE (Cafeteria / Fish & Chips / Galitos) ===== -->
+<div id="shop-page-screen" class="screen">
+  <div class="pageName">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span id="shop-page-emoji" style="font-size:1.5rem;"></span>
+      <div>
+        <div id="shop-page-title" style="font-family:'Sora',sans-serif;font-size:0.95rem;font-weight:700;line-height:1.1;"></div>
+        <div id="shop-page-tagline" style="font-size:0.62rem;color:var(--muted);letter-spacing:.3px;"></div>
+      </div>
+    </div>
+    <div style="display:flex;gap:0.4rem;">
+      <button class="nav-btn nav-btn-ghost" id="shop-page-back-btn"><i class="fas fa-arrow-left"></i> Market</button>
+      <button class="nav-btn nav-btn-gold hidden" id="shop-page-add-btn"><i class="fas fa-plus"></i> Add</button>
+    </div>
+  </div>
+  <div class="hero-strip" id="shop-page-hero" style="padding:1.1rem 1rem;">
+    <div class="hero-logo" style="margin-bottom:0;">
+      <span id="shop-page-hero-emoji" style="font-size:2rem;"></span>
+      <span id="shop-page-hero-name">Shop <small id="shop-page-hero-tagline"></small></span>
+    </div>
+  </div>
+  <div class="sort-bar">
+    <span class="result-count" id="shop-page-count">Loading…</span>
+  </div>
+  <div class="cards-grid" id="shop-page-grid"></div>
+</div>
+
 <!-- ===== ORDER MODAL ===== -->
 <div class="modal-overlay hidden" id="order-modal">
   <div class="modal-box">
@@ -696,55 +742,41 @@ a{color:inherit;text-decoration:none;}
 <!-- TOAST -->
 <div class="toast1 hidden" id="toast1"></div>
 
-<!-- Firebase -->
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
-<!-- Yoco card payments SDK (client-side, public key only — safe to expose) -->
-<script src="https://js.yoco.com/sdk/v1/yoco-sdk-web.js"></script>
+<!-- Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 
 <script>
 /* ====================== IMPORTANT ======================
-   Replace this config with your actual Firebase project config.
+   Replace this config with your actual Supabase project URL + anon key.
+   Find them in: Supabase Dashboard > Project Settings > API.
+   The anon key is safe to expose in the browser as long as you have
+   Row Level Security (RLS) policies set up (see schema note at bottom).
    ======================================================= */
 
-firebase.initializeApp({
-apiKey: "AIzaSyBSMvHpZ0_VkqWjJ94UMa6vqEhFiqrsIWM",
-authDomain: "rare-5f47e.firebaseapp.com",
-databaseURL: "https://rare-5f47e-default-rtdb.firebaseio.com",
-projectId: "rare-5f47e",
-storageBucket: "rare-5f47e.appspot.com",
-messagingSenderId: "811727087812",
-appId: "1:811727087812:web:d362e68abf6c26acf24191"
-});
+const SUPABASE_URL = "https://rbnnbmduwrvokhbkezyh.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJibm5ibWR1d3J2b2toYmtlenloIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4NTM1MzgzNiwiZXhwIjoyMTAwOTI5ODM2fQ.dR9SaqDS2kVGKm60LyGeaFLxhBIqiWW3o49jtu2GxUQ";
 
-const db = firebase.database();
-const auth = firebase.auth();
-const storage = firebase.storage();
+const sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 /* ====================== YOCO PAYMENT CONFIG ======================
-   YOCO_PUBLIC_KEY: safe to expose in the browser — get it from
-     Yoco Business Portal > Settings > API Keys (use pk_test_... while testing).
+   This uses Yoco's current Checkout API: card details are entered on
+   Yoco's own hosted page (never on this site), and the real charge
+   only ever happens in server code — never in the browser — so no
+   Yoco key of any kind needs to live in this file.
 
-   CHARGE_ENDPOINT: a Cloud Function URL you deploy separately. It's the
-     ONLY place your Yoco *secret* key may live, because it must never be
-     shipped to the browser. See the deployment note at the bottom of
-     this file for the exact function code to deploy.
+   CHECKOUT_ENDPOINT: a Supabase Edge Function URL you deploy separately
+     (code + deploy steps are in the big comment at the bottom of this
+     file). It creates the Yoco Checkout session and returns a redirect
+     URL. Your secret key lives only inside that function's environment,
+     never here.
 
-   DEMO MODE: while CHARGE_ENDPOINT is empty, card payments are SIMULATED
-     locally (no real charge happens) so you can test the full flow right
-     now without any backend. Set CHARGE_ENDPOINT once your function is
-     deployed to start taking real payments.
+   DEMO MODE: while CHECKOUT_ENDPOINT is empty, card payments are
+     SIMULATED locally (no real charge happens) so you can test the full
+     flow without any backend. Set CHECKOUT_ENDPOINT once your Edge
+     Functions are deployed to start taking real payments.
    =================================================================== */
-const YOCO_PUBLIC_KEY = "pk_test_YOUR_PUBLIC_KEY";
-const CHARGE_ENDPOINT = ""; // e.g. "https://us-central1-yourproject.cloudfunctions.net/chargeYocoPayment"
-const DEMO_MODE = !CHARGE_ENDPOINT;
-
-let yoco = null;
-try {
-  if (window.YocoSDK) yoco = new window.YocoSDK({ publicKey: YOCO_PUBLIC_KEY });
-} catch (e) { console.warn("Yoco SDK not available:", e.message); }
+const CHECKOUT_ENDPOINT = ""; // e.g. "https://YOUR-PROJECT-REF.functions.supabase.co/create-yoco-checkout"
+const DEMO_MODE = !CHECKOUT_ENDPOINT;
 
 // ======================== STATE ========================
 let allListings = [];
@@ -821,22 +853,72 @@ async function compressImage(file, maxW=800, quality=0.75){
   });
 }
 
+// ======================== ROW <-> APP OBJECT MAPPING ========================
+// Postgres columns are snake_case; the rest of the app (unchanged from the
+// Firebase version) expects camelCase JS objects, so we map both ways here.
+function listingRowToObj(l){
+  return {
+    id:l.id, sellerId:l.seller_id, shopName:l.shop_name, whatsapp:l.whatsapp,
+    title:l.title, price:Number(l.price), category:l.category, description:l.description,
+    stock:l.stock, status:l.status, soldOut:l.sold_out,
+    createdAt:new Date(l.created_at).getTime(), rating:Number(l.rating||0),
+    reviewCount:l.review_count||0, images:l.images||[], shopKey:l.shop_key||null
+  };
+}
+
+// ======================== BRANDED SHOP PAGES ========================
+// These 3 pages are separate, single-vendor storefronts. Only this one
+// user (identified by their Supabase Auth UID) is allowed to add/manage
+// products on them — enforced both in the UI (Add button hidden for
+// everyone else) and in the database via RLS policies (see schema notes
+// at the bottom of this file).
+const SHOP_ADMIN_UID = '4fba00fa-29cc-4ed5-961c-9ad925d32d08';
+const SHOPS = {
+  cafeteria:  { key:'cafeteria',  name:'Cafeteria',      emoji:'☕', tagline:'Campus cafeteria menu' },
+  fish_chips: { key:'fish_chips', name:'Fish & Chips',   emoji:'🐟', tagline:'Fresh fish & chips, made to order' },
+  galitos:    { key:'galitos',    name:'Galitos',        emoji:'🍗', tagline:'Flame-grilled chicken' }
+};
+let currentShopKey = null;
+function orderRowToObj(o){
+  return {
+    orderId:o.order_id, productId:o.product_id, productTitle:o.product_title,
+    shopId:o.shop_id, shopName:o.shop_name, sellerWhatsapp:o.seller_whatsapp,
+    price:Number(o.price), buyerName:o.buyer_name, buyerPhone:o.buyer_phone,
+    buyerLocation:o.buyer_location, quantity:o.quantity, total:Number(o.total),
+    note:o.note, status:o.status, paymentStatus:o.payment_status,
+    paymentMethod:o.payment_method, createdAt:new Date(o.created_at).getTime()
+  };
+}
+function orderObjToRow(order){
+  return {
+    order_id:order.orderId, product_id:order.productId, product_title:order.productTitle,
+    shop_id:order.shopId, shop_name:order.shopName, seller_whatsapp:order.sellerWhatsapp,
+    price:order.price, buyer_name:order.buyerName, buyer_phone:order.buyerPhone,
+    buyer_location:order.buyerLocation, quantity:order.quantity, total:order.total,
+    note:order.note, status:order.status, payment_status:order.paymentStatus,
+    payment_method:order.paymentMethod, created_at:new Date(order.createdAt).toISOString()
+  };
+}
+
 // ======================== LOAD LISTINGS ========================
+async function fetchListings(){
+  const {data,error}=await sbClient.from('listings').select('*').eq('status','active').order('created_at',{ascending:false});
+  if(error){console.error(error);toast1('Could not load products','error');return;}
+  allListings=(data||[]).map(listingRowToObj);
+  renderListings();
+  updateStats();
+}
+
 function loadListings(){
-  db.ref('vendamarket/listings').on('value',snap=>{
-    const data=snap.val();
-    allListings=[];
-    if(data) Object.keys(data).forEach(k=>{
-      const l=data[k];
-      if(l.status==='active') allListings.push({id:k,...l});
-    });
-    renderListings();
-    updateStats();
-  });
+  fetchListings();
+  // Live updates: re-fetch whenever the listings table changes
+  sbClient.channel('listings-changes')
+    .on('postgres_changes',{event:'*',schema:'public',table:'listings'},()=>fetchListings())
+    .subscribe();
 }
 
 function filteredListings(){
-  let arr=[...allListings];
+  let arr=allListings.filter(l=>!l.shopKey); // branded shop-page items live on their own pages
   if(currentCat!=='all') arr=arr.filter(l=>l.category===currentCat);
   if(searchQ.trim()){
     const q=searchQ.toLowerCase();
@@ -849,25 +931,16 @@ function filteredListings(){
   return arr;
 }
 
-function renderListings(){
-  const arr=filteredListings();
-  const grid=$('cards-grid'),rc=$('result-count');
-  if(!grid||!rc)return;
-  rc.textContent=`${arr.length} product${arr.length!==1?'s':''} found`;
-  if(arr.length===0){
-    grid.innerHTML=`<div class="empty-state"><div class="empty-icon">🛒</div><h3>No products yet</h3><p>Be the first to list in this category!</p><button class="btn-full btn-full-green" style="max-width:220px;margin:0 auto" onclick="openSeller()"><i class="fas fa-plus"></i> Start Selling</button></div>`;
-    return;
-  }
-  grid.innerHTML=arr.map((item,i)=>{
-    const liked=wishlist.includes(item.id);
-    const stars=item.rating>0?'⭐'.repeat(Math.min(5,Math.round(item.rating))):'— new';
-    const reviewCount=item.reviewCount||0;
-    const hasImg=item.images&&item.images.length>0&&item.images[0];
-    const imgHtml=hasImg
-      ?`<img class="product-img" src="${item.images[0]}" alt="${esc(item.title)}" loading="lazy">`
-      :`<span class="cat-emoji">${catEmoji(item.category)}</span>`;
-    const multiImg=hasImg&&item.images.length>1;
-    return `<div class="card fade-up" style="animation-delay:${i*0.04}s" data-id="${item.id}">
+function productCardHtml(item,i){
+  const liked=wishlist.includes(item.id);
+  const stars=item.rating>0?'⭐'.repeat(Math.min(5,Math.round(item.rating))):'— new';
+  const reviewCount=item.reviewCount||0;
+  const hasImg=item.images&&item.images.length>0&&item.images[0];
+  const imgHtml=hasImg
+    ?`<img class="product-img" src="${item.images[0]}" alt="${esc(item.title)}" loading="lazy">`
+    :`<span class="cat-emoji">${catEmoji(item.category)}</span>`;
+  const multiImg=hasImg&&item.images.length>1;
+  return `<div class="card fade-up" style="animation-delay:${i*0.04}s" data-id="${item.id}">
       <div class="card-img">
         ${imgHtml}
         <span class="card-badge">${esc(item.category)}</span>
@@ -893,17 +966,73 @@ function renderListings(){
         </div>
       </div>
     </div>`;
-  }).join('');
-  document.querySelectorAll('.card[data-id]').forEach(c=>{
+}
+function bindCardClicks(container){
+  if(!container)return;
+  container.querySelectorAll('.card[data-id]').forEach(c=>{
     c.addEventListener('click',()=>openDetail(c.dataset.id));
   });
 }
 
-function updateStats(){
-  const sp=$('stat-products'),ss=$('stat-sellers'),so=$('stat-orders');
-  if(sp) sp.textContent=allListings.length;
-  if(ss) db.ref('vendamarket/sellers').once('value',s=>{if(ss)ss.textContent=s.val()?Object.keys(s.val()).length:0;});
-  if(so) db.ref('vendamarket/orders').orderByChild('createdAt').startAt(Date.now()-86400000).once('value',s=>{if(so)so.textContent=s.val()?Object.keys(s.val()).length:0;});
+function renderListings(){
+  const arr=filteredListings();
+  const grid=$('cards-grid'),rc=$('result-count');
+  if(!grid||!rc)return;
+  rc.textContent=`${arr.length} product${arr.length!==1?'s':''} found`;
+  if(arr.length===0){
+    grid.innerHTML=`<div class="empty-state"><div class="empty-icon">🛒</div><h3>No products yet</h3><p>Be the first to list in this category!</p><button class="btn-full btn-full-green" style="max-width:220px;margin:0 auto" onclick="openSeller()"><i class="fas fa-plus"></i> Start Selling</button></div>`;
+    return;
+  }
+  grid.innerHTML=arr.map((item,i)=>productCardHtml(item,i)).join('');
+  bindCardClicks(grid);
+}
+
+// ======================== BRANDED SHOP PAGE RENDERING ========================
+function openShopPage(key){
+  const cfg=SHOPS[key];if(!cfg)return;
+  currentShopKey=key;
+  const em=$('shop-page-emoji'),ti=$('shop-page-title'),ta=$('shop-page-tagline');
+  if(em)em.textContent=cfg.emoji;
+  if(ti)ti.textContent=cfg.name;
+  if(ta)ta.textContent=cfg.tagline;
+  const hem=$('shop-page-hero-emoji'),hn=$('shop-page-hero-name'),ht=$('shop-page-hero-tagline');
+  if(hem)hem.textContent=cfg.emoji;
+  if(hn)hn.childNodes[0].textContent=cfg.name+' ';
+  if(ht)ht.textContent=cfg.tagline;
+  const addBtn=$('shop-page-add-btn');
+  if(addBtn)addBtn.classList.toggle('hidden',!(currentSeller&&currentSeller.id===SHOP_ADMIN_UID));
+  renderShopPageGrid();
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  const sp=$('shop-page-screen');if(sp)sp.classList.add('active');
+}
+
+function renderShopPageGrid(){
+  const grid=$('shop-page-grid'),rc=$('shop-page-count');
+  if(!grid||!currentShopKey)return;
+  const arr=allListings.filter(l=>l.shopKey===currentShopKey).sort((a,b)=>b.createdAt-a.createdAt);
+  if(rc)rc.textContent=`${arr.length} item${arr.length!==1?'s':''} on the menu`;
+  if(arr.length===0){
+    const cfg=SHOPS[currentShopKey];
+    grid.innerHTML=`<div class="empty-state"><div class="empty-icon">${cfg?cfg.emoji:'🍽️'}</div><h3>Nothing listed yet</h3><p>Check back soon!</p></div>`;
+    return;
+  }
+  grid.innerHTML=arr.map((item,i)=>productCardHtml(item,i)).join('');
+  bindCardClicks(grid);
+}
+
+async function updateStats(){
+  const sp=$('stat-products');if(sp)sp.textContent=allListings.filter(l=>!l.shopKey).length;
+  const ss=$('stat-sellers');
+  if(ss){
+    const {count}=await sbClient.from('sellers').select('*',{count:'exact',head:true});
+    ss.textContent=count||0;
+  }
+  const so=$('stat-orders');
+  if(so){
+    const since=new Date(Date.now()-86400000).toISOString();
+    const {count}=await sbClient.from('orders').select('*',{count:'exact',head:true}).gte('created_at',since);
+    so.textContent=count||0;
+  }
 }
 
 // ======================== WISHLIST ========================
@@ -1033,6 +1162,20 @@ document.addEventListener('DOMContentLoaded',()=>{
       c.classList.add('active');currentCat=c.dataset.cat;renderListings();
     });
   });
+  // Branded shop pages (Cafeteria / Fish & Chips / Galitos)
+  document.querySelectorAll('.shop-link-btn').forEach(b=>{
+    b.addEventListener('click',()=>openShopPage(b.dataset.shop));
+  });
+  const spb=$('shop-page-back-btn');
+  if(spb) spb.addEventListener('click',()=>{
+    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+    const ms=$('marketplace-screen');if(ms)ms.classList.add('active');
+  });
+  const spa=$('shop-page-add-btn');
+  if(spa) spa.addEventListener('click',()=>{
+    if(!currentSeller||currentSeller.id!==SHOP_ADMIN_UID){toast1('Only the shop owner can add products here','error');return;}
+    showAddShopListing(currentShopKey);
+  });
   // Qty
   const qm=$('qty-minus'),qp=$('qty-plus');
   if(qm) qm.addEventListener('click',()=>{if(orderQty>1)orderQty--;const qd=$('qty-display');if(qd)qd.textContent=orderQty;updateOrderTotal();});
@@ -1048,8 +1191,8 @@ document.addEventListener('DOMContentLoaded',()=>{
     if(!order){toast1(!$('buyer-name')?.value.trim()?'Please enter your name':'Please enter your phone number','error');return;}
     order.paymentMethod='collection';
     try{
-      await db.ref('vendamarket/orders/'+order.orderId).set(order);
-      await db.ref(`vendamarket/sellerInbox/${order.shopId}/${order.orderId}`).set(order);
+      const {error}=await sbClient.from('orders').insert(orderObjToRow(order));
+      if(error) throw error;
       toast1(`✅ Order #${order.orderId} placed! Seller notified.`,'success',5000);
       localStorage.setItem('last_order_id',order.orderId);
       const modal=$('order-modal');if(modal)modal.classList.add('hidden');
@@ -1069,15 +1212,19 @@ document.addEventListener('DOMContentLoaded',()=>{
   });
 
   // ---- Pay by card (Yoco) ----
+  // Real payments use Yoco's hosted Checkout page: we ask our server (Edge
+  // Function) to open a checkout session, then send the browser there.
+  // Card details are entered on Yoco's page, never on this site. Once paid,
+  // Yoco calls a webhook on our server (not the browser) to confirm — see
+  // the deployment notes at the bottom of this file.
   const payBtn=$('yoco-pay-btn');
-  if(payBtn) payBtn.addEventListener('click',()=>{
+  if(payBtn) payBtn.addEventListener('click',async()=>{
     const order=currentOrderPayload();
     if(!order){toast1(!$('buyer-name')?.value.trim()?'Please enter your name first':'Please enter your WhatsApp number first','error');return;}
 
     const statusEl=$('yoco-status');
     payBtn.disabled=true;
-    payBtn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Opening secure card form…';
-
+    payBtn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Preparing secure checkout…';
     const finish=(html)=>{ payBtn.disabled=false; payBtn.innerHTML='<i class="fas fa-credit-card"></i> Pay Securely by Card'; if(statusEl) statusEl.innerHTML=html; };
 
     if(DEMO_MODE){
@@ -1089,8 +1236,8 @@ document.addEventListener('DOMContentLoaded',()=>{
         order.paymentMethod='card-demo';
         order.paymentRef='DEMO-'+Date.now();
         try{
-          await db.ref('vendamarket/orders/'+order.orderId).set(order);
-          await db.ref(`vendamarket/sellerInbox/${order.shopId}/${order.orderId}`).set(order);
+          const {error}=await sbClient.from('orders').insert(orderObjToRow(order));
+          if(error) throw error;
           finish(`<div style="color:var(--green);font-size:.82rem;"><i class="fas fa-check-circle"></i> Demo payment successful.</div>`);
           toast1(`✅ (Demo) Payment successful! Order #${order.orderId} confirmed.`,'success',5000);
           $('order-modal').classList.add('hidden');
@@ -1101,32 +1248,23 @@ document.addEventListener('DOMContentLoaded',()=>{
       return;
     }
 
-    if(!yoco){ finish(`<div style="color:var(--danger);font-size:.82rem;">Card payments are unavailable right now.</div>`); return; }
-
-    yoco.showPopup({
-      amountInCents: Math.round(order.total*100),
-      currency:'ZAR',
-      name: order.shopName,
-      description: `${order.productTitle} × ${order.quantity}`,
-      callback: async (result)=>{
-        if(result.error){ finish(`<div style="color:var(--danger);font-size:.82rem;">${esc(result.error.message)}</div>`); return; }
-        if(statusEl) statusEl.innerHTML=`<div style="color:var(--muted);font-size:.82rem;"><i class="fas fa-spinner fa-spin"></i> Processing payment…</div>`;
-        try{
-          const res=await fetch(CHARGE_ENDPOINT,{
-            method:'POST',
-            headers:{'Content-Type':'application/json'},
-            body:JSON.stringify({token:result.id,order})
-          });
-          const data=await res.json();
-          if(!res.ok||!data.success) throw new Error(data.error||'Payment failed');
-          finish(`<div style="color:var(--green);font-size:.82rem;"><i class="fas fa-check-circle"></i> Payment successful.</div>`);
-          toast1(`✅ Payment successful! Order #${order.orderId} confirmed.`,'success',5000);
-          $('order-modal').classList.add('hidden');
-          ['buyer-name','buyer-phone','buyer-location','order-note'].forEach(id=>{const el=$(id);if(el)el.value='';});
-          localStorage.setItem('last_order_id',order.orderId);
-        }catch(err){ finish(`<div style="color:var(--danger);font-size:.82rem;">${esc(err.message)}</div>`); }
-      }
-    });
+    try{
+      // Yoco requires absolute return URLs; build them from the current page.
+      const returnUrl = window.location.origin + window.location.pathname;
+      const res = await fetch(CHECKOUT_ENDPOINT, {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ order, returnUrl })
+      });
+      const data = await res.json();
+      if(!res.ok || !data.redirectUrl) throw new Error(data.error || 'Could not start checkout');
+      localStorage.setItem('last_order_id', order.orderId);
+      // Full-page redirect to Yoco's hosted checkout — card details are
+      // entered there, never on this site.
+      window.location.href = data.redirectUrl;
+    }catch(err){
+      finish(`<div style="color:var(--danger);font-size:.82rem;">${esc(err.message)}</div>`);
+    }
   });
 
   // Track
@@ -1138,8 +1276,8 @@ document.addEventListener('DOMContentLoaded',()=>{
   if(dtb) dtb.addEventListener('click',async()=>{
     const oid=$('track-input')?.value.trim().toUpperCase();
     if(!oid){toast1('Enter order ID','error');return;}
-    const snap=await db.ref('vendamarket/orders/'+oid).once('value');
-    const o=snap.val();
+    const {data:row}=await sbClient.from('orders').select('*').eq('order_id',oid).maybeSingle();
+    const o=row?orderRowToObj(row):null;
     const statusMap={
       pending:{color:'#E65100',bg:'#FFF3E0',icon:'🕐',label:'Pending — Seller reviewing'},
       confirmed:{color:'#1565C0',bg:'#E3F2FD',icon:'✅',label:'Confirmed — Being prepared'},
@@ -1188,7 +1326,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   });
   const lb=$('logout-btn');
   if(lb) lb.addEventListener('click',async()=>{
-    await auth.signOut();currentSeller=null;currentSellerData=null;
+    await sbClient.auth.signOut();currentSeller=null;currentSellerData=null;
     toast1('Logged out');
     const ss=$('seller-screen'),ms=$('marketplace-screen');
     if(ss)ss.classList.remove('active');if(ms)ms.classList.add('active');
@@ -1254,10 +1392,29 @@ async function doLogin(){
   const email=$('l-email')?.value.trim(),pwd=$('l-pwd')?.value;
   if(!email||!pwd){toast1('Fill all fields','error');return;}
   try{
-    const cred=await auth.signInWithEmailAndPassword(email,pwd);
-    const snap=await db.ref('vendamarket/sellers/'+cred.user.uid).once('value');
-    if(!snap.exists())throw new Error('No seller profile found.');
-    currentSeller=cred.user;currentSellerData=snap.val();loadSellerDashboard();
+    const {data,error}=await sbClient.auth.signInWithPassword({email,password:pwd});
+    if(error) throw error;
+    let {data:profile,error:pErr}=await sbClient.from('sellers').select('*').eq('id',data.user.id).maybeSingle();
+    if(pErr) throw pErr;
+
+    // If registration happened while email confirmation was still pending,
+    // the profile insert was blocked by RLS (no session existed yet). Now
+    // that we have a valid session, finish creating it from the pending
+    // details that doRegister stashed locally.
+    if(!profile){
+      const pendingRaw=localStorage.getItem('vm_pending_seller_'+email.toLowerCase());
+      if(pendingRaw){
+        const pending=JSON.parse(pendingRaw);
+        const row={...pending,id:data.user.id,created_at:new Date().toISOString()};
+        const {data:created,error:cErr}=await sbClient.from('sellers').insert(row).select().maybeSingle();
+        if(cErr) throw cErr;
+        profile=created;
+        localStorage.removeItem('vm_pending_seller_'+email.toLowerCase());
+      }
+    }
+
+    if(!profile) throw new Error('No seller profile found. Please register first.');
+    currentSeller=data.user;currentSellerData=sellerRowToObj(profile);loadSellerDashboard();
   }catch(err){toast1('Login failed: '+err.message,'error');}
 }
 async function doRegister(){
@@ -1266,31 +1423,52 @@ async function doRegister(){
     cat=$('r-cat')?.value,loc=$('r-loc')?.value.trim(),pwd=$('r-pwd')?.value;
   if(!shop||!owner||!email||!wa||!pwd||pwd.length<6){toast1('Fill all required fields (password 6+ chars)','error');return;}
   try{
-    const cred=await auth.createUserWithEmailAndPassword(email,pwd);
-    const profile={shopName:shop,ownerName:owner,email,whatsapp:wa,category:cat,location:loc,status:'active',createdAt:Date.now(),listingsCount:0};
-    await db.ref('vendamarket/sellers/'+cred.user.uid).set(profile);
-    currentSeller=cred.user;currentSellerData=profile;
+    const {data,error}=await sbClient.auth.signUp({email,password:pwd});
+    if(error) throw error;
+    if(!data.user) throw new Error('Registration failed. Try again.');
+
+    const profileFields={shop_name:shop,owner_name:owner,email,whatsapp:wa,category:cat,location:loc,status:'active',listings_count:0};
+
+    if(!data.session){
+      // Email confirmation is required: we don't have a session yet, so an
+      // RLS-protected insert would fail. Stash the details locally and
+      // finish creating the profile the moment they log in after confirming.
+      localStorage.setItem('vm_pending_seller_'+email.toLowerCase(),JSON.stringify(profileFields));
+      toast1('📧 Check your email to confirm your account, then log in to finish setup.','success',7000);
+      switchSellerTab('login');
+      return;
+    }
+
+    const profile={id:data.user.id,...profileFields,created_at:new Date().toISOString()};
+    const {error:iErr}=await sbClient.from('sellers').insert(profile);
+    if(iErr) throw iErr;
+    currentSeller=data.user;currentSellerData=sellerRowToObj(profile);
     toast1('🎉 Welcome! Your shop is live!','success');loadSellerDashboard();
   }catch(err){toast1('Registration error: '+err.message,'error');}
 }
+function sellerRowToObj(r){
+  return{shopName:r.shop_name,ownerName:r.owner_name,email:r.email,whatsapp:r.whatsapp,category:r.category,location:r.location,status:r.status,createdAt:r.created_at,listingsCount:r.listings_count};
+}
 window.doResetPwd=async function(){
   const e=prompt('Enter your email for password reset:');if(!e)return;
-  try{await auth.sendPasswordResetEmail(e);toast1('Reset email sent!','success');}
-  catch(err){toast1(err.message,'error');}
+  try{
+    const {error}=await sbClient.auth.resetPasswordForEmail(e);
+    if(error) throw error;
+    toast1('Reset email sent!','success');
+  }catch(err){toast1(err.message,'error');}
 };
 
 async function loadSellerDashboard(){
   if(!currentSeller)return;
   const lb=$('logout-btn');if(lb)lb.classList.remove('hidden');
-  const uid=currentSeller.uid;
-  const [ls,os,is_]=await Promise.all([
-    db.ref('vendamarket/listings').orderByChild('sellerId').equalTo(uid).once('value'),
-    db.ref('vendamarket/orders').orderByChild('shopId').equalTo(uid).once('value'),
-    db.ref('vendamarket/sellerInbox/'+uid).once('value')
+  const uid=currentSeller.id;
+  const [{data:listingRows},{data:orderRows}]=await Promise.all([
+    sbClient.from('listings').select('*').eq('seller_id',uid),
+    sbClient.from('orders').select('*').eq('shop_id',uid)
   ]);
-  const myListings=ls.val()?Object.keys(ls.val()).map(k=>({id:k,...ls.val()[k]})):[];
-  const myOrders=os.val()?Object.keys(os.val()).map(k=>({id:k,...os.val()[k]})):[];
-  const messages=is_.val()?Object.values(is_.val()):[];
+  const myListings=(listingRows||[]).map(listingRowToObj);
+  const myOrders=(orderRows||[]).map(orderRowToObj);
+  const messages=myOrders; // buyer messages are just the orders placed with this seller
   const pending=myOrders.filter(o=>o.status==='pending').length;
   const paidOrders=myOrders.filter(o=>o.paymentStatus==='paid');
   const revenue=myOrders.filter(o=>o.status==='delivered').reduce((a,c)=>a+(c.total||0),0);
@@ -1324,7 +1502,7 @@ async function loadSellerDashboard(){
       <div style="display:flex;gap:10px;align-items:center;flex:1;min-width:0;">
         ${l.images&&l.images[0]?`<img src="${l.images[0]}" style="width:48px;height:48px;border-radius:10px;object-fit:cover;flex-shrink:0;" alt="">`:
           `<div style="width:48px;height:48px;border-radius:10px;background:var(--surface);display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;">${catEmoji(l.category)}</div>`}
-        <div class="listing-info" style="min-width:0;"><h4 style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${catEmoji(l.category)} ${esc(l.title)}</h4><p>${formatPrice(l.price)} · ${esc(l.category)} · ${timeAgo(l.createdAt)}</p></div>
+        <div class="listing-info" style="min-width:0;"><h4 style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${catEmoji(l.category)} ${esc(l.title)}</h4><p>${formatPrice(l.price)} · ${esc(l.category)} · ${timeAgo(l.createdAt)}${l.shopKey&&SHOPS[l.shopKey]?` · ${SHOPS[l.shopKey].emoji} ${esc(SHOPS[l.shopKey].name)}`:''}</p></div>
       </div>
       <div class="listing-actions" style="flex-shrink:0;">
         <span class="status-badge ${l.soldOut?'status-sold':'status-active'}">${l.soldOut?'Sold Out':'Active'}</span>
@@ -1358,16 +1536,19 @@ window.setTab=function(t,btn){
   });
 };
 window.updateOrderStatus=async function(oid,status){
-  await db.ref('vendamarket/orders/'+oid+'/status').set(status);
+  const {error}=await sbClient.from('orders').update({status}).eq('order_id',oid);
+  if(error){toast1('Could not update order','error');return;}
   toast1(`Order updated: ${status}`,'success');
 };
 window.deleteListing=async function(id){
   if(!confirm('Delete this listing? This cannot be undone.'))return;
-  await db.ref('vendamarket/listings/'+id).remove();
+  const {error}=await sbClient.from('listings').delete().eq('id',id);
+  if(error){toast1('Could not delete listing','error');return;}
   toast1('Listing deleted');loadSellerDashboard();
 };
 window.toggleSoldOut=async function(id,current){
-  await db.ref('vendamarket/listings/'+id+'/soldOut').set(!current);
+  const {error}=await sbClient.from('listings').update({sold_out:!current}).eq('id',id);
+  if(error){toast1('Could not update listing','error');return;}
   toast1(!current?'Marked as sold out':'Marked as available','success');
   loadSellerDashboard();
 };
@@ -1435,9 +1616,14 @@ window.submitListing=async function(btn){
   if(!title||!price){toast1('Title and price required','error');return;}
   btn.disabled=true;btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Publishing…';
   const images=listingImages.filter(Boolean);
-  const listing={sellerId:currentSeller.uid,shopName:currentSellerData.shopName,whatsapp:currentSellerData.whatsapp,title,price,category:cat,description:desc,stock,status:'active',soldOut:false,createdAt:Date.now(),rating:0,reviewCount:0,images};
+  const listing={
+    seller_id:currentSeller.id,shop_name:currentSellerData.shopName,whatsapp:currentSellerData.whatsapp,
+    title,price,category:cat,description:desc,stock,status:'active',sold_out:false,
+    created_at:new Date().toISOString(),rating:0,review_count:0,images
+  };
   try{
-    await db.ref('vendamarket/listings').push(listing);
+    const {error}=await sbClient.from('listings').insert(listing);
+    if(error) throw error;
     document.getElementById('add-listing-modal')?.remove();
     toast1('🎉 Listing is live!','success');
     loadSellerDashboard();
@@ -1447,18 +1633,84 @@ window.submitListing=async function(btn){
   }
 };
 
+// ======================== ADD PRODUCT — BRANDED SHOP PAGES ========================
+// Same modal/flow as showAddListing, but the product is tagged with a
+// shop_key so it only appears on its dedicated page, not the main market.
+// Gated in the UI (button hidden unless logged in as SHOP_ADMIN_UID) and
+// in the database (RLS policy only allows that UID to write shop_key rows).
+window.showAddShopListing=function(shopKey){
+  const cfg=SHOPS[shopKey];if(!cfg)return;
+  if(!currentSeller||currentSeller.id!==SHOP_ADMIN_UID){toast1('Only the shop owner can add products here','error');return;}
+  listingImages=[null,null];
+  const modal=document.createElement('div');
+  modal.className='modal-overlay';
+  modal.id='add-shop-listing-modal';
+  modal.innerHTML=`<div class="modal-box"><div class="modal-header"><h3>${cfg.emoji} Add ${esc(cfg.name)} Item</h3><button class="close-btn" onclick="this.closest('.modal-overlay').remove()">&times;</button></div>
+
+  <div class="form-group">
+    <label>📸 Product Photos (up to 2)</label>
+    <div class="img-upload-area" id="upload-slots">
+      ${[0,1].map(i=>`
+      <div class="img-upload-slot" id="slot-${i}">
+        <i class="fas fa-camera"></i>
+        <span>Photo ${i+1}</span>
+        <input type="file" accept="image/*" onchange="handleImgUpload(${i}, this)">
+      </div>`).join('')}
+    </div>
+  </div>
+
+  <div class="form-group"><label>Item Name *</label><input class="input" id="nl-title" placeholder="e.g. Chicken Burger"></div>
+  <div class="input-row">
+    <div class="form-group"><label>Price (R) *</label><input class="input" id="nl-price" type="number" step="0.01" placeholder="45.00"></div>
+    <div class="form-group"><label>Category</label><select class="select" id="nl-cat"><option>Food</option><option>Groceries</option><option>Beauty</option><option>Services</option></select></div>
+  </div>
+  <div class="form-group"><label>Description</label><textarea class="textarea" id="nl-desc" placeholder="Describe this item…"></textarea></div>
+  <div class="form-group"><label>Stock Available (0 = unlimited)</label><input class="input" id="nl-stock" type="number" placeholder="0" value="0"></div>
+  <button class="btn-full btn-full-green" id="publish-btn" onclick="submitShopListing(this,'${shopKey}')"><i class="fas fa-rocket"></i> Publish to ${esc(cfg.name)}</button></div>`;
+
+  document.body.appendChild(modal);
+  modal.addEventListener('click',e=>{if(e.target===modal)modal.remove();});
+  setTimeout(()=>{const inp=$('nl-title');if(inp)inp.focus();},50);
+};
+
+window.submitShopListing=async function(btn,shopKey){
+  const cfg=SHOPS[shopKey];if(!cfg)return;
+  const title=$('nl-title')?.value.trim(),price=parseFloat($('nl-price')?.value);
+  const cat=$('nl-cat')?.value,desc=$('nl-desc')?.value.trim(),stock=parseInt($('nl-stock')?.value)||0;
+  if(!title||!price){toast1('Title and price required','error');return;}
+  btn.disabled=true;btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Publishing…';
+  const images=listingImages.filter(Boolean);
+  const listing={
+    seller_id:currentSeller.id,shop_name:cfg.name,whatsapp:currentSellerData?.whatsapp||'',
+    title,price,category:cat,description:desc,stock,status:'active',sold_out:false,
+    created_at:new Date().toISOString(),rating:0,review_count:0,images,shop_key:shopKey
+  };
+  try{
+    const {error}=await sbClient.from('listings').insert(listing);
+    if(error) throw error;
+    document.getElementById('add-shop-listing-modal')?.remove();
+    toast1(`🎉 Added to ${cfg.name}!`,'success');
+  }catch(e){
+    toast1('Error publishing: '+e.message,'error');
+    btn.disabled=false;btn.innerHTML='<i class="fas fa-rocket"></i> Publish to '+cfg.name;
+  }
+};
+
 // ======================== AUTH OBSERVER ========================
-auth.onAuthStateChanged(async user=>{
+sbClient.auth.onAuthStateChange(async (event,session)=>{
+  const user=session?.user||null;
   if(user){
-    const snap=await db.ref('vendamarket/sellers/'+user.uid).once('value');
-    if(snap.exists()){
-      currentSeller=user;currentSellerData=snap.val();
+    const {data:profile}=await sbClient.from('sellers').select('*').eq('id',user.id).maybeSingle();
+    if(profile){
+      currentSeller=user;currentSellerData=sellerRowToObj(profile);
       const lb=$('logout-btn');if(lb)lb.classList.remove('hidden');
     }
   }else{
     currentSeller=null;currentSellerData=null;
     const lb=$('logout-btn');if(lb)lb.classList.add('hidden');
   }
+  const spa=$('shop-page-add-btn');
+  if(spa)spa.classList.toggle('hidden',!(currentSeller&&currentSeller.id===SHOP_ADMIN_UID));
 });
 
 // ======================== INIT ========================
@@ -1466,69 +1718,311 @@ updateWishlistBadge();
 updateCartBadge();
 loadListings();
 
+// If the customer was just redirected back from Yoco's checkout page,
+// let them know what happened. The *actual* payment confirmation always
+// comes from the server-side webhook, not this redirect — so we don't
+// mark anything as paid here, we just point them to Track Order.
+(function handleYocoReturn(){
+  const params = new URLSearchParams(window.location.search);
+  const yocoResult = params.get('yoco');
+  const orderId = params.get('order');
+  if(!yocoResult) return;
+  if(yocoResult==='success'){
+    toast1(`✅ Payment received for order #${orderId||''}! Confirming with the seller…`,'success',7000);
+  }else if(yocoResult==='cancel'){
+    toast1('Payment cancelled. Your order was not placed.','',5000);
+  }else if(yocoResult==='fail'){
+    toast1('Payment failed. Please try again or use another payment method.','error',6000);
+  }
+  // Clean the URL so refreshing doesn't re-trigger this message
+  window.history.replaceState({}, document.title, window.location.pathname);
+  if(orderId){
+    setTimeout(()=>{
+      const ti=$('track-input'); if(ti) ti.value=orderId;
+      const tm=$('track-modal'); if(tm) tm.classList.remove('hidden');
+      const dtb=$('do-track-btn'); if(dtb) dtb.click();
+    },800);
+  }
+})();
+
 // Seed demo data if empty
 setTimeout(async()=>{
-  const snap=await db.ref('vendamarket/listings').once('value');
-  if(!snap.exists()){
+  const {count}=await sbClient.from('listings').select('*',{count:'exact',head:true});
+  if(!count){
     const demos=[
-      {sellerId:'demo_001',shopName:"Mama T's Kitchen",whatsapp:'27781234567',title:'Pap & Vleis Combo',price:35,category:'Food',description:'Delicious home-cooked pap, beef stew and veggies. Served daily 12pm–3pm at the residences.',status:'active',soldOut:false,createdAt:Date.now()-3600000,rating:4.8,reviewCount:24,images:[]},
-      {sellerId:'demo_001',shopName:"Mama T's Kitchen",whatsapp:'27781234567',title:'Vetkoek & Mince (3 for R30)',price:15,category:'Food',description:'Freshly fried vetkoek filled with savoury mince. Order 3 for only R30!',status:'active',soldOut:false,createdAt:Date.now()-7200000,rating:4.5,reviewCount:12,images:[]},
-      {sellerId:'demo_002',shopName:'Campus Prints',whatsapp:'27789876543',title:'A4 Black & White Printing',price:0.5,category:'Printing',description:'Fast, affordable printing near the library. 50c per page. Colour printing also available at R3/page.',status:'active',soldOut:false,createdAt:Date.now()-86400000,rating:4.2,reviewCount:55,images:[]},
-      {sellerId:'demo_002',shopName:'Campus Prints',whatsapp:'27789876543',title:'CV Printing + Spiral Binding',price:25,category:'Printing',description:'Professional CV print + spiral binding. Impress any employer. Ready in under 30 minutes.',status:'active',soldOut:false,createdAt:Date.now()-172800000,rating:4.7,reviewCount:8,images:[]},
-      {sellerId:'demo_003',shopName:'Thabo Styles',whatsapp:'27762345678',title:'UNIVEN Hoodies — S/M/L/XL',price:250,category:'Clothing',description:'Quality UNIVEN branded hoodies. Show campus pride! Pre-order only. Delivery within 5 days.',status:'active',soldOut:false,createdAt:Date.now()-259200000,rating:5,reviewCount:3,images:[]},
-      {sellerId:'demo_004',shopName:'Beauty by Nandi',whatsapp:'27713456789',title:'Hair Braiding — Full Head',price:180,category:'Beauty',description:'Neat, affordable braiding. Box braids, cornrows & knotless braids. Book in advance. Home visits available.',status:'active',soldOut:false,createdAt:Date.now()-345600000,rating:4.6,reviewCount:18,images:[]},
+      {seller_id:null,shop_name:"Mama T's Kitchen",whatsapp:'27781234567',title:'Pap & Vleis Combo',price:35,category:'Food',description:'Delicious home-cooked pap, beef stew and veggies. Served daily 12pm–3pm at the residences.',status:'active',sold_out:false,created_at:new Date(Date.now()-3600000).toISOString(),rating:4.8,review_count:24,images:[]},
+      {seller_id:null,shop_name:"Mama T's Kitchen",whatsapp:'27781234567',title:'Vetkoek & Mince (3 for R30)',price:15,category:'Food',description:'Freshly fried vetkoek filled with savoury mince. Order 3 for only R30!',status:'active',sold_out:false,created_at:new Date(Date.now()-7200000).toISOString(),rating:4.5,review_count:12,images:[]},
+      {seller_id:null,shop_name:'Campus Prints',whatsapp:'27789876543',title:'A4 Black & White Printing',price:0.5,category:'Printing',description:'Fast, affordable printing near the library. 50c per page. Colour printing also available at R3/page.',status:'active',sold_out:false,created_at:new Date(Date.now()-86400000).toISOString(),rating:4.2,review_count:55,images:[]},
+      {seller_id:null,shop_name:'Campus Prints',whatsapp:'27789876543',title:'CV Printing + Spiral Binding',price:25,category:'Printing',description:'Professional CV print + spiral binding. Impress any employer. Ready in under 30 minutes.',status:'active',sold_out:false,created_at:new Date(Date.now()-172800000).toISOString(),rating:4.7,review_count:8,images:[]},
+      {seller_id:null,shop_name:'Thabo Styles',whatsapp:'27762345678',title:'UNIVEN Hoodies — S/M/L/XL',price:250,category:'Clothing',description:'Quality UNIVEN branded hoodies. Show campus pride! Pre-order only. Delivery within 5 days.',status:'active',sold_out:false,created_at:new Date(Date.now()-259200000).toISOString(),rating:5,review_count:3,images:[]},
+      {seller_id:null,shop_name:'Beauty by Nandi',whatsapp:'27713456789',title:'Hair Braiding — Full Head',price:180,category:'Beauty',description:'Neat, affordable braiding. Box braids, cornrows & knotless braids. Book in advance. Home visits available.',status:'active',sold_out:false,created_at:new Date(Date.now()-345600000).toISOString(),rating:4.6,review_count:18,images:[]},
     ];
-    for(const d of demos) await db.ref('vendamarket/listings').push(d);
+    const {error}=await sbClient.from('listings').insert(demos);
+    if(error) console.warn('Demo seed skipped:',error.message);
   }
 },1200);
 
 /* ============================================================================
-   GOING LIVE WITH REAL CARD CHARGES (do this when ready — not required to
-   test the app now, since DEMO_MODE handles everything locally):
+   SUPABASE SETUP — run this SQL once in the Supabase SQL Editor to create
+   the schema this app expects, with sane Row Level Security (RLS) policies.
 
-   1. firebase init functions   (choose JavaScript)
-   2. firebase functions:config:set yoco.secret="sk_test_YOUR_SECRET_KEY"
-   3. Paste this into functions/index.js:
+   -- SELLERS (1 row per seller, id = auth.users.id)
+   create table sellers (
+     id uuid primary key references auth.users(id) on delete cascade,
+     shop_name text not null,
+     owner_name text not null,
+     email text not null,
+     whatsapp text not null,
+     category text,
+     location text,
+     status text default 'active',
+     listings_count int default 0,
+     created_at timestamptz default now()
+   );
+   alter table sellers enable row level security;
+   create policy "Sellers are publicly readable" on sellers for select using (true);
+   create policy "Users can insert their own seller row" on sellers for insert with check (auth.uid() = id);
+   create policy "Users can update their own seller row" on sellers for update using (auth.uid() = id);
 
-   const functions = require("firebase-functions");
-   const admin = require("firebase-admin");
-   const fetch = require("node-fetch");
-   const cors = require("cors")({ origin: true });
-   admin.initializeApp();
-   const db = admin.database();
+   -- LISTINGS
+   -- shop_key: null = a normal marketplace listing (any seller, own products).
+   --   'cafeteria' | 'fish_chips' | 'galitos' = a branded, single-vendor page
+   --   that only the designated admin UID may write to (see policies below).
+   create table listings (
+     id uuid primary key default gen_random_uuid(),
+     seller_id uuid references sellers(id) on delete set null,
+     shop_name text,
+     whatsapp text,
+     title text not null,
+     price numeric not null,
+     category text,
+     description text,
+     stock int default 0,
+     status text default 'active',
+     sold_out boolean default false,
+     rating numeric default 0,
+     review_count int default 0,
+     images jsonb default '[]',
+     shop_key text,
+     created_at timestamptz default now()
+   );
+   alter table listings enable row level security;
+   create policy "Active listings are publicly readable" on listings for select using (true);
+   create policy "Sellers can insert their own listings" on listings for insert with check (
+     (shop_key is null and auth.uid() = seller_id)
+     or (shop_key is not null and auth.uid() = '4fba00fa-29cc-4ed5-961c-9ad925d32d08')
+   );
+   create policy "Sellers can update their own listings" on listings for update using (
+     (shop_key is null and auth.uid() = seller_id)
+     or (shop_key is not null and auth.uid() = '4fba00fa-29cc-4ed5-961c-9ad925d32d08')
+   );
+   create policy "Sellers can delete their own listings" on listings for delete using (
+     (shop_key is null and auth.uid() = seller_id)
+     or (shop_key is not null and auth.uid() = '4fba00fa-29cc-4ed5-961c-9ad925d32d08')
+   );
 
-   exports.chargeYocoPayment = functions.https.onRequest((req, res) => {
-     cors(req, res, async () => {
-       if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
-       const { token, order } = req.body;
-       if (!token || !order || !order.orderId || !order.total) {
-         return res.status(400).json({ error: "Missing token or order details" });
+   -- ORDERS (order_id is the human-friendly code shown to buyers, e.g. VM123ABC)
+   create table orders (
+     order_id text primary key,
+     product_id uuid references listings(id) on delete set null,
+     product_title text,
+     shop_id uuid references sellers(id) on delete set null,
+     shop_name text,
+     seller_whatsapp text,
+     price numeric,
+     buyer_name text,
+     buyer_phone text,
+     buyer_location text,
+     quantity int default 1,
+     total numeric,
+     note text,
+     status text default 'pending',
+     payment_status text default 'unpaid',
+     payment_method text default 'unpaid',
+     created_at timestamptz default now()
+   );
+   alter table orders enable row level security;
+   -- Buyers need to both create orders and later look them up by order_id while
+   -- unauthenticated, and sellers need to see/update orders placed with them.
+   create policy "Anyone can create an order" on orders for insert with check (true);
+   create policy "Anyone can look up an order by id" on orders for select using (true);
+   create policy "Sellers can update their own orders" on orders for update using (auth.uid() = shop_id);
+
+   -- Realtime: enable replication on listings so the live feed works
+   alter publication supabase_realtime add table listings;
+
+   ============================================================================
+   GOING LIVE WITH REAL CARD PAYMENTS (not required to test the app now,
+   since DEMO_MODE handles everything locally).
+
+   Yoco's current integration is a hosted Checkout page + webhook — there is
+   no card form or SDK on this site at all. Card details are entered on
+   Yoco's own page; your server creates the checkout and later gets a
+   webhook confirming payment. You need TWO Edge Functions:
+
+   ---- STEP 1: get your Yoco keys ----
+   Yoco Business Portal → Sales → Payment Gateway → API Keys.
+   Use sk_test_... while testing, sk_live_... once you're ready to go live.
+
+   ---- STEP 2: deploy "create-yoco-checkout" ----
+   This is the function CHECKOUT_ENDPOINT (above) points to. It saves the
+   order as pending/unpaid, asks Yoco to open a checkout session, and
+   returns the URL to send the customer to.
+
+   1. supabase functions new create-yoco-checkout
+   2. supabase secrets set YOCO_SECRET_KEY=sk_test_YOUR_SECRET_KEY
+   3. Paste this into supabase/functions/create-yoco-checkout/index.ts:
+
+   import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+   const corsHeaders = {
+     "Access-Control-Allow-Origin": "*",
+     "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+   };
+
+   Deno.serve(async (req) => {
+     if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
+     try {
+       const { order, returnUrl } = await req.json();
+       if (!order?.orderId || !order?.total || !returnUrl) {
+         return new Response(JSON.stringify({ error: "Missing order details or returnUrl" }), { status: 400, headers: corsHeaders });
        }
-       try {
-         const yocoRes = await fetch("https://online.yoco.com/v1/charges/", {
-           method: "POST",
-           headers: { "X-Auth-Secret-Key": functions.config().yoco.secret, "Content-Type": "application/json" },
-           body: JSON.stringify({ token, amountInCents: Math.round(order.total * 100), currency: "ZAR" })
-         });
-         const yocoData = await yocoRes.json();
-         if (!yocoRes.ok || yocoData.status !== "successful") {
-           return res.status(402).json({ success: false, error: yocoData.displayMessage || "Card was declined" });
-         }
-         const orderWithPayment = { ...order, status: "confirmed", paymentStatus: "paid", paymentMethod: "card", paymentRef: yocoData.id, paidAt: Date.now() };
-         await db.ref("vendamarket/orders/" + order.orderId).set(orderWithPayment);
-         await db.ref(`vendamarket/sellerInbox/${order.shopId}/${order.orderId}`).set(orderWithPayment);
-         await db.ref("vendamarket/payments/" + yocoData.id).set({ orderId: order.orderId, shopId: order.shopId, amount: order.total, status: "success", createdAt: Date.now() });
-         return res.json({ success: true, reference: yocoData.id });
-       } catch (err) {
-         console.error(err);
-         return res.status(500).json({ success: false, error: "Payment processing error. Please try again." });
+
+       const supabase = createClient(
+         Deno.env.get("SUPABASE_URL")!,
+         Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")! // service role bypasses RLS, safe here (server-side only)
+       );
+
+       // Save the order as pending/unpaid *before* sending the customer to
+       // Yoco, so we already have a row for the webhook to update later.
+       const { error: insertErr } = await supabase.from("orders").insert({
+         order_id: order.orderId, product_id: order.productId, product_title: order.productTitle,
+         shop_id: order.shopId, shop_name: order.shopName, seller_whatsapp: order.sellerWhatsapp,
+         price: order.price, buyer_name: order.buyerName, buyer_phone: order.buyerPhone,
+         buyer_location: order.buyerLocation, quantity: order.quantity, total: order.total,
+         note: order.note, status: "pending", payment_status: "unpaid", payment_method: "card-pending",
+         created_at: new Date().toISOString(),
+       });
+       if (insertErr) throw insertErr;
+
+       const yocoRes = await fetch("https://payments.yoco.com/api/checkouts", {
+         method: "POST",
+         headers: {
+           "Content-Type": "application/json",
+           "Authorization": `Bearer ${Deno.env.get("YOCO_SECRET_KEY")}`,
+         },
+         body: JSON.stringify({
+           amount: Math.round(order.total * 100), // cents
+           currency: "ZAR",
+           successUrl: `${returnUrl}?yoco=success&order=${order.orderId}`,
+           cancelUrl: `${returnUrl}?yoco=cancel&order=${order.orderId}`,
+           failureUrl: `${returnUrl}?yoco=fail&order=${order.orderId}`,
+           // This metadata comes back on the webhook event so we know
+           // which order to mark as paid.
+           metadata: { orderId: order.orderId },
+         }),
+       });
+       const yocoData = await yocoRes.json();
+       if (!yocoRes.ok || !yocoData.redirectUrl) {
+         return new Response(JSON.stringify({ error: yocoData.message || "Could not start checkout" }), { status: 502, headers: corsHeaders });
        }
-     });
+
+       return new Response(JSON.stringify({ redirectUrl: yocoData.redirectUrl, checkoutId: yocoData.id }), { headers: corsHeaders });
+     } catch (err) {
+       return new Response(JSON.stringify({ error: String(err) }), { status: 500, headers: corsHeaders });
+     }
    });
 
-   4. firebase deploy --only functions
-   5. Copy the deployed URL into CHARGE_ENDPOINT above, and your real
-      pk_test_/sk_test_ (then live) keys into YOCO_PUBLIC_KEY / yoco.secret.
+   4. supabase functions deploy create-yoco-checkout --no-verify-jwt
+   5. Copy the deployed URL into CHECKOUT_ENDPOINT near the top of this file.
+
+   ---- STEP 3: deploy "yoco-webhook" ----
+   This is what actually confirms payment — never trust the browser
+   redirect for that. Yoco calls this URL on its own servers when a
+   payment succeeds or fails.
+
+   1. supabase functions new yoco-webhook
+   2. Paste this into supabase/functions/yoco-webhook/index.ts:
+
+   import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+   function timingSafeEqual(a: Uint8Array, b: Uint8Array) {
+     if (a.length !== b.length) return false;
+     let diff = 0;
+     for (let i = 0; i < a.length; i++) diff |= a[i] ^ b[i];
+     return diff === 0;
+   }
+
+   Deno.serve(async (req) => {
+     try {
+       const rawBody = await req.text();
+       const webhookId = req.headers.get("webhook-id") || "";
+       const webhookTimestamp = req.headers.get("webhook-timestamp") || "";
+       const webhookSignature = req.headers.get("webhook-signature") || "";
+
+       // Reject stale requests (replay-attack protection) — Yoco recommends
+       // a 3-minute window.
+       const tsSeconds = parseInt(webhookTimestamp, 10);
+       if (!tsSeconds || Math.abs(Date.now() / 1000 - tsSeconds) > 180) {
+         return new Response("Invalid timestamp", { status: 400 });
+       }
+
+       // Verify the HMAC-SHA256 signature per Yoco's webhook-signing spec.
+       const secret = Deno.env.get("YOCO_WEBHOOK_SECRET")!.replace(/^whsec_/, "");
+       const secretBytes = Uint8Array.from(atob(secret), (c) => c.charCodeAt(0));
+       const signedContent = `${webhookId}.${webhookTimestamp}.${rawBody}`;
+       const key = await crypto.subtle.importKey("raw", secretBytes, { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+       const sigBuf = await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(signedContent));
+       const expected = btoa(String.fromCharCode(...new Uint8Array(sigBuf)));
+       const expectedBytes = Uint8Array.from(atob(expected), (c) => c.charCodeAt(0));
+
+       const provided = webhookSignature.split(" ").map((p) => p.split(",")[1]).filter(Boolean);
+       const valid = provided.some((sig) => {
+         try {
+           const sigBytes = Uint8Array.from(atob(sig), (c) => c.charCodeAt(0));
+           return timingSafeEqual(sigBytes, expectedBytes);
+         } catch { return false; }
+       });
+       if (!valid) return new Response("Invalid signature", { status: 401 });
+
+       const event = JSON.parse(rawBody);
+       const orderId = event?.payload?.metadata?.orderId;
+       if (!orderId) return new Response("ok", { status: 200 }); // nothing to reconcile
+
+       const supabase = createClient(
+         Deno.env.get("SUPABASE_URL")!,
+         Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+       );
+
+       if (event.type === "payment.succeeded") {
+         await supabase.from("orders").update({
+           status: "confirmed", payment_status: "paid", payment_method: "card",
+         }).eq("order_id", orderId);
+       } else if (event.type === "payment.failed") {
+         await supabase.from("orders").update({ payment_method: "card-failed" }).eq("order_id", orderId);
+       }
+
+       return new Response("ok", { status: 200 });
+     } catch (err) {
+       console.error(err);
+       return new Response("error", { status: 500 });
+     }
+   });
+
+   3. supabase functions deploy yoco-webhook --no-verify-jwt
+
+   ---- STEP 4: register the webhook with Yoco ----
+   Yoco Business Portal → Developers/Webhooks → Add endpoint:
+     URL: https://YOUR-PROJECT-REF.functions.supabase.co/yoco-webhook
+     Events: payment.succeeded, payment.failed
+   Yoco will show you a signing secret starting with "whsec_" — copy it, then:
+     supabase secrets set YOCO_WEBHOOK_SECRET=whsec_YOUR_SECRET
+
+   ---- STEP 5: go live ----
+   Switch YOCO_SECRET_KEY to your sk_live_... key once you've tested with
+   sk_test_... and Yoco's test card numbers (from their docs), and make
+   sure CHECKOUT_ENDPOINT (near the top of this file) points at your
+   deployed create-yoco-checkout URL.
    ============================================================================ */
 </script>
 </body>
