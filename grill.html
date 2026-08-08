@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grills & Eats — Online Menu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#f5efe3;
+    --cream-2:#efe6d4;
+    --surface:#fffdf8;
+    --ink:#171412;
+    --ink-soft:#665f57;
+    --ink-faint:#948c81;
+    --orange:#f2661d;
+    --orange-dark:#d9420f;
+    --orange-tint:#fdeadc;
+    --whatsapp:#25d366;
+    --whatsapp-dark:#1cb659;
+    --line:#e6d9c0;
+    --radius:26px;
+    --font-display:'Anton', sans-serif;
+    --font-body:'Inter', sans-serif;
+    --font-mono:'JetBrains Mono', monospace;
+    --shadow-sm:0 2px 10px -4px rgba(23,20,18,0.10);
+    --shadow-md:0 16px 40px -18px rgba(23,20,18,0.22);
+    --shadow-lg:0 24px 60px -20px rgba(23,20,18,0.28);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  .cat-photo.placeholder {
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(135deg, rgba(242,102,29,.12), rgba(239,230,212,.8)),
+    var(--cream-2);
+}
+
+.cat-photo.placeholder::before {
+  content: 'PHOTO';
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--orange);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+
+.cat-photo.placeholder::after {
+  content: '🍗';
+  position: absolute;
+  font-size: 38px;
+  opacity: .18;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -65%);
+}
+  body{
+    background:var(--cream);
+    color:var(--ink);
+    font-family:var(--font-body);
+    -webkit-font-smoothing:antialiased;
+    position:relative;
+  }
+  body::before{
+    content:''; position:fixed; inset:0; pointer-events:none; z-index:1; opacity:0.5;
+    background-image:radial-gradient(circle at 1px 1px, rgba(23,20,18,0.045) 1px, transparent 0);
+    background-size:5px 5px;
+  }
+  a{color:inherit; text-decoration:none;}
+  button{font-family:inherit; cursor:pointer;}
+  img{display:block; max-width:100%;}
+  ::selection{background:var(--orange); color:#fff;}
+  :focus-visible{outline:2px solid var(--orange); outline-offset:2px;}
+
+  .wrap{max-width:1120px; margin:0 auto; padding:0 20px; position:relative; z-index:2;}
+
+  /* ---------- NAV ---------- */
+  header.site-nav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(245,239,227,0.9);
+    backdrop-filter:blur(14px) saturate(1.4);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{display:flex; align-items:center; justify-content:space-between; height:64px;}
+  .brand{display:flex; align-items:center; gap:9px; font-family:var(--font-display); font-size:19px; letter-spacing:0.5px;}
+  .brand .flame-dot{
+    width:26px; height:26px; border-radius:50%; background:var(--ink);
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .brand .amp{color:var(--orange);}
+  .nav-actions{display:flex; align-items:center; gap:10px;}
+  .nav-wa-btn{
+    display:none; align-items:center; gap:7px;
+    background:var(--whatsapp); color:#fff; font-weight:700; font-size:12px;
+    padding:10px 16px; border-radius:999px; border:none; box-shadow:var(--shadow-sm);
+    transition:transform .15s, background .15s;
+  }
+  .nav-wa-btn:hover{background:var(--whatsapp-dark); transform:translateY(-1px);}
+  @media(min-width:600px){ .nav-wa-btn{display:inline-flex;} }
+  .cart-btn{
+    background:var(--surface); border:1px solid var(--line); color:var(--ink);
+    position:relative; display:flex; align-items:center; justify-content:center;
+    width:42px; height:42px; border-radius:999px; transition:border-color .15s, transform .15s;
+  }
+  .cart-btn:hover{border-color:var(--orange); transform:translateY(-1px);}
+  .cart-count{
+    position:absolute; top:-6px; right:-6px; background:var(--orange); color:#fff;
+    font-family:var(--font-mono); font-size:10px; font-weight:700;
+    width:19px; height:19px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    border:2px solid var(--cream);
+  }
+  nav.categories{
+    display:flex; gap:26px; overflow-x:auto; padding:11px 0; border-top:1px solid var(--line);
+    scrollbar-width:none; position:relative;
+  }
+  nav.categories::-webkit-scrollbar{display:none;}
+  nav.categories a{
+    font-size:12px; letter-spacing:1.4px; text-transform:uppercase; font-weight:700;
+    color:var(--ink-faint); white-space:nowrap; padding-bottom:5px; border-bottom:2px solid transparent;
+    transition:color .15s, border-color .15s;
+  }
+  nav.categories a:hover, nav.categories a.active{color:var(--ink); border-color:var(--orange);}
+
+  /* ---------- HERO ---------- */
+  .hero{position:relative; overflow:hidden; padding:64px 0 40px; text-align:center;}
+  .brush{position:absolute; filter:blur(0.5px); z-index:0;}
+  .brush.b1{
+    top:-70px; left:-100px; width:380px; height:170px; background:var(--ink); opacity:0.96;
+    transform:rotate(-13deg); border-radius:45% 55% 60% 40%/55% 40% 60% 45%;
+  }
+  .brush.b2{
+    top:-50px; right:-110px; width:360px; height:190px; background:linear-gradient(135deg,var(--orange),#ff8a3d); opacity:0.95;
+    transform:rotate(15deg); border-radius:50% 50% 55% 45%/45% 55% 45% 55%;
+  }
+  .brush.b3{
+    bottom:-20px; left:-70px; width:280px; height:120px; background:var(--orange); opacity:0.9;
+    transform:rotate(-9deg); border-radius:50% 50% 45% 55%/60% 40% 60% 40%;
+  }
+  .hero-inner{position:relative; z-index:2;}
+  .hero-kicker{
+    display:inline-flex; align-items:center; gap:8px; padding:6px 14px; border-radius:999px;
+    background:var(--surface); border:1px solid var(--line); box-shadow:var(--shadow-sm);
+    font-family:var(--font-mono); font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:var(--ink-soft);
+    margin-bottom:22px;
+  }
+  .hero-kicker .flame{font-size:12px;}
+  .hero h1{
+    font-family:var(--font-display); font-size:clamp(48px,10.5vw,92px); line-height:0.9; letter-spacing:0.5px;
+    text-transform:uppercase; text-shadow:0 2px 0 rgba(23,20,18,0.04);
+  }
+  .hero h1 .accent{color:var(--orange);}
+  .hero-rule-row{display:flex; align-items:center; justify-content:center; gap:14px; margin:18px 0;}
+  .hero-rule-row .rule{height:2px; width:70px; background:linear-gradient(90deg, transparent, var(--orange), transparent); border-radius:2px;}
+  .hero .menu-word{
+    font-family:var(--font-display); font-size:clamp(72px,15vw,148px); line-height:0.82;
+    text-transform:uppercase; margin-top:2px; letter-spacing:1px;
+  }
+  .hero .tagline{
+    font-weight:800; letter-spacing:1.5px; text-transform:uppercase; font-size:clamp(12px,1.8vw,15px);
+    color:var(--ink-soft); margin-top:6px;
+  }
+
+  /* ---------- MENU CATEGORY CARDS ---------- */
+  .section{padding:44px 0 20px;}
+  .section-eyebrow{
+    display:flex; align-items:center; gap:12px; margin-bottom:22px; font-family:var(--font-mono);
+    font-size:12px; letter-spacing:2px; text-transform:uppercase; color:var(--ink-faint);
+  }
+  .section-eyebrow .line{flex:1; height:1px; background:var(--line);}
+
+  .menu-grid{display:grid; grid-template-columns:1fr; gap:22px;}
+  @media(min-width:840px){ .menu-grid{grid-template-columns:1fr 1fr;} }
+
+  .cat-card{
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
+    overflow:hidden; scroll-margin-top:150px; box-shadow:var(--shadow-sm);
+    position:relative; transition:box-shadow .25s, transform .25s;
+    opacity:0; transform:translateY(18px);
+  }
+  .cat-card.in-view{opacity:1; transform:translateY(0); transition:opacity .5s ease, transform .5s ease;}
+  .cat-card:hover{box-shadow:var(--shadow-md); transform:translateY(-3px);}
+  .cat-card.orderable{border-top:5px solid var(--orange);}
+  .cat-card.info-card{border-top:5px solid var(--ink);}
+  .cat-card-inner{display:flex; gap:18px; padding:22px;}
+  .cat-photo{
+    width:104px; height:104px; flex-shrink:0; border-radius:18px; overflow:hidden;
+    background:var(--orange-tint); display:flex; align-items:center; justify-content:center;
+    box-shadow:inset 0 0 0 1px rgba(23,20,18,0.05);
+  }
+  .cat-photo img{width:100%; height:100%; object-fit:cover;}
+  .cat-photo svg{width:52%; height:52%;}
+  .cat-body{flex:1; min-width:0;}
+  .cat-title{display:flex; align-items:center; gap:11px; margin-bottom:14px;}
+  .cat-icon{
+    width:34px; height:34px; border-radius:50%; background:var(--orange-tint); color:var(--orange);
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .cat-icon.dark{background:var(--ink); color:#fff;}
+  .cat-title h2{font-family:var(--font-display); font-size:23px; letter-spacing:0.5px; text-transform:uppercase;}
+  .price-cols{display:flex; gap:16px; margin-left:auto; font-family:var(--font-mono); font-size:10px; color:var(--ink-faint); letter-spacing:1.5px; text-transform:uppercase;}
+
+  .menu-row{
+    display:flex; align-items:baseline; gap:8px; padding:11px 6px; margin:0 -6px;
+    border-bottom:1px dashed var(--line);
+    width:calc(100% + 12px); background:none; border-top:none; border-left:none; border-right:none;
+    text-align:left; color:var(--ink); font-size:14.5px; font-weight:600; border-radius:10px;
+    transition:background .15s;
+  }
+  .menu-row:hover{background:var(--orange-tint);}
+  .menu-row:last-child{border-bottom:none;}
+  .menu-row-name{white-space:nowrap;}
+  .menu-row-leader{flex:1; border-bottom:2px dotted #d8c9a5; height:0; transform:translateY(-4px);}
+  .menu-row-price{font-family:var(--font-mono); color:var(--orange-dark); font-weight:700; white-space:nowrap;}
+  .menu-row-prices{display:flex; gap:18px;}
+  .menu-row-prices span{font-family:var(--font-mono); color:var(--orange-dark); font-weight:700; min-width:34px; text-align:right;}
+  .menu-row-add{
+    width:28px; height:28px; border-radius:50%; background:var(--ink); color:#fff;
+    display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0; border:none;
+    transition:background .15s, transform .15s;
+  }
+  .menu-row:hover .menu-row-add{background:var(--orange); transform:scale(1.08) rotate(90deg);}
+
+  .info-list{list-style:none; display:flex; flex-direction:column; gap:8px;}
+  .info-list li{font-size:13.5px; color:var(--ink-soft); padding-left:18px; position:relative; font-weight:500;}
+  .info-list li::before{content:'\1F525'; position:absolute; left:0; font-size:11px; top:1px;}
+  .info-note{font-size:12.5px; color:var(--ink-soft); margin-top:10px; line-height:1.65;}
+  .cat-subtitle{font-weight:800; font-size:13.5px; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:5px; color:var(--ink);}
+
+  /* ---------- FOOTER INFO BAR ---------- */
+  .info-bar-wrap{
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
+    padding:32px 24px; margin:44px 0 0; box-shadow:var(--shadow-sm);
+  }
+  .info-bar{display:grid; grid-template-columns:repeat(2,1fr); gap:28px 20px;}
+  @media(min-width:760px){ .info-bar{grid-template-columns:repeat(4,1fr);} }
+  .info-item{display:flex; flex-direction:column; align-items:center; text-align:center; gap:10px; position:relative;}
+  @media(min-width:760px){
+    .info-item:not(:last-child)::after{
+      content:''; position:absolute; right:-14px; top:6px; bottom:6px; width:1px;
+      background-image:linear-gradient(var(--line) 60%, transparent 0); background-size:1px 6px; background-repeat:repeat-y;
+    }
+  }
+  .info-item .icon-circle{
+    width:46px; height:46px; border-radius:50%; background:var(--orange); color:#fff;
+    display:flex; align-items:center; justify-content:center; box-shadow:var(--shadow-sm);
+  }
+  .info-item p{font-size:12.5px; font-weight:700; line-height:1.45; color:var(--ink-soft);}
+
+  footer.contact-bar{
+    background:var(--ink); color:#fff; text-align:center; padding:32px 0 26px; margin-top:44px;
+    position:relative; overflow:hidden;
+  }
+  footer.contact-bar::before{
+    content:''; position:absolute; top:-60px; left:50%; transform:translateX(-50%); width:400px; height:200px;
+    background:radial-gradient(ellipse, rgba(242,102,29,0.25), transparent 70%);
+  }
+  footer.contact-bar .foot-brand{
+    font-family:var(--font-display); font-size:20px; letter-spacing:0.5px; position:relative; z-index:1; margin-bottom:14px;
+  }
+  footer.contact-bar .foot-brand .amp{color:var(--orange);}
+  footer.contact-bar .contact-label{color:var(--orange); font-style:italic; font-size:13px; margin-bottom:4px; position:relative; z-index:1;}
+  footer.contact-bar .contact-phone{font-family:var(--font-mono); font-size:24px; font-weight:700; letter-spacing:1px; position:relative; z-index:1;}
+  footer.contact-bar .foot-sub{font-size:11px; color:#a39a8d; margin-top:10px; position:relative; z-index:1;}
+
+  /* ---------- QUICK ADD MODAL ---------- */
+  .overlay{position:fixed; inset:0; background:rgba(23,20,18,0.55); z-index:90; opacity:0; pointer-events:none; transition:opacity .2s;}
+  .overlay.open{opacity:1; pointer-events:auto;}
+  .modal{
+    position:fixed; left:50%; bottom:0; transform:translate(-50%,100%); width:min(440px,92vw);
+    background:var(--surface); border-radius:26px 26px 0 0; z-index:100; padding:26px;
+    transition:transform .3s cubic-bezier(.2,.8,.2,1); max-height:85vh; overflow-y:auto;
+    box-shadow:var(--shadow-lg);
+  }
+  @media(min-width:600px){ .modal{bottom:50%; transform:translate(-50%,150%); border-radius:26px;} .modal.open{transform:translate(-50%,50%);} }
+  .modal.open{transform:translate(-50%,0);}
+  .modal-head{display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:6px;}
+  .modal-head h3{font-family:var(--font-display); font-size:21px; text-transform:uppercase; letter-spacing:0.3px; padding-right:10px;}
+  .modal-close{background:var(--cream-2); border:none; width:32px; height:32px; border-radius:50%; font-size:16px; flex-shrink:0; transition:background .15s;}
+  .modal-close:hover{background:var(--orange-tint); color:var(--orange-dark);}
+  .modal-price{font-family:var(--font-mono); color:var(--orange-dark); font-weight:700; font-size:17px; margin-bottom:20px;}
+  .modal-label{font-size:11px; font-weight:800; letter-spacing:1.2px; text-transform:uppercase; color:var(--ink-faint); margin-bottom:9px;}
+  .chip-row{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px;}
+  .chip{
+    padding:9px 15px; border-radius:999px; border:1.5px solid var(--line); background:var(--cream);
+    font-size:13px; font-weight:700; color:var(--ink-soft); transition:all .15s;
+  }
+  .chip:hover{border-color:var(--orange);}
+  .chip.selected{background:var(--ink); color:#fff; border-color:var(--ink);}
+  .modal-qty-row{display:flex; align-items:center; gap:16px; margin-bottom:22px;}
+  .modal-qty-btn{width:36px; height:36px; border-radius:50%; border:1.5px solid var(--line); background:var(--cream); font-size:17px; transition:border-color .15s;}
+  .modal-qty-btn:hover{border-color:var(--orange);}
+  .modal-qty-val{font-family:var(--font-mono); font-weight:700; min-width:22px; text-align:center; font-size:15px;}
+  .modal-add-btn{
+    width:100%; padding:17px; background:var(--orange); color:#fff; border:none;
+    font-family:var(--font-display); font-size:15px; letter-spacing:0.5px; text-transform:uppercase; border-radius:999px;
+    box-shadow:0 10px 24px -10px rgba(242,102,29,0.6); transition:background .15s, transform .15s;
+  }
+  .modal-add-btn:hover{background:var(--orange-dark); transform:translateY(-1px);}
+
+  /* ---------- ORDER DRAWER ---------- */
+  .drawer{
+    position:fixed; top:0; right:0; height:100%; width:min(400px,92vw);
+    background:var(--surface); border-left:1px solid var(--line); z-index:100;
+    transform:translateX(100%); transition:transform .3s cubic-bezier(.2,.8,.2,1); display:flex; flex-direction:column;
+    box-shadow:var(--shadow-lg);
+  }
+  .drawer.open{transform:translateX(0);}
+  .drawer-head{display:flex; align-items:center; justify-content:space-between; padding:22px; border-bottom:1px solid var(--line);}
+  .drawer-head h3{font-family:var(--font-display); font-size:19px; text-transform:uppercase;}
+  .drawer-close{background:var(--cream-2); border:none; color:var(--ink); font-size:18px; width:32px; height:32px; border-radius:50%;}
+  .drawer-items{flex:1; overflow-y:auto; padding:10px 22px;}
+  .order-line{display:flex; justify-content:space-between; gap:10px; padding:14px 0; border-bottom:1px dashed var(--line);}
+  .order-line-info{flex:1;}
+  .order-line-name{font-size:13.5px; font-weight:700;}
+  .order-line-meta{font-size:11px; color:var(--ink-faint); font-family:var(--font-mono);}
+  .order-line-right{display:flex; flex-direction:column; align-items:flex-end; gap:7px;}
+  .order-line-qty{display:flex; align-items:center; gap:8px;}
+  .order-line-qty button{width:23px; height:23px; border:1px solid var(--line); background:none; font-size:12px; border-radius:50%;}
+  .order-line-price{font-family:var(--font-mono); font-weight:700; font-size:13px; color:var(--orange-dark);}
+  .remove-link{font-size:11px; color:var(--ink-faint); text-decoration:underline;}
+  .drawer-empty{color:var(--ink-faint); font-size:13px; text-align:center; margin-top:70px;}
+  .drawer-foot{border-top:1px solid var(--line); padding:22px;}
+  .drawer-subtotal{display:flex; justify-content:space-between; font-family:var(--font-mono); margin-bottom:16px; font-size:15px; font-weight:700;}
+  .review-btn{width:100%; padding:16px; background:var(--ink); color:#fff; border:none; font-family:var(--font-display); font-size:14px; border-radius:999px; text-transform:uppercase; transition:background .15s;}
+  .review-btn:hover{background:var(--orange-dark);}
+
+  /* ---------- REVIEW PAGE ---------- */
+  .checkout-wrap{display:grid; grid-template-columns:1fr; gap:32px; padding:32px 0 64px;}
+  @media(min-width:900px){ .checkout-wrap{grid-template-columns:1.3fr 1fr;} }
+  .back-link{display:inline-flex; align-items:center; gap:6px; color:var(--ink-soft); font-size:12px; text-transform:uppercase; font-weight:700; margin-bottom:18px;}
+  .back-link:hover{color:var(--orange);}
+  .form-group{margin-bottom:16px;}
+  .form-group label{display:block; font-size:11px; text-transform:uppercase; letter-spacing:1px; font-weight:800; color:var(--ink-faint); margin-bottom:7px;}
+  .form-group input, .form-group textarea{
+    width:100%; padding:13px 15px; background:var(--surface); border:1.5px solid var(--line);
+    color:var(--ink); border-radius:12px; font-family:inherit; font-size:14px; transition:border-color .15s;
+  }
+  .form-group input:focus, .form-group textarea:focus{border-color:var(--orange);}
+  .form-group textarea{resize:vertical; min-height:70px;}
+  .order-summary{background:var(--surface); border:1px solid var(--line); border-top:5px solid var(--orange); border-radius:var(--radius); padding:22px; height:fit-content; box-shadow:var(--shadow-sm);}
+  .order-summary h3{font-family:var(--font-display); font-size:17px; text-transform:uppercase; margin-bottom:15px;}
+  .summary-line{display:flex; justify-content:space-between; font-size:13px; padding:9px 0; border-bottom:1px dashed var(--line); font-family:var(--font-mono);}
+  .summary-total{display:flex; justify-content:space-between; font-size:18px; padding-top:15px; font-weight:800;}
+  .send-wa-btn{
+    width:100%; margin-top:20px; padding:17px; background:var(--whatsapp); color:#fff; border:none;
+    font-family:var(--font-display); font-size:14px; border-radius:999px; text-transform:uppercase;
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    box-shadow:0 10px 24px -10px rgba(37,211,102,0.6); transition:background .15s, transform .15s;
+  }
+  .send-wa-btn:hover{background:var(--whatsapp-dark); transform:translateY(-1px);}
+
+  .confirm{text-align:center; padding:100px 20px;}
+  .confirm .wa-circle{width:64px; height:64px; border-radius:50%; background:var(--whatsapp); color:#fff; display:flex; align-items:center; justify-content:center; margin:0 auto 24px; box-shadow:var(--shadow-md);}
+  .confirm h1{font-family:var(--font-display); font-size:28px; text-transform:uppercase; margin-bottom:10px;}
+  .confirm p{color:var(--ink-soft); margin-bottom:6px;}
+  .cta-secondary{
+    display:inline-flex; align-items:center; gap:8px; margin-top:22px;
+    border:1.5px solid var(--ink); border-radius:999px; padding:13px 22px; font-weight:700; font-size:13px;
+    transition:background .15s, color .15s;
+  }
+  .cta-secondary:hover{background:var(--ink); color:#fff;}
+
+  .fab-wa{
+    position:fixed; bottom:24px; right:24px; z-index:80; width:58px; height:58px; border-radius:50%;
+    background:var(--whatsapp); color:#fff; display:flex; align-items:center; justify-content:center;
+    box-shadow:0 14px 30px -10px rgba(37,211,102,0.7); border:none; transition:transform .15s, background .15s;
+  }
+  .fab-wa:hover{background:var(--whatsapp-dark); transform:scale(1.06);}
+
+  .toast{
+    position:fixed; bottom:26px; left:50%; transform:translateX(-50%) translateY(20px);
+    background:var(--ink); color:#fff; padding:13px 22px; border-radius:999px; font-size:13px; z-index:200;
+    opacity:0; pointer-events:none; transition:all .25s; box-shadow:var(--shadow-md);
+  }
+  .toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+  .empty-state{padding:80px 20px; text-align:center; color:var(--ink-soft);}
+</style>
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="wrap nav-inner">
+    <a href="#/" class="brand">
+      <span class="flame-dot">
+<img src="https://i.ibb.co/YBmf408h/file-00000000815c71f4a1050089e98e3d5b.png" alt="Ramvee's Fresh logo">
+      </span>
+      GRILLS<span class="amp">&amp;EATS</span>
+    </a>
+    <div class="nav-actions">
+      <a class="nav-wa-btn" href="#" id="nav-wa-link">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2zm5.8 14.2c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-1.6-.1-.4-.1-.9-.3-1.5-.6-2.7-1.2-4.5-3.9-4.6-4.1-.1-.2-1.1-1.5-1.1-2.8 0-1.3.7-2 1-2.2.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5.2.5.7 1.8.8 1.9.1.2.1.3 0 .5-.1.2-.1.3-.3.5l-.4.5c-.1.2-.3.4-.1.7.2.3.9 1.4 1.9 2.3 1.3 1.1 2.3 1.5 2.6 1.6.3.1.5.1.7-.1.2-.2.7-.8.9-1.1.2-.3.4-.2.7-.1.3.1 1.7.8 2 .9.3.2.5.2.6.4.1.1.1.7-.1 1.3z"/></svg>
+        Order on WhatsApp
+      </a>
+      <button class="cart-btn" aria-label="Your order" onclick="openCart()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 8h12l-1 12H7L6 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+        <span class="cart-count" id="cart-count" style="display:none;">0</span>
+      </button>
+    </div>
+  </div>
+  <nav class="categories wrap" id="cat-nav">
+    <a href="#chicken" data-cat="chicken">Chicken</a>
+    <a href="#grill" data-cat="grill">Grill</a>
+    <a href="#combo" data-cat="combo">Combo</a>
+    <a href="#stews" data-cat="stews">Stews</a>
+    <a href="#sides" data-cat="sides">Meals Include</a>
+    <a href="#flavours" data-cat="flavours">Flavours</a>
+  </nav>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="brush b1"></div>
+    <div class="brush b2"></div>
+    <div class="brush b3"></div>
+    <div class="wrap hero-inner">
+      <span class="hero-kicker"><span class="flame">&#128293;</span> Hot &amp; Fresh, Flame-Grilled Daily</span>
+      <h1>GRILLS<br><span class="accent">&amp; EATS</span></h1>
+      <div class="hero-rule-row"><span class="rule"></span></div>
+      <div class="menu-word">MENU</div>
+      <p class="tagline">Hot &amp; Fresh Flame-Grilled Meals</p>
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <div class="section-eyebrow"><span>Order Online</span><span class="line"></span><span id="item-total-label">Select an item to begin</span></div>
+    <div class="menu-grid" id="menu-grid"></div>
+  </section>
+
+  <section class="wrap">
+    <div class="info-bar-wrap">
+      <div class="info-bar" id="info-bar"></div>
+    </div>
+  </section>
+</main>
+
+<footer class="contact-bar">
+  <div class="wrap">
+    <div class="foot-brand">GRILLS<span class="amp">&amp;EATS</span></div>
+    <div class="contact-label">Contact</div>
+    <div class="contact-phone">+27 (60) 488-7562</div>
+    <div class="foot-sub">WHATSAPP &middot; ORDERS TAKEN DAILY</div>
+  </div>
+</footer>
+
+<button class="fab-wa" id="fab-wa" aria-label="Chat on WhatsApp">
+  <svg width="27" height="27" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2zm5.8 14.2c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-1.6-.1-.4-.1-.9-.3-1.5-.6-2.7-1.2-4.5-3.9-4.6-4.1-.1-.2-1.1-1.5-1.1-2.8 0-1.3.7-2 1-2.2.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5.2.5.7 1.8.8 1.9.1.2.1.3 0 .5-.1.2-.1.3-.3.5l-.4.5c-.1.2-.3.4-.1.7.2.3.9 1.4 1.9 2.3 1.3 1.1 2.3 1.5 2.6 1.6.3.1.5.1.7-.1.2-.2.7-.8.9-1.1.2-.3.4-.2.7-.1.3.1 1.7.8 2 .9.3.2.5.2.6.4.1.1.1.7-.1 1.3z"/></svg>
+</button>
+
+<div class="overlay" id="overlay" onclick="closeAllOverlays()"></div>
+<aside class="drawer" id="drawer" aria-label="Your order">
+  <div class="drawer-head">
+    <h3>Your Order</h3>
+    <button class="drawer-close" onclick="closeCart()" aria-label="Close">&times;</button>
+  </div>
+  <div class="drawer-items" id="drawer-items"></div>
+  <div class="drawer-foot" id="drawer-foot"></div>
+</aside>
+
+<div class="modal" id="quick-modal"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ---------------- CONFIG ---------------- */
+const WHATSAPP_NUMBER = '27604887562'; // +27 (60) 488-7562
+const BRAND_NAME = 'Grills & Eats';
+
+function waLink(text){ return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`; }
+
+/* ---------------- DATA ---------------- */
+const FLAVOURS = ['No preference','Mild','BBQ','Lemon & Herb','Hot','Dynamite'];
+
+const ITEMS = [
+  { id:'quarter-chicken', name:'Quarter Chicken', category:'chicken', price:50, flavour:true, sides:true },
+  { id:'half-chicken', name:'Half Chicken', category:'chicken', price:80, flavour:true, sides:true },
+  { id:'full-chicken', name:'Full Chicken', category:'chicken', price:140, flavour:true, sides:true },
+  { id:'wors-full', name:'Wors (Full)', category:'grill', price:40, flavour:false, sides:false },
+  { id:'beef-steak', name:'Beef Steak', category:'grill', price:80, flavour:false, sides:false },
+  { id:'pork-steak', name:'Pork Steak', category:'grill', price:80, flavour:false, sides:false },
+  { id:'combo-quarter-wors', name:'Quarter Chicken & Wors', category:'combo', price:80, flavour:true, sides:true },
+  { id:'combo-half-wors', name:'Half Chicken & Wors', category:'combo', price:110, flavour:true, sides:true },
+  { id:'combo-full-wors', name:'Full Chicken & Wors', category:'combo', price:140, flavour:true, sides:true },
+  { id:'combo-wors-steak', name:'Wors & Steak', category:'combo', price:120, flavour:false, sides:true },
+  { id:'combo-quarter-wors-steak', name:'Quarter Chicken, Wors & Steak', category:'combo', price:160, flavour:true, sides:true },
+  { id:'beef-stew', name:'Beef Stew', category:'stews', prices:{half:65, full:80}, flavour:false, sides:false },
+  { id:'chicken-feet', name:'Chicken Feet', category:'stews', prices:{half:35, full:50}, flavour:false, sides:false },
+  { id:'pork-trotters', name:'Pork Trotters', category:'stews', prices:{half:50, full:70}, flavour:false, sides:false },
+];
+
+const itemById = id => ITEMS.find(i => i.id === id);
+
+/* ---------------- STATE ---------------- */
+let cart = [];
+
+async function loadCart(){
+  try{
+    const res = await window.storage.get('grills-eats-order', false);
+    cart = res && res.value ? JSON.parse(res.value) : [];
+  }catch(e){ cart = []; }
+  renderCartCount();
+}
+async function saveCart(){
+  try{ await window.storage.set('grills-eats-order', JSON.stringify(cart), false); }
+  catch(e){ console.error('Could not save order', e); }
+}
+
+/* ---------------- IMAGES ----------------
+   Drop your own photos into /menu-images next to this file:
+   menu-images/chicken.jpg, grill.jpg, sides.jpg, flavours.jpg
+   A placeholder icon shows automatically until a photo is added. */
+function mountCatPhoto(container, slug){
+  const img = document.createElement('img');
+
+  img.src = `menu-images/${slug}.jpg`;
+  img.alt = `${slug} food`;
+  img.loading = 'lazy';
+
+  img.onerror = function(){
+    container.innerHTML = '';
+    container.classList.add('placeholder');
+  };
+
+  container.innerHTML = '';
+  container.classList.remove('placeholder');
+  container.appendChild(img);
+}
+function placeholderIcon(){
+  return `<svg viewBox="0 0 64 64" fill="none" stroke="#f2661d" stroke-width="2.2"><circle cx="32" cy="32" r="24"/><path d="M22 32c0-8 4-14 10-14s10 6 10 14-4 14-10 14-10-6-10-14z"/><path d="M18 22c2-4 6-6 6-6M46 22c-2-4-6-6-6-6"/></svg>`;
+}
+
+/* ---------------- CATEGORY ICONS ---------------- */
+const CAT_ICONS = {
+  chicken: `
+    <img src="https://i.ibb.co/YBmf408h/file-00000000815c71f4a1050089e98e3d5b.png" alt="Ramvee's Fresh logo">
+  
+  `,
+  grill: `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2c1 3-2 4-2 7a4 4 0 0 0 8 0c0-1-.5-2-1-2 .5 2-.5 3-1.5 3-1.5 0-2-1.5-1-3 1-2 0-4-2.5-5z"/><path d="M8 13a4 4 0 0 0 8 0c0-3-2-4-2-7-3 1-6 4-6 7z"/></svg>`,
+  combo: `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg>`,
+  stews: `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 11h16l-1.5 7a2 2 0 0 1-2 1.6H7.5a2 2 0 0 1-2-1.6z"/><path d="M9 11V6M12 11V4M15 11V6"/></svg>`,
+  sides: `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 4v16M4 12h16" opacity=".4"/></svg>`,
+  flavours: `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2c1 3-2 4-2 7a4 4 0 0 0 8 0c0-1-.5-2-1-2 .5 2-.5 3-1.5 3-1.5 0-2-1.5-1-3 1-2 0-4-2.5-5z"/><path d="M8 13a4 4 0 0 0 8 0c0-3-2-4-2-7-3 1-6 4-6 7z"/></svg>`,
+};
+
+/* ---------------- BUILD MENU ---------------- */
+function buildMenu(){
+  const grid = document.getElementById('menu-grid');
+  grid.innerHTML = `
+    <div class="cat-card orderable" id="chicken">
+      <div class="cat-card-inner">
+        <div class="cat-photo" id="photo-chicken"></div>
+        <div class="cat-body">
+          <div class="cat-title"><span class="cat-icon">${CAT_ICONS.chicken}</span><h2>Chicken</h2></div>
+          ${ITEMS.filter(i=>i.category==='chicken').map(menuRow).join('')}
+        </div>
+      </div>
+    </div>
+
+    <div class="cat-card orderable" id="grill">
+      <div class="cat-card-inner">
+        <div class="cat-photo" id="photo-grill"></div>
+        <div class="cat-body">
+          <div class="cat-title"><span class="cat-icon">${CAT_ICONS.grill}</span><h2>Grill</h2></div>
+          ${ITEMS.filter(i=>i.category==='grill').map(menuRow).join('')}
+        </div>
+      </div>
+    </div>
+
+    <div class="cat-card orderable" id="combo">
+      <div class="cat-card-inner">
+        <div class="cat-body" style="width:100%;">
+          <div class="cat-title"><span class="cat-icon">${CAT_ICONS.combo}</span><h2>Combo</h2></div>
+          ${ITEMS.filter(i=>i.category==='combo').map(menuRow).join('')}
+        </div>
+      </div>
+    </div>
+
+    <div class="cat-card orderable" id="stews">
+      <div class="cat-card-inner">
+        <div class="cat-body" style="width:100%;">
+          <div class="cat-title"><span class="cat-icon">${CAT_ICONS.stews}</span><h2>Stews</h2>
+            <span class="price-cols"><span>Half</span><span>Full</span></span>
+          </div>
+          ${ITEMS.filter(i=>i.category==='stews').map(menuRowStew).join('')}
+        </div>
+      </div>
+    </div>
+
+    <div class="cat-card info-card" id="sides">
+      <div class="cat-card-inner">
+        <div class="cat-photo" id="photo-sides"></div>
+        <div class="cat-body">
+          <div class="cat-title"><span class="cat-icon dark">${CAT_ICONS.sides}</span><h2>Meals Include</h2></div>
+          <p class="cat-subtitle">Pap and 2 sides</p>
+          <p class="info-note">Sides: Coleslaw, Chakalaka and Mustard Greens (Mutshaini). Included with Chicken and Combo meals.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="cat-card info-card" id="flavours">
+      <div class="cat-card-inner">
+        <div class="cat-photo" id="photo-flavours"></div>
+        <div class="cat-body">
+          <div class="cat-title"><span class="cat-icon dark">${CAT_ICONS.flavours}</span><h2>Flavours</h2></div>
+          <ul class="info-list">${FLAVOURS.slice(1).map(f=>`<li>${f}</li>`).join('')}</ul>
+          <p class="info-note">Choose your flavour when you add a chicken or combo item to your order.</p>
+        </div>
+      </div>
+    </div>
+  `;
+  mountCatPhoto(document.getElementById('photo-chicken'), 'chicken');
+  mountCatPhoto(document.getElementById('photo-grill'), 'grill');
+  mountCatPhoto(document.getElementById('photo-sides'), 'sides');
+  mountCatPhoto(document.getElementById('photo-flavours'), 'flavours');
+
+  document.querySelectorAll('[data-item-id]').forEach(btn => {
+    btn.addEventListener('click', () => openQuickAdd(btn.dataset.itemId));
+  });
+
+  setupFadeIn();
+  setupScrollSpy();
+}
+
+function menuRow(item){
+  return `
+    <button class="menu-row" data-item-id="${item.id}">
+      <span class="menu-row-name">${item.name}</span>
+      <span class="menu-row-leader"></span>
+      <span class="menu-row-price">R${item.price}</span>
+      <span class="menu-row-add">+</span>
+    </button>
+  `;
+}
+function menuRowStew(item){
+  return `
+    <button class="menu-row" data-item-id="${item.id}">
+      <span class="menu-row-name">${item.name}</span>
+      <span class="menu-row-leader"></span>
+      <span class="menu-row-prices"><span>R${item.prices.half}</span><span>R${item.prices.full}</span></span>
+      <span class="menu-row-add">+</span>
+    </button>
+  `;
+}
+
+function buildInfoBar(){
+  const el = document.getElementById('info-bar');
+  el.innerHTML = `
+    <div class="info-item">
+      <div class="icon-circle"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s7-6.5 7-12a7 7 0 0 0-14 0c0 5.5 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/></svg></div>
+      <p>Univen Maungani Gate</p>
+    </div>
+    <div class="info-item">
+      <div class="icon-circle"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="19" r="2"/><circle cx="17" cy="19" r="2"/><path d="M3 5h2l2 11h11"/><path d="M8 5h9l3 6h-6"/></svg></div>
+      <p>Delivery available at a fee from R10<br>Univen campus &amp; nearest residences</p>
+    </div>
+    <div class="info-item">
+      <div class="icon-circle"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 9h13v5a5 5 0 0 1-5 5H9a4 4 0 0 1-4-4z"/><path d="M18 10h1a2 2 0 0 1 0 4h-1"/></svg></div>
+      <p>Refreshments available</p>
+    </div>
+    <div class="info-item">
+      <div class="icon-circle"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M2 10h20"/></svg></div>
+      <p>Card, Cash &amp; Transfer accepted</p>
+    </div>
+  `;
+}
+
+/* ---------------- FADE-IN + SCROLLSPY ---------------- */
+function setupFadeIn(){
+  const cards = document.querySelectorAll('.cat-card');
+  if('IntersectionObserver' in window){
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in-view'); obs.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    cards.forEach(c => obs.observe(c));
+  } else {
+    cards.forEach(c => c.classList.add('in-view'));
+  }
+}
+function setupScrollSpy(){
+  const links = document.querySelectorAll('#cat-nav a');
+  const sections = Array.from(links).map(l => document.getElementById(l.dataset.cat)).filter(Boolean);
+  if(!('IntersectionObserver' in window)) return;
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      const link = document.querySelector(`#cat-nav a[data-cat="${entry.target.id}"]`);
+      if(!link) return;
+      if(entry.isIntersecting) links.forEach(l=>l.classList.remove('active')), link.classList.add('active');
+    });
+  }, { rootMargin:'-40% 0px -50% 0px', threshold:0 });
+  sections.forEach(s => obs.observe(s));
+}
+
+/* ---------------- QUICK ADD MODAL ---------------- */
+let modalState = null;
+function openQuickAdd(itemId){
+  const item = itemById(itemId);
+  if(!item) return;
+  modalState = { item, size: item.prices ? 'full' : null, flavour: 'No preference', qty: 1 };
+  renderModal();
+  document.getElementById('overlay').classList.add('open');
+  document.getElementById('quick-modal').classList.add('open');
+}
+function closeModal(){
+  document.getElementById('quick-modal').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+}
+function currentModalPrice(){
+  const { item, size, qty } = modalState;
+  const unit = item.prices ? item.prices[size] : item.price;
+  return unit * qty;
+}
+function renderModal(){
+  const { item, size, flavour, qty } = modalState;
+  const modal = document.getElementById('quick-modal');
+  modal.innerHTML = `
+    <div class="modal-head">
+      <h3>${item.name}</h3>
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+    </div>
+    <div class="modal-price">R${currentModalPrice()}</div>
+
+    ${item.prices ? `
+    <div class="modal-label">Portion</div>
+    <div class="chip-row" id="size-chips">
+      <button class="chip ${size==='half'?'selected':''}" data-size="half">Half — R${item.prices.half}</button>
+      <button class="chip ${size==='full'?'selected':''}" data-size="full">Full — R${item.prices.full}</button>
+    </div>` : ''}
+
+    ${item.flavour ? `
+    <div class="modal-label">Flavour</div>
+    <div class="chip-row" id="flavour-chips">
+      ${FLAVOURS.map(f => `<button class="chip ${flavour===f?'selected':''}" data-flavour="${f}">${f}</button>`).join('')}
+    </div>` : ''}
+
+    ${item.sides ? `<p class="info-note" style="margin-bottom:16px;">Includes pap and 2 sides.</p>` : ''}
+
+    <div class="modal-label">Quantity</div>
+    <div class="modal-qty-row">
+      <button class="modal-qty-btn" id="modal-qty-minus">&minus;</button>
+      <span class="modal-qty-val" id="modal-qty-val">${qty}</span>
+      <button class="modal-qty-btn" id="modal-qty-plus">+</button>
+    </div>
+
+    <button class="modal-add-btn" id="modal-add-btn">Add to order — R${currentModalPrice()}</button>
+  `;
+
+  if(item.prices){
+    modal.querySelectorAll('#size-chips .chip').forEach(chip => {
+      chip.addEventListener('click', () => { modalState.size = chip.dataset.size; renderModal(); });
+    });
+  }
+  if(item.flavour){
+    modal.querySelectorAll('#flavour-chips .chip').forEach(chip => {
+      chip.addEventListener('click', () => { modalState.flavour = chip.dataset.flavour; renderModal(); });
+    });
+  }
+  document.getElementById('modal-qty-minus').addEventListener('click', () => {
+    modalState.qty = Math.max(1, modalState.qty - 1); renderModal();
+  });
+  document.getElementById('modal-qty-plus').addEventListener('click', () => {
+    modalState.qty = Math.min(20, modalState.qty + 1); renderModal();
+  });
+  document.getElementById('modal-add-btn').addEventListener('click', async () => {
+    const { item, size, flavour, qty } = modalState;
+    const line = { itemId: item.id, size: item.prices ? size : null, flavour: item.flavour ? flavour : null, qty };
+    const existing = cart.find(c => c.itemId===line.itemId && c.size===line.size && c.flavour===line.flavour);
+    if(existing){ existing.qty += qty; } else { cart.push(line); }
+    await saveCart();
+    renderCartCount();
+    renderDrawer();
+    closeModal();
+    showToast(`Added ${item.name} to your order`);
+  });
+}
+
+/* ---------------- CART LOGIC ---------------- */
+function lineLabel(line){
+  const bits = [];
+  if(line.size) bits.push(line.size === 'half' ? 'Half' : 'Full');
+  if(line.flavour && line.flavour !== 'No preference') bits.push(line.flavour);
+  return bits.join(' · ');
+}
+function lineUnitPrice(line){
+  const item = itemById(line.itemId);
+  return item.prices ? item.prices[line.size] : item.price;
+}
+function cartSubtotal(){ return cart.reduce((sum, line) => sum + lineUnitPrice(line) * line.qty, 0); }
+function cartCount(){ return cart.reduce((n, l) => n + l.qty, 0); }
+
+async function updateQty(index, delta){
+  cart[index].qty += delta;
+  if(cart[index].qty <= 0) cart.splice(index,1);
+  await saveCart(); renderCartCount(); renderDrawer();
+}
+async function removeItem(index){
+  cart.splice(index,1);
+  await saveCart(); renderCartCount(); renderDrawer();
+}
+function renderCartCount(){
+  const el = document.getElementById('cart-count');
+  const n = cartCount();
+  el.textContent = n;
+  el.style.display = n > 0 ? 'flex' : 'none';
+}
+function renderDrawer(){
+  const itemsEl = document.getElementById('drawer-items');
+  const footEl = document.getElementById('drawer-foot');
+  if(cart.length === 0){
+    itemsEl.innerHTML = `<div class="drawer-empty">Your order is empty.</div>`;
+    footEl.innerHTML = '';
+    return;
+  }
+  itemsEl.innerHTML = cart.map((line, i) => {
+    const item = itemById(line.itemId);
+    const label = lineLabel(line);
+    return `
+      <div class="order-line">
+        <div class="order-line-info">
+          <div class="order-line-name">${item.name}</div>
+          ${label ? `<div class="order-line-meta">${label}</div>` : ''}
+        </div>
+        <div class="order-line-right">
+          <div class="order-line-qty">
+            <button onclick="updateQty(${i},-1)" aria-label="Decrease">&minus;</button>
+            <span>${line.qty}</span>
+            <button onclick="updateQty(${i},1)" aria-label="Increase">+</button>
+          </div>
+          <span class="order-line-price">R${lineUnitPrice(line)*line.qty}</span>
+          <a class="remove-link" href="javascript:void(0)" onclick="removeItem(${i})">Remove</a>
+        </div>
+      </div>
+    `;
+  }).join('');
+  const subtotal = cartSubtotal();
+  footEl.innerHTML = `
+    <div class="drawer-subtotal"><span>Subtotal</span><span>R${subtotal}</span></div>
+    <button class="review-btn" onclick="goReview()">Review &amp; send on WhatsApp</button>
+  `;
+}
+function openCart(){
+  document.getElementById('overlay').classList.add('open');
+  document.getElementById('drawer').classList.add('open');
+}
+function closeCart(){
+  document.getElementById('overlay').classList.remove('open');
+  document.getElementById('drawer').classList.remove('open');
+}
+function closeAllOverlays(){ closeCart(); closeModal(); }
+function goReview(){ closeCart(); location.hash = '#/review'; }
+
+/* ---------------- ROUTER (review / confirmation only) ---------------- */
+window.addEventListener('hashchange', renderRoute);
+window.addEventListener('DOMContentLoaded', async () => {
+  document.getElementById('nav-wa-link').href = waLink(`Hi ${BRAND_NAME}! I'd like to place an order.`);
+  document.getElementById('fab-wa').addEventListener('click', () => {
+    window.open(waLink(`Hi ${BRAND_NAME}! I'd like to place an order.`), '_blank');
+  });
+  buildMenu();
+  buildInfoBar();
+  await loadCart();
+  renderDrawer();
+  renderRoute();
+});
+
+function renderRoute(){
+  const hash = location.hash.replace(/^#\/?/, '');
+  const main = document.querySelector('main');
+  if(hash === '/review'){
+    injectOverlayView(renderReview());
+    initReviewPage();
+  } else if(hash === '/confirmation'){
+    injectOverlayView(renderConfirmation());
+  } else {
+    const existing = document.getElementById('overlay-view');
+    if(existing) existing.remove();
+    main.style.display = '';
+  }
+}
+function injectOverlayView(html){
+  const main = document.querySelector('main');
+  main.style.display = 'none';
+  let el = document.getElementById('overlay-view');
+  if(!el){
+    el = document.createElement('div');
+    el.id = 'overlay-view';
+    main.after(el);
+  }
+  el.innerHTML = html;
+}
+
+function renderReview(){
+  if(cart.length === 0){
+    return `<div class="wrap empty-state">Your order is empty. <a href="javascript:void(0)" style="color:var(--orange); font-weight:700;" onclick="location.hash='';">Back to menu</a></div>`;
+  }
+  const subtotal = cartSubtotal();
+  return `
+    <div class="wrap checkout-wrap">
+      <div>
+        <a class="back-link" href="javascript:void(0)" onclick="location.hash='';">&larr; Back to menu</a>
+        <h2 style="font-family:var(--font-display); font-size:24px; text-transform:uppercase; margin-bottom:6px;">Review your order</h2>
+        <p class="info-note" style="margin-bottom:18px;">These details are optional but help us get your order right — they'll be included in your WhatsApp message.</p>
+        <form id="review-form">
+          <div class="form-group"><label>Name</label><input id="f-name" type="text" placeholder="Your name"></div>
+          <div class="form-group"><label>Delivery location</label><input id="f-area" type="text" placeholder="e.g. Univen residence / gate"></div>
+          <div class="form-group"><label>Notes</label><textarea id="f-notes" placeholder="Anything else we should know?"></textarea></div>
+        </form>
+      </div>
+      <div class="order-summary">
+        <h3>Order summary</h3>
+        ${cart.map(line => {
+          const item = itemById(line.itemId);
+          const label = lineLabel(line);
+          return `<div class="summary-line"><span>${item.name}${label?' · '+label:''} × ${line.qty}</span><span>R${lineUnitPrice(line)*line.qty}</span></div>`;
+        }).join('')}
+        <div class="summary-total"><span>Subtotal</span><span>R${subtotal}</span></div>
+        <button class="send-wa-btn" id="send-wa-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2zm5.8 14.2c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-1.6-.1-.4-.1-.9-.3-1.5-.6-2.7-1.2-4.5-3.9-4.6-4.1-.1-.2-1.1-1.5-1.1-2.8 0-1.3.7-2 1-2.2.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5.2.5.7 1.8.8 1.9.1.2.1.3 0 .5-.1.2-.1.3-.3.5l-.4.5c-.1.2-.3.4-.1.7.2.3.9 1.4 1.9 2.3 1.3 1.1 2.3 1.5 2.6 1.6.3.1.5.1.7-.1.2-.2.7-.8.9-1.1.2-.3.4-.2.7-.1.3.1 1.7.8 2 .9.3.2.5.2.6.4.1.1.1.7-.1 1.3z"/></svg>
+          Send order on WhatsApp
+        </button>
+      </div>
+    </div>
+  `;
+}
+function initReviewPage(){
+  const btn = document.getElementById('send-wa-btn');
+  if(!btn) return;
+  btn.addEventListener('click', async () => {
+    const name = document.getElementById('f-name').value.trim();
+    const area = document.getElementById('f-area').value.trim();
+    const notes = document.getElementById('f-notes').value.trim();
+    const subtotal = cartSubtotal();
+
+    let text = `Hi ${BRAND_NAME}! I'd like to order:\n\n`;
+    cart.forEach(line => {
+      const item = itemById(line.itemId);
+      const label = lineLabel(line);
+      text += `• ${item.name}${label?' ('+label+')':''} × ${line.qty} — R${lineUnitPrice(line)*line.qty}\n`;
+    });
+    text += `\nSubtotal: R${subtotal}\n`;
+    if(name) text += `\nName: ${name}`;
+    if(area) text += `\nDelivery location: ${area}`;
+    if(notes) text += `\nNotes: ${notes}`;
+    text += `\n\n(sent from the Grills & Eats menu site)`;
+
+    window.open(waLink(text), '_blank');
+    cart = [];
+    await saveCart();
+    renderCartCount();
+    renderDrawer();
+    location.hash = '#/confirmation';
+  });
+}
+function renderConfirmation(){
+  return `
+    <div class="wrap confirm">
+      <div class="wa-circle">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2zm5.8 14.2c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-1.6-.1-.4-.1-.9-.3-1.5-.6-2.7-1.2-4.5-3.9-4.6-4.1-.1-.2-1.1-1.5-1.1-2.8 0-1.3.7-2 1-2.2.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5.2.5.7 1.8.8 1.9.1.2.1.3 0 .5-.1.2-.1.3-.3.5l-.4.5c-.1.2-.3.4-.1.7.2.3.9 1.4 1.9 2.3 1.3 1.1 2.3 1.5 2.6 1.6.3.1.5.1.7-.1.2-.2.7-.8.9-1.1.2-.3.4-.2.7-.1.3.1 1.7.8 2 .9.3.2.5.2.6.4.1.1.1.7-.1 1.3z"/></svg>
+      </div>
+      <h1>Order sent to WhatsApp</h1>
+      <p>We've opened WhatsApp with your order pre-filled — just hit send in the app to confirm.</p>
+      <p>We'll reply to confirm timing and payment.</p>
+      <a class="cta-secondary" href="javascript:void(0)" onclick="location.hash='';">&larr; Back to menu</a>
+    </div>
+  `;
+}
+
+/* ---------------- TOAST ---------------- */
+let toastTimer;
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
+}
+</script>
+</body>
+</html>
