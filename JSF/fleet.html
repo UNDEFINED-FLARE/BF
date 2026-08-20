@@ -112,6 +112,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .nav-inner{ display:flex; align-items:center; justify-content:space-between; height:86px; transition:height .2s ease; }
 .nav.scrolled .nav-inner{ height:66px; }
 .brand{ display:flex; align-items:center; gap:11px; }
+.brand-logo-img{ height:52px; width:auto; display:block; object-fit:contain; }
+.nav.scrolled .brand-logo-img{ height:44px; }
 .brand-mark{
   width:38px; height:38px; border:1.5px solid var(--black); border-radius:var(--radius);
   display:flex; align-items:center; justify-content:center; font-weight:800; font-size:14px; flex-shrink:0;
@@ -387,8 +389,7 @@ footer{ background:var(--grey-100); border-top:1px solid var(--line); }
 <header class="nav">
   <div class="container nav-inner">
     <a href="index.html" class="brand">
-      <span class="brand-mark">JX</span>
-      <span class="brand-text"><span class="l1">JUSTFIX</span><span class="l2">AUTO ELECTRIX</span></span>
+      <img src="logo.png" alt="JustFix Auto Electrix" class="brand-logo-img">
     </a>
     <nav class="nav-links">
       <a class="nav-link" href="index.html">Home</a><a class="nav-link" href="services.html">Services</a><a class="nav-link" href="gallery.html">Gallery</a><a class="nav-link" href="about.html">About</a><a class="nav-link active" href="fleet.html">Fleet Solutions</a><a class="nav-link" href="contact.html">Contact</a>
